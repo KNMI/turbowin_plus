@@ -1,0 +1,20 @@
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Type de donnees (pour choix du modele BUFR) en fonction :
+#	- du mode le de compression
+#	- du mode operatoire de la station (a -1 si elle n'accepte qu'un seul mode)
+#
+#	Le codage des types de donnees est celuis-ci :
+#		1 pour modele BUFR SHIP
+#		2 pour TRACKOB
+#		3 pour BUOY
+#		4 pour WAVEOB 
+#
+#	Format du fichier : champs separes par ";"
+#	Code modele de compression;Nom ou commentaire; mode operatoire 1; type de donnees 1; mode operatoire 2; type de donnees 2 etc
+#-------------------------------------------------------------------------------
+SHIPTRAC;BATOS;1;1;2;2
+SHIPTW1;TURBOWIN;-1;1
+S-AWS-100;Autonomous S-AWS au format 100;-1;1
+S-AWS-101;Autonomous S-AWS au format 101;-1;1
+BATOS_IRID;Batos Iridium;-1;1
+

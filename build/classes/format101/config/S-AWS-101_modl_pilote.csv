@@ -1,0 +1,58 @@
+000000;;0;1;1;0;0;127;sans;1;0;1;operating mode;0;0
+001198;;8;1;1;0;254;1;;1;0;1;Format identifier (101 for the present version);0;254
+001199;;1;1;1;0;1;1;;1;0;1;Callsign encryption indicator;0;1
+001012;;7;1;5;0;72;1;Degres;1;0;1;Ship's Course Over Ground (past 10 minutes);0;360
+001013;;6;1;0.5;0;60;1;m/s;1;0;1;Ship's average Speed Over Ground (past 10 minutes);0;30
+001044;;7;1;5;0;72;1;Degres;1;0;1;Ship's average True Heading  (past 10 minutes);0;360
+007072;;5;1;1;-10;30;1;m;1;0;1;Departure of summer loadline from actual sea level;-10;20
+004001;;7;1;1;2000;126;1;;1;0;1;Year;2000;2126
+004002;;4;1;1;0;12;1;;1;0;1;Month;0;12
+004003;;6;1;1;0;31;1;;1;0;1;Day;0;31
+004004;;5;1;1;0;23;1;UTC;1;0;1;Hour;0;23
+004005;;6;1;1;0;59;1;;1;0;1;Minute;0;59
+005002;;15;1;0.01;-90;18000;1;Degres;1;0;1;Latitude (coarse accuracy);-90;90
+006002;;16;1;0.01;-180;36000;1;Degres;1;0;1;Longitude (coarse accuracy);-180;180
+010004;;11;1;10;85000;2046;1;Pa;1;0;1;Pressure at barometer height;85000;105460
+010051;;11;1;10;85000;2046;1;Pa;1;0;1;Pressure reduced to mean sea level;85000;105460
+010061;;10;1;10;-5000;1000;1;Pa;1;0;1;3-hour pressure change ;-5000;5000
+010063;;4;1;1;0;8;1;code;1;0;1;Characteristic of pressure tendency;0;8
+011001;;7;1;5;0;72;1;Degres;1;0;1;True wind direction clockwise from the north;0;360
+011002;;10;1;0.1;0;1020;1;m/s;1;0;1;True wind speed;0;102
+011099;;7;1;5;0;72;1;Degres;1;0;1;Relative wind direction clockwise from the bow;0;360
+011100;;8;1;0.5;0;254;1;m/s;1;0;1;Relative wind speed;0;127
+011041;;8;1;0.5;0;254;1;m/s;1;0;1;Maximum wind gust speed;0;127
+011043;;7;1;5;0;72;1;Degres;1;0;1;Maximum wind gust direction;0;360
+012101;;10;1;0.1;223.15;1022;1;K;1;0;1;Air temperature;223.15;325.35
+012102;;10;1;0.1;223.15;1020;1;K;1;0;1;Wet bulb temperature ;223.15;325.35
+012103;;10;1;0.1;223.15;1020;1;K;1;0;1;Dew point temperature;223.15;325.35
+013003;;10;1;0.1;0;1000;1;%;1;0;1;Relative humidity;0;100
+022042;;11;1;0.02;268.15;4090;1;K;1;0;1;Sea temperature;268.15;309.05
+410000;;1;1;1;0;1;1;;1;0;1;Visual obs. presence indicator;;
+020001;code;4;1;1;90;9;1;Code;1;0;1;Horizontal visibility;90;99
+020003;;9;1;1;0;510;1;Code;1;0;1;Present weather;0;510
+020004;;5;1;1;0;30;1;Code;1;0;1;Past weather 1;0;30
+020005;;5;1;1;0;30;1;Code;1;0;1;Past weather 2;0;30
+020011;N;4;1;1;0;9;1;Code;1;0;1;Total cloud cover;0;9
+020011;Nh;4;1;1;0;14;1;Code;1;0;1;Cloud amount (low);0;14
+020012;CL_100;6;1;1;0;62;1;Code;1;0;1;Cloud type (low);0;62
+020012;CM_100;6;1;1;0;62;1;Code;1;0;1;Cloud type (middle);0;62
+020012;CH_100;6;1;1;0;62;1;Code;1;0;1;Cloud type (high);0;62
+020013;code;4;1;1;0;9;1;Code;1;0;1;Height of base of lowest clouds;0;9
+408000;;1;1;1;0;1;1;;1;0;1;Wave obs. presence indicator;;
+022012;;5;1;1;0;30;1;Seconde;1;0;1;Period of wind waves;0;30
+022022;;6;1;0.5;0;62;1;m;1;0;1;Height of wind waves;0;31
+022003;SW1;6;1;10;0;36;1;Deg vrai;1;0;1;Direction of 1st swell;0;360
+022013;SW1;5;1;1;0;30;1;Seconde;1;0;1;Period of 1st swell;0;30
+022023;SW1;6;1;0.5;0;62;1;m;1;0;1;Height of 1st swell;0;31
+022003;SW2;6;1;10;0;36;1;Deg vrai;1;0;1;Direction of 2nd swell;0;360
+022013;SW2;5;1;1;0;30;1;Seconde;1;0;1;Period of 2nd swell;0;30
+022023;SW2;6;1;0.5;0;62;1;m;1;0;1;Height of 2nd swell;0;31
+408000;;1;1;1;0;1;1;;1;0;1;Ice obs. presence indicator;;
+020031;;7;1;0.01;0;126;1;m;1;0;1;Ice deposit (thickness);0;1.26
+020032;;3;1;1;0;6;1;Code;1;0;1;Rate of ice acretion;0;6
+020033;;4;1;1;0;14;1;Code;1;0;1;Cause of ice acretion;0;14
+020034;;5;1;1;0;30;1;Code;1;0;1;Sea ice concentration;0;30
+020035;;4;1;1;0;14;1;Code;1;0;1;Amount and type of ice;0;14
+020036;;5;1;1;0;30;1;Code;1;0;1;Ice situation;0;30
+020037;;5;1;1;0;30;1;Code;1;0;1;Ice development;0;30
+020038;;4;1;45;0;360;1;Degre;1;0;1;Bearing of ice edge;0;360
