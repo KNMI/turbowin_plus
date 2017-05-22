@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for TurboWin+ -->
+<jnlp
+  codebase="" 
+  spec="1.0+">
+  <information>
+    <title>TurboWin+</title>
+    <vendor>KNMI</vendor>
+    <homepage href="http://projects.knmi.nl/turbowin/index.html"/>
+    <offline-allowed/>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <resources>
+    <java version="1.7+" java-vm-args="-Xms512M -Xmx512M -XX:NewRatio=2"/>
+    <jar eager="true" href="turbowin_jws.jar" main="true"/>
+    <jar href="lib/jnlp.jar"/> 
+    <jar href="lib/jssc.jar"/>
+  </resources>
+  <application-desc main-class="main"/>
+</jnlp> 
