@@ -31,11 +31,14 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -172,21 +175,7 @@ import jssc.SerialPortException;
 * - NB vanaf versie 1.7 update 45 moet de manifest in de jars gewijzigd worden voor application-name (anders warning in console)
 *
 *
-* onderstaande voor officieel certificaat
-* - certificaat is file cert-stam.p12 van COMODO (toegestuurd door Jeroen van der Reijden) [password: stam]
-* - geldig tot 29-10-2016 (zie jarsigner_veriy.cmd)
 *
-*  >>>>>>>>>>>>>>>> dit is de uitvoer van keytool naar file (vanaf de bxpm171, let op waar de alias ["comodo ca limited-id van knmi"] staat!!) ///////////////////
-* D:\stam\Mijn Documenten\NetBeansProjects\turbowin_jws\backup\java_web_start_BXPM171>"c:\program files\java\jdk1.7.0_25\bin\keytool" -list -storetype pkcs12 -storepass stam -keystore cert-stam.p12 
-*
-* Keystore type: PKCS12
-* Keystore provider: SunJSSE
-*
-* Your keystore contains 1 entry
-*
-* comodo ca limited-id van knmi, 29-Oct-2013, PrivateKeyEntry, 
-* Certificate fingerprint (SHA1): E1:20:C2:11:20:A6:A0:58:E1:E8:E1:33:26:5B:48:6D:15:61:A2:18
-*   >>>>>>>>>>>>>>
 *
 *
 * ---------------------------------------------------------------------------------------------------------------------
@@ -592,6 +581,9 @@ public class main extends javax.swing.JFrame {
       jMenuItem45 = new javax.swing.JMenuItem();
       jMenuItem47 = new javax.swing.JMenuItem();
       jMenuItem51 = new javax.swing.JMenuItem();
+      Dashboard = new javax.swing.JMenu();
+      jMenuItem55 = new javax.swing.JMenuItem();
+      jMenuItem56 = new javax.swing.JMenuItem();
       jMenu7 = new javax.swing.JMenu();
       jMenuItem36 = new javax.swing.JMenuItem();
       jMenuItem49 = new javax.swing.JMenuItem();
@@ -620,7 +612,7 @@ public class main extends javax.swing.JFrame {
       jButton1.setToolTipText("Call sign / VOS ID");
       jButton1.setFocusable(false);
       jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton1.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton1.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -632,7 +624,7 @@ public class main extends javax.swing.JFrame {
       jButton2.setToolTipText("Date and Time");
       jButton2.setFocusable(false);
       jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton2.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton2.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -644,7 +636,7 @@ public class main extends javax.swing.JFrame {
       jButton3.setToolTipText("Position, course and speed");
       jButton3.setFocusable(false);
       jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton3.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton3.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -656,7 +648,7 @@ public class main extends javax.swing.JFrame {
       jButton6.setToolTipText("Barometer reading");
       jButton6.setFocusable(false);
       jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton6.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton6.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -668,7 +660,7 @@ public class main extends javax.swing.JFrame {
       jButton7.setToolTipText("Barograph reading");
       jButton7.setFocusable(false);
       jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton7.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton7.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -680,7 +672,7 @@ public class main extends javax.swing.JFrame {
       jButton8.setToolTipText("Temperatures");
       jButton8.setFocusable(false);
       jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton8.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton8.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton8.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -692,7 +684,7 @@ public class main extends javax.swing.JFrame {
       jButton4.setToolTipText("Wind");
       jButton4.setFocusable(false);
       jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton4.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton4.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -704,7 +696,7 @@ public class main extends javax.swing.JFrame {
       jButton5.setToolTipText("Waves");
       jButton5.setFocusable(false);
       jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton5.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton5.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -716,7 +708,7 @@ public class main extends javax.swing.JFrame {
       jButton11.setToolTipText("Visibility");
       jButton11.setFocusable(false);
       jButton11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton11.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton11.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton11.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton11.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -728,7 +720,7 @@ public class main extends javax.swing.JFrame {
       jButton9.setToolTipText("Present weather");
       jButton9.setFocusable(false);
       jButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton9.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton9.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -740,7 +732,7 @@ public class main extends javax.swing.JFrame {
       jButton10.setToolTipText("Past weather");
       jButton10.setFocusable(false);
       jButton10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton10.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton10.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton10.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton10.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -752,7 +744,7 @@ public class main extends javax.swing.JFrame {
       jButton12.setToolTipText("Clouds low");
       jButton12.setFocusable(false);
       jButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton12.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton12.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton12.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton12.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -764,7 +756,7 @@ public class main extends javax.swing.JFrame {
       jButton13.setToolTipText("Clouds middle");
       jButton13.setFocusable(false);
       jButton13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton13.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton13.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton13.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton13.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -776,7 +768,7 @@ public class main extends javax.swing.JFrame {
       jButton14.setToolTipText("Clouds high");
       jButton14.setFocusable(false);
       jButton14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton14.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton14.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton14.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton14.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -788,7 +780,7 @@ public class main extends javax.swing.JFrame {
       jButton15.setToolTipText("Clouds cover and height");
       jButton15.setFocusable(false);
       jButton15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton15.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton15.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton15.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton15.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -800,7 +792,7 @@ public class main extends javax.swing.JFrame {
       jButton16.setToolTipText("Icing");
       jButton16.setFocusable(false);
       jButton16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton16.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton16.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton16.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton16.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -812,7 +804,7 @@ public class main extends javax.swing.JFrame {
       jButton17.setToolTipText("Ice");
       jButton17.setFocusable(false);
       jButton17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton17.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton17.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton17.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton17.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -824,7 +816,7 @@ public class main extends javax.swing.JFrame {
       jButton18.setToolTipText("Observer");
       jButton18.setFocusable(false);
       jButton18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton18.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton18.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton18.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton18.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -836,7 +828,7 @@ public class main extends javax.swing.JFrame {
       jButton19.setToolTipText("Captains");
       jButton19.setFocusable(false);
       jButton19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton19.setPreferredSize(new java.awt.Dimension(22, 22));
+      jButton19.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton19.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton19.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -848,6 +840,7 @@ public class main extends javax.swing.JFrame {
       jButton20.setToolTipText("next form automation");
       jButton20.setFocusable(false);
       jButton20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+      jButton20.setPreferredSize(new java.awt.Dimension(28, 28));
       jButton20.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
       jButton20.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2205,6 +2198,26 @@ public class main extends javax.swing.JFrame {
 
       jMenuBar1.add(jMenu8);
 
+      Dashboard.setText("Dashboard");
+
+      jMenuItem55.setText("Barometer");
+      jMenuItem55.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Dashboard_Barometer_actionPerformed(evt);
+         }
+      });
+      Dashboard.add(jMenuItem55);
+
+      jMenuItem56.setText("AWS");
+      jMenuItem56.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Dashboard_AWS_actionPerformed(evt);
+         }
+      });
+      Dashboard.add(jMenuItem56);
+
+      jMenuBar1.add(Dashboard);
+
       jMenu7.setText("Info");
 
       jMenuItem36.setText("Statistics (internet)");
@@ -2522,7 +2535,7 @@ public void set_datetime_while_collecting_sensor_data()
    {   
       if (system_minute > 30)
       {
-         cal_systeem_datum_tijd.add(Calendar.HOUR, 1);   // add 1 hour
+         cal_systeem_datum_tijd.add(Calendar.HOUR_OF_DAY, 1);   // add 1 hour
          cal_systeem_datum_tijd.getTime();
       }
 
@@ -3218,11 +3231,22 @@ private void read_muffin()
                /* gray (disable) the not appropriate graph menu selection options */
                disable_graph_menu_items();
                
-               /* if not AWS connected -> disable the "Obs to AWS" menu item */
+               
+               /* if no AWS connected */
                if (RS232_connection_mode != 3)                            // not AWS connected mode
                {
+                  // disable the "Obs to AWS" menu item 
                   jMenuItem46.setEnabled(false);                          // Obs to AWS
+                  
+                  // disable Dasboard AWS
+                  jMenuItem56.setEnabled(false);                          // Dashboard - AWS
                }
+               
+               /* if no barometer connected */
+               if (RS232_connection_mode != 1 && RS232_connection_mode != 2 && RS232_connection_mode != 4 && RS232_connection_mode != 5 && RS232_connection_mode != 6)  
+               {
+                  jMenuItem55.setEnabled(false);                          // Dashboard - barometer
+               }   
                
                /* GPS connected ? */
                if (RS232_GPS_connection_mode == 1)                        // 0 = no GPS; 1 = GPS (NMEA 1083)
@@ -3230,6 +3254,14 @@ private void read_muffin()
                   RS232_RS422.RS232_GPS_NMEA_0183_initComponents();
                }
 
+               // Obs to server
+               if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
+               {
+                  // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
+                  // gray (disable) the "output -> obs to server (internet)" menu selection option
+                  jMenuItem20.setEnabled(false);
+               }
+               
                // NB !!!!!!!!!!!!!! see also alternative lees_configuratie_regels() if muffin read fails !!!!!!!!!
                
             } // else (muffin read succeeded)
@@ -4459,11 +4491,21 @@ public static void set_muffin()
                /* gray (disable) the not appropriate graph menu selection options */
                disable_graph_menu_items();
                
-               /* if not AWS connected -> disable the "Obs to AWS" menu item */
+               /* if no AWS connected */
                if (RS232_connection_mode != 3)                            // not AWS connected mode
                {
+                  // disable the "Obs to AWS" menu item 
                   jMenuItem46.setEnabled(false);                          // Obs to AWS
+                  
+                  // disable Dasboard AWS
+                  jMenuItem56.setEnabled(false);                          // Dashboard - AWS
                }
+               
+               /* if no barometer connected */
+               if (RS232_connection_mode != 1 && RS232_connection_mode != 2 && RS232_connection_mode != 4 && RS232_connection_mode != 5 && RS232_connection_mode != 6)  
+               {
+                  jMenuItem55.setEnabled(false);                          // Dashboard - barometer
+               }   
                
                /* GPS connected ? */
                if (RS232_GPS_connection_mode == 1)   // 0 = no GPS; 1 = GPS (NMEA 1083)
@@ -4471,6 +4513,14 @@ public static void set_muffin()
                   RS232_RS422.RS232_GPS_NMEA_0183_initComponents();
                }
                
+               // Obs to server
+               if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
+               {
+                  // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
+                  // gray (disable) the "output -> obs to server (internet)" menu selection option
+                  jMenuItem20.setEnabled(false);
+               }
+
             }
          }.execute(); // new SwingWorker<Void, Void>()
 
@@ -5953,7 +6003,7 @@ private static void check_meta_data()
       // 
       if (RS232_connection_mode == 3)                       // AWS   
       {
-         if (displayed_aws_data_obsolate)
+         if (displayed_aws_data_obsolate)                               // set in Function: RS422_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
          {
             jTextField9.setForeground(obsolate_color_data_from_aws);    // gray
             jTextField10.setForeground(obsolate_color_data_from_aws);   // gray
@@ -9431,16 +9481,263 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
          JOptionPane.showMessageDialog(null, "Failed to send obs to AWS because no serial connection available (defaultPort = null)"  , APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE);
       }
       
+      /* on request of Meteo France write the extra MANUAL measured and observed data to IMMT log */
+      IMMT_AWS_manual_input_preperations();
+      IMMT_log();
+      
       /* reset alll meteo parameters */
       main_RS232_RS422.RS422_initialise_AWS_Sensor_Data_For_Display(); // must be called before: Reset_all_meteo_parameters();
       Reset_all_meteo_parameters();
       
    }                                                  
 
+   
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void IMMT_AWS_manual_input_preperations() 
+{
+   // On request of Meteo France also IMMT storage of extra MANUAL entered parameters in AWS mode (observers are paid for these extra inserted parameters)
+   //
+   // Convert date/time and position in IMMT code
+   // NB manual parameters (eg waves) cab be added by observer
+   // NB but also parameters by default measured by AWS if not present at that moment then they can be added by observer (pressure excepted)
+   // NB     eg if temperature is not part of the incoming data (eg sensor failure) then observer can manually insert the temperature
+   // NB Pressure can never be inserted by the observer (even if not measured by the AWS) 
+   // 
+   
+   boolean position_ok = true;
+   int len;
+   int hulp_month;
+  
+   
+   // month (mydatetime.month is retrieved every minute) (Function: RS422_Read_AWS_Sensor_Data_For_Display() [main_RS232_RS422.java])
+   switch (mydatetime.month) 
+   {
+      case "January":
+         hulp_month = 1;
+         break;
+      case "February":
+         hulp_month = 2;
+         break;
+      case "March":
+         hulp_month = 3;
+         break;
+      case "April":
+         hulp_month = 4;
+         break;
+      case "May":
+         hulp_month = 5;
+         break;
+      case "June":
+         hulp_month = 6;
+         break;
+      case "July":
+         hulp_month = 7;
+         break;
+      case "August":
+         hulp_month = 8;
+         break;
+      case "September":
+         hulp_month = 9;
+         break;
+      case "October":
+         hulp_month = 10;
+         break;
+      case "November":
+         hulp_month = 11;
+         break;
+      case "December":
+         hulp_month = 12;
+         break;
+      default:
+         hulp_month = 0;
+         break;
+   }  // switch
+   
+   // NB obs date time = AWS +1 hour compared to the AWS date time of incoming data !!
+   
+   // NB GregorianCalendar(int year, int month, int dayOfMonth, int hourOfDay, int minute)
+   // NB Constructs a GregorianCalendar with the given date and time set for the default time zone with the default locale.
+   // NB month 0..11            // The first month of the year in the Gregorian and Julian calendars is JANUARY which is 0
+   // NB dayOfMonth 1..31       // The first day of the month has value 1
+   // NB hourOfDay: 0.. 23      // Field number for get and set indicating the hour of the day. HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+   
+   if (mydatetime.year.equals("") == false && mydatetime.year != null && mydatetime.day.equals("") == false && mydatetime.day != null && mydatetime.hour.equals("") == false && mydatetime.hour != null && hulp_month != 0)
+   {
+      GregorianCalendar cal_obs_datum_tijd = new GregorianCalendar(Integer.parseInt(mydatetime.year), 
+                                                                   hulp_month -1, 
+                                                                   Integer.parseInt(mydatetime.day),
+                                                                   Integer.parseInt(mydatetime.hour),
+                                                                   0
+                                                                  );
+      cal_obs_datum_tijd.add(Calendar.HOUR_OF_DAY, 1);                  // add 1 hour
+      
+      SimpleDateFormat sdf8 = new SimpleDateFormat("yyyyMMddHH");       // NB MM-> start = 1!! (eg January = 01 !!)
+      //sdf8.setTimeZone(TimeZone.getTimeZone("UTC"));                  // NOT IN THIS CASE [PROGRAM DO A 'DOUBLE' CONVERSION]
+      String obs_date_time = sdf8.format(cal_obs_datum_tijd.getTime()); // eg 2017000308
+      
+      //System.out.println("+++ " + "mydatetime.hour = " + mydatetime.hour); 
+      //System.out.println("+++ " + "obs_date_time = " + obs_date_time); 
+      
+      mydatetime.year    = obs_date_time.substring(0, 4);               // eg 2017          
+      
+      //hulp_int_month = Integer.parseInt(obs_date_time.substring(4, 6)) + 1;         // NB if January : hulp_int_month = 0 -> convert to -> mydatetime.MM_code = "01"
+      //mydatetime.MM_code = String.valueOf(hulp_int_month);              // eg "1"
+      //len = 2;                                                                          // MM_code always 2 characters width e.g. 02
+      //if (mydatetime.MM_code.length() < len)                                            // pad on left with zeros
+      //{   
+      //  mydatetime.MM_code = "0000000000".substring(0, len - mydatetime.MM_code.length()) + mydatetime.MM_code;
+      //}
+      mydatetime.MM_code = obs_date_time.substring(4, 6);
+      
+
+      mydatetime.YY_code = obs_date_time.substring(6, 8);               // eg 03       // day of obs
+      mydatetime.GG_code = obs_date_time.substring(8, 10);              // eg 08       // hour of obs
+   }
+   else
+   {
+      mydatetime.year    = "    ";               // 4x space           
+      mydatetime.MM_code = "  ";                 // 2x space 
+      mydatetime.YY_code = "  ";                 // 2x space // day of obs
+      mydatetime.GG_code = "  ";                 // 2x space // hour of obs
+   } // else
+
+   //System.out.println("+++ " + "mydatetime.hour = " + mydatetime.hour); 
+   //System.out.println("+++ " + "mydatetime.GG_code = " + mydatetime.GG_code); 
+   // 
+   //System.out.println("+++ " + "hulp_int_month = " + hulp_int_month); 
+   //System.out.println("+++ " + "mydatetime.MM_code = " + mydatetime.MM_code); 
+    
+   
+   
+   //
+   ////////////// position //////////////
+   //
+   // NB retrieved every minute. Function: RS422_Read_AWS_Sensor_Data_For_Display() [main_RS232_RS422.java]:
+   //    - myposition.latitude_degrees
+   //    - myposition.latitude_minutes
+   //    - myposition.longitude_degrees
+   //    - myposition.longitude_minutes
+   
+   // String latitude convert to integer
+   try 
+   {
+      myposition.int_latitude_degrees = Integer.parseInt(myposition.latitude_degrees.trim());
+   }
+   catch (NumberFormatException e)
+   {
+      position_ok = false;
+   }
+      
+   try 
+   {
+      myposition.int_latitude_minutes = Integer.parseInt(myposition.latitude_minutes.trim());
+   }
+   catch (NumberFormatException e)
+   {
+      position_ok = false;
+   }
+      
+   // String longitude omzetten naar integer
+   try 
+   {
+      myposition.int_longitude_degrees = Integer.parseInt(myposition.longitude_degrees.trim());
+   }
+   catch (NumberFormatException e)
+   {
+      position_ok = false;
+   }
+      
+   try 
+   {
+      myposition.int_longitude_minutes = Integer.parseInt(myposition.longitude_minutes.trim());
+   }
+   catch (NumberFormatException e)
+   {
+      position_ok = false;
+   }   
+   
+   
+   if (position_ok)
+   {
+      // determine code figure quadrant of the globe
+      //
+      if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+      {
+         myposition.Qc_code = "1";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+      {
+         myposition.Qc_code = "3";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+      {
+         myposition.Qc_code = "5";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+      {
+         myposition.Qc_code = "7";
+      }
+      else
+      {
+         //JOptionPane.showMessageDialog(null, "internal error: Qc_code", main.APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE); // bug check message
+         myposition.Qc_code = " ";
+      }
+
+      // determine code figures (latitude)
+      //
+      int int_latitude_minutes_6 = myposition.int_latitude_minutes / 6;               // devide the minutes by six and disregard the remainder
+      String latitude_minutes_6 = Integer.toString(int_latitude_minutes_6);           // convert to String 
+         
+      if (latitude_minutes_6.length() != 1)                                           // debug check
+      {
+         //JOptionPane.showMessageDialog(null, "internal error: latitude_minutes_6",  main.APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE);
+         position_ok = false;
+      }
+
+      myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)", "") + latitude_minutes_6;
+
+      len = 3;                                                                    // always 3 chars
+      if (myposition.lalala_code.length() < len) 
+      {
+         // pad on left with zeros
+         myposition.lalala_code = "0000000000".substring(0, len - myposition.lalala_code.length()) + myposition.lalala_code;
+      }
+         
+      // determine code figures (longitude)
+      //
+      int int_longitude_minutes_6 = myposition.int_longitude_minutes / 6;               // devide the minutes by six and disregard the remainder
+      String longitude_minutes_6 = Integer.toString(int_longitude_minutes_6);           // convert to String 
+         
+      if (longitude_minutes_6.length() != 1)                                            // debug check
+      {
+         //JOptionPane.showMessageDialog(null, "internal error: longitude_minutes_6",  main.APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE);
+         position_ok = false;
+      }
+
+      myposition.lolololo_code = myposition.longitude_degrees.trim().replaceFirst("^0+(?!$)", "") + longitude_minutes_6;
+         
+      len = 4;                                                                          // always 4 chars
+      if (myposition.lolololo_code.length() < len)                                      // pad on left with zeros
+      {
+         myposition.lolololo_code = "0000000000".substring(0, len - myposition.lolololo_code.length()) + myposition.lolololo_code;
+      }
+   } // if (position_ok)
 
    
+   if (position_ok == false)
+   {
+      myposition.Qc_code       = " ";       // 1x space
+      myposition.lalala_code   = "   ";     // 3x space 
+      myposition.lolololo_code = "    ";    // 4x space 
+   }
+}   
    
-   
+
    
 /***********************************************************************************************/
 /*                                                                                             */
@@ -10877,7 +11174,7 @@ private boolean checking_level_3()
                      
                            if (main.wind_units.indexOf(main.M_S) == -1)  // so knots
                            {
-                              wind_speed_units = "kn";
+                              wind_speed_units = "kts";
                            }   
                            else
                            {
@@ -10944,6 +11241,20 @@ private boolean checking_level_3()
          
          if ( (RS232_connection_mode == 3) && (defaultPort != null) )    // AWS
          {
+            MenuItem dashboard_Item = new MenuItem("dashboard");
+            popup.add(dashboard_Item);
+            
+            popup.addSeparator();
+            
+            dashboard_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Dashboard_AWS_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });            
+            
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             MenuItem wind_dir_graph_Item = new MenuItem("wind direction graph");
             MenuItem wind_speed_graph_Item = new MenuItem("wind speed graph");
@@ -11031,13 +11342,25 @@ private boolean checking_level_3()
 
          if ( ((RS232_connection_mode == 1) || (RS232_connection_mode == 2) || (RS232_connection_mode == 4) || (RS232_connection_mode == 5)) && (defaultPort != null) ) // PTB220 or PTB330 or Mintaka Duo or Mintaka Star USB
          {
+            MenuItem dashboard_Item = new MenuItem("dashboard");
+            popup.add(dashboard_Item);
+            
+            popup.addSeparator();
+            
+            dashboard_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Dashboard_Barometer_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });            
+            
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             popup.add(pressure_graph_Item);
             
             popup.addSeparator();
             
-            // air pressure graph
-            //
             pressure_graph_Item.addActionListener(new ActionListener() 
             {
                @Override
@@ -11051,13 +11374,25 @@ private boolean checking_level_3()
 
          if (RS232_connection_mode == 6) // Mintaka Star WiFi
          {
+            MenuItem dashboard_Item = new MenuItem("dashboard");
+            popup.add(dashboard_Item);
+            
+            popup.addSeparator();
+            
+            dashboard_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Dashboard_Barometer_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });                    
+            
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             popup.add(pressure_graph_Item);
             
             popup.addSeparator();
             
-            // air pressure graph
-            //
             pressure_graph_Item.addActionListener(new ActionListener() 
             {
                @Override
@@ -11448,6 +11783,76 @@ private boolean checking_level_3()
    }//GEN-LAST:event_Info_send_System_log_menu_actionperformed
 
    
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/      
+   private void Dashboard_Barometer_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Dashboard_Barometer_actionPerformed
+      // TODO add your handling code here:
+      
+      if (dashboard_form != null)
+      {
+         if (DASHBOARD_view.dashboard_update_timer_is_gecreeerd == true)  
+         {
+            if (DASHBOARD_view.dashboard_update_timer.isRunning())
+            {
+               DASHBOARD_view.dashboard_update_timer.stop();
+            }
+         }
+         DASHBOARD_view.dashboard_update_timer = null;
+      
+         DASHBOARD_view.dashboard_update_timer_is_gecreeerd = false;
+          
+         //graph_form.dispose();
+         dashboard_form.setVisible(false);
+      }      
+      
+      
+      dashboard_form = new DASHBOARD_view();
+      dashboard_form.setExtendedState(MAXIMIZED_BOTH); 
+      dashboard_form.setVisible(true);       
+      
+   }//GEN-LAST:event_Dashboard_Barometer_actionPerformed
+
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/    
+   private void Dashboard_AWS_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Dashboard_AWS_actionPerformed
+      // TODO add your handling code here:
+      
+      
+      if (dashboard_form_AWS != null)
+      {
+         if (DASHBOARD_view_AWS.dashboard_update_timer_AWS_is_gecreeerd == true)  
+         {
+            if (DASHBOARD_view_AWS.dashboard_update_timer_AWS.isRunning())
+            {
+               DASHBOARD_view_AWS.dashboard_update_timer_AWS.stop();
+            }
+         }
+         DASHBOARD_view_AWS.dashboard_update_timer_AWS = null;
+      
+         DASHBOARD_view_AWS.dashboard_update_timer_AWS_is_gecreeerd = false;
+          
+         //graph_form.dispose();
+         dashboard_form_AWS.setVisible(false);
+      }      
+      
+      
+      dashboard_form_AWS = new DASHBOARD_view_AWS();
+      dashboard_form_AWS.setExtendedState(MAXIMIZED_BOTH); 
+      dashboard_form_AWS.setVisible(true);       
+      
+      
+   }//GEN-LAST:event_Dashboard_AWS_actionPerformed
+
    
    
    
@@ -12894,12 +13299,12 @@ private void initComponents2()
    }
    
    // Obs to server
-   if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
-   {
-      // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
-      // gray (disable) the "output -> obs to server (internet)" menu selection option
-      jMenuItem20.setEnabled(false);
-   }
+   //if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
+   //{
+   //   // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
+   //   // gray (disable) the "output -> obs to server (internet)" menu selection option
+   //   jMenuItem20.setEnabled(false);
+   //}
    
    // initialisation
    mode_grafiek = MODE_PRESSURE;
@@ -12913,6 +13318,23 @@ private void initComponents2()
    /* read stored meta (station) data from muffins or from configuration files */
    if (offline_mode_via_cmd == true) // offline mode
    {
+	   // check only one instance running 
+		try 
+      {
+			s = new ServerSocket(PORT, 10, InetAddress.getLocalHost());
+		} 
+      catch (UnknownHostException e) 
+      {
+			// shouldn't happen for localhost
+		} 
+      catch (IOException e)
+      {
+			// port taken, so app is already running
+         JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE); 
+			System.exit(0);
+		}
+      
+      // read stored meta data
       lees_configuratie_regels();          
    }
    else // so offline_via_jnlp mode or online (webstart) mode
@@ -15705,20 +16127,22 @@ public static String http_respons_code_to_text(int responseCode)
       case 505: text = "HTTP Version not supported (HTTP code 505)"; break;
       case 511: text = "Authentication Required (HTTP code 511)"; break;
          
-      // 7xx: TurboWin+/server Error (custom/sef defined errors) 
-      //// start self defined section (must be coordinated with server [index_webstart_101.php]) //////   
+      // 7xx: TurboWin+/server Error (custom/sef defined errors) [2 sections] 
+      //// start first self defined section (must be coordinated with server [index_webstart_101.php]) //////   
       case 700: text = "obs invalid format"; break;                                                                       // self defined
       case 701: text = "(masked)call sign in the obs not on the email whitelist of this server." + "<br>" +               // self defined
                        "Please send an email with your (masked)call sign to your PMO or National Meteorological Service"; break;
       case 702: text = "obs routing from server to Meteorological Centre failed"; break;                                  // self defined
-      
-      //// start self defined section (no coordination with server [index_webstart_101.php]) //////      
+       //// end first self defined section ////// 
+         
+      //// start second self defined section (no coordination with server [index_webstart_101.php]) //////      
       case 710: text = "internal error when generating format 101 obs"; break;                                            // self defined 
       case 711: text = "most probably no internet connection available"; break;                                           // self defined (actually IOexception)
       case 712: text = "internal error, malformed URL"; break;                                                            // self defined
       case 713: text = "most probably no internet connection available (format 101 obs ok)"; break;                       // self defined
       case 714: text = "InterruptedException or ExecutionException"; break;                                               // self defined
-      //// end self defined section //////         
+      case 715: text = "Unsupported UTF-8 encoding"; break;                                                               // self defined 
+      //// end second self defined section //////         
          
       // default   
       default:  text = "Unknown error"; break;                  
@@ -16300,6 +16724,7 @@ public static void log_turbowin_system_message(final String message)
  
  
    // Variables declaration - do not modify//GEN-BEGIN:variables
+   private javax.swing.JMenu Dashboard;
    private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton10;
    private javax.swing.JButton jButton11;
@@ -16419,6 +16844,8 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem52;
    private javax.swing.JMenuItem jMenuItem53;
    private javax.swing.JMenuItem jMenuItem54;
+   private javax.swing.JMenuItem jMenuItem55;
+   private javax.swing.JMenuItem jMenuItem56;
    private javax.swing.JMenuItem jMenuItem6;
    private javax.swing.JMenuItem jMenuItem7;
    private javax.swing.JMenuItem jMenuItem8;
@@ -16486,7 +16913,7 @@ public static void log_turbowin_system_message(final String message)
    private static final int IMMT_4_POSITION_OBSERVER        = 173;         // in IMMT-4 records begin position observer name
    private static final int IMMT_5_POSITION_OBSERVER        = 173;         // in IMMT-5 records begin position observer name
    private static final int IMMT_POSITION_IMMT_VERSION      = 110;         // immt version voor zowel IMMT-3/IMMT-4/IMMT-5 staat deze op dezelfde pos, zal in de toekomst ook wel zo blijven, maar wel controleren voor volgende IMMT versies
-   private static final int IMMT_LIMIT                      = 512000;      // 500 bytes x 1024 = 500 kB
+   private static final int IMMT_LIMIT                      = 1024000;     //512000;      // 512000 bytes / 1024 = 500 kB
    private final String MOVE_TO_EMAIL                       = "move_to_email";
    private final String MOVE_TO_DISK                        = "move_to_disk";
    private final String LOGS_ZIP                            = "logs.zip";
@@ -16586,7 +17013,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String MUFFIN_LINE_SEPARATOR         = "%";                    // i.p.v. eol deze geeft problemen bij bytes -> String
    public static final String UK_OBS_EMAIL_SUBJECT          = "SXVX88 EGRR ddhhmm";
    public static final String GENERAL_OBS_EMAIL_SUBJECT     = "weather observation";
-   public static final String URL_INTERNET_HELP             = "http://projects.knmi.nl/turbowin/webstart/help/";      //"www.knmi.nl/samenw/turbowin/webstart/help/";
+   public static final String URL_INTERNET_HELP             = "http://projects.knmi.nl/turbowin/webstart/help/";      //"www.turbowin.knmi.nl/webstart101/help/";
    public static final String OFFLINE_HELP_DIR              = "help";                 // wordt alleeen gebruikt indien in offline_mode
    public static final String KNOTS                         = "knots";
    public static final String M_S                           = "m/s";
@@ -16609,16 +17036,17 @@ public static void log_turbowin_system_message(final String message)
    public static final String THEME_NIMBUS_SUNRISE          = "theme_nimbus_sunrise";
    public static final String THEME_NIMBUS_SUNSET           = "theme_nimbus_sunset";
    public enum OSType {WINDOWS, MACOS, LINUX, OTHER};
-   public static final String KNMI_UPLOAD_URL               = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?";
+   public static final String KNMI_UPLOAD_URL               = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?"; // "www.turbowin.knmi.nl/webstart101/index_webstart_101.php?";
    public static final Integer INVALID_RESPONSE_FORMAT_101  = 710;                    // self defined http response code
    public static final Integer RESPONSE_NO_INTERNET         = 711;                    // self defined http response code (IOException)
    public static final Integer RESPONSE_MALFORMED_URL       = 712;                    // self defined http response code
    public static final Integer OK_RESPONSE_FORMAT_101       = 713;                    // self defined http response code 
    public static final Integer RESPONSE_INTERRUPTION        = 714;                    // self defined http response code (InterruptedException | ExecutionException)
+   public static final Integer RESPONSE_UNSUPPORTED_ENCODING= 715;                   // self defined http response code 
    
    // public var's
    public static final String APPLICATION_NAME              = "TurboWin+";                       // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "2.6.5 (build 18-May-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_VERSION           = "2.8.0 (build 25-Oct-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
    public static String user_dir;
@@ -16686,24 +17114,27 @@ public static void log_turbowin_system_message(final String message)
    
    
    // private var's
-   private SingleInstanceService sis                        = null;        // for checking only one instance is running
-   private SISListener sisL                                 = null;        // for checking only one instance is running
-   private static String output_dir                         = null;
-   private static String hulp_dir                           = "";          // for writing configuration.txt file in user_dir (system defined) AND logs_dir (user defined) (backup for muffin)
+   private static final int PORT                                   = 12345;		   // for checking only one instance is running  // random large port number
+	private static ServerSocket s;                                                   // for checking only one instance is running
+ 
+   private SingleInstanceService sis                               = null;          // for checking only one instance is running
+   private SISListener sisL                                        = null;          // for checking only one instance is running
+   private static String output_dir                                = null;
+   private static String hulp_dir                                  = "";            // for writing configuration.txt file in user_dir (system defined) AND logs_dir (user defined) (backup for muffin)
    private URL url_php;
-   private String obs_write                                 = "";
-   private String output_file                               = "";
-   private String volledig_path_dstFilename_immt            = "";
-   private String volledig_path_srcFilename_immt            = "";
-   private String volledig_path_backup_srcFilename_immt     = "";
-   private String volledig_path_dstFilename_captain         = "";
-   private String volledig_path_srcFilename_captain         = "";
-   private String volledig_path_backup_srcFilename_captain  = "";
-   private String temp_logs_dir                             = "";
-   //private String last_record                               = "";
+   private String obs_write                                        = "";
+   private String output_file                                      = "";
+   private String volledig_path_dstFilename_immt                   = "";
+   private String volledig_path_srcFilename_immt                   = "";
+   private String volledig_path_backup_srcFilename_immt            = "";
+   private String volledig_path_dstFilename_captain                = "";
+   private String volledig_path_srcFilename_captain                = "";
+   private String volledig_path_backup_srcFilename_captain         = "";
+   private String temp_logs_dir                                    = "";
+   //private String last_record                                    = "";
    private static String last_record                               = "";
-   private String[] jaar_substring_array                    = new String [MAX_AANTAL_JAREN_IN_IMMT];
-   private String[] observername_array                      = new String [MAX_AANTAL_WAARNEMERS];
+   private String[] jaar_substring_array                           = new String [MAX_AANTAL_JAREN_IN_IMMT];
+   private String[] observername_array                             = new String [MAX_AANTAL_WAARNEMERS];
    public static GregorianCalendar cal_systeem_datum_tijd;             
    public static GregorianCalendar cal_systeem_datum_tijd_UTC;
    public static GregorianCalendar cal_systeem_datum_tijd_LT;
@@ -16720,7 +17151,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String MODE_SST                             = "mode_sst";
    public static final String MODE_WIND_SPEED                      = "mode_windspeed";
    public static final String MODE_WIND_DIR                        = "mode_winddir";
-	public static final String MODE_ALL_PARAMETERS                  = "mode_all_parameters";
+   public static final String MODE_ALL_PARAMETERS                  = "mode_all_parameters";
    
    public static final int RECORD_LENGTE_PTB330                    = 46;
    public static final int RECORD_DATUM_TIJD_BEGIN_POS_PTB330      = 34; 
@@ -16783,7 +17214,8 @@ public static void log_turbowin_system_message(final String message)
    public static boolean relative_wind_dir_from_AWS_present        = false;
    public static boolean true_wind_speed_from_AWS_present          = false;
    public static boolean true_wind_dir_from_AWS_present            = false;
-   public static boolean displayed_aws_data_obsolate               = false;
+   public static boolean true_wind_gust_from_AWS_present           = false;
+   public static boolean displayed_aws_data_obsolate               = false;   // set in Function: RS422_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
    
    public static final int NUMBER_COM_PORTS                        = 20;     // used by checking COM ports meteorological instrument (barometer, EUCAWS) and also for GPS
    public static final int LENGTE_SMD_STRING                       = 14;//14;//1024;//20;  // 20 is willekeurig, moet nog precies bepaald worden
@@ -16830,6 +17262,8 @@ public static void log_turbowin_system_message(final String message)
    public static String total_string;     
    
    private RS232_view graph_form;
+   private DASHBOARD_view dashboard_form;
+   private DASHBOARD_view_AWS dashboard_form_AWS;
    
    public static final Color input_color_from_aws                   = Color.RED;  // color for text fields if input was measured by AWS (manually input of that text field disabled)
    public static final Color input_color_from_observer              = Color.BLACK;

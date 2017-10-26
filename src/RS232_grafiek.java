@@ -120,6 +120,8 @@ public void paintComponent(Graphics g)
    Color color_raster_blue_sst = new Color(0, 153, 153);            //  sea water color
    Color color_pen_black     = Color.BLACK;
    
+   
+   
    // in night mode theme than truck for oposite pen color
    //if (main.theme_mode .equals(main.THEME_NIGHT))
    //{
@@ -418,7 +420,7 @@ public void paintComponent(Graphics g)
          }
          else if (k == 3)                        // bottom right; graph d (wind speed)
          {
-            test_aanduiding_y = "30 kn";
+            test_aanduiding_y = "30 kts";
          }
       
 			FontRenderContext context_y = g2.getFontRenderContext();
@@ -467,7 +469,7 @@ public void paintComponent(Graphics g)
                }
                else if (k == 3)   // bottom right; graph d; wind speed
                {
-                  aanduiding = Integer.toString(int_aanduiding) + " kn";
+                  aanduiding = Integer.toString(int_aanduiding) + " kts";
                }
          
                // indications at left y-axis
@@ -984,8 +986,8 @@ public void paintComponent(Graphics g)
 				} 
 				else if (k == 3)              // graph d; bottom right; wind speed
 				{
-				   datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kn";
-					test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 23 kn";
+				   datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kts";
+					test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 23 kts";
 				} 
 
 				//Font font_datum_tijd_parameter = new Font("Serif", Font.BOLD, 14);
@@ -1281,7 +1283,7 @@ public void paintComponent(Graphics g)
       }
       else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
       {
-         test_aanduiding_y = "30 kn";
+         test_aanduiding_y = "30 kts";
       }
       else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
       {
@@ -1322,7 +1324,7 @@ public void paintComponent(Graphics g)
          }
          else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
          {
-            aanduiding = Integer.toString(int_aanduiding) + " kn";
+            aanduiding = Integer.toString(int_aanduiding) + " kts";
          }
          else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
          {
@@ -1401,7 +1403,7 @@ public void paintComponent(Graphics g)
       
       if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)   // PTB220 or PTB330 or MintakaDuo or Mintaka Star (USB) or Mintaka Star WiFi connected
       {
-         string_aanduiding = "All values at barometer height";
+         string_aanduiding = "All values at barometer height and no ic applied";
          // NB color is the color of the raster 
          //Font font_sensor_level_text = new Font("Serif", Font.BOLD, 14);
          //g2.setFont(font_sensor_level_text);
@@ -1580,8 +1582,8 @@ public void paintComponent(Graphics g)
                   }
                   else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                   {
-                     datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kn";
-                     test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 23 kn";							
+                     datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kts";
+                     test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 23 kts";							
                   }
                   else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
                   {

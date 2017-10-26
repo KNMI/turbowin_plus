@@ -204,7 +204,7 @@ public class RS232_settings extends javax.swing.JFrame {
       });
 
       buttonGroup1.add(jRadioButton5);
-      jRadioButton5.setText("Mintaka Duo barometer");
+      jRadioButton5.setText("Mintaka Duo barometer via USB");
       jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
          public void itemStateChanged(java.awt.event.ItemEvent evt) {
             Mintaka_connected_itemStateChanged(evt);
@@ -234,18 +234,14 @@ public class RS232_settings extends javax.swing.JFrame {
          .addGroup(jPanel2Layout.createSequentialGroup()
             .addGap(20, 20, 20)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addGroup(jPanel2Layout.createSequentialGroup()
-                  .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jRadioButton11)
-                     .addComponent(jRadioButton10)
-                     .addComponent(jRadioButton5)
-                     .addComponent(jRadioButton3)
-                     .addComponent(jRadioButton2)
-                     .addComponent(jRadioButton1))
-                  .addContainerGap(122, Short.MAX_VALUE))
-               .addGroup(jPanel2Layout.createSequentialGroup()
-                  .addComponent(jRadioButton4)
-                  .addGap(20, 252, Short.MAX_VALUE))))
+               .addComponent(jRadioButton11)
+               .addComponent(jRadioButton10)
+               .addComponent(jRadioButton5)
+               .addComponent(jRadioButton3)
+               .addComponent(jRadioButton2)
+               .addComponent(jRadioButton1)
+               .addComponent(jRadioButton4))
+            .addContainerGap(122, Short.MAX_VALUE))
       );
       jPanel2Layout.setVerticalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

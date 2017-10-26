@@ -582,7 +582,7 @@ public class myposition extends javax.swing.JFrame {
       //jCheckBox2.setSelected(false);                                  // position on Google Maps + AIS map
       
       
-      // SOG and COG over 10 minutes if AWS connected or 101 format (FM13 default over 3 hrs)
+      // SOG and COG over 10 minutes if AWS connected/101 format (FM13 default: over 3 hrs)
       if ( (main.obs_format.equals(main.FORMAT_101)) || (main.RS232_connection_mode == 3) )
       {
          jLabel5.setText("course made good during last 10 min (degr)");
@@ -1655,7 +1655,7 @@ else
          //System.out.println("+++ GPS-ok = " + GPS_ok);
          // NB inserting values in jTextfields etc was done in the function: RS232_Mintaka_Star_Read_Sensor_Data_GPS_For_Obs("MANUAL");
       }
-      else if (main.RS232_GPS_connection_mode == 1)
+      else if (main.RS232_GPS_connection_mode == 1)                          // GPS NMEA 0183 (separate GPS, not barometer integrated)
       {
          GPS_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MANUAL");     
          
@@ -1710,7 +1710,7 @@ else
          } // if (GPS_date_time_ok )
          
       } // if (main.RS232_GPS_connection_mode == 1)
-      else if (main.RS232_GPS_connection_mode == 0)                          // no GPS connected
+      else if (main.RS232_GPS_connection_mode == 0)                          // no GPS connected (noat a separate GPS and not a baromyter integrated GPS)
       {
          // put back earlier inserted values (if applicable)
          //
@@ -1833,28 +1833,28 @@ else
    private javax.swing.JPanel jPanel4;
    private javax.swing.JPanel jPanel5;
    public static javax.swing.JRadioButton jRadioButton1;
-   private javax.swing.JRadioButton jRadioButton10;
-   private javax.swing.JRadioButton jRadioButton11;
-   private javax.swing.JRadioButton jRadioButton12;
-   private javax.swing.JRadioButton jRadioButton13;
-   private javax.swing.JRadioButton jRadioButton14;
-   private javax.swing.JRadioButton jRadioButton15;
-   private javax.swing.JRadioButton jRadioButton16;
-   private javax.swing.JRadioButton jRadioButton17;
-   private javax.swing.JRadioButton jRadioButton18;
-   private javax.swing.JRadioButton jRadioButton19;
+   public static javax.swing.JRadioButton jRadioButton10;
+   public static javax.swing.JRadioButton jRadioButton11;
+   public static javax.swing.JRadioButton jRadioButton12;
+   public static javax.swing.JRadioButton jRadioButton13;
+   public static javax.swing.JRadioButton jRadioButton14;
+   public static javax.swing.JRadioButton jRadioButton15;
+   public static javax.swing.JRadioButton jRadioButton16;
+   public static javax.swing.JRadioButton jRadioButton17;
+   public static javax.swing.JRadioButton jRadioButton18;
+   public static javax.swing.JRadioButton jRadioButton19;
    public static javax.swing.JRadioButton jRadioButton2;
-   private javax.swing.JRadioButton jRadioButton20;
-   private javax.swing.JRadioButton jRadioButton21;
-   private javax.swing.JRadioButton jRadioButton22;
-   private javax.swing.JRadioButton jRadioButton23;
+   public static javax.swing.JRadioButton jRadioButton20;
+   public static javax.swing.JRadioButton jRadioButton21;
+   public static javax.swing.JRadioButton jRadioButton22;
+   public static javax.swing.JRadioButton jRadioButton23;
    public static javax.swing.JRadioButton jRadioButton3;
    public static javax.swing.JRadioButton jRadioButton4;
-   private javax.swing.JRadioButton jRadioButton5;
-   private javax.swing.JRadioButton jRadioButton6;
-   private javax.swing.JRadioButton jRadioButton7;
-   private javax.swing.JRadioButton jRadioButton8;
-   private javax.swing.JRadioButton jRadioButton9;
+   public static javax.swing.JRadioButton jRadioButton5;
+   public static javax.swing.JRadioButton jRadioButton6;
+   public static javax.swing.JRadioButton jRadioButton7;
+   public static javax.swing.JRadioButton jRadioButton8;
+   public static javax.swing.JRadioButton jRadioButton9;
    private javax.swing.JSeparator jSeparator1;
    public static javax.swing.JTextField jTextField1;
    public static javax.swing.JTextField jTextField2;

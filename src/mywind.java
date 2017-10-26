@@ -1879,6 +1879,7 @@ public class mywind extends javax.swing.JFrame {
    public static int int_true_wind_dir          = main.INVALID;
    public static int int_true_wind_speed        = main.INVALID;
    public static int int_difference_sll_wl      = main.INVALID;
+   public static int int_true_wind_gust_speed   = main.INVALID;  // only for dashboard
  
    // var's scope only this module (no static)
    private int int_wind_dir                     = main.INVALID;

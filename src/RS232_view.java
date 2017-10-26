@@ -96,6 +96,7 @@ public class RS232_view extends javax.swing.JFrame {
       jLabel1 = new javax.swing.JLabel();
       jLabel2 = new javax.swing.JLabel();
       jPanel2 = new javax.swing.JPanel();
+      jLabel3 = new javax.swing.JLabel();
       /*
       jPanel1 = new javax.swing.JPanel();
       */jPanel1 = new RS232_grafiek();
@@ -195,15 +196,23 @@ public class RS232_view extends javax.swing.JFrame {
 
       jPanel2.setPreferredSize(new java.awt.Dimension(975, 50));
 
+      jLabel3.setText("---");
+
       javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
       jPanel2.setLayout(jPanel2Layout);
       jPanel2Layout.setHorizontalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGap(0, 975, Short.MAX_VALUE)
+         .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGap(61, 61, 61)
+            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(257, Short.MAX_VALUE))
       );
       jPanel2Layout.setVerticalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGap(0, 50, Short.MAX_VALUE)
+         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addContainerGap(25, Short.MAX_VALUE)
+            .addComponent(jLabel3)
+            .addContainerGap())
       );
 
       getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
@@ -299,7 +308,7 @@ public class RS232_view extends javax.swing.JFrame {
 
       if (main.RS232_connection_mode == 6)
       {
-         // NB In case of WiFi connection no possibility to check the connection is still live *in case of serial connection that will be the case if defaultPort ! null)
+         // NB In case of WiFi connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
          //
          //
          // retrieving sensor data from file, timer scheduled
@@ -561,7 +570,7 @@ private void Read_Sensor_Data_Files_For_Barograph()
    for (int i = aantal_intelezen_files; i >= 0; i--)
    {
       cal_file_datum_tijd = new GregorianCalendar();
-      cal_file_datum_tijd.add(Calendar.HOUR, -i);
+      cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
 
       String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(cal_file_datum_tijd.getTime()); // eg 2013020308
       sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
@@ -899,7 +908,7 @@ private void Read_Sensor_Data_Files_For_Graphs()
    for (int i = aantal_intelezen_files; i >= 0; i--)
    {
       cal_file_datum_tijd = new GregorianCalendar();
-      cal_file_datum_tijd.add(Calendar.HOUR, -i);
+      cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
 
       String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(cal_file_datum_tijd.getTime()); // -> eg 2013020308
       sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
@@ -1104,7 +1113,7 @@ private void Read_Sensor_Data_Files_For_Graphs()
 /***********************************************************************************************/
 private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
 {
-   // NB this function reads sensor data from an individual Mintaka Duo barometer (not from an AWS) stored in files
+   // NB this function reads sensor data from an individual Mintaka Duo or Star barometer (not from an AWS) stored in files
    //
    // NB This function will be called from within a swingworker, see: init_sensor_data_uit_file_ophalen_timer() and sensor_data_uit_file_ophalen()
    //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file reading/writing)
@@ -1150,7 +1159,7 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
    for (int i = aantal_intelezen_files; i >= 0; i--)
    {
       cal_file_datum_tijd = new GregorianCalendar();
-      cal_file_datum_tijd.add(Calendar.HOUR, -i);
+      cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
 
       String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(cal_file_datum_tijd.getTime()); // -> eg 2013020308
       sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
@@ -1318,6 +1327,21 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
                            if (pos2 - pos >= 2)            // between commas at least 1 char
                            {
                               record_parameter = record.substring(pos, pos2);
+                              
+                              // verify the retrieved value (to avoid spikes)
+                              double hulp_double_pressure_reading;
+                              try
+                              {   
+                                 hulp_double_pressure_reading = Double.parseDouble(record_parameter.trim());
+                              }
+                              catch (NumberFormatException e)
+                              {
+                                 hulp_double_pressure_reading = Double.MAX_VALUE;
+                              }  
+                              if ((hulp_double_pressure_reading < 900.0) || (hulp_double_pressure_reading > 1100.0))
+                              {
+                                 record_parameter = "";
+                              }
                                        
                               //System.out.println("+++ record_parameter = " + record_parameter);
                                        
@@ -1424,7 +1448,7 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
    for (int i = aantal_intelezen_files; i >= 0; i--)
    {
       cal_file_datum_tijd = new GregorianCalendar();
-      cal_file_datum_tijd.add(Calendar.HOUR, -i);
+      cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
 
       String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(cal_file_datum_tijd.getTime()); // -> eg 2013020308
       sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
@@ -1877,32 +1901,46 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
       {
          if (main.RS232_connection_mode == 3)                                              // AWS
          {   
-            setTitle(main.APPLICATION_NAME + " sensor data graph pressure (1 minute average)");
-         }
-         else // e.g. PTB220, PTB330, MintakaDuo
-         {
+            //setTitle(main.APPLICATION_NAME + " sensor data graph pressure (1 minute average)");
             setTitle(main.APPLICATION_NAME + " sensor data graph pressure");
+            jLabel3.setText("--- pressure = 1 min average ---");
+         }
+         else // e.g. PTB220, PTB330, MintakaDuo, Mintaka Star
+         {
+            //setTitle(main.APPLICATION_NAME + " sensor data graph pressure");
+            setTitle(main.APPLICATION_NAME + " sensor data graph pressure");
+            jLabel3.setText("");
          }
       }
       else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))
       {
-         setTitle(main.APPLICATION_NAME + " sensor data graph air temp (1 minute average)");
+         //setTitle(main.APPLICATION_NAME + " sensor data graph air temp (1 minute average)");
+         setTitle(main.APPLICATION_NAME + " sensor data graph air temp");
+         jLabel3.setText("--- air temp = 1 min average ---");
       }
       else if (main.mode_grafiek.equals(main.MODE_SST))
       {
-         setTitle(main.APPLICATION_NAME + " sensor data graph SST (1 minute average)");
+         //setTitle(main.APPLICATION_NAME + " sensor data graph SST (1 minute average)");
+         setTitle(main.APPLICATION_NAME + " sensor data graph SST");
+         jLabel3.setText("--- SST = 1 min average ---");
       }
       else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
       {
-         setTitle(main.APPLICATION_NAME + " sensor data graph true wind speed (10 minutes average) and wind gust (in last 10 minutes)");
+         //setTitle(main.APPLICATION_NAME + " sensor data graph true wind speed (10 minutes average) and wind gust (in last 10 minutes)");
+         setTitle(main.APPLICATION_NAME + " sensor data graph true wind speed and true wind gust");
+         jLabel3.setText("--- True wind speed = 10 min average. True wind gust = max wind in last 10 min ---");
       }
       else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
       {
-         setTitle(main.APPLICATION_NAME + " sensor data graph true wind dir (10 minutes average)");
+         //setTitle(main.APPLICATION_NAME + " sensor data graph true wind dir (10 minutes average)");
+         setTitle(main.APPLICATION_NAME + " sensor data graph true wind dir");
+         jLabel3.setText("--- true wind dir = 10 min average ---");
       }
       else if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS))
       {
-         setTitle(main.APPLICATION_NAME + " sensor data graphs pressure (1 minute average), air temp (1 minute average) and wind (10 minutes average)");
+         //setTitle(main.APPLICATION_NAME + " sensor data graphs pressure (1 minute average), air temp (1 minute average) and wind (10 minutes average)");
+         setTitle(main.APPLICATION_NAME + " sensor data graphs pressure, air temp and true wind");
+         jLabel3.setText("--- Pressure = 1 min average. Air temp = 1 min average. Wind = 10 min average ---");
       }     
      
       /* user directory */
@@ -2014,6 +2052,7 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
    private javax.swing.ButtonGroup buttonGroup1;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
+   private javax.swing.JLabel jLabel3;
    /*
    private javax.swing.JPanel jPanel1;
    */private RS232_grafiek jPanel1;
