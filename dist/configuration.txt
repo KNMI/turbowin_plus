@@ -15,7 +15,7 @@ max. height cargo  : 0
 diff. sll-wl       : 0
 obs email recipient: 
 obs email subject  : weather observation
-logs folder        : C:\Users\stam\Documents\NetBeansProjects\turbowin_jws\dist\logs
+logs folder        : C:\Users\Martin\Documents\NetBeansProjects\turbowin_jws\dist\logs
 log email recipient: 
 wind units         : knots
 RS232 instrument   : 3
@@ -23,17 +23,17 @@ RS232 bps          : 4800
 RS232 data bits    : 8
 RS232 parity       : 0
 RS232 stop bits    : 1
-RS232 prefered COM : COM5
-ic barometer       : -0.1
-obs format         : format_101
-format 101 encrypt : 101_encrypt_no
-format 101 email   : 101_email_body
+RS232 prefered COM : COM3
+ic barometer       : 0.0
+obs format         : format_aws
+format 101 encrypt : 
+format 101 email   : 
 RS232 pref COM name: AUTOMATICALLY
-WOW publish        : false
-WOW site ID        : 
-WOW pin            : 
-WOW rep. interval  : 
-WOW/APR draught    : 4
+WOW publish        : true
+WOW site ID        : 933616001
+WOW pin            : 794314
+WOW rep. interval  : 10
+WOW/APR draught    : 4.1
 AMOS Mail          : false
 RS232 GPS type     : 0
 RS232 GPS bps      : 0
