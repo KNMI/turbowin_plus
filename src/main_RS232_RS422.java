@@ -1,4 +1,8 @@
 
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
+import com.fazecast.jSerialComm.SerialPortPacketListener;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.TrayIcon.MessageType;
@@ -27,6 +31,7 @@ import java.net.SocketException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,11 +49,11 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
-import jssc.SerialPort;
-import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener;
-import jssc.SerialPortException;
-import jssc.SerialPortList;
+//import jssc.SerialPort;
+//import jssc.SerialPortEvent;
+//import jssc.SerialPortEventListener;
+//import jssc.SerialPortException;
+//import jssc.SerialPortList;
 
 
 
@@ -72,7 +77,8 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
    // AWS connection (not used if barometer connected)
    
    int teller                                        = -1;
-   String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
    String info                                       = "[AWS] start up: no AWS found";
    String hulp_parity                                = "";                     // for message writing on java console
 
@@ -85,7 +91,8 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
 
    // initialisation
    main.defaultPort                                  = null;
-      
+   main.defaultPort_descriptive                      = null;
+   
    
    if (main.prefered_COM_port.equals("AUTOMATICALLY"))
    {
@@ -110,26 +117,46 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
       }
 
       // Get sorted array of serial ports in the system
-	   main.portList = SerialPortList.getPortNames();
+	   //main.portList = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
+      //main.serialPorts = SerialPort.getCommPorts();
+      SerialPort[] serialPorts = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
 
-      for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)//for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
       {
+         //teller++;
+	      //
+         //SerialPort serialPort_test = new SerialPort(main.portList[i]);
+         //try
+         //{
+         //   serialPort_test.openPort();         // Open serial port
+         //   serial_ports_portid_array[teller] = main.portList[i];
+         //   serialPort_test.closePort();
+         //   
+         //   String message = "[AWS] found serial port (ok): " + main.portList[i];
+         //   main.log_turbowin_system_message(message);
+         //}
+         //catch (SerialPortException ex) 
+         //{
+         //   System.out.println(ex);
+         //}
+         
          teller++;
-	      
-         SerialPort serialPort_test = new SerialPort(main.portList[i]);
-         try
-         {
-            serialPort_test.openPort();         // Open serial port
-            serial_ports_portid_array[teller] = main.portList[i];
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen()) 
+         { 
+            serial_ports_portid_array[teller] = serialPorts[portNo];
             serialPort_test.closePort();
-            
-            String message = "[AWS] found serial port (ok): " + main.portList[i];
+            String message = "[AWS] found serial port (ok): " + serialPorts[portNo].getDescriptivePortName();
             main.log_turbowin_system_message(message);
-         }
-         catch (SerialPortException ex) 
+         } // if (serialPort_test.isOpen()) 
+         else
          {
-            System.out.println(ex);
-         }           
+            serial_ports_portid_array[teller] = null;
+            System.out.println("couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else
+                 
 
          // NB opening a port cannot be done in SwingWorker, so must be done here !!
 
@@ -140,11 +167,68 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
       {
          if (serial_ports_portid_array[i] != null)                         // so serial port present (and also not in use)
          {
-            SerialPort serialPort_test = new SerialPort(serial_ports_portid_array[i]);
-		      try
-            {
-               serialPort_test.openPort();                                 // Open serial port
-               
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName()); //SerialPort serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+		      //try
+            //{
+            //   serialPort_test.openPort();                                 // Open serial port
+            //   
+            //   if (main.parity == 0)
+            //   {
+            //      hulp_parity = "none";
+            //   }
+            //   else if (main.parity == 1)
+            //   {
+            //      hulp_parity = "odd";
+            //   }
+            //   else if (main.parity == 2)
+            //   {
+            //      hulp_parity = "even";
+            //   }               
+            //   
+            //   System.out.println("[AWS] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits));
+            //   serialPort_test.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+            //   serialPort_test.setFlowControlMode(main.flow_control);
+            //      
+            //   System.out.println("[AWS] Writing \"" + "?" + "\" to " + serialPort_test.getPortName()); 
+            //   String messageString_info = "?\r\n";                    // or "?\r"   
+            //   serialPort_test.writeBytes(messageString_info.getBytes());//Write data to port   
+            //   
+            //   try
+            //   {
+            //      Thread.sleep(2000);
+            //   }
+            //   catch (InterruptedException ex){ }                
+            //   
+            //   String response = serialPort_test.readString();   
+            //   System.out.println(response);
+            //
+            //   if (response != null && response.indexOf("EUCAWS") >= 0)
+            //   {
+            //      info = "[AWS] found AWS on port: " + serial_ports_portid_array[i];
+            //      System.out.print("--- ");
+            //      main.log_turbowin_system_message(info);
+            //      System.out.println("");
+            //      
+            //      serialPort_test.closePort();
+            //      main.defaultPort = serial_ports_portid_array[i];
+            //      break;
+            //   }
+            //   else 
+            //   {
+            //      serialPort_test.closePort();
+            //      info = "[AWS] no AWS found";
+            //      System.out.println("--- " + info);
+            //      System.out.println("");
+            //   }    
+		      //}
+            //catch (SerialPortException ex)
+            //{
+            ///   System.out.println(ex);
+            //}
+            
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
+            { 
                if (main.parity == 0)
                {
                   hulp_parity = "none";
@@ -159,45 +243,64 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
                }               
                
                System.out.println("[AWS] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits));
-               serialPort_test.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
-               serialPort_test.setFlowControlMode(main.flow_control);
-                  
-               System.out.println("[AWS] Writing \"" + "?" + "\" to " + serialPort_test.getPortName()); 
-               String messageString_info = "?\r\n";                    // or "?\r"   
-               serialPort_test.writeBytes(messageString_info.getBytes());//Write data to port   
+               serialPort_test.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+               
+               System.out.println("[AWS] Writing \"" + "?" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName()); 
+               String messageString_info = "?\r\n";                    // or "?\r" 
+               byte[] bytes_message = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_test.writeBytes(bytes_message, bytes_message.length);  ///Write data to port 
                
                try
                {
-                  Thread.sleep(2000);
+                  Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
                }
-               catch (InterruptedException ex){ }                
-               
-               String response = serialPort_test.readString();   
-               System.out.println(response);
-
-               if (response != null && response.indexOf("EUCAWS") >= 0)
+               catch (InterruptedException ex){ }     
+                  
+               // the response
+               //
+               //String response = serialPort_test.readString();   
+               //System.out.println(response);
+                  
+               String response = "";
+               serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+               try 
                {
-                  info = "[AWS] found AWS on port: " + serial_ports_portid_array[i];
+                  byte[] readBuffer = new byte[64];
+                  serialPort_test.readBytes(readBuffer, readBuffer.length);
+                  response = new String(readBuffer, StandardCharsets.UTF_8);
+                  System.out.println(response);
+               } 
+               catch (Exception e) 
+               { 
+                  System.out.println(e);
+               }
+                  
+               if (response != null && response.indexOf("EUCAWS") >= 0)   
+               {
+                  info = "[AWS] found AWS on port: " + serial_ports_portid_array[i].getDescriptivePortName();
                   System.out.print("--- ");
                   main.log_turbowin_system_message(info);
                   System.out.println("");
-                  
-                  serialPort_test.closePort();
-                  main.defaultPort = serial_ports_portid_array[i];
+                     
+                  serialPort_test.closePort();   
+                  main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                  main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
                   break;
                }
                else 
                {
-                  serialPort_test.closePort();
                   info = "[AWS] no AWS found";
                   System.out.println("--- " + info);
                   System.out.println("");
-               }    
-		      }
-            catch (SerialPortException ex)
+                  serialPort_test.closePort();   
+               }
+            } // if (serialPort_test.isOpen()) 
+            else
             {
-               System.out.println(ex);
+               System.out.println("[AWS] couldn't open: " + serial_ports_portid_array[i]);
             }
+            
          } // if (serial_ports_portid_array[i] != null)
       } // for (int i = 0; i < NUMBER_COM_PORTS; i++)
 
@@ -236,17 +339,17 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
    } // if (main.prefered_COM_port.equals("AUTOMATICALLY"))
    else // fixed COM port selected
    {
-      SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
-      try 
-      {
-         // Open port
-         serialPort_test.openPort();
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+      serialPort_test.openPort();
+         
+      if (serialPort_test.isOpen())   
+      {   
          serialPort_test.closePort();
          
          // OK, no problems encoutered
          main.defaultPort = main.prefered_COM_port;
-         info = main.prefered_COM_port + " OK";
-         
+         main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+         info = "[AWS] " + main.prefered_COM_port + " serial COM port available";
          main.log_turbowin_system_message(info);
          
          final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
@@ -264,14 +367,18 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
          timer_begin.start();
          checking_ports_begin_dialog.setVisible(true); 
       }
-      catch (SerialPortException ex) 
+      //catch (SerialPortException ex) 
+      else
       {
          // error opening predefined (by the user)port, reset/warnings
-         System.out.println(ex);
-         info = "[AWS] " + main.prefered_COM_port + " not available";
+         //System.out.println(ex);
+         info = "[AWS] " + main.prefered_COM_port + " serial COM port not available";
          main.log_turbowin_system_message(info);
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         
+         System.out.println(info);
          main.defaultPort = null;
+         main.defaultPort_descriptive = null;
       }
    } // else (fixed COM port selected)
 
@@ -292,9 +399,10 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
       
    ///////// only used for PTB220/PTB330/Mintaka Duo/MintakaStar USB barometers (not for EUCAWS) ////////   
       
-   SerialPort serialPort_test                        = null;
+   //SerialPort serialPort_test                        = null;
    int teller                                        = -1;
-   String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
    String info                                       = "[BAROMETER] start up: no barometer found";
    String hulp_parity                                = "";                     // for message writing on java console
 
@@ -307,7 +415,8 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
 
    // initialisation
    main.defaultPort                                  = null;
-
+   main.defaultPort_descriptive                      = null;
+   
 
    ////////// automatically detecting COM port ///////////
    //
@@ -335,41 +444,41 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
       }
 
       // list all the available ports
-	   main.portList = SerialPortList.getPortNames();
+	   SerialPort[] serialPorts = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
 
-      for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)//for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
       {
-         teller++;
-
-         serialPort_test = new SerialPort(main.portList[i]);
-         try
-         {
-            serialPort_test.openPort();
-            serial_ports_portid_array[teller] = main.portList[i];
-            serialPort_test.closePort();
-            
-            //System.out.println("found serial port (ok): " + main.portList[i]);
-            String message = "[BAROMETER] found serial port (ok): " + main.portList[i];
-            main.log_turbowin_system_message(message);
-         }
-         catch (SerialPortException ex)
-         {
-            System.out.println("[BAROMETER] found serial port (error): " + ex);
-         }
-
          // NB opening a port cannot be done in SwingWorker, so must be done here !!
-
-	   } // for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++)
-
+         
+         teller++;
+         //SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getDescriptivePortName()); 
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen()) 
+         { 
+            //serial_ports_portid_array[teller] = serialPorts[portNo].getSystemPortName();
+            serial_ports_portid_array[teller] = serialPorts[portNo];
+            serialPort_test.closePort();
+            String message = "[BAROMETER] found serial port (ok): " + serialPorts[portNo].getDescriptivePortName();
+            main.log_turbowin_system_message(message);
+         } // if (serialPort_test.isOpen()) 
+         else
+         {
+            serial_ports_portid_array[teller] = null;
+            System.out.println("[BAROMETER] couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else      
+	   } // for (int portNo = 0; portNo < serialPorts.length; portNo++)
 
 
       for (int i = 0; i < main.NUMBER_COM_PORTS; i++)                      // max aantal te scannen poorten
       {
          if (serial_ports_portid_array[i] != null)                         // dus serial port aanwezig (en ook niet in gebruik)
          {
-            serialPort_test = new SerialPort(serial_ports_portid_array[i]);
-            
-            try
+            //SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i]);//serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName());
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
             {
                serialPort_test.openPort();//Open serial port
 
@@ -386,17 +495,20 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   hulp_parity = "even";
                }               
                
-               System.out.println("[BAROMETER] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits));
-               serialPort_test.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
-               serialPort_test.setFlowControlMode(main.flow_control);
+               System.out.println("[BAROMETER] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits)+ serial_ports_portid_array[i].getDescriptivePortName());
+               serialPort_test.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
                
                if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PTB330
                {
                   // send data to the barometer
                   //
-                  System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serialPort_test.getPortName());
+                  //System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serialPort_test.getDescriptivePortName());
+                  System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
                   String messageString_stop = "S\r";
-                  serialPort_test.writeBytes(messageString_stop.getBytes());              // Write data to port
+                  //serialPort_test.writeBytes(messageString_stop.getBytes());                     // Write data to port
+                  byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
 
                   try
                   {
@@ -404,9 +516,12 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   }
                   catch (InterruptedException ex){ }     
                   
-                  System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + serialPort_test.getPortName());
+                  //System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + serialPort_test.getDescriptivePortName());
+                  System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
                   String messageString_info = "VERS\r";
-                  serialPort_test.writeBytes(messageString_info.getBytes());              // Write data to port
+                  //serialPort_test.writeBytes(messageString_info.getBytes());                     // Write data to port
+                  byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
                   
                   try
                   {
@@ -416,19 +531,39 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   
                   // the response
                   //
-                  String response = serialPort_test.readString();   
-                  System.out.println(response);
+                  //String response = serialPort_test.readString();   
+                  //System.out.println(response);
+                  
+                  String response = "";
+                  serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                  try 
+                  {
+                     //while (true)
+                     //{
+                        byte[] readBuffer = new byte[64];
+                        serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        response = new String(readBuffer, StandardCharsets.UTF_8);
+                        System.out.println(response);
+                     //}
+                  } 
+                  catch (Exception e) 
+                  { 
+                     System.out.println(e);
+                  }
+                 //serialPort_test.closePort();                  
+                  
                   
                   //if (response.indexOf("PTB220") >= 0)
                   if (response != null && response.indexOf("PTB220") >= 0)   
                   {
-                     info = "[BAROMETER] found PTB220 on port: " + serial_ports_portid_array[i];
+                     info = "[BAROMETER] found PTB220 on port: " + serial_ports_portid_array[i].getDescriptivePortName();
                      System.out.print("--- ");
                      main.log_turbowin_system_message(info);
                      System.out.println("");
                      
                      serialPort_test.closePort();   
-                     main.defaultPort = serial_ports_portid_array[i];
+                     main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                     main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
                      break;
                   }
                   //else if (response.indexOf("PTB330") >= 0)
@@ -437,13 +572,15 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                      // NB after command "?" a BTB330 barometer will always return 4800 bit rate (or bit rate set for user port)
                      //    despite the PTB330 was opened via its service port (19200 bit rate)
 
-                     info = "[BAROMETER] found PTB330 on port: " + serial_ports_portid_array[i];
+                     info = "[BAROMETER] found PTB330 on port: " + serial_ports_portid_array[i].getDescriptivePortName();
                      System.out.print("--- ");
                      main.log_turbowin_system_message(info);
                      System.out.println("");
                      
                      serialPort_test.closePort();   
-                     main.defaultPort = serial_ports_portid_array[i];
+                     main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                     main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                     //main.defaultPort = serial_ports_portid_array[i];
                      break;
                   }    
                   else 
@@ -459,9 +596,12 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                {
                   // send data to the barometer
                   //
-                  System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + serialPort_test.getPortName());
+                  System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
                   String messageString_stop = "asq\r";
-                  serialPort_test.writeBytes(messageString_stop.getBytes());              // Write data to port
+                  //serialPort_test.writeBytes(messageString_stop.getBytes());                     // Write data to port
+                  byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+
                   
                   try
                   {
@@ -469,9 +609,12 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   }
                   catch (InterruptedException ex){ }                      
                   
-                  System.out.println("[BAROMETER] Writing \"" + "dm ma" + "\" to " + serialPort_test.getPortName());
+                  System.out.println("[BAROMETER] Writing \"" + "dm ma" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
                   String messageString_info = "dm ma\r";
-                  serialPort_test.writeBytes(messageString_info.getBytes());              // Write data to port
+                  //serialPort_test.writeBytes(messageString_info.getBytes());                     // Write data to port
+                  byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
+
 
                   try
                   {
@@ -482,29 +625,50 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   
                   // the response
                   //
-                  String response = serialPort_test.readString();   
-                  System.out.println(response);                  
+                  //String response = serialPort_test.readString();   
+                  //System.out.println(response);    
+                  String response = "";
+                  serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                  try 
+                  {
+                     //while (true)
+                     //{
+                        byte[] readBuffer = new byte[1024];
+                        //int numRead = serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        //System.out.println("Read " + numRead + " bytes.");
+                        response = new String(readBuffer, StandardCharsets.UTF_8);
+                        System.out.println(response);
+                     //}
+                  } catch (Exception e) 
+                  { 
+                     System.out.println(e);
+                  }
                   
                   if (response != null && response.indexOf("MintakaDuo") >= 0)
                   {
-                     info = "[BAROMETER] found Mintaka Duo on port: " + serial_ports_portid_array[i];
+                     info = "[BAROMETER] found Mintaka Duo on port: " + serial_ports_portid_array[i].getDescriptivePortName();
                      System.out.print("--- ");
                      main.log_turbowin_system_message(info);
                      System.out.println("");
                      
                      serialPort_test.closePort();   
-                     main.defaultPort = serial_ports_portid_array[i];
+                     main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                     main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                     //main.defaultPort = serial_ports_portid_array[i];
                      break;
                   }        
                   else if (response != null && response.indexOf("Mintaka Star") >= 0)
                   {
-                     info = "[BAROMETER] found Mintaka Star on port: " + serial_ports_portid_array[i];
+                     info = "[BAROMETER] found Mintaka Star on port: " + serial_ports_portid_array[i].getDescriptivePortName();
                      System.out.print("--- ");
                      main.log_turbowin_system_message(info);
                      System.out.println("");
                      
                      serialPort_test.closePort();   
-                     main.defaultPort = serial_ports_portid_array[i];
+                     main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                     main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                     //main.defaultPort = serial_ports_portid_array[i];
                      break;
                   }    
                   else 
@@ -517,10 +681,12 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   
                } //  else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5) 
                
-            } // try  
-            catch (SerialPortException ex)
+            } // if
+            //catch (SerialPortException ex)
+            else        
             {
-               System.out.println(ex);
+               //System.out.println(ex);
+               System.out.println("[BAROMETER] couldn't open: " + serial_ports_portid_array[i].getDescriptivePortName());
             }
       
          } // if (serial_ports_portid_array[i] != null)
@@ -563,15 +729,16 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
    //
    else // fixed COM port selected
    {
-      serialPort_test = new SerialPort(main.prefered_COM_port);
-      try 
+      //serialPort_test = new SerialPort(main.prefered_COM_port);
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+      serialPort_test.openPort();
+      if (serialPort_test.isOpen())   
       {
-         // Open port
-         serialPort_test.openPort();
          serialPort_test.closePort();
          
          // OK, no problems
-         main.defaultPort = main.prefered_COM_port;
+         main.defaultPort = main.prefered_COM_port;             // this construction is ok (prefered COM port is the same as getSystemPortName())
+         main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
          info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port available";
          
          main.log_turbowin_system_message(info);
@@ -591,15 +758,17 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
          timer_begin.start();
          checking_ports_begin_dialog.setVisible(true);            
       }
-      catch (SerialPortException ex) 
+      //catch (SerialPortException ex) 
+      else        
       {
          // error opening predefined (by the user)port, reset/warnings
-         System.out.println(ex);
-         info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port not available (" + ex + ")";
+         info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port not available";
          main.log_turbowin_system_message(info);
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
          main.defaultPort = null;
-      }     
+         main.defaultPort_descriptive = null;
+         System.out.println(info);
+      } // else    
       
    } // else (fixed COM port selected)
   
@@ -1062,9 +1231,20 @@ private static void RS232_compute_dasboard_values(final String date_time_last_up
                         dashboard_double_last_update_record_pressure = Double.MAX_VALUE;
                      }   
              
+                     double dashboard_double_barometer_instrument_correction = 0.0;
                      if ((dashboard_double_last_update_record_pressure > 900.0) && (dashboard_double_last_update_record_pressure < 1100.0))
                      {
-                        double dashboard_double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                        if (main.barometer_instrument_correction.equals("") || (main.barometer_instrument_correction == null))
+                        {
+                           // so in the case there was never an ic inserted
+                           dashboard_double_barometer_instrument_correction = 0.0;        
+                        }
+                        else
+                        {
+                           dashboard_double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                        }
+                        
+                        
                         if ((dashboard_double_barometer_instrument_correction > -4.0) && (dashboard_double_barometer_instrument_correction < 4.0))
                         {        
                            // 1 digit precision
@@ -1077,8 +1257,8 @@ private static void RS232_compute_dasboard_values(final String date_time_last_up
                         {
                             //pressure_sensor_height = Double.toString(hulp_double_pressure_reading);
                            // 1 digit precision
-                            //dashboard_double_last_update_record_pressure_ic = Double.toString(Math.round(dashboard_double_last_update_record_pressure * 10d) / 10d);
-                            dashboard_double_last_update_record_pressure_ic = Math.round(dashboard_double_last_update_record_pressure * 10d) / 10d;
+                           //dashboard_double_last_update_record_pressure_ic = Double.toString(Math.round(dashboard_double_last_update_record_pressure * 10d) / 10d);
+                           dashboard_double_last_update_record_pressure_ic = Math.round(dashboard_double_last_update_record_pressure * 10d) / 10d;
                            dashboard_double_last_update_record_pressure_ic_ok = true;
                         }         
                      } 
@@ -3007,7 +3187,7 @@ public void RS232_Format_Barometer_Output_3()
 
       if (main.defaultPort == null)
       {
-	      String info = "[BAROMETER] selected serial port [function: Format_Barometer_Output_3()] " + main.defaultPort + " not found";
+	      String info = "[BAROMETER] selected serial port [function: Format_Barometer_Output_3()] " + main.defaultPort_descriptive + " not found";
          System.out.println(info);
          // JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
 	   }
@@ -3015,12 +3195,10 @@ public void RS232_Format_Barometer_Output_3()
 
       if (main.defaultPort != null)
       {
-         serialPort_form = new SerialPort(main.defaultPort);
-         
-         try
+         serialPort_form = SerialPort.getCommPort(main.defaultPort);//serialPort_form = new SerialPort(main.defaultPort);
+         serialPort_form.openPort(); 
+         if (serialPort_form.isOpen())
          {
-            serialPort_form.openPort();                              // Open serial port
-            
             if (main.parity == 0)
             {
                hulp_parity = "none";
@@ -3034,27 +3212,28 @@ public void RS232_Format_Barometer_Output_3()
                hulp_parity = "even";
             }               
               
-            //System.out.println("opening with " + String.valueOf(main.bits_per_second) + " " + String.valueOf(main.parity) + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits));
-            System.out.println("[BAROMETER] opening with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + serialPort_form.getPortName());
-             
-            serialPort_form.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
-            serialPort_form.setFlowControlMode(main.flow_control);
+            System.out.println("[BAROMETER] opening with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + main.defaultPort_descriptive);
+            serialPort_form.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+            serialPort_form.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
              
             if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PRB330
             {   
-               System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serialPort_form.getPortName());
+               //System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serialPort_form.getDescriptivePortName());
+               System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + main.defaultPort_descriptive);
                String messageString_stop = "S\r";
-               serialPort_form.writeBytes(messageString_stop.getBytes());              // Write data to port
+               byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
                   
                // NB reset niet nodig (heeft geen effect)
 
             } // if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2) 
             else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)   // Mintaka Duo or Mintaka Star USB
             {
-               System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + main.defaultPort_descriptive);
                String messageString_stop = "asq\r";                                    // asq = terminate autosampling
-               serialPort_form.writeBytes(messageString_stop.getBytes());              // Write data to port
-                  
+               byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
             } // else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)            
             
             try
@@ -3070,43 +3249,51 @@ public void RS232_Format_Barometer_Output_3()
             
             if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    // PTB220 or PTB330
             {
-               System.out.println("[BAROMETER] Writing \"" + "ECHO OFF" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "ECHO OFF" + "\" to " + main.defaultPort_descriptive);
                String messageString_echo = "ECHO OFF\r";
-               serialPort_form.writeBytes(messageString_echo.getBytes());              // Write data to port
+               byte[] bytes_message_echo = messageString_echo.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_echo, bytes_message_echo.length);       // Write data to port 
             }           
             
             if (main.RS232_connection_mode == 1)             // PTB220
             {
                // NB LET OP DE TE VERZENDEN FORMAT STRING NAAR PTB220 MAG NIET TE LANG ZIJN (ongeveer 50 char -100 bytes-)!!!!
-               System.out.println("[BAROMETER] Writing \"" + "form 4.2 P \" \" 4.2 HCP \" \" 3.1 TREND \" \" A \" \" #r #n" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "form 4.2 P \" \" 4.2 HCP \" \" 3.1 TREND \" \" A \" \" #r #n" + "\" to " + main.defaultPort_descriptive);
                String messageString_format2 = "form 4.2 P \" \" 4.2 HCP \" \" 3.1 TREND \" \" A \" \" #r #n\r";
                //String messageString_format2 = "form P \" \" P \" \" P \" \" P \" \" P \" \" P \" \" P \" \" #r #n\r";
                //String messageString_format2 = "form \"0123456789 0123456789 01234567 \" P \" \" #r #n\r"; // deze gaat noog net goed
-               serialPort_form.writeBytes(messageString_format2.getBytes());              // Write data to port
-               
+               byte[] bytes_message_format2 = messageString_format2.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format2, bytes_message_format2.length);       // Write data to port 
             } // if (barometer_type.equals(PTB220))
             else if (main.RS232_connection_mode == 2)       // PTB330
             {
                // test voor bxpm171 - bxpm80
                //String messageString_format = "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" DIT IS EEN TEST 1234567890 1234567890 1234567890 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ X\r\n";
                //String messageString_format = "123456789";
-               System.out.println("[BAROMETER] Writing \"" + "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" #r #n" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" #r #n" + "\" to " + main.defaultPort_descriptive);
                String messageString_format = "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" #r #n\r";
-               serialPort_form.writeBytes(messageString_format.getBytes());              // Write data to port   
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
                
             } //  else if (barometer_type.equals(PTB330_USER_PORT) || etc
             else if (main.RS232_connection_mode == 4)       // Mintaka Duo
             {            
-               System.out.println("[BAROMETER] Writing \"" + "as 60 TurboWin" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "as 60 TurboWin" + "\" to " + main.defaultPort_descriptive);
                String messageString_format = "as 60 TurboWin\r\n";
-               serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port   
+               //serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port  
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+
             } // else if (main.RS232_connection_mode == 4) 
             
             else if (main.RS232_connection_mode == 5)       // Mintaka Star USB
             {            
-               System.out.println("[BAROMETER] Writing \"" + "as 60 turbowing" + "\" to " + serialPort_form.getPortName());
-               String messageString_format = "as 60 turbowing\r\n";                            // note: turbowing !!
-               serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port   
+               System.out.println("[BAROMETER] Writing \"" + "as 60 TurboWinG" + "\" to " + main.defaultPort_descriptive);
+               String messageString_format = "as 60 TurboWinG\r\n";                            // note: turbowing !!
+               //serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port  
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+
             } // else if (main.RS232_connection_mode == 5) 
             
             else
@@ -3117,17 +3304,21 @@ public void RS232_Format_Barometer_Output_3()
             if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))         // PTB220 or PTB330
             {   
                // NB INTV 60 s niet voor het form commando uitvoeren!!!!!!!
-               System.out.println("[BAROMETER] Writing \"" + "INTV 60 s" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "INTV 60 s" + "\" to " + main.defaultPort_descriptive);
                String messageString_int = "INTV 60 s\r";
-               serialPort_form.writeBytes(messageString_int.getBytes());                        // Write data to port 
+               byte[] bytes_message_int = messageString_int.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_int, bytes_message_int.length);       // Write data to port 
+
                //flush??
             } // if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    // PTB220 or PTB330
             
             if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    // PTB220 or PTB330
             {   
-               System.out.println("[BAROMETER] Writing \"" + "R" + "\" to " + serialPort_form.getPortName());
+               System.out.println("[BAROMETER] Writing \"" + "R" + "\" to " + main.defaultPort_descriptive);
                String messageString_cont_R = "R\r";
-               serialPort_form.writeBytes(messageString_cont_R.getBytes());                      // Write data to port 
+               byte[] bytes_message_cont_R = messageString_cont_R.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_cont_R, bytes_message_cont_R.length);       // Write data to port 
+
                // flush ??
             } // if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))     // PTB220 or PTB330
             
@@ -3143,10 +3334,11 @@ public void RS232_Format_Barometer_Output_3()
             // close the serial port
             serialPort_form.closePort();
             
-         } // try
-         catch (SerialPortException ex)
+         } // if (serialPort_form.isOpen())
+         else        
          {
-            System.out.println("[BAROMETER] Function: RS232_Format_Barometer_Output_3() " + ex);
+            //System.out.println("[BAROMETER] Function: RS232_Format_Barometer_Output_3() " + ex);
+            System.out.println("[BAROMETER] Couldn't open (for formatting) serial port:  " + main.defaultPort_descriptive);
          }         
          
       } // if (defaultPort != null)
@@ -4346,71 +4538,98 @@ public void RS422_initComponents()
       //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", receiving AWS sensor data via serial communication....."); // application mode was set in initComponents2() [main.java]
       main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received AWS data via serial communication: no data"); // application mode was set in initComponents2() [main.java]
       
-         
-      main.serialPort = new SerialPort(main.defaultPort);
+      //final SerialPort serialPort  = SerialPort.getCommPort(main.defaultPort);//main.serialPort = new SerialPort(main.defaultPort);
+      main.serialPort  = SerialPort.getCommPort(main.defaultPort); 
 
       new SwingWorker<String, String>()
       {
          @Override
          protected String doInBackground() throws Exception
          {
-            try
+            main.serialPort.openPort(); 
+            if (main.serialPort.isOpen())
             {
-               main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
-               main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
-               main.serialPort.setFlowControlMode(main.flow_control);
-                  
+               //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+               //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               //main.serialPort.setFlowControlMode(main.flow_control);
+               main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+             
+               
                // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
                // Well, for example, we need to know what came some data, thus in the mask must have the
                // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
                // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
-               int mask = SerialPort.MASK_RXCHAR;
+               //int mask = SerialPort.MASK_RXCHAR;
                   
                // Set the prepared mask
-               main.serialPort.setEventsMask(mask);                  
+               //main.serialPort.setEventsMask(mask);                  
                   
-		      }
-            catch (SerialPortException ex) 
+		      } // if (serialPort.isOpen())
+            else        
             {
-               System.out.println("+++ " + ex);
+               System.out.println("+++ " + "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName());
             }                       
-               
-	         main.serialPort.addEventListener(new SerialPortEventListener()
+        
+            
+            if (main.serialPort.isOpen())
             {
-               @Override
-               public void serialEvent(SerialPortEvent event)
+               main.serialPort.addDataListener(new SerialPortDataListener() 
                {
-                  String ontvangen_SMD_string = "";
-                        
-                  if (event.isRXCHAR() && event.getEventValue() > 0)                               // NB event.getEventValue() gives number of received bytes
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
                   {
-                     try 
+                     String ontvangen_SMD_string = "";
+                     
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                        return;
+                     
+                     //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                     //int numRead = main.serialPort.readBytes(newData, newData.length);
+                     int numRead;
+                     byte[] newData = null;
+                     try
                      {
-                        ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
-                        //System.out.println("Received response: " + ontvangen_SMD_string);
+                        newData = new byte[main.serialPort.bytesAvailable()];
+                        numRead = main.serialPort.readBytes(newData, newData.length);                  
                      }
-                     catch (SerialPortException ex) 
+                     catch (NegativeArraySizeException ex) 
                      {
-                        System.out.println("Error in receiving string from COM-port: " + ex);
-                     }                                                  
-                  } // if (event.isRXCHAR() && event.getEventValue() > 0)                   
-                        
-                  // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
-                  //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
-                  //
-                  // For example:
-                  //
-                  // publish("1");
-                  // publish("2", "3");
-                  // publish("4", "5", "6");
-                  //
-                  // might result in: process("1", "2", "3", "4", "5", "6")
-                  //
-                  publish(new String[] { ontvangen_SMD_string });
-                        
-               } // public void serialEvent(SerialPortEvent spe)
-            });
-               
+                        numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }
+                     
+                     //ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
+                     if (numRead > 0)
+                     {
+                        ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                        //System.out.println("Read " + numRead + " bytes.");
+                     
+                        // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                        //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                        //
+                        // For example:
+                        //
+                        // publish("1");
+                        // publish("2", "3");
+                        // publish("4", "5", "6");
+                        //
+                        // might result in: process("1", "2", "3", "4", "5", "6")
+                        //
+                        publish(new String[] { ontvangen_SMD_string });
+                     } // if (numRead > 0)
+                     else if (numRead == -1)
+                     {
+                        publish(new String[] { "interruption or excecution error\n" });
+                     }
+                  } // public void serialEvent(SerialPortEvent event)
+               });              
+            } // if (serialPort.isOpen())
+            
             return null;
 
          } // protected Void doInBackground() throws Exception
@@ -4438,6 +4657,13 @@ public void RS422_initComponents()
                System.out.print(main.total_string);
                //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
 
+               // error logging
+               if (main.total_string.indexOf("error") != -1)
+               {
+                  String message = "[AWS] " + "interruption or execution exception"; 
+                  main.log_turbowin_system_message(message);
+               } //  if (main.total_string.indexOf("error") != -1)              
+               
                
                // write sensor data to sensor log file
                RS422_write_sensor_data_to_file();
@@ -4485,7 +4711,8 @@ public void RS422_initComponents()
 private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_ports)
 {
    int teller                                        = -1;
-   String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
    String info                                       = "[GPS] start up: no GPS found";
    String hulp_parity                                = "";                     // for message writing on java console
    
@@ -4498,7 +4725,8 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
 
    // initialisation
    GPS_defaultPort                                   = null;
-      
+   GPS_defaultPort_descriptive                       = null;  
+   
    
    if (main.prefered_GPS_COM_port.equals("AUTOMATICALLY"))
    {
@@ -4523,27 +4751,29 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
       }
 
       // Get sorted array of serial ports in the system
-	   main.portList = SerialPortList.getPortNames();
+	   //main.portList = SerialPortList.getPortNames();
+      SerialPort[] serialPorts = SerialPort.getCommPorts();
 
-      for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      //for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)   
       {
          teller++;
-	      
-         SerialPort serialPort_test = new SerialPort(main.portList[i]);
-         try
-         {
-            serialPort_test.openPort();         // Open serial port
-            serial_ports_portid_array[teller] = main.portList[i];
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen())
+         { 
+            serial_ports_portid_array[teller] = serialPorts[portNo];
             serialPort_test.closePort();
-            
-            //System.out.println("[GPS] found serial com port (ok): " + main.portList[i]);
-            String message = "[GPS] found serial com port (ok): " + main.portList[i];
+            String message = "[GPS] found serial com port (ok): " + serialPorts[portNo].getDescriptivePortName();
             main.log_turbowin_system_message(message);
-         }
-         catch (SerialPortException ex) 
+         } // if (serialPort_test.isOpen()) 
+         else
          {
-            System.out.println(ex);
-         }           
+            serial_ports_portid_array[teller] = null;
+            System.out.println("[GPS] couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else         
+         
 
          // NB opening a port cannot be done in SwingWorker, so must be done here !!
 
@@ -4554,8 +4784,11 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
       {
          if (serial_ports_portid_array[i] != null)                         // so serial port present (and also not in use)
          {
-            SerialPort serialPort_test = new SerialPort(serial_ports_portid_array[i]);
-		      try
+            //SerialPort serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName());
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
+		      //try
             {
                serialPort_test.openPort();                                 // Open serial port
                
@@ -4572,9 +4805,11 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
                   hulp_parity = "even";
                }               
                
-               System.out.println("[GPS] trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
-               serialPort_test.setParams(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
-               serialPort_test.setFlowControlMode(GPS_NMEA_0183_flow_control);
+               System.out.println("[GPS] trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits) + " " + serial_ports_portid_array[i].getDescriptivePortName() );
+               //serialPort_test.setParams(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               serialPort_test.setComPortParameters(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               serialPort_test.setFlowControl(GPS_NMEA_0183_flow_control); 
+               
                   
                try
                {
@@ -4582,18 +4817,40 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
                }
                catch (InterruptedException ex){ }                 
                
-               String response = serialPort_test.readString();   
-               System.out.println(response);
-
+               //String response = serialPort_test.readString();   
+               //System.out.println(response);
+ 
+               // the response   
+               String response = "";
+               serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 2000, 0);
+               try 
+               {
+                  //while (true)
+                  //{
+                     byte[] readBuffer = new byte[1024];            // NB keep size 1024 because first part of incoming data is rubish
+                     //int numRead = serialPort_test.readBytes(readBuffer, readBuffer.length);
+                     serialPort_test.readBytes(readBuffer, readBuffer.length);
+                     //System.out.println("Read " + numRead + " bytes.");
+                     response = new String(readBuffer, StandardCharsets.UTF_8);
+                     System.out.println(response);
+                  //}
+               } 
+               catch (Exception e) 
+               { 
+                  System.out.println(e);
+               }              
+               
+               
                if (response != null && (response.indexOf("$GP") >= 0 || response.indexOf("$GL") >= 0))
                {
-                  info = "[GPS] found GPS on port: " + serial_ports_portid_array[i];
+                  info = "[GPS] found GPS on port: " + serial_ports_portid_array[i].getDescriptivePortName();
                   System.out.print("--- ");
                   main.log_turbowin_system_message(info);
                   System.out.println("");
                   
                   serialPort_test.closePort();
-                  GPS_defaultPort = serial_ports_portid_array[i];
+                  GPS_defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                  GPS_defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
                   break;
                }
                else 
@@ -4603,10 +4860,12 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
                   System.out.println("--- " + info);
                   System.out.println("");
                }    
-		      }
-            catch (SerialPortException ex)
+		      } // if (serialPort_test.isOpen())
+            //catch (SerialPortException ex)
+            else
             {
-               System.out.println(ex);
+               //System.out.println(ex);
+               System.out.println("[GPS] couldn't open: " + serial_ports_portid_array[i].getDescriptivePortName());     
             }
          } // if (serial_ports_portid_array[i] != null)
       } // for (int i = 0; i < NUMBER_COM_PORTS; i++)
@@ -4647,15 +4906,17 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
    
    else // fixed GPS com port set by user
    {   
-      SerialPort serialPort_test = new SerialPort(main.prefered_GPS_COM_port);
-      try 
-      {
-         // Open port
-         serialPort_test.openPort();
+      //SerialPort serialPort_test = new SerialPort(main.prefered_GPS_COM_port);
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_GPS_COM_port);
+      serialPort_test.openPort();
+         
+      if (serialPort_test.isOpen())   
+      {  
          serialPort_test.closePort();
          
          // OK, no port problems encoutered
          GPS_defaultPort = main.prefered_GPS_COM_port;
+         GPS_defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
          info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port available";
          
          // file logging
@@ -4675,16 +4936,17 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
          timer_begin.setRepeats(false);
          timer_begin.start();
          checking_ports_begin_dialog.setVisible(true);            
-      }
-      catch (SerialPortException ex) 
+      } // if (serialPort_test.isOpen())  
+      else 
       {
          // error opening predefined (by the user)port, reset/warnings
-         System.out.println(ex);
-         info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port not available (" + ex + ")";
+         info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port not available";
          main.log_turbowin_system_message(info);
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         System.out.println(info);
          GPS_defaultPort = null;
-      }     
+         GPS_defaultPort_descriptive = null;
+      } // else   
    }
 }
 
@@ -5469,18 +5731,18 @@ public void RS232_GPS_NMEA_0183_initComponents()
       // info text on (bottom) main screen 
       main.jLabel6.setText(main.APPLICATION_NAME + " receiving GPS data via serial communication.....");
       
-      GPS_serialPort = new SerialPort(GPS_defaultPort);  // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
-
+      //GPS_serialPort = new SerialPort(GPS_defaultPort);  // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
+      //final SerialPort GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort); // // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
+      main.GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort);
+      
       new SwingWorker<String, String>()
       {
          @Override
          protected String doInBackground() throws Exception
          {
-		      try
+            main.GPS_serialPort.openPort();                  // NB will NOT be closed in Function:  File_Exit_menu_actionPerformd() [main.java] ????
+            if (main.GPS_serialPort.isOpen())
             {
-               GPS_serialPort.openPort();               // NB will NOT be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
-               
-               
                String hulp_parity = "";
                if (GPS_NMEA_0183_parity == 0)
                {
@@ -5494,53 +5756,70 @@ public void RS232_GPS_NMEA_0183_initComponents()
                {
                   hulp_parity = "even";
                }          
-               System.out.println("[GPS] " + GPS_serialPort.getPortName() + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
-
-               
-               GPS_serialPort.setParams(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
-               GPS_serialPort.setFlowControlMode(GPS_NMEA_0183_flow_control);               
-               
+               //System.out.println("[GPS] " + GPS_serialPort.getPortName() + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               System.out.println("[GPS] " + GPS_defaultPort_descriptive + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               main.GPS_serialPort.setComPortParameters(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               main.GPS_serialPort.setFlowControl(GPS_NMEA_0183_flow_control);
                   
                // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
                // Well, for example, we need to know what came some data, thus in the mask must have the
                // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
                // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
-               int mask = SerialPort.MASK_RXCHAR;
+               //int mask = SerialPort.MASK_RXCHAR;
                   
                //Set the prepared mask
-               GPS_serialPort.setEventsMask(mask);   
+               //GPS_serialPort.setEventsMask(mask);   
                   
                //System.out.println("+++ passed try block");
                   
-		      }
-            catch (SerialPortException ex) 
+		      } // if (GPS_serialPort.isOpen())
+            //catch (SerialPortException ex) 
+            else        
             {
-               System.out.println("[GPS] " + ex);
+               //System.out.println("[GPS] " + ex);
+               //System.out.println("[GPS] Couldn't open " +  main.GPS_serialPort.getDescriptivePortName());
+               System.out.println("[GPS] Couldn't open " +  GPS_defaultPort_descriptive);
             }               
    
-	         GPS_serialPort.addEventListener(new SerialPortEventListener()
+            if (main.GPS_serialPort.isOpen())
             {
-               StringBuilder message = new StringBuilder();
-                  
-               @Override
-               public void serialEvent(SerialPortEvent event)
+               main.GPS_serialPort.addDataListener(new SerialPortDataListener() 
                {
-                  String ontvangen_GPS_string = "";
-                        
-                  if (event.isRXCHAR() && event.getEventValue() > 0)                               // NB event.getEventValue() gives number of received bytes
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  
+                  StringBuilder message = new StringBuilder();
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
                   {
-                     try 
+                     String ontvangen_GPS_string = "";
+                  
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
                      {
-                        // onderstaande werkt 
-                        //ontvangen_GPS_string = GPS_serialPort.readString(event.getEventValue());
-                        //System.out.println("+++ Received response: " + ontvangen_GPS_string);     // in case GPS always return 1 char
-                           
-                        // onderstaande werkt 
-                        //int bytesCount = event.getEventValue();
-                        //System.out.print(GPS_serialPort.readString(bytesCount)); // komplete zinnen op scherm                          
-                           
-                        byte buffer[] = GPS_serialPort.readBytes();
-                        for (byte b: buffer) 
+                        return;
+                     }
+                     
+                     //byte[] newData = new byte[main.GPS_serialPort.bytesAvailable()];
+                     //int numRead = main.GPS_serialPort.readBytes(newData, newData.length);
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.GPS_serialPort.bytesAvailable()];
+                        numRead = main.GPS_serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                         numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }                     
+                     
+                  
+                     if (numRead > 0)
+                     {
+                        for (byte b: newData) 
                         {
                            if ((b == '\r' || b == '\n') && message.length() > 0) 
                            {
@@ -5573,23 +5852,60 @@ public void RS232_GPS_NMEA_0183_initComponents()
                            {
                               message.append((char)b);
                            }
-                        } // for (byte b: buffer)                           
-                     } // try
-                     catch (SerialPortException ex) 
+                        } // for (byte b: buffer)                     
+                     } // if (numRead > 0)  
+                     else if (numRead == -1)
                      {
-                        System.out.println("[GPS] Error in receiving string from COM-port: " + ex);
-                     }                                                  
-                  } // if (event.isRXCHAR() && event.getEventValue() > 0)                  
-                        
-               } // public void serialEvent(SerialPortEvent spe)
-            });
-
+                        //publish(new String[] { "interruption or excecution error\n" });
+                        String message_a = "[GPS] " + "NegativeArraySizeException (interruption or execution error)"; 
+                        main.log_turbowin_system_message(message_a);
+                     }
+                    
+                  } // public void serialEvent(SerialPortEvent spe)
+              });
+            } // if (GPS_serialPort.isOpen())
+            
             return null;               
                
          } // protected Void doInBackground() throws Exception
+         
+         
+         //
+         // NB url: https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+         //         You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+         //         and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+         //         (Voidin your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+         // NB see above: when testing it seems that the NegativeArraySizeException wasn't passed to the Done method!! 
+         // NB not sure the program will ever execute the code below
+         //
+         // Executed in EDT
+         //
+         @Override
+         protected void done() 
+         {
+            try 
+            {
+               get();
+            } 
+            catch (ExecutionException ex) 
+            {
+               //String message = "[GPS] " + ex.getMessage(); 
+               String message = "[GPS] " + "execution excption"; 
+               main.log_turbowin_system_message(message);
+               //message = "barometer connection execution exception (pc sleep mode?); restart this program";
+               //JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);                 
+            } 
+            catch (InterruptedException ex) 
+            {
+               String message = "[GPS] " + "interruption exception"; 
+               main.log_turbowin_system_message(message);
+               //message = "barometer connection interrupted; restart this program";
+               //JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+            }
+         } // protected void done()          
             
       }.execute(); // new SwingWorker<String, String>()
-   } // if (main.defaultPort != null)
+   } // if (GPS.defaultPort != null)
    
 } // public void RS232_GPS_initComponents()
 
@@ -6420,77 +6736,149 @@ public void WiFi_initComponents()
             main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received barometer data via serial communication: no data");
          }
          
-         main.serialPort = new SerialPort(main.defaultPort);  // NB main.defaultPort was determined in Function: RS232_Check_Serial_Ports_8()
-
+         //main.serialPort = new SerialPort(main.defaultPort);  // NB main.defaultPort was determined in Function: RS232_Check_Serial_Ports_8()
+         //final SerialPort serialPort  = SerialPort.getCommPort(main.defaultPort
+         main.serialPort  = SerialPort.getCommPort(main.defaultPort);        
+         
          new SwingWorker<String, String>()
          {
             boolean retry = false;
             
+            
             @Override
             protected String doInBackground() throws Exception
             {
-		         try
+               main.serialPort.openPort(); 
+               if (main.serialPort.isOpen())
                {
-                  main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
-                  main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
-                  main.serialPort.setFlowControlMode(main.flow_control);
+                  //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+                  //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+                  //main.serialPort.setFlowControlMode(main.flow_control);
+                  main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+                  main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
                   
                   // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
                   // Well, for example, we need to know what came some data, thus in the mask must have the
                   // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
                   // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
-                  int mask = SerialPort.MASK_RXCHAR;
+                  //int mask = SerialPort.MASK_RXCHAR;
                   
                   //Set the prepared mask
-                  main.serialPort.setEventsMask(mask);                  
+                  //main.serialPort.setEventsMask(mask);                  
                   
-		         }
-               catch (SerialPortException ex) 
+		         } // if (serialPort.isOpen())
+               else        
                {
-                  System.out.println("+++ " + ex);
+                  //System.out.println("+++ " + ex);
+                  System.out.println("+++ " + "[BAROMETER] Couldn't open " +  main.serialPort.getDescriptivePortName());
                }               
 	            
                
-	            main.serialPort.addEventListener(new SerialPortEventListener()
+               if (main.serialPort.isOpen())
                {
-                  @Override
-                  public void serialEvent(SerialPortEvent event)
+                  main.serialPort.addDataListener(new SerialPortDataListener() 
                   {
-                     String ontvangen_SMD_string = "";
-                        
-                     if (event.isRXCHAR() && event.getEventValue() > 0)                               // NB event.getEventValue() gives number of received bytes
-                     {
-                        try 
+                     @Override
+                     public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                     @Override
+                     public void serialEvent(SerialPortEvent event)
+                     {                  
+                        String ontvangen_SMD_string = "";
+                     
+                        if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
                         {
-                           ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
-                           //System.out.println("Received response: " + ontvangen_SMD_string);
+                           return;
                         }
-                        catch (SerialPortException ex) 
+                     
+                        //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                        //int numRead = main.serialPort.readBytes(newData, newData.length);  
+                        int numRead;
+                        byte[] newData = null;
+                        try
                         {
-                           System.out.println("Error in receiving string from COM-port: " + ex);
-                        }                                                  
-                     } // if(event.getEventValue() == 10)                 
-                        
-                     // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
-                     //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
-                     //
-                     // For example:
-                     //
-                     // publish("1");
-                     // publish("2", "3");
-                     // publish("4", "5", "6");
-                     //
-                     // might result in: process("1", "2", "3", "4", "5", "6")
-                     //
-                        
-                     publish(new String[] { ontvangen_SMD_string });
-                        
-                  } // public void serialEvent(SerialPortEvent spe)
-               });
-
+                           newData = new byte[main.serialPort.bytesAvailable()];
+                           numRead = main.serialPort.readBytes(newData, newData.length);                  
+                        }
+                        catch (NegativeArraySizeException ex) 
+                        {
+                           numRead = -1;
+                           // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                        }
+                  
+                        if (numRead > 0)
+                        {
+                           ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                           //System.out.println("Read " + numRead + " bytes.");
+                     
+                           // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                           //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                           //
+                           // For example:
+                           //
+                           // publish("1");
+                           // publish("2", "3");
+                           // publish("4", "5", "6");
+                           //
+                           // might result in: process("1", "2", "3", "4", "5", "6")
+                           //
+                           publish(new String[] { ontvangen_SMD_string });
+                        } // if (numRead > 0)       
+                        else if (numRead == -1)
+                        {
+                           publish(new String[] { "interruption or excecution error\n" });
+                        }
+                     } // public void serialEvent(SerialPortEvent event)
+                  });                   
+               } // if (serialPort.isOpen())
+               
+               
                return null;
 
             } // protected Void doInBackground() throws Exception
+            
+            // NB https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+            //    You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+            //    and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+            //    (Void in your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+            //
+            // NB Martin: but in this case it goes via the process() function, done() method has no effect!
+            //
+/*            
+            // Executed in EDT
+            @Override
+            protected void done() 
+            {
+               try 
+               {
+                  //System.out.println("Done");
+                  get();
+               } 
+               catch (ExecutionException ex) 
+               {
+                  //e.getCause().printStackTrace();
+                  //String msg = String.format("Unexpected problem: %s", 
+                  //            e.getCause().toString());
+                  //JOptionPane.showMessageDialog(Utils.getActiveFrame(),
+                  // msg, "Error", JOptionPane.ERROR_MESSAGE, errorIcon);
+                  String message = "[BAROMETER] " + ex.getMessage(); 
+                  main.log_turbowin_system_message(message);
+                  message = "barometer connection execution exception (pc sleep mode?); restart this program";
+                  JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);                 
+               } 
+               catch (InterruptedException ex) 
+               {
+                  // Process e here
+                  //String message = "[BAROMETER] " + ex.getMessage(); 
+                  String message = "[BAROMETER] " + "interruption exception"; 
+                  main.log_turbowin_system_message(message);
+                  message = "barometer connection interrupted; restart this program";
+                  JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+               }
+            } // protected void done() 
+*/           
 
             @Override
             protected void process(List<String> data)
@@ -6515,6 +6903,33 @@ public void WiFi_initComponents()
                   //
                   System.out.print(main.total_string);
                   //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+                  
+                  // error logging
+                  if (main.total_string.indexOf("error") != -1)
+                  {
+/*                     
+                     // NB code below is OK but maybe dangerous if messagebox may blocking application? (eg after a 1 time hick-upp)
+                     if (comm_error_messagebox_shown == 0 )
+                     {
+                        String message = "[BAROMETER] " + "interruption or execution exception"; 
+                        main.log_turbowin_system_message(message);
+                        message = "barometer connection interrupted; check pc sleep mode and/or connection cable; if obsolete data restart this application";
+                     
+                        comm_error_messagebox_shown = 1;
+                        //int return = JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+                        Object[] options = { "OK" };
+                        int reply = JOptionPane.showOptionDialog(null, message, main.APPLICATION_NAME, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                        if (reply == JOptionPane.OK_OPTION) 
+                        {
+                           comm_error_messagebox_shown = 0;
+                        }
+                     } //  if (comm_error_messagebox_shown == 0)   
+*/                     
+                     String message = "[BAROMETER] " + "interruption or execution exception"; 
+                     main.log_turbowin_system_message(message);
+                  } //  if (main.total_string.indexOf("error") != -1)
+                  
+                  
 
                   // update main screen with application name + mode and date time last received data
                   String info = "";
@@ -9349,13 +9764,15 @@ private void RS232_Send_Sensor_Data_to_WOW(String sensor_data_record_WOW_pressur
    } 
    catch (MalformedURLException ex)
    {
-      String message = "[WOW] send data failed; MalformedURLException (function: RS232_Send_Sensor_Data_to_WOW)"; 
+      //String message = "[WOW] send data failed; MalformedURLException (function: RS232_Send_Sensor_Data_to_WOW)"; 
+      String message = "[WOW] send data failed; MalformedURLException"; 
       main.log_turbowin_system_message(message);
       main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
    }
    catch (IOException ex) 
    {
-      String message = "[WOW] send data failed; most probably no internet connection available; IOException (function: RS232_Send_Sensor_Data_to_WOW)"; 
+      //String message = "[WOW] send data failed; most probably no internet connection available or firewall/scanner is blocking; IOException (function: RS232_Send_Sensor_Data_to_WOW)"; 
+      String message = "[WOW] send data failed; most probably no internet connection available or firewall/scanner is blocking; IOException"; 
       main.log_turbowin_system_message(message);
       main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
    }
@@ -10727,6 +11144,7 @@ private final long MAX_AGE_AWS_DATA                                             
 private final int APR_RETRY_MINUTES                                             = 3;       // APR
 public static final int AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS                       = 777;     // APR; symbolic value, only to indicate the ship is at the great lakes but mabe in a lock (not possible to determine height corr)
 
+private int comm_error_messagebox_shown                                         = 0;
 private Color color_dark_green;
 private GregorianCalendar cal_WOW_systeem_datum_tijd;                    // format: yyyyMMddHHmm
 private GregorianCalendar cal_APR_system_date_time;
@@ -10752,14 +11170,15 @@ private final double M_S_TO_KNOTS                                               
 public static String test_record                                                = "";
 
 // RS232 GPS
-public static String GPS_defaultPort                                            = null;
-public static SerialPort GPS_serialPort;
+public static String GPS_defaultPort                                            = null;  // port info for the system (to open/close etc)
+public static String GPS_defaultPort_descriptive                                = null;  // port info for messages and logging
+//public static SerialPort GPS_serialPort;
 private final int MAX_COMPLETED_GPS_PORT_CHECKS                                 = 2;
 
 private final int GPS_NMEA_0183_parity                                          = 0;   // 0 = none parity
 private final int GPS_NMEA_0183_data_bits                                       = 8;
 private final int GPS_NMEA_0183_stop_bits                                       = 1;
-private final int GPS_NMEA_0183_flow_control                                    = SerialPort.FLOWCONTROL_NONE;
+private final int GPS_NMEA_0183_flow_control                                    = SerialPort.FLOW_CONTROL_DISABLED;//SerialPort.FLOWCONTROL_NONE;
 
 public static String GPS_date                                                   = "";
 public static String GPS_time                                                   = "";
@@ -10789,4 +11208,8 @@ public static int dashboard_int_last_update_record_relative_wind_speed          
 public static double dashboard_double_last_update_record_sst                    = Double.MAX_VALUE;
 public static double dashboard_double_last_update_record_humidity               = Double.MAX_VALUE;
         
+//SwingWorker myWorker;
+//private int comm_errors_consecutive                                             = 0;
+//private String previous_received_string                                         = null;
+
 } // public class main_RS232_RS422

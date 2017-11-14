@@ -67,6 +67,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
 
       jPanel4 = new javax.swing.JPanel();
       jLabel3 = new javax.swing.JLabel();
+      jLabel4 = new javax.swing.JLabel();
       jPanel3 = new javax.swing.JPanel();
       jPanel2 = new javax.swing.JPanel();
       jPanel5 = new javax.swing.JPanel();
@@ -88,6 +89,9 @@ public class DASHBOARD_view extends javax.swing.JFrame {
       jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
       jLabel3.setText("--- all readings indicate pressure at barometer height with ic applied ---");
 
+      jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+      jLabel4.setText("--- update every minute ---");
+
       javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
       jPanel4.setLayout(jPanel4Layout);
       jPanel4Layout.setHorizontalGroup(
@@ -95,13 +99,17 @@ public class DASHBOARD_view extends javax.swing.JFrame {
          .addGroup(jPanel4Layout.createSequentialGroup()
             .addGap(99, 99, 99)
             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(590, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(104, 104, 104))
       );
       jPanel4Layout.setVerticalGroup(
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
             .addContainerGap(75, Short.MAX_VALUE)
-            .addComponent(jLabel3)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(jLabel3)
+               .addComponent(jLabel4))
             .addContainerGap())
       );
 
@@ -152,7 +160,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
          .addGroup(jPanel5Layout.createSequentialGroup()
             .addGap(100, 100, 100)
             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(98, 98, 98))
       );
@@ -175,7 +183,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
       jPanel1.setLayout(jPanel1Layout);
       jPanel1Layout.setHorizontalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGap(0, 974, Short.MAX_VALUE)
+         .addGap(0, 1042, Short.MAX_VALUE)
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,6 +395,7 @@ private void init_dasboard_timer()
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
+   private javax.swing.JLabel jLabel4;
    /*
    private javax.swing.JPanel jPanel1;
    */private DASHBOARD_grafiek jPanel1;

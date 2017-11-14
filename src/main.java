@@ -1,3 +1,4 @@
+import com.fazecast.jSerialComm.SerialPort;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -40,6 +41,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -71,8 +73,8 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import jssc.SerialPort;
-import jssc.SerialPortException;
+//import jssc.SerialPort;
+//import jssc.SerialPortException;
 
 //import netscape.javascript.JSObject;
 
@@ -170,12 +172,11 @@ import jssc.SerialPortException;
 *
 * 
 * CERTIFICATE
-* - jnlp.jar, jssc.jar en turbowin_jws.jar moeten gesigned worden
-* - NB vanaf versie 1.7 update 25 moet de manifest in de jars gewijzigd worden voor permisions en codebase (anders warning in console)
-* - NB vanaf versie 1.7 update 45 moet de manifest in de jars gewijzigd worden voor application-name (anders warning in console)
-*
-*
-*
+* - jnlp.jar, jssc.jar/jSerialCoomm-1.3.11.jar en turbowin_jws.jar moeten gesigned worden
+* - NB vanaf versie 1.7 update 25 moet de manifest in de jars gewijzigd worden voor permisions en codebase (anders warning in console) [gebeurt met manifest_input.cmd]
+* - NB vanaf versie 1.7 update 45 moet de manifest in de jars gewijzigd worden voor application-name (anders warning in console) [gebeurt met manifest_input.cmd]
+* - NB manifest_input.cmd is nodig om permissies, application name and codebase te zetten. Omdat dit de eerste keer gebeurt (bv na clean build) geeft een volgende 
+*      keer runnen manifest_input.cmd in feite een update (wat manifest_input.cmd met "umf" doet) warnings for duplicate entry -> DIT GEEFT NIETS
 *
 *
 * ---------------------------------------------------------------------------------------------------------------------
@@ -315,6 +316,17 @@ import jssc.SerialPortException;
 * ---------------------------------------------------------------------------------------------------------------------
 * UPDATE IN/TERVAL PARAMETERS
 * update date-time field main screen every minute if GPS is connected (both, APR and MANUAL mode)
+*
+* ---------------------------------------------------------------------------------------------------------------------
+** The following functions are using the serial communication library
+*      - main_windowClosing() [main.java]
+*      - Output_obs_to_AWS_actionPerformed() [main.java]
+*
+*
+*
+*
+*
+*
 *
 * 
 **/
@@ -4737,9 +4749,9 @@ public static void meta_data_from_configuration_regels_into_global_vars()
             
             switch (hulp_data_bits)  
             {
-               case "7"  : data_bits = SerialPort.DATABITS_7;
+               case "7"  : data_bits = 7;
                                        break;
-               case "8"  : data_bits = SerialPort.DATABITS_8;
+               case "8"  : data_bits = 8;
                                        break;
                default   : data_bits = 0;                                // non existing (data bits) value
                                        break;
@@ -4753,11 +4765,11 @@ public static void meta_data_from_configuration_regels_into_global_vars()
             
             switch (hulp_parity)
             {
-               case "0" : parity = SerialPort.PARITY_NONE;
+               case "0" : parity = SerialPort.NO_PARITY;
                           break;
-               case "1" : parity = SerialPort.PARITY_ODD;
+               case "1" : parity = SerialPort.ODD_PARITY;
                           break;
-               case "2" : parity = SerialPort.PARITY_EVEN;
+               case "2" : parity = SerialPort.EVEN_PARITY;
                           break;
                default  : parity = 99;                         // non existing (parity) value
                           break;
@@ -4771,9 +4783,9 @@ public static void meta_data_from_configuration_regels_into_global_vars()
             
             switch (hulp_stop_bits)  
             {
-               case "1"  : stop_bits = SerialPort.STOPBITS_1;
+               case "1"  : stop_bits = SerialPort.ONE_STOP_BIT;
                                        break;
-               case "2"  : stop_bits = SerialPort.STOPBITS_2;
+               case "2"  : stop_bits = SerialPort.TWO_STOP_BITS;
                                        break;
                default   : stop_bits = 0;                       // non existing (stop bits) value
                                        break;
@@ -9129,16 +9141,16 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
             //
             if (main.serialPort != null)
             {
-               try 
-               {
-                  main.serialPort.removeEventListener();
+               //try 
+               //{
+                  main.serialPort.removeDataListener();
                   main.serialPort.closePort();
                   main.serialPort = null;
-               } 
-               catch (SerialPortException ex) 
-               {
-                  System.out.println(ex);
-               }
+               //} 
+               //catch (SerialPortException ex) 
+               //{
+               //   System.out.println(ex);
+               //}
             } // if (main.serialPort != null)
             
          } // if ((RS232_connection_mode != 0) && (defaultPort != null))
@@ -9147,18 +9159,19 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
          if ((RS232_GPS_connection_mode != 0) && (main_RS232_RS422.GPS_defaultPort != null))
          {
             // only necessary in case of RxTx serial?
-            if (main_RS232_RS422.GPS_serialPort != null)
+            //if (main_RS232_RS422.GPS_serialPort != null)
+            if (main.GPS_serialPort != null)   
             {
-               try 
-               {
-                  main_RS232_RS422.GPS_serialPort.removeEventListener();
-                  main_RS232_RS422.GPS_serialPort.closePort();
-                  main_RS232_RS422.GPS_serialPort = null;
-               } 
-               catch (SerialPortException ex) 
-               {
-                  System.out.println(ex);
-               }
+               //try 
+               //{
+                  main.GPS_serialPort.removeDataListener();
+                  main.GPS_serialPort.closePort();
+                  main.GPS_serialPort = null;
+               //} 
+               //catch (SerialPortException ex) 
+               //{
+               //   System.out.println(ex);
+               //}
             } // if (main_RS232_RS422.GPS_serialPort != null)
          } // if ((RS232_GPS_connection_mode != 0) && (main_RS232_RS422.GPS_defaultPort != null))
          
@@ -9414,78 +9427,84 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
 /***********************************************************************************************/
    private void Output_obs_to_AWS_actionPerformed(java.awt.event.ActionEvent evt) {                                                   
       // TODO add your handling code here:
+      String message_info = "";
+      String log_info     = "";
+      boolean send_ok     = true;
       
       
-/////////// TEST START ///////////
-//      
-//      String test_obs_for_AWS_string = compile_obs_for_AWS();
-//      System.out.println("Writing " + test_obs_for_AWS_string + " to " + defaultPort);      
-//      
-/////////// TEST END /////////////      
-      
-      
-      if (defaultPort != null)
+      if (main.defaultPort != null)
       {
          String obs_for_AWS_string = compile_obs_for_AWS();
-         System.out.println("Writing " + obs_for_AWS_string + " to " + defaultPort);
+         String log_obs_for_AWS_string = obs_for_AWS_string;  // for logging but still without the newline ("\r\n")
+         System.out.println("Writing " + obs_for_AWS_string + " to " + main.defaultPort);
          obs_for_AWS_string += "\r\n";                  // <CR><LF>  required for EUCAWS          
-         try 
-         {
-            serialPort.writeBytes(obs_for_AWS_string.getBytes());              // Write data to port
-            
-            // temporary message box "obs sent to AWS" 
-            final JOptionPane pane_end = new JOptionPane("obs sent to AWS", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-            final JDialog end_dialog = pane_end.createDialog(APPLICATION_NAME);
 
-            Timer timer_end = new Timer(1500, new ActionListener()
-            {
-               @Override
-               public void actionPerformed(ActionEvent e)
-               {
-                  end_dialog.dispose();
-               }
-            });
-            timer_end.setRepeats(false);
-            timer_end.start();
-            end_dialog.setVisible(true);
-         } // try
-         catch (SerialPortException ex) 
+         if (main.serialPort.isOpen())
          {
-            System.out.println(ex);
-         }
-               
-              
-//////////// TEST START /////////////////
-//              
-//               String messageString_stop = "S\r";
-//               outputStream_obs_to_aws.write(messageString_stop.getBytes());
-//               outputStream_obs_to_aws.flush();
-//               
-//               try 
-//               {
-//                  Thread.sleep(2000);
-//               } 
-//               catch (InterruptedException ex) { }
-//               
-//               String messageString_info = "VERS\r";
-//               outputStream_obs_to_aws.write(messageString_info.getBytes());
-//               outputStream_obs_to_aws.flush();
-//               
- //////////////////// TEST STOP ////////////     
-               
-                
-         
-      } // if (defaultPort != null)
+            //serialPort.writeBytes(obs_for_AWS_string.getBytes());              // Write data to port
+            byte[] bytes_message_obs = obs_for_AWS_string.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+            if (main.serialPort.writeBytes(bytes_message_obs, bytes_message_obs.length) != -1)      // Write data to port 
+            {
+               message_info = "success obs sent to AWS";
+               log_info = "[AWS] obs sent ok (" + log_obs_for_AWS_string + ") to " + main.defaultPort_descriptive; 
+               send_ok = true;
+            }
+            else
+            {
+               message_info = "error obs to AWS";
+               log_info = "[AWS] Unable to write " + log_obs_for_AWS_string + " to " + main.defaultPort_descriptive;  
+               send_ok = false;
+            }
+         } // if (main.serialPort.isOpen())
+         else
+         {
+            //System.out.println("+++ " + "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName());
+            log_info = "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName() + " (" + main.defaultPort_descriptive + ")";
+            message_info = "error obs to AWS";
+            send_ok = false;
+         } // else
+      } // if (main.defaultPort != null)
       else
       {
-         JOptionPane.showMessageDialog(null, "Failed to send obs to AWS because no serial connection available (defaultPort = null)"  , APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE);
+         //JOptionPane.showMessageDialog(null, "Failed to send obs to AWS because no serial connection available (defaultPort = null)"  , APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE);
+         log_info = "[AWS] Failed to send obs to AWS because no serial connection available (defaultPort = null)";
+         message_info = "error obs to AWS";
+         send_ok = false;
       }
       
-      /* on request of Meteo France write the extra MANUAL measured and observed data to IMMT log */
+      
+      // show message box "success obs sent to AWS" or "error obs to AWS"
+      if (send_ok)
+      {
+         JOptionPane.showMessageDialog(null, message_info , APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+      }
+      else
+      {
+         JOptionPane.showMessageDialog(null, message_info , APPLICATION_NAME + " error", JOptionPane.ERROR_MESSAGE);
+      }
+      //final JOptionPane pane_end = new JOptionPane(message_info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+      //final JDialog end_dialog = pane_end.createDialog(APPLICATION_NAME);
+      //
+      //Timer timer_end = new Timer(1500, new ActionListener()
+      //{
+      //   @Override
+      //   public void actionPerformed(ActionEvent e)
+      //   {
+      //      end_dialog.dispose();
+      //   }
+      //});
+      //timer_end.setRepeats(false);
+      //timer_end.start();
+      //end_dialog.setVisible(true);
+      
+      // logging
+      main.log_turbowin_system_message(log_info);  // NB writing also to screen console [System.out.println(log_info)] is part of this function
+      
+      // on request of Meteo France write the extra MANUAL measured and observed data to IMMT log 
       IMMT_AWS_manual_input_preperations();
       IMMT_log();
       
-      /* reset alll meteo parameters */
+      // reset alll meteo parameters 
       main_RS232_RS422.RS422_initialise_AWS_Sensor_Data_For_Display(); // must be called before: Reset_all_meteo_parameters();
       Reset_all_meteo_parameters();
       
@@ -16137,7 +16156,7 @@ public static String http_respons_code_to_text(int responseCode)
          
       //// start second self defined section (no coordination with server [index_webstart_101.php]) //////      
       case 710: text = "internal error when generating format 101 obs"; break;                                            // self defined 
-      case 711: text = "most probably no internet connection available"; break;                                           // self defined (actually IOexception)
+      case 711: text = "most probably no internet connection available or firewall/scanner is blocking"; break;                                           // self defined (actually IOexception)
       case 712: text = "internal error, malformed URL"; break;                                                            // self defined
       case 713: text = "most probably no internet connection available (format 101 obs ok)"; break;                       // self defined
       case 714: text = "InterruptedException or ExecutionException"; break;                                               // self defined
@@ -17046,7 +17065,7 @@ public static void log_turbowin_system_message(final String message)
    
    // public var's
    public static final String APPLICATION_NAME              = "TurboWin+";                       // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "2.8.0 (build 25-Oct-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_VERSION           = "3.0.0 (build 13-Nov-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
    public static String user_dir;
@@ -17175,14 +17194,16 @@ public static void log_turbowin_system_message(final String message)
    public static int data_bits                                     = 0;   //  0 = meteorological instrument no existing value
    public static int parity                                        = 99;  // 99 = meteorological instrument no existing value
    public static int stop_bits                                     = 0;   //  0 = meteorological instrument no existing value 
-   public static int flow_control                                  = SerialPort.FLOWCONTROL_NONE;
+   //public static int flow_control                                  = SerialPort.FLOWCONTROL_NONE;
    public static String prefered_COM_port_number                   = "";  // meteorological instrument Windows and Linux
    public static String prefered_GPS_COM_port_number               = "";  // GPS Windows and Linux
    public static String prefered_COM_port_name                     = "";  // meteorological instrument OS X
    public static String prefered_GPS_COM_port_name                 = "";  // GPS OS X
    public static String prefered_COM_port                          = "";  // meteorological instrument generic (Windows/Linux/OS X)
    public static String prefered_GPS_COM_port                      = "";  // GPS generic (Windows/Linux/OS X)
-   public static String defaultPort                                = null;
+   public static String defaultPort                                = null;// system port name for opening/closing etc
+   public static String defaultPort_descriptive                    = null;// descripte port name for info messages and logging
+   //public static SerialPort defaultPort                            = null;
    public static String sensor_data_record_obs_pressure            = "";
    public static String sensor_data_record_obs_ppp                 = "";
    public static String sensor_data_record_obs_a                   = "";
@@ -17256,9 +17277,10 @@ public static void log_turbowin_system_message(final String message)
    public static int type_record_a_begin_pos                        = 0;
    public static int type_record_ppp_begin_pos                      = 0;
   
-   public static String[] portList;
+   //public static SerialPort[] portList;//public static String[] portList;
    public static GregorianCalendar obs_file_datum_tijd;
-   public static SerialPort serialPort;
+   public static SerialPort serialPort                              = null;
+   public static SerialPort GPS_serialPort                          = null;
    public static String total_string;     
    
    private RS232_view graph_form;

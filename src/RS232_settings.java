@@ -1,8 +1,9 @@
 
+import com.fazecast.jSerialComm.SerialPort;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import jssc.SerialPort;
+//import jssc.SerialPort;
 
 /*
  * To change this template, choose Tools | Templates
@@ -549,10 +550,10 @@ public class RS232_settings extends javax.swing.JFrame {
 
          switch (hulp_data_bits) {
             case 7:
-               main.data_bits = SerialPort.DATABITS_7;
+               main.data_bits = 7;//SerialPort.DATABITS_7;
                break;
             case 8:
-               main.data_bits = SerialPort.DATABITS_8;
+               main.data_bits = 8;//SerialPort.DATABITS_8;
                break;
             default:
                main.data_bits = 0;
@@ -570,13 +571,13 @@ public class RS232_settings extends javax.swing.JFrame {
 
          switch (hulp_parity) {
             case "none":
-               main.parity = SerialPort.PARITY_NONE;
+               main.parity = SerialPort.NO_PARITY;//SerialPort.PARITY_NONE;
                break;
             case "odd":
-               main.parity = SerialPort.PARITY_ODD;
+               main.parity = SerialPort.ODD_PARITY;//SerialPort.PARITY_ODD;
                break;
             case "even":
-               main.parity = SerialPort.PARITY_EVEN;
+               main.parity = SerialPort.EVEN_PARITY;//SerialPort.PARITY_EVEN;
                break;
             default:
                main.parity = 99;                                    // 99 = non-existing value
@@ -594,10 +595,10 @@ public class RS232_settings extends javax.swing.JFrame {
 
          switch (hulp_stop_bits) {
             case 1:
-               main.stop_bits = SerialPort.STOPBITS_1;
+               main.stop_bits = SerialPort.ONE_STOP_BIT;//SerialPort.STOPBITS_1;
                break;
             case 2:
-               main.stop_bits = SerialPort.STOPBITS_2;
+               main.stop_bits = SerialPort.TWO_STOP_BITS;//SerialPort.STOPBITS_2;
                break;
             default:
                main.stop_bits = 0;
@@ -1369,13 +1370,13 @@ public class RS232_settings extends javax.swing.JFrame {
       jComboBox1.setSelectedItem(main.stop_bits);
 
       switch (main.parity) {
-         case SerialPort.PARITY_NONE:
+         case SerialPort.NO_PARITY://SerialPort.PARITY_NONE:
             jComboBox4.setSelectedItem("none");
             break;
-         case SerialPort.PARITY_ODD:
+         case SerialPort.ODD_PARITY://SerialPort.PARITY_ODD:
             jComboBox4.setSelectedItem("odd");
             break;
-         case SerialPort.PARITY_EVEN:
+         case SerialPort.EVEN_PARITY://SerialPort.PARITY_EVEN:
             jComboBox4.setSelectedItem("even");
             break;
          default: //jComboBox4.setSelectedItem("");
