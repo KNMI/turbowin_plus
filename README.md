@@ -4,8 +4,8 @@ see: http://projects.knmi.nl/turbowin
 
 created with NetBeans IDE
 
-========================================================================================
 
+=======================================================================
 
 Noticeable new items in TurboWin+ (TurboWeb) 3.0 compared to TurboWin+ (TurboWeb) 2.6
 
