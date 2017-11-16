@@ -2,7 +2,6 @@
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
-import com.fazecast.jSerialComm.SerialPortPacketListener;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.TrayIcon.MessageType;
@@ -14,10 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -26,11 +22,9 @@ import java.net.DatagramSocket;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -43,8 +37,6 @@ import java.util.Objects;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -242,7 +234,7 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
                   hulp_parity = "even";
                }               
                
-               System.out.println("[AWS] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits));
+               System.out.println("[AWS] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + serial_ports_portid_array[i].getDescriptivePortName());
                serialPort_test.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
                serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
                
@@ -495,7 +487,7 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
                   hulp_parity = "even";
                }               
                
-               System.out.println("[BAROMETER] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits)+ serial_ports_portid_array[i].getDescriptivePortName());
+               System.out.println("[BAROMETER] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + serial_ports_portid_array[i].getDescriptivePortName());
                serialPort_test.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
                serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
                
@@ -5916,6 +5908,7 @@ public void RS232_GPS_NMEA_0183_initComponents()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+/*
 private void WiFi_Check_Connection_b()
 {
    System.out.println("start Wifi_Check_connection_b");
@@ -5958,6 +5951,7 @@ private void WiFi_Check_Connection_b()
          }            
 
 }
+*/
 
 
 
@@ -5966,15 +5960,14 @@ private void WiFi_Check_Connection_b()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+/*
 private void WiFi_Check_Connection_UDP_c()
 {
    
    System.out.println("start Wifi_Check_connection_UDP_c");
       
-   
-      
 }
-
+*/
 
 
 /***********************************************************************************************/
@@ -5982,6 +5975,7 @@ private void WiFi_Check_Connection_UDP_c()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+/*
 private void WiFi_Check_Connection_UDP_b()
 {
    // https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
@@ -6028,12 +6022,9 @@ DatagramSocket socket = null;
             for (int i = 0; i<endidx; i++) System.out.print((char) buf[idx++]);
             System.out.println();
         }   
-   
-   
-   
 
 }
-
+*/
 
 /***********************************************************************************************/
 /*                                                                                             */
@@ -6332,6 +6323,7 @@ private void WiFi_Receive_UDP()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+/*
 private void WiFi_Check_Connection_UDP()
 {
    // https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
@@ -6434,7 +6426,7 @@ private void WiFi_Check_Connection_UDP()
    
    
 }
-
+*/
 
 
 
@@ -6445,6 +6437,7 @@ private void WiFi_Check_Connection_UDP()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+/*
 private void WiFi_Check_Connection()
 {
    // https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
@@ -6594,7 +6587,7 @@ private void WiFi_Check_Connection()
 
    }.execute(); // new SwingWorker <Void, Void>()
 }
-
+*/
  
 
 /***********************************************************************************************/

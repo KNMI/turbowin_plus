@@ -17065,7 +17065,7 @@ public static void log_turbowin_system_message(final String message)
    
    // public var's
    public static final String APPLICATION_NAME              = "TurboWin+";                       // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "3.0.0 (build 13-Nov-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_VERSION           = "3.0.0 (build 15-Nov-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
    public static String user_dir;
