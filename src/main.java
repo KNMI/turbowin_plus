@@ -62,14 +62,12 @@ import javax.jnlp.SingleInstanceListener;
 import javax.jnlp.SingleInstanceService;
 import javax.jnlp.UnavailableServiceException;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -321,13 +319,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 ** The following functions are using the serial communication library
 *      - main_windowClosing() [main.java]
 *      - Output_obs_to_AWS_actionPerformed() [main.java]
+*      - ......
 *
-*
-*
-*
-*
-*
-*
+* ---------------------------------------------------------------------------------------------------------------------
+* logging/dispalying examples:
+*               - main.log_turbowin_system_message(message);  // NB inclusive System.out.printLn
+*               - JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);  
+*               - System.out.printLn("test");
 * 
 **/
 
@@ -593,9 +591,10 @@ public class main extends javax.swing.JFrame {
       jMenuItem45 = new javax.swing.JMenuItem();
       jMenuItem47 = new javax.swing.JMenuItem();
       jMenuItem51 = new javax.swing.JMenuItem();
-      Dashboard = new javax.swing.JMenu();
+      jMenu9 = new javax.swing.JMenu();
       jMenuItem55 = new javax.swing.JMenuItem();
       jMenuItem56 = new javax.swing.JMenuItem();
+      jMenuItem57 = new javax.swing.JMenuItem();
       jMenu7 = new javax.swing.JMenu();
       jMenuItem36 = new javax.swing.JMenuItem();
       jMenuItem49 = new javax.swing.JMenuItem();
@@ -2210,7 +2209,7 @@ public class main extends javax.swing.JFrame {
 
       jMenuBar1.add(jMenu8);
 
-      Dashboard.setText("Dashboard");
+      jMenu9.setText("Dashboard");
 
       jMenuItem55.setText("Barometer");
       jMenuItem55.addActionListener(new java.awt.event.ActionListener() {
@@ -2218,17 +2217,25 @@ public class main extends javax.swing.JFrame {
             Dashboard_Barometer_actionPerformed(evt);
          }
       });
-      Dashboard.add(jMenuItem55);
+      jMenu9.add(jMenuItem55);
 
-      jMenuItem56.setText("AWS");
+      jMenuItem56.setText("AWS analog");
       jMenuItem56.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
             Dashboard_AWS_actionPerformed(evt);
          }
       });
-      Dashboard.add(jMenuItem56);
+      jMenu9.add(jMenuItem56);
 
-      jMenuBar1.add(Dashboard);
+      jMenuItem57.setText("AWS digital");
+      jMenuItem57.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Dashboard_AWS_digital_actionPerformed(evt);
+         }
+      });
+      jMenu9.add(jMenuItem57);
+
+      jMenuBar1.add(jMenu9);
 
       jMenu7.setText("Info");
 
@@ -3250,8 +3257,13 @@ private void read_muffin()
                   // disable the "Obs to AWS" menu item 
                   jMenuItem46.setEnabled(false);                          // Obs to AWS
                   
-                  // disable Dasboard AWS
-                  jMenuItem56.setEnabled(false);                          // Dashboard - AWS
+                  // disable Dasboard AWS (analog)
+                  jMenuItem56.setEnabled(false);                          // Dashboard - AWS [analog)
+                  
+                  
+                  // disable Dasboard AWS (digital)
+                  jMenuItem57.setEnabled(false);                          // Dashboard - AWS [digital)
+                  
                }
                
                /* if no barometer connected */
@@ -4509,8 +4521,11 @@ public static void set_muffin()
                   // disable the "Obs to AWS" menu item 
                   jMenuItem46.setEnabled(false);                          // Obs to AWS
                   
-                  // disable Dasboard AWS
-                  jMenuItem56.setEnabled(false);                          // Dashboard - AWS
+                  // disable Dasboard AWS analog
+                  jMenuItem56.setEnabled(false);                          // Dashboard - AWS analog
+                  
+                  // disable Dasboard AWS digital
+                  jMenuItem57.setEnabled(false);                          // Dashboard - AWS digital
                }
                
                /* if no barometer connected */
@@ -11260,19 +11275,31 @@ private boolean checking_level_3()
          
          if ( (RS232_connection_mode == 3) && (defaultPort != null) )    // AWS
          {
-            MenuItem dashboard_Item = new MenuItem("dashboard");
-            popup.add(dashboard_Item);
+            MenuItem dashboard_analog_Item = new MenuItem("dashboard analog");
+            popup.add(dashboard_analog_Item);
             
-            popup.addSeparator();
-            
-            dashboard_Item.addActionListener(new ActionListener() 
+            dashboard_analog_Item.addActionListener(new ActionListener() 
             {
                @Override
                public void actionPerformed(ActionEvent e) 
                {
                   Dashboard_AWS_actionPerformed(null);  
                } // public void actionPerformed(ActionEvent e)
-            });            
+            });        
+            
+            MenuItem dashboard_digital_Item = new MenuItem("dashboard digital");
+            popup.add(dashboard_digital_Item);
+            
+            popup.addSeparator();
+            
+            dashboard_digital_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Dashboard_AWS_digital_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });        
             
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             MenuItem wind_dir_graph_Item = new MenuItem("wind direction graph");
@@ -11869,8 +11896,43 @@ private boolean checking_level_3()
       dashboard_form_AWS.setExtendedState(MAXIMIZED_BOTH); 
       dashboard_form_AWS.setVisible(true);       
       
-      
    }//GEN-LAST:event_Dashboard_AWS_actionPerformed
+
+   
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/   
+   private void Dashboard_AWS_digital_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Dashboard_AWS_digital_actionPerformed
+      // TODO add your handling code here:
+      
+      if (dashboard_form_AWS_digital != null)
+      {
+         if (DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital_is_gecreeerd == true)  
+         {
+            if (DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital.isRunning())
+            {
+               DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital.stop();
+            }
+         }
+         DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital = null;
+      
+         DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital_is_gecreeerd = false;
+          
+         //graph_form.dispose();
+         dashboard_form_AWS_digital.setVisible(false);
+      }      
+      
+      
+      dashboard_form_AWS_digital = new DASHBOARD_view_AWS_digital();
+      dashboard_form_AWS_digital.setExtendedState(MAXIMIZED_BOTH); 
+      dashboard_form_AWS_digital.setVisible(true);       
+      
+      
+   }//GEN-LAST:event_Dashboard_AWS_digital_actionPerformed
 
    
    
@@ -16743,7 +16805,6 @@ public static void log_turbowin_system_message(final String message)
  
  
    // Variables declaration - do not modify//GEN-BEGIN:variables
-   private javax.swing.JMenu Dashboard;
    private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton10;
    private javax.swing.JButton jButton11;
@@ -16812,6 +16873,7 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenu jMenu6;
    private javax.swing.JMenu jMenu7;
    private javax.swing.JMenu jMenu8;
+   private javax.swing.JMenu jMenu9;
    private javax.swing.JMenuBar jMenuBar1;
    private javax.swing.JMenuItem jMenuItem1;
    private javax.swing.JMenuItem jMenuItem10;
@@ -16865,6 +16927,7 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem54;
    private javax.swing.JMenuItem jMenuItem55;
    private javax.swing.JMenuItem jMenuItem56;
+   private javax.swing.JMenuItem jMenuItem57;
    private javax.swing.JMenuItem jMenuItem6;
    private javax.swing.JMenuItem jMenuItem7;
    private javax.swing.JMenuItem jMenuItem8;
@@ -17065,7 +17128,8 @@ public static void log_turbowin_system_message(final String message)
    
    // public var's
    public static final String APPLICATION_NAME              = "TurboWin+";                       // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "3.0.0 (build 15-Nov-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_VERSION           = "3.0.5 (build 18-Dec-2017)"; // NB DO NOT FORGET TO COMPILE ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String DASHBOARD_LOGO                = "sot.png";
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
    public static String user_dir;
@@ -17237,6 +17301,7 @@ public static void log_turbowin_system_message(final String message)
    public static boolean true_wind_dir_from_AWS_present            = false;
    public static boolean true_wind_gust_from_AWS_present           = false;
    public static boolean displayed_aws_data_obsolate               = false;   // set in Function: RS422_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
+   public static boolean displayed_barometer_data_obsolate         = false;   // set in Function: RS232_WiFi_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
    
    public static final int NUMBER_COM_PORTS                        = 20;     // used by checking COM ports meteorological instrument (barometer, EUCAWS) and also for GPS
    public static final int LENGTE_SMD_STRING                       = 14;//14;//1024;//20;  // 20 is willekeurig, moet nog precies bepaald worden
@@ -17282,10 +17347,12 @@ public static void log_turbowin_system_message(final String message)
    public static SerialPort serialPort                              = null;
    public static SerialPort GPS_serialPort                          = null;
    public static String total_string;     
+   public static boolean obsolate_data_flag                         = false;
    
    private RS232_view graph_form;
    private DASHBOARD_view dashboard_form;
    private DASHBOARD_view_AWS dashboard_form_AWS;
+   private DASHBOARD_view_AWS_digital dashboard_form_AWS_digital;
    
    public static final Color input_color_from_aws                   = Color.RED;  // color for text fields if input was measured by AWS (manually input of that text field disabled)
    public static final Color input_color_from_observer              = Color.BLACK;

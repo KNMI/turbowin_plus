@@ -1651,8 +1651,16 @@ else
       // GPS connection
       if (main.RS232_GPS_connection_mode == 3)                               // GPS integrated Mintaka Star
       {
-         main_RS232_RS422.RS232_Mintaka_Star_Read_Sensor_Data_GPS_For_Obs("MANUAL"); 
-         //System.out.println("+++ GPS-ok = " + GPS_ok);
+         if (main.obs_format.equals(main.FORMAT_101) || main.obs_format.equals(main.FORMAT_FM13) ) 
+         {
+            // for correct compting obs format must beset before to format101 or FM13
+            main_RS232_RS422.RS232_Mintaka_Star_Read_Sensor_Data_GPS_For_Obs("MANUAL"); 
+         }
+         else
+         {
+            String message = "[GPS] obs format not set to format101 or FM13";
+            JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE); 
+         }
          // NB inserting values in jTextfields etc was done in the function: RS232_Mintaka_Star_Read_Sensor_Data_GPS_For_Obs("MANUAL");
       }
       else if (main.RS232_GPS_connection_mode == 1)                          // GPS NMEA 0183 (separate GPS, not barometer integrated)

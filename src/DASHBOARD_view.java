@@ -99,8 +99,8 @@ public class DASHBOARD_view extends javax.swing.JFrame {
          .addGroup(jPanel4Layout.createSequentialGroup()
             .addGap(99, 99, 99)
             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
-            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(104, 104, 104))
       );
       jPanel4Layout.setVerticalGroup(
@@ -178,6 +178,11 @@ public class DASHBOARD_view extends javax.swing.JFrame {
 
       jPanel1.setBackground(new java.awt.Color(255, 250, 240));
       jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
+      jPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
+         public void componentResized(java.awt.event.ComponentEvent evt) {
+            Dashboard_componentResizedHandler(evt);
+         }
+      });
 
       javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
@@ -308,6 +313,24 @@ public class DASHBOARD_view extends javax.swing.JFrame {
 
    
    
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Dashboard_componentResizedHandler(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_Dashboard_componentResizedHandler
+      // TODO add your handling code here:
+      System.out.println("--- Barometer Dashboard (jPanel1) size = " + DASHBOARD_view.jPanel1.getSize());
+      //width_AWS_analog_dashboard = jPanel1.getWidth();
+      //height_AWS_analog_dashboard = jPanel1.getHeight();
+      
+      jPanel1.repaint();  
+      
+      
+   }//GEN-LAST:event_Dashboard_componentResizedHandler
+
+   
+   
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -395,10 +418,10 @@ private void init_dasboard_timer()
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
-   private javax.swing.JLabel jLabel4;
+   public static javax.swing.JLabel jLabel4;
    /*
-   private javax.swing.JPanel jPanel1;
-   */private DASHBOARD_grafiek jPanel1;
+   private static javax.swing.JPanel jPanel1;
+   */private static DASHBOARD_grafiek jPanel1;
    private javax.swing.JPanel jPanel2;
    private javax.swing.JPanel jPanel3;
    private javax.swing.JPanel jPanel4;

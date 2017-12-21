@@ -1127,14 +1127,13 @@ public static void RS232_read_dasboard_values()
 /***********************************************************************************************/
 private static void RS232_compute_dasboard_values(final String date_time_last_update, final String last_update_record)
 {
-   /////////////// called from: RS232_write_sensor_data_to_file() [main_RS232_RS422.java]
    // called from: RS232_read_dasboard_values() [main_RS232_RS422.java]
    //
    //
    // NB update the global dasboard var's if ok, otherwise do not reset them but leave the old values unchanged!
-   // NB dashboard_double_last_update_record_pressure_ic -> glabal var, link between this function and dasboard dial
-   // NB dashboard_string_last_update_record_date_time   -> glabal var, link between this function and dasboard dial   
-   // NB dashboard_double_last_update_record_ppp         -> glabal var, link between this function and dasboard dial  
+   // NB dashboard_double_last_update_record_pressure_ic -> glabal var, link between this function and dashboard dial
+   // NB dashboard_string_last_update_record_date_time   -> glabal var, link between this function and dashboard dial   
+   // NB dashboard_double_last_update_record_ppp         -> glabal var, link between this function and dashboard dial  
    
    
    new SwingWorker<Void, Void>()
@@ -4435,6 +4434,18 @@ private void RS422_init_new_aws_data_received_check_timer()
             
             // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
             
+            
+            // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
+          
+            // message obsolate data only the first time
+            if (main.obsolate_data_flag == false)
+            {
+               String message = "[AWS] sensor data obsolate (lost connection?)";
+               main.log_turbowin_system_message(message);
+            } // if (main.obsolate_data_flag == false)
+            
+            main.obsolate_data_flag = true;            
+            
          }
          else // so aws data NOT obsolate (data < 5 minutes old)
          {
@@ -4442,7 +4453,17 @@ private void RS422_init_new_aws_data_received_check_timer()
             
             // NB in this case: in function: RS422_Read_AWS_Sensor_Data_For_Display() the fields on the main screen will be updated
             // NB main.date_time_fields_update() etc. and VOT will be updated there
-         }
+            
+            // reset message if before was written data obsolate
+            // NB probably the message below will never be written because disconnected serial connection must be reconnected by a program restart (contraru to WiFi connection)
+            if (main.obsolate_data_flag)
+            {
+               String message = "[AWS] start receiving sensor data again";
+               main.log_turbowin_system_message(message);
+            } // if (main.obsolate_data_flag)
+            
+            main.obsolate_data_flag = false;
+         } //else
          
          // initialisation
          //last_new_data_received_TimeMillis = 0;
@@ -4654,6 +4675,9 @@ public void RS422_initComponents()
                {
                   String message = "[AWS] " + "interruption or execution exception"; 
                   main.log_turbowin_system_message(message);
+                  
+                  //main.obsolate_data_flag = true;  // see also Function RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]                     
+                  
                } //  if (main.total_string.indexOf("error") != -1)              
                
                
@@ -6042,6 +6066,7 @@ private void WiFi_Receive_UDP()
    //     0r https://stackoverflow.com/questions/20427697/trying-to-stop-swingworker
    //     etc.
    
+   
    new SwingWorker<String, String>()
    {
       //String line;
@@ -6135,6 +6160,8 @@ private void WiFi_Receive_UDP()
             }     
             main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via WiFi: " + info);
 
+            // for timer checking the data is not obsolate (see Function: RS232_WiFi_init_new_barometer_received_check_timer)
+            last_new_data_received_TimeMillis = System.currentTimeMillis(); 
             
             // update the date and time on the main screen (and the global date time var's)
             // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
@@ -6590,6 +6617,99 @@ private void WiFi_Check_Connection()
 */
  
 
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_And_WiFi_init_new_sensor_data_received_check_timer()
+{
+   /////// for serial link and WiFi connected barometers (NB not EUCAWS) ////////
+   
+   // called from: RS232_initComponents()
+   //              WiFi_initComponents()
+   
+   
+   ActionListener check_new_data_action = new ActionListener()
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+			//System.out.println("+++ System.currentTimeMillis() = " + System.currentTimeMillis());
+			//System.out.println("+++ last_new_data_received_TimeMillis = " + last_new_data_received_TimeMillis);
+			//System.out.println("+++ System.currentTimeMillis() - last_new_data_received_TimeMillis = " + (System.currentTimeMillis() - last_new_data_received_TimeMillis));
+			
+			
+         // NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+         // NB last_new_data_received_TimeMillis: returns the difference,in milliseconds between the last aws data receipt system time and midnight, January 1, 1970 UTC.
+         if ((System.currentTimeMillis() - last_new_data_received_TimeMillis) > MAX_AGE_AWS_DATA)     // MAX_AGE_AWS_DATA e.g. 30000 msec (5 minutes)
+         {
+            main.displayed_barometer_data_obsolate = true;
+            
+            // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
+          
+            // message obsolate data only the first time
+            if (main.obsolate_data_flag == false)
+            {
+               if (main.RS232_connection_mode == 6)   // Mintaka Star WiFi
+               {
+                  String message = "[WIFI] sensor data obsolate (lost connection?)";
+                  main.log_turbowin_system_message(message);
+               }
+               else
+               {
+                  String message = "[BAROMETER] sensor data obsolate (lost connection?)";
+                  main.log_turbowin_system_message(message);
+               }
+            } // if (main.obsolate_data_flag == false)
+            
+            main.obsolate_data_flag = true;
+         }
+         else // so aws data NOT obsolate (data < 5 minutes old)
+         {
+            main.displayed_barometer_data_obsolate = false;
+            
+            // reset message if before was written data obsolate
+            // NB probably the message below will never be written because disconnected serial connection must be reconnected by a program restart (contraru to WiFi connection)
+            if (main.obsolate_data_flag)
+            {
+               if (main.RS232_connection_mode == 6)   // Mintaka Star WiFi
+               {
+                  String message = "[WIFI] sensor data receiving again";
+                  main.log_turbowin_system_message(message);
+               }
+               else
+               {
+                  String message = "[BAROMETER] start receiving sensor data again";
+                  main.log_turbowin_system_message(message);
+               }               
+            } // if (main.obsolate_data_flag)
+            
+            main.obsolate_data_flag = false;
+            
+            // NB in this case: in function: RS422_Read_AWS_Sensor_Data_For_Display() the fields on the main screen will be updated
+            // NB main.date_time_fields_update() etc. and VOT will be updated there
+         }
+         
+         // initialisation
+         //last_new_data_received_TimeMillis = 0;
+   
+      } // public void actionPerformed(ActionEvent e)
+   };
+   
+   /* main loop for checking when new AWS data arrives */
+   check_new_data_timer_delay = DELAY_NEW_DATA_CHECK_LOOP;                              // delay between two new aws data checks (e.g. 1 minute)  
+   check_new_data_timer = new Timer(check_new_data_timer_delay, check_new_data_action);
+   check_new_data_timer.setRepeats(true);                                               // false = only one action
+   check_new_data_timer.setInitialDelay(INITIAL_DELAY_NEW_DATA_CHECK_LOOP);             // time in millisec to wait after timer is started to fire first event
+   check_new_data_timer.setCoalesce(true);                                              // to be sure
+   check_new_data_timer.start();   
+   
+}
+
+
+
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -6600,6 +6720,13 @@ public void WiFi_initComponents()
    // called from read_muffin() [main.java] or lees_configuratie_regels() [main.java]
 
    //System.out.println("+++ " + "WiFi_initComponents()");
+   
+   String message = "[WIFI] start listening";
+   main.log_turbowin_system_message(message);
+   
+   // start timer for checking every 1 minute if there is new barometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+   last_new_data_received_TimeMillis = 0;
+   RS232_And_WiFi_init_new_sensor_data_received_check_timer();
    
    
    // for sensor data files (in the file name itself) (note also used in RS232_view.java)
@@ -6652,6 +6779,9 @@ public void WiFi_initComponents()
       // serialPort.notifyOnOutputEmpty(true);
       //#==================================================================#     
       
+      // start timer for checking every 1 minute if there is newbarometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+      last_new_data_received_TimeMillis = 0;
+      RS232_And_WiFi_init_new_sensor_data_received_check_timer();
       
       
       //System.loadLibrary("C:\\Users\\hometrainer\\Documents\\NetBeansProjects\\turbowin_jws\\rxtxSerial.dll"); // gaat fout omdat het geen path mag zijn (alleen de library name)
@@ -6934,6 +7064,7 @@ public void WiFi_initComponents()
                   {
                      info = main_RS232_RS422.test_record;
                   }   
+                  
                   if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)            // Mintaka Duo or Mintaka Star USB
                   {
                      main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via USB: " + info);
@@ -6944,6 +7075,9 @@ public void WiFi_initComponents()
                   }
                   
                   RS232_write_sensor_data_to_file();                             // PTB220, PTB330, MintakaDuo, Mintaka Star USB
+                  
+                  // for timer checking the data is not obsolate (see Function: RS232_WiFi_init_new_barometer_received_check_timer)
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); 
                   
                   // update the date and time on the main screen (and the global date time var's)
                   // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
@@ -10959,156 +11093,156 @@ private void RS422_Read_AWS_Sensor_Data_For_Display()
 /***********************************************************************************************/  
 private void RS422_update_AWS_dasboard_values()
 {
+   // called from: RS422_Read_AWS_Sensor_Data_For_Display() [main_RS232_RS422.java]
+   
    
    new SwingWorker<Void, Void>()
    {
       @Override
       protected Void doInBackground() throws Exception
       {
+         // last update date time
+         //
+         //
+         dashboard_string_last_update_record_date_time = main.sdf_tsl_2.format(new Date()) + " UTC";   // // new Date() -> always in UTC 
    
    
-   // last update date time
-   //
-   //
-   dashboard_string_last_update_record_date_time = main.sdf_tsl_2.format(new Date()) + " UTC";   // // new Date() -> always in UTC 
+         // air pressure sensor_height
+         //
+         //
+         // NB if AWS connected always pressure with ic intergrated (contrary to only a barometer connected)
+         //
+         if (main.pressure_sensor_level_from_AWS_present)
+         {
+            // nb in case EUCAWS always ic integrated in barometer reading!
+            dashboard_double_last_update_record_sensor_level_pressure_ic = Double.parseDouble(mybarometer.pressure_reading);
+         } 
+         else
+         {
+            dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
+         }
    
    
-   // air pressure sensor_height
-   //
-   //
-   // NB if AWS connected always pressure with ic intergrated (contrary to only a barometer connected)
-   //
-   if (main.pressure_sensor_level_from_AWS_present)
-   {
-      // nb in case EUCAWS always ic integrated in barometer reading!
-      dashboard_double_last_update_record_sensor_level_pressure_ic = Double.parseDouble(mybarometer.pressure_reading);
-   } 
-   else
-   {
-      dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
-   }
+         // air pressure MSL
+         //
+         //
+         // NB if AWS connected always pressure with ic intergrated (contrary to only a barometer connected)
+         //
+         if (main.pressure_MSL_from_AWS_present)
+         {
+            dashboard_double_last_update_record_MSL_pressure_ic = Double.parseDouble(mybarometer.pressure_msl_corrected);
+         } 
+         else
+         {
+            dashboard_double_last_update_record_MSL_pressure_ic = Double.MAX_VALUE;
+         }
    
    
-   // air pressure MSL
-   //
-   //
-   // NB if AWS connected always pressure with ic intergrated (contrary to only a barometer connected)
-   //
-   if (main.pressure_MSL_from_AWS_present)
-   {
-      dashboard_double_last_update_record_MSL_pressure_ic = Double.parseDouble(mybarometer.pressure_msl_corrected);
-   } 
-   else
-   {
-      dashboard_double_last_update_record_MSL_pressure_ic = Double.MAX_VALUE;
-   }
+         // air temperature
+         //
+         //
+         if (main.air_temp_from_AWS_present)
+         {
+            dashboard_double_last_update_record_air_temp = Double.parseDouble(mytemp.air_temp);
+         } 
+         else
+         {
+            dashboard_double_last_update_record_air_temp = Double.MAX_VALUE;
+         }
    
-   
-   // air temperature
-   //
-   //
-   if (main.air_temp_from_AWS_present)
-   {
-      dashboard_double_last_update_record_air_temp = Double.parseDouble(mytemp.air_temp);
-   } 
-   else
-   {
-      dashboard_double_last_update_record_air_temp = Double.MAX_VALUE;
-   }
-   
-   // humidity
-   //
-   //
-   if (main.rh_from_AWS_present)
-   {
-      double hulp_double_rv = Math.round(mytemp.double_rv * 10 * 100) / 10.0; // nb Math.round(xxx) - > geeft long terug  // NB * 100 for getting %
-      dashboard_double_last_update_record_humidity = hulp_double_rv;
-   } 
-   else
-   {
-      dashboard_double_last_update_record_humidity = Double.MAX_VALUE;
-   }        
+         // humidity
+         //
+         //
+         if (main.rh_from_AWS_present)
+         {
+            double hulp_double_rv = Math.round(mytemp.double_rv * 10 * 100) / 10.0; // nb Math.round(xxx) - > geeft long terug  // NB * 100 for getting %
+           dashboard_double_last_update_record_humidity = hulp_double_rv;
+         } 
+         else
+         {
+            dashboard_double_last_update_record_humidity = Double.MAX_VALUE;
+         }        
      
    
-   // true wind dir
-   //
-   //
-   if (main.true_wind_dir_from_AWS_present)
-   {
-      dashboard_int_last_update_record_true_wind_dir = mywind.int_true_wind_dir;
-   }
-   else
-   {
-      dashboard_int_last_update_record_true_wind_dir = Integer.MAX_VALUE;        
-   }
+         // true wind dir
+         //
+         //
+         if (main.true_wind_dir_from_AWS_present)
+         {
+            dashboard_int_last_update_record_true_wind_dir = mywind.int_true_wind_dir;
+         }
+         else
+         {
+            dashboard_int_last_update_record_true_wind_dir = Integer.MAX_VALUE;        
+         }
    
    
-   // relative wind dir
-   //
-   //
-   if (main.relative_wind_dir_from_AWS_present)
-   {
-      dashboard_int_last_update_record_relative_wind_dir = Integer.parseInt(mywind.wind_dir);
-   }
-   else
-   {
-      dashboard_int_last_update_record_relative_wind_dir = Integer.MAX_VALUE;        
-   }
+         // relative wind dir
+         //
+         //
+         if (main.relative_wind_dir_from_AWS_present) 
+         {
+            dashboard_int_last_update_record_relative_wind_dir = Integer.parseInt(mywind.wind_dir);
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_relative_wind_dir = Integer.MAX_VALUE;
+         }
    
    
-   // true wind speed
-   //
-   //
-   if (main.true_wind_speed_from_AWS_present)
-   {
-      // NB mywind.int_true_wind_speed in kts
-      dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;
-   }
-   else
-   {
-      dashboard_int_last_update_record_true_wind_speed = Integer.MAX_VALUE;        
-   }
+         // true wind speed
+         //
+         //
+         if (main.true_wind_speed_from_AWS_present) 
+         {
+            // NB mywind.int_true_wind_speed in kts
+            dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_true_wind_speed = Integer.MAX_VALUE;
+         }
    
    
-   // relative wind speed
-   //
-   //
-   if (main.relative_wind_speed_from_AWS_present)
-   {
-      // NB mywind.wind_speed already in kts
-      dashboard_int_last_update_record_relative_wind_speed = Integer.parseInt(mywind.wind_speed);
-   }
-   else
-   {
-      dashboard_int_last_update_record_relative_wind_speed = Integer.MAX_VALUE;        
-   }
+         // relative wind speed
+         //
+         //
+         if (main.relative_wind_speed_from_AWS_present) 
+         {
+            // NB mywind.wind_speed already in kts
+            dashboard_int_last_update_record_relative_wind_speed = Integer.parseInt(mywind.wind_speed);
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_relative_wind_speed = Integer.MAX_VALUE;
+         }
    
    
-   // true wind gust speed
-   //
-   //
-   if (main.true_wind_gust_from_AWS_present)
-   {
-      // NB mywind.int_true_wind_speed gust in kts
-      dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;
-   }
-   else
-   {
-      dashboard_int_last_update_record_true_wind_gust = Integer.MAX_VALUE;        
-   }
+         // true wind gust speed
+         //
+         //
+         if (main.true_wind_gust_from_AWS_present) 
+         {
+            // NB mywind.int_true_wind_speed gust in kts
+            dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_true_wind_gust = Integer.MAX_VALUE;
+         }
 
    
-   // SST
-   //
-   //
-   if (main.SST_from_AWS_present)
-   {
-      dashboard_double_last_update_record_sst = Double.parseDouble((mytemp.sea_water_temp));
-   }
-   else
-   {
-      dashboard_double_last_update_record_sst = Double.MAX_VALUE;        
-   }
+         // SST
+         //
+         //
+         if (main.SST_from_AWS_present)
+         {
+            dashboard_double_last_update_record_sst = Double.parseDouble((mytemp.sea_water_temp));
+         }
+         else
+         {
+            dashboard_double_last_update_record_sst = Double.MAX_VALUE;        
+         }
   
          return null;
       } // protected Void doInBackground() throws Exception

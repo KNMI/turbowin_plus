@@ -1,11 +1,14 @@
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.geom.Arc2D;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -32,33 +35,56 @@ public class DASHBOARD_grafiek_AWS  extends JPanel {
 /***********************************************************************************************/
  public DASHBOARD_grafiek_AWS()
 { 
-    color_black             = Color.BLACK;
-   //color_gold              = new Color(255, 215, 0);
-   //color_yellow            = Color.YELLOW;
-   color_light_golden_rod  = new Color(255, 236, 139);
-   color_brown             = new Color(139, 69, 19);
-   color_white             = Color.WHITE;
-   //color_red               = Color.RED;
-   color_dark_red          = new Color(210, 0, 0);
-   color_gray              = Color.GRAY;
-   
-   
-   // font (logical fonts, will always be available on every system with Java)
-   font_a = new Font("SansSerif", Font.PLAIN, 7);                   // units (eg 1100)
-   font_b = new Font("SansSerif", Font.PLAIN, 8);                   // digits sensor value
-   font_c = new Font("SansSerif", Font.PLAIN, 5);                   // last update
-   //font_d = new Font("SansSerif", Font.ITALIC, 12);
-   //font_d = new Font("SansSerif", Font.PLAIN, 12);
-   //font_d = new Font("Monospaced", Font.PLAIN, 12);
-   font_d = new Font("Monospaced", Font.ITALIC, 12);                // text's like "PRESSURE MSL", "TEMPERATURE" etc
-    
+   color_gray                 = Color.GRAY;
+   color_black                = Color.BLACK;
+   color_light_golden_rod     = new Color(255, 236, 139);
+   color_brown                = new Color(139, 69, 19);
+   color_dark_red             = new Color(210, 0, 0);
    thickness_outside_ring     = 2.0f;
    updated_text               = "";                                 //updated";  // unfortunately due to a lack of space no room for writing "updated"
-   instrument_diameter        = 180;                                // 220 = orig
-   vert_offset                = 30;
+   
+   // get the screen size 
+   //
+   Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+   double width_screen = screenSize.getWidth();
+   double height_screen = screenSize.getHeight();
+   System.out.println("--- Screen resolution AWS Dashboard analog: " + width_screen + " x " + height_screen);
+   
+   // Full HD or above (1920 x 1080)
+   if ((width_screen > 1900) && (height_screen > 1000))
+   {
+      instrument_diameter = 180;  
+      vert_offset         = 30;
+      fontSize_a          = 7;
+      fontSize_b          = 8;
+      fontSize_c          = 5;
+      fontSize_d          = 12;
+      color_digits        = color_black;                            // digits value on the dial
+   }
+   else
+   {
+      // eg 1600 x 900 or 1366 x 768
+      instrument_diameter = 240; 
+      vert_offset         = -20;
+      fontSize_a          = 7;
+      fontSize_b          = 15;
+      fontSize_c          = 10;
+      fontSize_d          = 18;
+      color_digits        = Color.BLUE;
+   }
+   
+   // font (logical fonts, will always be available on every system with Java)
+   font_a = new Font("SansSerif", Font.PLAIN, fontSize_a);          // units (eg 1100)
+   font_b = new Font("SansSerif", Font.PLAIN, fontSize_b);          // digits sensor value
+   font_c = new Font("SansSerif", Font.PLAIN, fontSize_c);          // last update on dial
+   font_d = new Font("Monospaced", Font.ITALIC, fontSize_d);        // text's like "PRESSURE MSL", "TEMPERATURE" etc
+   
+   // default stroke for main hand (= pointer/arrow air pressure value); will be overwritten (by a dashed line) if the communucation to the sensor is lost
+   stroke_main_hand = new BasicStroke(1.0f);
+   
    horz_offset                = instrument_diameter - 0;            // -20 orig
-   marker_circle_diameter_1   = instrument_diameter - 26;           // eg outside marker corcle: 220 - 26 = 194;
-   marker_circle_diameter_2   = marker_circle_diameter_1 - 10;      // eg outside marker corcle: 194 - 10 = 184;
+   marker_circle_diameter_1   = instrument_diameter - 26;           // eg outside marker circle: 220 - 26 = 194;
+   marker_circle_diameter_2   = marker_circle_diameter_1 - 10;      // eg outside marker circle: 194 - 10 = 184;
    units_start                = instrument_diameter / 2 - 18;       // eg 220 / 2 - 18 = 92   // not the 5 and 10 units markers
    units_end                  = instrument_diameter / 2 - 14;       // eg 220 / 2 - 14 = 96   // all markers end (5, 10 and intermediate) 
    units_5_start              = instrument_diameter / 2 - 21;       // eg 220 / 2 - 21 = 89   //the 5 units markers
@@ -88,7 +114,7 @@ public void paintComponent(Graphics g)
    int wind_mode = 0;                  // 1 = true wind 2 = relative wind 3 = wind gust
    boolean pressure_mode_msl;        // if true; pressure MSL; if false: pressure read (sensor height)
    
-   // meter top row
+   // meters top row
    //
    int x0_meter_top_middle = getWidth() / 2;
    int y0_meter_top_middle = getHeight() / 3 + vert_offset;     
@@ -124,12 +150,10 @@ public void paintComponent(Graphics g)
    int y0_meter_bottom_left2 = getHeight() / 3 * 2 - vert_offset;     
    
   
+   // clean the dirty pixels
    super.paintComponent(g);
    
-   
-   
    // general
-   //
    Graphics2D g2d = (Graphics2D) g;
    
   
@@ -137,16 +161,28 @@ public void paintComponent(Graphics g)
    //
    if (DASHBOARD_view_AWS.night_vision == false)
    {
-      Image img1 = new ImageIcon(this.getClass().getResource(main.ICONS_DIRECTORY + "wmo.png")).getImage();
+      Image img1 = new ImageIcon(this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO)).getImage();
       //scale the image to cover a the complete area of the drawing surface
-      g2d.drawImage(img1, 0, 0,getWidth(), getHeight(), 0, 0, img1.getWidth(null), img1.getHeight(null), null);
+      //g2d.drawImage(img1, 0, 0,getWidth(), getHeight(), 0, 0, img1.getWidth(null), img1.getHeight(null), null);
+      int width = getWidth();  
+      int height = getHeight();  
+      for (int x = 0; x < width; x += img1.getWidth(null)) 
+      {  
+         for (int y = 0; y < height; y += img1.getHeight(null)) 
+         {  
+            g2d.drawImage(img1, x, y, this);  
+         }  
+      }       
    }
 
+   // set the new origin
    g2d.translate(getWidth() / 2, getHeight() / 2);
    
+   // scaling
    int side = getWidth() > getHeight() ? getHeight() : getWidth();
    g2d.scale((side / 2) / 200, (side / 2) / 200);
    
+   // rendering hints
    setAllRenderingHints(g2d);
    
    // colors depending night or day vision
@@ -155,14 +191,50 @@ public void paintComponent(Graphics g)
       color_instrument_face = color_dark_red;
       color_instrument_ring = color_black;
       //color_set_hand = color_gray;
+      color_update_message_south_panel = color_gray;
    }
    else
    {
       color_instrument_face = color_light_golden_rod;
       color_instrument_ring = color_brown;
       //color_set_hand = color_white;
+      color_update_message_south_panel = color_black;
    }
 
+   // obsolete data (no cummunication for roughly > 5 minutes with the AWS)
+   if (main.displayed_aws_data_obsolate == true)
+   {
+      color_digits = main.obsolate_color_data_from_aws;                      // // will not be visible antmore on the same color instrument face
+      color_instrument_face = main.obsolate_color_data_from_aws;
+      color_instrument_ring = color_black;
+      
+      float dash1[] = {5.0f};     // where the values alternate between the dash length and the gap length. a transparent dash for 5 units, another opaque dash for 5 units
+      stroke_main_hand = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
+   }
+   
+   
+   //
+   ///////////////////// "last updated date and time" bottom left screen [South panel]
+   //
+   String updated_text_bottom_screen = "dials updated every minute. last updated: ";
+   String update_message = "";
+   
+   if (main_RS232_RS422.dashboard_string_last_update_record_date_time.equals(""))
+   {
+      update_message =  updated_text_bottom_screen + " unknown";
+   }
+   else
+   {
+      //update_message = updated_text_bottom_screen + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time.replace("-", " ");
+      
+      // remove the seconds from the date-time update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+      String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+      update_message = updated_text_bottom_screen + " " + updated_message_short + " UTC";
+   }
+
+   DASHBOARD_view_AWS.jLabel3.setForeground(color_update_message_south_panel);
+   DASHBOARD_view_AWS.jLabel3.setText(update_message);
+   
    
    
    //
@@ -1910,7 +1982,7 @@ private void setAllRenderingHints(Graphics2D g2d)
       ym_a = (int) (Math.sin(m * Math.PI / 30 - Math.PI / 2) * text_base_digits);
 
       g2d.setFont(font_b);
-   
+      g2d.setColor(color_digits);
    
       if (reading > 900.0 && reading < 1100.0)
       {
@@ -1918,6 +1990,8 @@ private void setAllRenderingHints(Graphics2D g2d)
          width_b1 = g2d.getFontMetrics().stringWidth(digits);
          g2d.drawString(digits, (int)xm_a - width_b1 / 2, (int)ym_a);
       }
+      
+      g2d.setColor(color_black);
    
    
       ///////////  last update date and time ////////////
@@ -1931,7 +2005,9 @@ private void setAllRenderingHints(Graphics2D g2d)
       }
       else
       {
-         update_message = updated_text + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time;
+         // remove the seconds from the update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+         String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+         update_message = updated_text + " " + updated_message_short + " UTC";
       }
    
       width_c1 = g2d.getFontMetrics().stringWidth(update_message);
@@ -2045,7 +2121,7 @@ private void setAllRenderingHints(Graphics2D g2d)
       ym_a = (int) (Math.sin(m * Math.PI / 30 - Math.PI / 2) * text_base_digits);
 
       g2d.setFont(font_b);
-   
+      g2d.setColor(color_digits);
    
       if (reading > -60.0 && reading < 60.0)
       {
@@ -2053,7 +2129,7 @@ private void setAllRenderingHints(Graphics2D g2d)
          width_b1 = g2d.getFontMetrics().stringWidth(digits);
          g2d.drawString(digits, (int) xm_a - width_b1 / 2, (int) ym_a);
       }
-   
+      g2d.setColor(color_black);
    
       ///////////  last update date and time ////////////
       //
@@ -2064,7 +2140,9 @@ private void setAllRenderingHints(Graphics2D g2d)
       }
       else
       {
-         update_message = updated_text + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time;
+         // remove the seconds from the update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+         String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+         update_message = updated_text + " " + updated_message_short + " UTC";
       }
    
       width_c1 = g2d.getFontMetrics().stringWidth(update_message);
@@ -2139,7 +2217,7 @@ private void setAllRenderingHints(Graphics2D g2d)
       ym_a = (int) (Math.sin(m * Math.PI / 30 - Math.PI / 2) * text_base_digits);
 
       g2d.setFont(font_b);
-   
+      g2d.setColor(color_digits);
    
       if (reading >= 0.0 && reading <= 105.0)
       {
@@ -2147,7 +2225,7 @@ private void setAllRenderingHints(Graphics2D g2d)
          width_b1 = g2d.getFontMetrics().stringWidth(digits);
          g2d.drawString(digits, (int)xm_a - width_b1 / 2, (int)ym_a);
       }
-   
+      g2d.setColor(color_black);
    
       ///////////  last update date and time ////////////
       //
@@ -2158,7 +2236,9 @@ private void setAllRenderingHints(Graphics2D g2d)
       }
       else
       {
-         update_message = updated_text + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time;
+         // remove the seconds from the update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+         String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+         update_message = updated_text + " " + updated_message_short + " UTC";
       }
    
       width_c1 = g2d.getFontMetrics().stringWidth(update_message);
@@ -2259,6 +2339,7 @@ private void setAllRenderingHints(Graphics2D g2d)
       ym_a = (int) (Math.sin(m * Math.PI / 30 - Math.PI / 2) * text_base_digits);
 
       g2d.setFont(font_b);
+      g2d.setColor(color_digits);
 
       if (reading >= 0.0 && reading <= 400.0) 
       {
@@ -2267,7 +2348,7 @@ private void setAllRenderingHints(Graphics2D g2d)
          width_b1 = g2d.getFontMetrics().stringWidth(digits);
          g2d.drawString(digits, (int) xm_a - width_b1 / 2, (int) ym_a);
       }
-   
+      g2d.setColor(color_black);
    
       ///////////  last update date and time ////////////
       //
@@ -2278,7 +2359,9 @@ private void setAllRenderingHints(Graphics2D g2d)
       } 
       else 
       {
-         update_message = updated_text + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time;
+         // remove the seconds from the update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+         String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+         update_message = updated_text + " " + updated_message_short + " UTC";
       }
 
       width_c1 = g2d.getFontMetrics().stringWidth(update_message);
@@ -2379,6 +2462,7 @@ private void setAllRenderingHints(Graphics2D g2d)
          ym_a = (int) (Math.sin(m * Math.PI / 30 - Math.PI / 2) * 20 + 0);
 
          g2d.setFont(font_b);
+         g2d.setColor(color_digits);
 
          if (reading >= 0.1 && reading <= 360) 
          {
@@ -2386,7 +2470,7 @@ private void setAllRenderingHints(Graphics2D g2d)
             width_b1 = g2d.getFontMetrics().stringWidth(digits);
             g2d.drawString(digits, (int) xm_a - width_b1 / 2, (int) ym_a);
          }
-
+         g2d.setColor(color_black);
    
    
          ///////////  last update date and time ////////////
@@ -2398,7 +2482,9 @@ private void setAllRenderingHints(Graphics2D g2d)
          }
          else
          {
-            update_message = updated_text + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time;
+            // remove the seconds from the update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+            String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+            update_message = updated_text + " " + updated_message_short + " UTC";
          }
    
          width_c1 = g2d.getFontMetrics().stringWidth(update_message);
@@ -2477,6 +2563,7 @@ private void setAllRenderingHints(Graphics2D g2d)
       ym_a = (int) (Math.sin(m * Math.PI / 30 - Math.PI / 2) * text_base_digits);
 
       g2d.setFont(font_b);
+      g2d.setColor(color_digits);
 
       if (reading > -60.0 && reading < 60.0) 
       {
@@ -2484,7 +2571,7 @@ private void setAllRenderingHints(Graphics2D g2d)
          width_b1 = g2d.getFontMetrics().stringWidth(digits);
          g2d.drawString(digits, (int) xm_a - width_b1 / 2, (int) ym_a);
       }
-   
+      g2d.setColor(color_black);
    
       ///////////  last update date and time ////////////
       //
@@ -2495,7 +2582,9 @@ private void setAllRenderingHints(Graphics2D g2d)
       }
       else
       {
-         update_message = updated_text + " " + main_RS232_RS422.dashboard_string_last_update_record_date_time;
+         // remove the seconds from the update string "12-Dec-2017 08:12:24 UTC" -> "12-Dec-2017 08:12 UTC"
+         String updated_message_short = main_RS232_RS422.dashboard_string_last_update_record_date_time.substring(0, main_RS232_RS422.dashboard_string_last_update_record_date_time.length() - 7);
+         update_message = updated_text + " " + updated_message_short + " UTC";
       }
    
       width_c1 = g2d.getFontMetrics().stringWidth(update_message);
@@ -2535,7 +2624,8 @@ private void make_arrow(Graphics2D g2d, double m)
    xm_b = Math.cos(m * Math.PI / 30 - Math.PI / 2) * -hand_opposite;      
    ym_b = Math.sin(m * Math.PI / 30 - Math.PI / 2) * -hand_opposite;
 
-   g2d.setStroke(new BasicStroke(1.0f));
+   //g2d.setStroke(new BasicStroke(1.0f));
+   g2d.setStroke(stroke_main_hand);
    g2d.drawLine((int) xm_b, (int) ym_b, (int) xm_a, (int) ym_a);
 
       // arrow point (trangle)
@@ -2579,24 +2669,21 @@ private void make_arrow(Graphics2D g2d, double m)
    private final String updated_text;
    private final float thickness_outside_ring;
    private final Color color_light_golden_rod;
-   //Color color_raster_blue     = new Color(205, 104, 137);          // palevioletred 3 
-   //Color color_raster_blue_air = new Color(114, 160, 193);          //  Air Superiority Blue
-   //Color color_raster_blue_sst = new Color(0, 153, 153);            //  sea water color
    private final Color color_black;
    private final Color color_brown;
-   private final Color color_white;
-   //private final Color color_red;
    private final Color color_dark_red;
    private final Color color_gray;
+   private Color color_digits;
    private Color color_instrument_face;
    private Color color_instrument_ring;
-   //private Color color_set_hand;
+   private Color color_update_message_south_panel;
    private final Font font_a;
    private final Font font_b;
    private final Font font_c;
-   private final Font font_d;   
+   private final Font font_d;  
    private int width_a1;
    private int width_a2;
+   private Stroke stroke_main_hand;
    private final int instrument_diameter;
    private final int vert_offset;
    private final int horz_offset;
@@ -2613,6 +2700,8 @@ private void make_arrow(Graphics2D g2d, double m)
    private final int arrow_n;
    private final int arrow_l;
    private final int arrow_r;
-   
-   
+   private final int fontSize_a;
+   private final int fontSize_b;
+   private final int fontSize_c;
+   private final int fontSize_d;
 }

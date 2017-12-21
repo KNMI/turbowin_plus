@@ -79,7 +79,7 @@ public class about extends javax.swing.JFrame {
 
       jLabel2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
       jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel2.setText("Endorsed by EUCOS (European Meteorological Services Network)");
+      jLabel2.setText("Endorsed by EUMETNET (European Meteorological Services Network)");
 
       jLabel3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
       jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

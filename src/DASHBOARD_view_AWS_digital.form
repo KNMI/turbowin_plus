@@ -12,7 +12,7 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
-    <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="Dashboard_view_AWS_windowClosed"/>
+    <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="Dashboard_view_AWS_digital_windowClosed"/>
   </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -96,8 +96,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="724" max="32767" attributes="0"/>
+                  <Component id="jLabel3" min="-2" pref="540" max="-2" attributes="0"/>
+                  <EmptySpace pref="344" max="32767" attributes="0"/>
                   <Component id="jLabel1" min="-2" pref="220" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -125,7 +125,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="--- dials updated every minute ---"/>
+            <Property name="text" type="java.lang.String" value="--- meters updated every minute ---"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
@@ -168,7 +168,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="--- Pressure MSL = 1 min average at MSL. Pressure read, Temp, Humidity and SST = 1 min average at sensor height. Wind speed and dir = 10 min average at sensor height. Wind gust = max wind in last 10 min at sensor height ---"/>
+            <Property name="text" type="java.lang.String" value="--- Pressure MSL = 1 min average at MSL. Pressure read, Temp, RH and SST = 1 min average at sensor height. Wind speed and dir = 10 min average at sensor height. Wind gust = max wind in last 10 min at sensor height ---"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
@@ -184,12 +184,12 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="Dashboard_AWS_componentResizedHandler"/>
+        <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="Dashboard_AWS_digital_componentResizedHandler"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="*/jPanel1 = new DASHBOARD_grafiek_AWS();"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="*/jPanel1 = new DASHBOARD_grafiek_AWS_digital();"/>
         <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="/*"/>
-        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="*/private static DASHBOARD_grafiek_AWS jPanel1;"/>
+        <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="*/private static DASHBOARD_grafiek_AWS_digital jPanel1;"/>
         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="/*"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
       </AuxValues>
