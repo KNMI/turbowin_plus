@@ -27,7 +27,7 @@ is very small (<3 Mb).
 
 ================================== VERSION 3.0.0 =====================================
 
-Noticeable new items in TurboWin+ (TurboWeb) 3.0 compared to TurboWin+ (TurboWeb) 2.6:
+[Noticeable new items in TurboWin+ (TurboWeb) 3.0 compared to TurboWin+ (TurboWeb) 2.6]
 
 •	New dashboard option for visualizing AWS  data (day and night mode). From this version there are now three AWS sensor data views available (textual on the main screen, week and day graphs and the dashboard dials)
 
