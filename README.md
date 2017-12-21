@@ -13,7 +13,19 @@ is very small (<3 Mb).
 
 
 
-================================== VERSION 3.0 ======================================
+================================== VERSION 3.0.5 ======================================
+[Version 3.0.5 compared to version 3.0.0]
+- Better Dashboard scaling for low screen resolutions (and enlarged fonts accordingly)
+- Changed the Dashboard background from WMO picture to (tiled) SOT-JCOMM logo (after counting the votes)
+- If no data from an instrument is received the appropriate Dashboard dial is cleared immediately
+- On Dashboard bottom screen added last update date-time
+- if AWS/instrument connection is lost for 5 minutes (5 min. to be sure and to compensate small hick-ups), the Dashboard dials/meters are grayed (and the dial pointers are dashed). 
+- For the youngest generation ships' officers: added also a full scalable digital Dashboard (see attachment)
+
+
+
+
+================================== VERSION 3.0.0 ======================================
 
 Noticeable new items in TurboWin+ (TurboWeb) 3.0 compared to TurboWin+ (TurboWeb) 2.6:
 
