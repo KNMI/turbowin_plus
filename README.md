@@ -13,7 +13,7 @@ is very small (<3 Mb).
 
 
 
-================================== VERSION 3.0.5 ======================================
+================================== VERSION 3.0.5 =====================================
 [Version 3.0.5 compared to version 3.0.0]
 - Better Dashboard scaling for low screen resolutions (and enlarged fonts accordingly)
 - Changed the Dashboard background from WMO picture to (tiled) SOT-JCOMM logo (after counting the votes)
@@ -25,7 +25,7 @@ is very small (<3 Mb).
 
 
 
-================================== VERSION 3.0.0 ======================================
+================================== VERSION 3.0.0 =====================================
 
 Noticeable new items in TurboWin+ (TurboWeb) 3.0 compared to TurboWin+ (TurboWeb) 2.6:
 
