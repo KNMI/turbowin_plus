@@ -16,7 +16,7 @@
     <java version="1.7+" java-vm-args="-Xms512M -Xmx512M -XX:NewRatio=2"/>
     <jar eager="true" href="turbowin_jws.jar" main="true"/>
     <jar href="lib/jnlp.jar"/> 
-    <jar href="lib/jssc.jar"/>
+    <jar href="lib/jSerialComm-1.3.11.jar"/>
   </resources>
   <application-desc main-class="main"/>
 </jnlp> 
