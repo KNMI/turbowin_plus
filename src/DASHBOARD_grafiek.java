@@ -103,6 +103,8 @@ public void paintComponent(Graphics g)
       color_set_hand = color_gray;
       color_digits = color_black;
       color_update_message_north_panel = color_gray;
+      
+      stroke_main_hand = new BasicStroke(1.0f);
    }
    else
    {
@@ -111,6 +113,8 @@ public void paintComponent(Graphics g)
       color_set_hand = color_white;
       color_digits = color_black;
       color_update_message_north_panel = color_black;
+      
+      stroke_main_hand = new BasicStroke(1.0f);
    }
    
    // obsolete data (no cummunication for roughly > 5 minutes with the AWS)

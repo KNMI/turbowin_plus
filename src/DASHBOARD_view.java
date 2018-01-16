@@ -284,7 +284,12 @@ public class DASHBOARD_view extends javax.swing.JFrame {
       // title
       setTitle(main.APPLICATION_NAME + " Barometer Dashboard");
       
-      //repaint();
+      // NB see below, otherwise if you select Dashboard -> Barometer for the second, third or xth time it wil first display the situation 
+      //    of the moment that the dasboard was closed, and after approx 1 minute it will be updated. 
+      //    NOW it will update the dashboard immediately
+      main_RS232_RS422.RS232_read_dasboard_values();
+      jPanel1.repaint();                                                        // main panel
+
 }
    
    
@@ -326,7 +331,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
       
       jPanel1.repaint();  
       
-      
    }//GEN-LAST:event_Dashboard_componentResizedHandler
 
    
@@ -347,19 +351,8 @@ private void init_dasboard_timer()
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         //cal_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // geeft systeem datum tijd in UTC van dit moment
-         //cal_systeem_datum_tijd.getTime();                                 // effectueren
-
-         //RS232_AWS_1View.sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));
-         //System.out.println(RS232_AWS_1View.sdf2.format(new Date()));
-
-         // event schrijven naar java console
-
          main_RS232_RS422.RS232_read_dasboard_values();
-         
          jPanel1.repaint();                                                        // main panel
-          
-         
 
       } // public void actionPerformed(ActionEvent e)
    }; // 
@@ -432,7 +425,7 @@ private void init_dasboard_timer()
    
    // martin var's    
    private final int DELAY_UPDATE_SENSOR_LOOP                 = 60000; // 1 min                          // time in millisec to wait after timer is started to fire first event (10 min = 10 * 1000 * 60 * 10 = 600000)
-   private final int INITIAL_DELAY_UPDATE_SENSOR_LOOP         = 500;//1000; // 1000 = 1 sec              // time in millisec to wait after timer is started to fire first event
+   private final int INITIAL_DELAY_UPDATE_SENSOR_LOOP         = 30000; // 1000 = 1 sec                   // time in millisec to wait after timer is started to fire first event
    public static Timer dashboard_update_timer;
    public static boolean dashboard_update_timer_is_gecreeerd;
    public static boolean night_vision;

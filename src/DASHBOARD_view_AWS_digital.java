@@ -5,9 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 
@@ -130,7 +128,10 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       // title
       setTitle(main.APPLICATION_NAME + " Automatic Weather Station Dashboard [digital]");
    
-      //repaint();
+      // NB see below, otherwise if you select Dashboard -> AWS for the second, third or xth time it wil first display the situation 
+      //    of the moment that the dasboard was closed, and after approx 1 minute it will be updated. 
+      //    NOW it will update the dashboard immediately
+      jPanel1.repaint();     
 }
      
    
@@ -513,7 +514,7 @@ private void init_dasboard_AWS_digital_timer()
 
   // Martin var's
    private final int DELAY_UPDATE_AWS_DIGITAL_SENSOR_LOOP                 = 60000; // 1 min                          // time in millisec to wait after timer is started to fire first event (10 min = 10 * 1000 * 60 * 10 = 600000)
-   private final int INITIAL_DELAY_UPDATE_AWS_DIGITAL_SENSOR_LOOP         = 500;//1000; // 1000 = 1 sec              // time in millisec to wait after timer is started to fire first event
+   private final int INITIAL_DELAY_UPDATE_AWS_DIGITAL_SENSOR_LOOP         = 30000; // 1000 = 1 sec              // time in millisec to wait after timer is started to fire first event
    public static Timer dashboard_update_AWS_digital_timer;
    public static boolean dashboard_update_AWS_digital_timer_is_gecreeerd;
 
@@ -529,8 +530,6 @@ private void init_dasboard_AWS_digital_timer()
    
    public static int width_AWS_digital_dashboard;
    public static int height_AWS_digital_dashboard;
-
-
 
 
 }
