@@ -11,6 +11,18 @@ It can run for weeks in the background.  The memory footprint is low and the cpu
 using extended threading the application is always responsive. Furthermore in TurboWeb mode the app size 
 is very small (<3 Mb).
 
+================================== VERSION 3.0.6 =====================================
+[Version 3.0.5 compared to version 3.0.5]
+TurboWin+ version 3.0.6:  
+This update contains a not visible new feature which  will not add any functionality but could be very useful: 
+Automatically restoring communication to an attached device (EUCAWS, barometer, GPS)
+
+If the serial communication (RS232/RS422) is lost e.g. due to a power break or device failure or an unplugged cable you 
+have to restart the application, despite the device is powered-up again or the cable is attached again .
+This is standard behavior for serial communication. If the communication between the device and TurboWin+ is via WiFi 
+then sometimes the communication will be restored after a power failure or WiFi interruption but will not
+always reconnect automatically. For more info see: https://www.taskjunction.com/
+
 
 
 ================================== VERSION 3.0.5 =====================================
