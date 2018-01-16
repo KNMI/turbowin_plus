@@ -12,8 +12,8 @@ using extended threading the application is always responsive. Furthermore in Tu
 is very small (<3 Mb).
 
 ================================== VERSION 3.0.6 =====================================
-[Version 3.0.5 compared to version 3.0.5]
-TurboWin+ version 3.0.6:  
+[Version 3.0.6 compared to version 3.0.5]
+
 This update contains a not visible new feature which  will not add any functionality but could be very useful: 
 Automatically restoring communication to an attached device (EUCAWS, barometer, GPS)
 
