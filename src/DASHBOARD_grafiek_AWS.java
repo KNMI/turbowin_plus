@@ -188,6 +188,7 @@ public void paintComponent(Graphics g)
    // colors depending night or day vision
    if (DASHBOARD_view_AWS.night_vision == true)
    {
+      color_digits = color_black;
       color_instrument_face = color_dark_red;
       color_instrument_ring = color_black;
       //color_set_hand = color_gray;
@@ -197,6 +198,7 @@ public void paintComponent(Graphics g)
    }
    else
    {
+      color_digits = color_black;
       color_instrument_face = color_light_golden_rod;
       color_instrument_ring = color_brown;
       //color_set_hand = color_white;
@@ -208,7 +210,8 @@ public void paintComponent(Graphics g)
    // obsolete data (no cummunication for roughly > 5 minutes with the AWS)
    if (main.displayed_aws_data_obsolate == true)
    {
-      color_digits = main.obsolate_color_data_from_aws;                      // // will not be visible antmore on the same color instrument face
+      //color_digits = main.obsolate_color_data_from_aws;                      // // will not be visible antmore on the same color instrument face
+      color_digits = color_black; 
       color_instrument_face = main.obsolate_color_data_from_aws;
       color_instrument_ring = color_black;
       
@@ -2347,8 +2350,16 @@ private void setAllRenderingHints(Graphics2D g2d)
 
       if (reading >= 0.0 && reading <= 400.0) 
       {
-         // so the digit indication is up to 400 kts and the analogue up to 110 kts
-         digits = Integer.toString(reading) + " kts";
+         // so the digit indication is up to 400 kts/m/s and the analogue up to 110 kts/m/s
+         if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+         {
+            digits = Integer.toString(reading) + " kts";
+         }
+         else
+         {
+            digits = Integer.toString(reading) + " m/s";
+         }
+         
          width_b1 = g2d.getFontMetrics().stringWidth(digits);
          g2d.drawString(digits, (int) xm_a - width_b1 / 2, (int) ym_a);
       }

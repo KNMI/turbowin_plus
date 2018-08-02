@@ -275,7 +275,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem42">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Serial/USB/WiFi connecton settings..."/>
+                <Property name="text" type="java.lang.String" value="Serial/USB/LAN connection settings..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_Serial_actionPerformed"/>
@@ -283,7 +283,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem52">
               <Properties>
-                <Property name="text" type="java.lang.String" value="WOW/APR settings..."/>
+                <Property name="text" type="java.lang.String" value="WOW/APR/AWSR settings..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_WOW_settings_actionPerformed"/>
@@ -319,7 +319,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Move log files to (floppy/USB) disk..."/>
+                <Property name="text" type="java.lang.String" value="Move log files to (USB) disk..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_Move_log_files_to_disk_actionPerformed"/>
@@ -331,6 +331,32 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_Move_log_files_by_email_actionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem59">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Show all maintenance data"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_Show_maintenance_data_actionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem60">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Export all maintenance data"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_Export_maintenance_data_actionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem61">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Import all maintenance data"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maintenance_Import_maintenance_data_actionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -460,7 +486,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem51">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Sensor data all"/>
+                <Property name="text" type="java.lang.String" value="Sensor data total"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Graph_All_Sensor_Data_actionPerformed"/>
@@ -473,6 +499,14 @@
             <Property name="text" type="java.lang.String" value="Dashboard"/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem58">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Latest Obs"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Dashboard_Latest_Obs_actionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem55">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Barometer"/>
@@ -510,6 +544,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Info_Statistics_menu_actionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem62">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Obs&apos;s Map (internet)"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Info_Obs_Map_menu_actionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem49">
@@ -1118,7 +1160,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Present weather"/>
+            <Property name="text" type="java.lang.String" value="Present weath."/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="present_weather_mainscreen_mouseClicked"/>
@@ -1276,7 +1318,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="h lowest cloud"/>
+            <Property name="text" type="java.lang.String" value="ht lowest cloud"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="height_lowest_cloud_mainscreen_mouseClicked"/>
@@ -1334,18 +1376,20 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel23" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel24" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel38" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel26" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel29" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel28" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel22" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jLabel17" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel38" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -1457,7 +1501,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel16">
           <Properties>
-            <Property name="text" type="java.lang.String" value="True wind speed"/>
+            <Property name="text" type="java.lang.String" value="Apparent wind"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="true_wind_speed_mainscreen_mouseClicked"/>
@@ -1592,7 +1636,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel17">
           <Properties>
-            <Property name="text" type="java.lang.String" value="True wind dir"/>
+            <Property name="text" type="java.lang.String" value="True wind"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="true_wind_dir_mainscreen_mouseClicked"/>

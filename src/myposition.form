@@ -994,7 +994,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="jCheckBox1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="plot position on Google Maps (internet)"/>
+        <Property name="text" type="java.lang.String" value="plot position on World Topographic Map (internet)"/>
         <Property name="horizontalAlignment" type="int" value="0"/>
       </Properties>
     </Component>

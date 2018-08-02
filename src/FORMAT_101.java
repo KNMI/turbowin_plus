@@ -986,7 +986,7 @@ public class FORMAT_101
          compressed_ship_direction = (double)360 * schalings_factor;
          present[2] = 1;
       }
-      else if (myposition.Ds_code.equals("9") == true)   
+      else if (myposition.Ds_code.equals("9") == true)                  
       {
          compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
          present[2] = 0;
@@ -1044,7 +1044,7 @@ public class FORMAT_101
       {   
          gem_Vs = 38;               // knots
       }
-      else if (myposition.vs_code.equals("2"))
+      else if (myposition.vs_code.equals("9"))    // tot versie 3.0.9: else if (myposition.vs_code.equals("2") == true) 
       {
          gem_Vs = 42;               // knots
       }

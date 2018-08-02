@@ -36,7 +36,8 @@ public class about extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       jSeparator1 = new javax.swing.JSeparator();
       jButton1 = new javax.swing.JButton();
@@ -44,6 +45,7 @@ public class about extends javax.swing.JFrame {
       jLabel4 = new javax.swing.JLabel();
       jPanel1 = new javax.swing.JPanel();
       jLabel2 = new javax.swing.JLabel();
+      jLabel6 = new javax.swing.JLabel();
       jLabel3 = new javax.swing.JLabel();
       jLabel5 = new javax.swing.JLabel();
 
@@ -53,33 +55,44 @@ public class about extends javax.swing.JFrame {
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton1.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             OK_button_actionPerformed(evt);
          }
       });
 
+      jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
       jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel1.setText("Turbo+");
 
       jLabel4.setForeground(new java.awt.Color(51, 0, 255));
       jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel4.setText("<html><u>Visit the TurboWin Web Site</u></html>");
-      jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-         public void mouseClicked(java.awt.event.MouseEvent evt) {
+      jLabel4.addMouseListener(new java.awt.event.MouseAdapter()
+      {
+         public void mouseClicked(java.awt.event.MouseEvent evt)
+         {
             Info_about_web_start_link_mouseClicked(evt);
          }
-         public void mouseEntered(java.awt.event.MouseEvent evt) {
+         public void mouseEntered(java.awt.event.MouseEvent evt)
+         {
             Info_about_mouseEntered(evt);
          }
-         public void mouseExited(java.awt.event.MouseEvent evt) {
+         public void mouseExited(java.awt.event.MouseEvent evt)
+         {
             Info_about_mouseExited(evt);
          }
       });
 
       jLabel2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
       jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel2.setText("Endorsed by EUMETNET (European Meteorological Services Network)");
+      jLabel2.setText("Endorsed by EUMETNET (European Meteorological Services Network),");
+
+      jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+      jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel6.setText("NOAA (National Oceanic and Atmospheric Administration)");
 
       jLabel3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
       jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -93,9 +106,14 @@ public class about extends javax.swing.JFrame {
       jPanel1.setLayout(jPanel1Layout);
       jPanel1Layout.setHorizontalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
          .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+         .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+               .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
+            .addContainerGap())
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,10 +121,12 @@ public class about extends javax.swing.JFrame {
             .addContainerGap()
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jLabel6)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel5)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap())
       );
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -115,31 +135,31 @@ public class about extends javax.swing.JFrame {
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
                .addGroup(layout.createSequentialGroup()
                   .addContainerGap()
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                     .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addContainerGap())
-         .addGroup(layout.createSequentialGroup()
-            .addGap(161, 161, 161)
+         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(0, 0, Short.MAX_VALUE)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(148, 148, 148))
       );
       layout.setVerticalGroup(
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(49, Short.MAX_VALUE)
+            .addGap(27, 27, 27)
             .addComponent(jLabel1)
-            .addGap(37, 37, 37)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(18, 18, 18)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(37, 37, 37)
+            .addGap(18, 18, 18)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(15, 15, 15)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(15, 15, 15))
       );
@@ -301,6 +321,7 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
    private javax.swing.JLabel jLabel3;
    private javax.swing.JLabel jLabel4;
    private javax.swing.JLabel jLabel5;
+   private javax.swing.JLabel jLabel6;
    private javax.swing.JPanel jPanel1;
    private javax.swing.JSeparator jSeparator1;
    // End of variables declaration//GEN-END:variables

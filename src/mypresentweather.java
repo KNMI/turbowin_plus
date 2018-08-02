@@ -995,6 +995,7 @@ public class mypresentweather extends javax.swing.JFrame {
          model3.addElement(ww_64);
          model3.addElement(ww_63);
          model3.addElement(ww_62);
+         model3.addElement(ww_61);
          model3.addElement(ww_60);
       } // else if (jList2.isSelectedIndex(5))
       else if (jList2.isSelectedIndex(6))

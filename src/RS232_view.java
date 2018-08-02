@@ -246,6 +246,7 @@ public class RS232_view extends javax.swing.JFrame {
       // TODO add your handling code here:
       
       // called from: initComponents1() [RS232_view.java]
+      //
       // NB timer will be stopped/checked in RS232_graph_windowClosed() [RS232_view.java]
       
       mode_tijd_periode = MODE_DAY;
@@ -259,9 +260,9 @@ public class RS232_view extends javax.swing.JFrame {
          }
       }
 
-      if (main.RS232_connection_mode == 6)
+      if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8|| main.RS232_connection_mode == 10)         // Mintaka Star or StarX LAN or OMC-140 LAN
       {
-         // NB In case of WiFi connection no possibility to check the connection is still live *in case of serial connection that will be the case if defaultPort ! null)
+         // NB In case of WiFi connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
          //
          //
          // retrieving sensor data from file, timer scheduled
@@ -293,6 +294,7 @@ public class RS232_view extends javax.swing.JFrame {
       // TODO add your handling code here:
       
       // called from: initComponents1() [RS232_view.java]
+      //
       // NB timer will be stopped/checked in RS232_graph_windowClosed() [RS232_view.java]
       
       mode_tijd_periode = MODE_WEEK;
@@ -306,9 +308,9 @@ public class RS232_view extends javax.swing.JFrame {
          }
       }
 
-      if (main.RS232_connection_mode == 6)
+      if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8 || main.RS232_connection_mode == 10)
       {
-         // NB In case of WiFi connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
+         // NB In case of LAN connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
          //
          //
          // retrieving sensor data from file, timer scheduled
@@ -361,6 +363,9 @@ public class RS232_view extends javax.swing.JFrame {
 /***********************************************************************************************/
 private void sensor_data_uit_file_ophalen()
 {
+   // called from: day_button_actionPerformed() [RS232_view.java]
+   //              week_button_actionPerformed() [RS232_view.java]
+   //
    // retrieving sensor data from file, only once (no timer because there is no active serial connection)
    
    new SwingWorker<Void, Void>()
@@ -368,11 +373,11 @@ private void sensor_data_uit_file_ophalen()
       @Override
       protected Void doInBackground() throws Exception
       {
-         if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)   // PTB220 or PTB330 connected
+         if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)        // PTB220 or PTB330 connected
          {
             Read_Sensor_Data_Files_For_Barograph();
          }
-         else if (main.RS232_connection_mode == 3)                                 // AWS connected
+         else if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)   // AWS connected
          {
 				if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS))
 				{	
@@ -385,8 +390,19 @@ private void sensor_data_uit_file_ophalen()
          }
          else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Duo or Mintaka Star USB or Mintaka Star WiFi
          {
-            Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star();
+            Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
          }   
+         else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // StarX USB or StarX LAN
+         {
+            if (main.mode_grafiek.equals(main.MODE_PRESSURE))
+            {
+               Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
+            }
+            else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))
+            {
+               Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
+            }
+         }
          
          return null;
       } // protected Void doInBackground() throws Exception
@@ -411,7 +427,9 @@ private void init_sensor_data_uit_file_ophalen_timer()
 {
    // retrieving sensor data from file, timer scheduled
    //
-   // called from: day_button_actionPerformed() or week_button_actionPerformed() [RS232_view.java]
+   // called from: day_button_actionPerformed() [RS232_view.java]
+   //              week_button_actionPerformed() [RS232_view.java]
+   //
    
    ActionListener sensor_data_file_ophalen_action = new ActionListener()
    {
@@ -442,11 +460,11 @@ private void init_sensor_data_uit_file_ophalen_timer()
             @Override
             protected Void doInBackground() throws Exception
             {
-               if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)   // PTB220 or PTB330 connected
+               if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PTB330 connected
                {
                   Read_Sensor_Data_Files_For_Barograph();
                }
-               else if (main.RS232_connection_mode == 3)                                 // AWS connected
+               else if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) // AWS connected
                {
                   if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS))
 						{
@@ -459,8 +477,19 @@ private void init_sensor_data_uit_file_ophalen_timer()
                }
                else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) // Mintaka Duo, Mintaka Star USB, Mintaka Star WiFi
                {
-                  Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star();
+                  Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
                }   
+               else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) // Mintaka StarX USB or Mintaka StarX LAN
+               {
+                  if (main.mode_grafiek.equals(main.MODE_PRESSURE))
+                  {
+                     Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
+                  }
+                  else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))
+                  {
+                     Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
+                  }
+               }
 
                return null;
             } // protected Void doInBackground() throws Exception
@@ -827,7 +856,7 @@ private void Read_Sensor_Data_Files_For_Barograph()
 /***********************************************************************************************/
 private void Read_Sensor_Data_Files_For_Graphs()
 {
-   // NB this function reads sensor data from an AWS (not from an individual Vaisala barometer) stored in files
+   // NB this function reads sensor data from an AWS (not from an individual Vaisala or Mintaka barometer) stored in files
    //
    // NB This function will be called from within a swingworker, see: init_sensor_data_uit_file_ophalen_timer() and sensor_data_uit_file_ophalen()
    //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file reading/writing)
@@ -1111,21 +1140,38 @@ private void Read_Sensor_Data_Files_For_Graphs()
 /*      Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()                     */
 /*                                                                                             */
 /***********************************************************************************************/
-private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
+private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX()
 {
-   // NB this function reads sensor data from an individual Mintaka Duo or Star barometer (not from an AWS) stored in files
+   // called from: sensor_data_uit_file_ophalen() [RS232_view.java]
+   //              init_sensor_data_uit_file_ophalen() [RS232_view.java]
+   //
+   // NB this function reads sensor data from an individual Mintaka Duo or Star/StarX barometer (not from an AWS) stored in files
    //
    // NB This function will be called from within a swingworker, see: init_sensor_data_uit_file_ophalen_timer() and sensor_data_uit_file_ophalen()
    //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file reading/writing)
    //
    // NB plot every 5 minutes -> 12 points per hour -> 288 points per 24 hours (12 * 24) + 12 (extra hour)
 
-   
+   final int AGE_NOT_OK                                   = 999999;
    int number_read_commas                                 = 0;
    int aantal_intelezen_files                             = 0;
    int int_record_minuten                                 = 0;
-   int pos;
-   int pos2;
+   int pos  = 0;
+   int pos1 = 0;
+   int pos2 = 0;
+   int pos3 = 0;                                         
+   int pos4 = 0;                                        
+   int pos5 = 0;                                        
+   int pos6 = 0;                                        
+   int pos7 = 0;                                        
+   int pos8 = 0;                                        
+   int pos9 = 0;
+   int pos10 = 0;                                        
+   int pos11 = 0;                                        
+   int pos12 = 0;
+   int pos13 = 0;                                        
+   int pos14 = 0;                                        // pos of the "*" in case STarX
+   String local_obs_age                                   = "";
    String sensor_data_file_name                           = "";
    String volledig_path_sensor_data                       = "";
    String record_parameter                                = "";
@@ -1153,7 +1199,7 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
    }
 
    // message to console
-   System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "reading Mintaka Duo/Star sensor data from file for graph");
+   System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "reading Mintaka Duo/Star/StarX sensor data from file for graph");
    
    
    for (int i = aantal_intelezen_files; i >= 0; i--)
@@ -1205,14 +1251,14 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
                   do
                   {
                      pos = record.indexOf(",", pos + 1);
-                     if (pos > 0)     // "," found
+                     if (pos != -1)     // "," found
                      {
                         number_read_commas++;
                         //System.out.println("+++ number_read_commas = " + number_read_commas);
                      }
-                  } while (pos > 0); 
+                  } while (pos != -1); 
                         
-                  if (main.RS232_connection_mode == 4)                                // Mintaka Duo
+                  if (main.RS232_connection_mode == 4)                                              // Mintaka Duo
                   {   
                      if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA)
                      {
@@ -1225,7 +1271,14 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
                      {
                         doorgaan_in_record = false;
                      }          
-                  }                  
+                  }        
+                  else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)      // Mintaka StarX USB or Mintaka StarX WiFi
+                  {   
+                     if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX)
+                     {
+                        doorgaan_in_record = false;
+                     }          
+                  }   
                   
                   if ( (doorgaan_in_record == true) && (record.length() > 15) )          // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at leat 2 char pressure value= 15 chars)
                   {
@@ -1286,37 +1339,398 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
                      if (doorgaan_in_record == true)
                      {   
                         // initialisation
-                        //number_read_commas = 0;
-                        //pos = -1;
-                        //do
-                        //{
-                        //   pos = record.indexOf(",", pos + 1);    // searching "," from position "pos + 1"
-                        //   if (pos > 0)     // "," found
-                        //   {
-                        //      number_read_commas++;
-                        //      
-                        //      if (number_read_commas == number_parameter_commas) // eg tendency change value always after the 2th comma
-                        //      {
-                        //         if (record.length() > pos + 1 + 12)    // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
-                        //         {
-                        //            int pos2 = record.indexOf(",", pos + 1);
-                        //            if (pos2 - pos >= 2)            // between conmmas at least 1 char
-                       //             {
-                        //               record_parameter = record.substring(pos + 1, pos2);
-                        //               
-                        //               //System.out.println("+++ record_parameter = " + record_parameter);
-                        //               
-                        //               int int_minuten_5 = int_record_minuten / 5;
-                        //
-                        //               sensor_waarde_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_parameter;           // so every 5 minutes storage (=array position)
-                        //               datum_tijd_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_datum_tijd_met_minuten; // so every 5 minutes storage (=array position)
-                        //            } // if (pos2 - pos >= 2)
-                        //         } // if (record.length() > number_read_commas + 12)
-                        //      } // if (number_read_commas == number_parameter_commas)
-                        //   } // if (pos > 0)
-                        //} while (pos > 0); 
+                        
+                        if ((main.RS232_connection_mode == 4) || (main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6)) // Mintaka Dua, Mintaka Star USB or Mintak Star LAN
+                        {
+                           number_read_commas = 0;
+                           pos = 0;
+                           pos2 = -1;
+
+                           if (record.length() > pos + 1 + 12)    // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                           {    
+                              pos2 = record.indexOf(",", pos);
+                              if (pos2 - pos >= 2)            // between commas at least 1 char
+                              {
+                                 record_parameter = record.substring(pos, pos2);
+                              } // if (pos2 - pos >= 2)
+                           } // if (record.length() > pos + 1 + 12)
+                        } // if ((main.RS232_connection_mode == 4) etc.
+                        else if ((main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8)) // Mintaka StarX USB or Mintaka StarX LAN
+                        {
+                           // StarX example: // 1009.73,1007.73,0.00,0, 52 41.9491N,  6 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
+                           pos1 = record.indexOf(",", 0);                                              // ML hereafter; position of the first "," in the last record
+                           pos2 = record.indexOf(",", pos1 +1);                                        // ppp hereafter; position of the second "," in the last record
+                           pos3 = record.indexOf(",", pos2 +1);                                        // a hereafter; position of the third "," in the last record
+                           pos4 = record.indexOf(",", pos3 +1);                                        // lat hereafter; position of the 4th "," in the last record
+                           pos5 = record.indexOf(",", pos4 +1);                                        // lon hereafter; position n of the 5th "," in the last record
+                           pos6 = record.indexOf(",", pos5 +1);                                        // course hereafter; position of the 6th "," in the last record
+                           pos7 = record.indexOf(",", pos6 +1);                                        // speed hereafter                                
+                           pos8 = record.indexOf(",", pos7 +1);                                        // elevation hereafter
+                           pos9 = record.indexOf(",", pos8 +1);                                        // air temp
+                           pos10 = record.indexOf(",", pos9 +1);                                       // RH
+                           pos11 = record.indexOf(",", pos10 +1);                                      // wet bulb                                      
+                           pos12 = record.indexOf(",", pos11 +1);                                      // dew point
+                           pos13 = record.indexOf(",", pos12 +1);                                      // observation age  
+                           pos14 = record.indexOf("*", pos13 +1);                                       // pos of the "*" 
+                              
+                           local_obs_age = record.substring(pos13 +1, pos14); 
+                           
+                           int int_local_obs_age = AGE_NOT_OK;                 // 999999 = random number but > 99.9
+                           if ( (local_obs_age.compareTo("") != 0) && (local_obs_age != null) && (local_obs_age.indexOf("*") == -1) )
+                           {
+                              try
+                              {
+                                 int_local_obs_age = Integer.parseInt(local_obs_age.trim());
+                              }
+                              catch (NumberFormatException e)
+                              {
+                                 int_local_obs_age = AGE_NOT_OK; 
+                                 System.out.println("--- " + "RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_a_ppp_Data_Files_For_Obs() " + e);
+                              }
+                           } 
+            
+                           if ((int_local_obs_age >= 0) && (int_local_obs_age <= main_RS232_RS422.MAX_AGE_STARX_OBS_DATA))
+                           {         
+                              record_parameter = record.substring(0, pos1);
+                           }
+                           else
+                           {
+                              record_parameter = "";
+                           }
+                           
+                        } // else if ((main.RS232_connection_mode == 7) etc.
                         
                         
+                        // verify the retrieved value (to avoid spikes)
+                        double hulp_double_pressure_reading;
+                        try
+                        {   
+                           hulp_double_pressure_reading = Double.parseDouble(record_parameter.trim());
+                        }
+                        catch (NumberFormatException e)
+                        {
+                           hulp_double_pressure_reading = Double.MAX_VALUE;
+                        }  
+                        if ((hulp_double_pressure_reading < 900.0) || (hulp_double_pressure_reading > 1100.0))
+                        {
+                           record_parameter = "";
+                        }
+                                       
+                        int int_minuten_5 = int_record_minuten / 5;
+
+                        sensor_waarde_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_parameter;           // so every 5 minutes storage (=array position)
+                        datum_tijd_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_datum_tijd_met_minuten; // so every 5 minutes storage (=array position)
+                        
+                     } // if (doorgaan_in_record)
+                  } // if ( (record.length() > 18) etc.
+               } // while ((record = in.readLine()) != null)
+               //in.close();
+
+            } // try
+            finally
+            {
+               in.close();
+            }
+
+         } // try
+         //catch (IOException ex) {System.out.println("--- " + "IOException:" + ex); }
+         catch (IOException ex) {  }
+
+      } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
+      
+      // clear memory
+      cal_file_datum_tijd = null;
+      
+   } // for (int i = aantal_intelezen_files; i >= 0; i--)
+   //cal_file_datum_tijd = null;
+}
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                 Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX()                   */
+/*                                                                                             */
+/***********************************************************************************************/
+private void Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX()
+{
+   // called from: sensor_data_uit_file_ophalen() [RS232_view.java]
+   //              init_sensor_data_uit_file_ophalen() [RS232_view.java]
+   //
+   // NB this function reads sensor data from an Mintaka StarX barometer + thermometer + rh stored in files
+   //
+   // NB This function will be called from within a swingworker, see: init_sensor_data_uit_file_ophalen_timer() and sensor_data_uit_file_ophalen()
+   //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file reading/writing)
+   //
+   // NB plot every 5 minutes -> 12 points per hour -> 288 points per 24 hours (12 * 24) + 12 (extra hour)
+   //
+   //
+   // STARX (NB first part of STARX is the same as the STAR)
+   //       TurboWinH 
+   //             <station pressure in mb>,
+   //             <sea level pressure in mb>,
+   //             <3 hour pressure tendency>,
+   //             <WMO tendency characteristic code>,
+   //             <lat>,
+   //             <long>,
+   //             <course>,
+   //             <speed>,
+   //             <elevation>,
+   //             <temperature>,
+   //             <relativeHumidity>,
+   //             <wetBulbTemperature>,
+   //             <dewPoint>,
+   //             <observationAge>
+   //             *<checksum>
+   //
+   //             <lat> = ddd mm.mmmm[N|S], <long> = ddd mm.mmmm[E|W], <course> is True,
+   //             <speed> in knots, <elevation> in meters, <relativeHumidity> is 0-100,
+   //             temperatures are in degrees celsius, <observatoinAge> is in seconds.
+   //
+   // 1009.73,1007.73,0.00,0, 52 41.9491N,  6 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
+
+   
+   int number_read_commas                                 = 0;
+   int aantal_intelezen_files                             = 0;
+   int int_record_minuten                                 = 0;
+   int pos;
+   //int pos2;
+   String sensor_data_file_name                           = "";
+   String volledig_path_sensor_data                       = "";
+   //String record_parameter                                = "";
+   String record_datum_tijd_met_minuten                   = "";
+   String record_datum_tijd                               = "";
+   String record_minuten                                  = "";
+   boolean doorgaan_in_record                             = true;
+   final int AGE_NOT_OK                                   = 999999;
+   
+   
+   // initialisation
+   for (int k = 0; k < AANTAL_PLOT_POINTS; k++)
+   {
+      sensor_waarde_array[k]   = "";
+      datum_tijd_array[k]      = "";
+   }
+   
+   // initialisation
+   if ((mode_tijd_periode).equals(MODE_DAY))
+   {
+      aantal_intelezen_files = 24;          // 24 * 1 = 24
+   }
+   else if ((mode_tijd_periode).equals(MODE_WEEK))
+   {
+      aantal_intelezen_files = 168;         // 24 * 7 = 168
+   }
+
+   // message to console
+   System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "reading Mintaka StarX air temp sensor data from file for graph");
+   
+   
+   for (int i = aantal_intelezen_files; i >= 0; i--)
+   {
+      cal_file_datum_tijd = new GregorianCalendar();
+      cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
+
+      String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(cal_file_datum_tijd.getTime()); // -> eg 2013020308
+      sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
+
+      // first check if there is a sensor data file present (and not empty)
+      volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
+      // bv volledig_path_sensor_data = C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+
+      //System.out.println("+++ " +  "i = : " + i);
+      //System.out.println("+++ " +  "proberen te openen file: " + volledig_path_sensor_data);
+
+      // keep track of the file name of the last (present hour) sensor data file
+      //if (i == 0)
+      //{
+      //   // for later use if there are more than 20 wrong records in the file, so we can delete this file, otherwise after a restart the program complains again (see next lines)
+      //   last_sensor_data_file = volledig_path_sensor_data;
+      //}
+      
+
+      File sensor_data_file = new File(volledig_path_sensor_data);
+      if (sensor_data_file.exists() && sensor_data_file.length() > 0)     // length() in bytes
+      {
+         try
+         {
+            BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data));
+
+            try
+            {
+               String record                    = null;
+               
+               while ((record = in.readLine()) != null)                                 // null means that the end of the stream has been reached 
+               {
+                  //System.out.println("+++ ingelezen record: " + record);
+               
+                  // initialisation
+                  doorgaan_in_record               = true;
+                  
+                  
+                  //
+                  number_read_commas = 0;
+                  pos = -1;
+                        
+                  do
+                  {
+                     pos = record.indexOf(",", pos + 1);
+                     if (pos != -1)     // "," found
+                     {
+                        number_read_commas++;
+                        //System.out.println("+++ number_read_commas = " + number_read_commas);
+                     }
+                  } while (pos != -1);  //while (pos > 0); 
+                        
+                  
+                  // Check the number of comma's in the record that must exactely match the fixed expected number (TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX)
+                  if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)      // Mintaka StarX USB or Mintaka StarX WiFi
+                  {   
+                     if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX)
+                     {
+                        doorgaan_in_record = false;
+                     }          
+                  }   
+                  
+                  
+                  // cheksum check
+                  if (doorgaan_in_record)
+                  {
+                     String record_checksum = record.substring(record.length() -14, record.length() -12);  // eg "24" from record "1022.20,1022.20,0.80,2, 52 41.9497N,  6 14.1848E,0,0,-1*24201703291211"
+                     String computed_checksum = main_RS232_RS422.Mintaka_Star_Checksum(record);
+   
+                     if (!computed_checksum.equals(record_checksum))
+                     {
+                        doorgaan_in_record = false;
+                     }
+                  } // if (doorgaan_in_record)
+                  
+                  
+                  if ( (doorgaan_in_record == true) && (record.length() > 15) )          // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at leat 2 char pressure value= 15 chars)
+                  {
+                     pos = record.length() -12;                                          // pos is now start position of YYYYMMDDHHmm
+                     
+                     if (pos > 0)     
+                     {
+                        record_datum_tijd_met_minuten = record.substring(pos, pos + 12);  // YYYYMMDDHHmm has length 12
+                        record_datum_tijd             = record.substring(pos, pos + 10);  // YYYYMMDDHH has length 10
+                     
+                        //System.out.println("+++ record_datum_tijd_met_minuten = " + record_datum_tijd_met_minuten);
+                        //System.out.println("+++ record_datum_tijd = " + record_datum_tijd);
+                        //System.out.println("+++ sensor_data_file_naam_datum_tijd_deel = " + sensor_data_file_naam_datum_tijd_deel);
+                        
+                        if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
+                        {
+                           record_minuten = record.substring(pos + 10, pos + 12);         // mm from YYYYMMDDHHmm
+                           
+                           //System.out.println("+++ record_minuten = " + record_minuten);
+
+                           // initialisation
+                           int_record_minuten = 9999;
+
+                           try
+                           {
+                              int_record_minuten = Integer.parseInt(record_minuten.trim());
+                           }
+                           catch (NumberFormatException e) 
+                           {
+                              //System.out.println("+++ " + "NumberFormatException:" + e);
+                              doorgaan_in_record = false;
+                           }
+
+                           // only parameter value (eg pressure) every 5 minutes (00, 05, 10, 15 etc minutes) !
+                           if (!(int_record_minuten >= 0 && int_record_minuten <= 59 && (int_record_minuten % 5 == 0)))
+                           {
+                              doorgaan_in_record = false;
+                           }      
+                           //else
+                           //{
+                           //   System.out.println("+++ " + "minuten ok (5-voud)");
+                           //   System.out.println("+++ " + "doorgaan_in_record = " + doorgaan_in_record);
+                           //}
+                        } // if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
+                        else
+                        {
+                           doorgaan_in_record = false;
+                        }
+                     } // if (pos > 0)
+                     else
+                     {
+                        doorgaan_in_record = false;
+                     }
+                        
+                     
+                     // If the by TurboWin+ added date and time are OK and number of commas in the record is OK then continue
+                     //
+                     if (doorgaan_in_record == true)
+                     {   
+                        int pos1 = record.indexOf(",", 0);                                              // MSL hereafter; position of the first "," in the last record
+                        int pos2 = record.indexOf(",", pos1 +1);                                        // ppp hereafter; position of the second "," in the last record
+                        int pos3 = record.indexOf(",", pos2 +1);                                        // a hereafter; position of the third "," in the last record
+                        int pos4 = record.indexOf(",", pos3 +1);                                        // lat hereafter 
+                        int pos5 = record.indexOf(",", pos4 +1);                                        // lon hereafter
+                        int pos6 = record.indexOf(",", pos5 +1);                                        // course hereafter                                    
+                        int pos7 = record.indexOf(",", pos6 +1);                                        // speed hereafter                                
+                        int pos8 = record.indexOf(",", pos7 +1);                                        // elevation hereafter
+                        int pos9 = record.indexOf(",", pos8 +1);                                        // air temp
+                        int pos10 = record.indexOf(",", pos9 +1);                                       // RH
+                        int pos11 = record.indexOf(",", pos10 +1);                                      // wet bulb                                      
+                        int pos12 = record.indexOf(",", pos11 +1);                                      // dew point
+                        int pos13 = record.indexOf(",", pos12 +1);                                      // observation age  
+                        int pos14 = record.indexOf("*", pos13 +1);                                      // pos of the "*" 
+
+                        String air_temp = record.substring(pos9 +1, pos10);
+                        String obs_age  = record.substring(pos13 +1, pos14); 
+                        
+                        int int_obs_age = AGE_NOT_OK;                 // 999999 = random number but > 99.9
+                        if ( (obs_age.compareTo("") != 0) && (obs_age != null) && (obs_age.indexOf("*") == -1) )
+                        {
+                           try
+                           {
+                              int_obs_age = Integer.parseInt(obs_age.trim());
+                           }
+                           catch (NumberFormatException e)
+                           {
+                              int_obs_age = AGE_NOT_OK; 
+                              System.out.println("--- " + "Read_Sensor_Data_Files_For_Air_Temp_Mintaka_StarX() " + e);
+                           }
+                        } 
+                        
+                        if ((int_obs_age >= 0) && (int_obs_age <= main_RS232_RS422.MAX_AGE_STARX_OBS_DATA))
+                        {         
+                           if ((air_temp.compareTo("") != 0) && (air_temp != null))
+                           {
+                              String record_parameter = "";
+                              double double_air_temp = Double.MAX_VALUE;
+                              try
+                              {   
+                                 double_air_temp = Double.parseDouble(air_temp.trim());
+                              }
+                              catch (NumberFormatException e)
+                              {
+                                 double_air_temp = Double.MAX_VALUE;
+                              }  
+                              
+                              if ((double_air_temp < -50.0) || (double_air_temp > 60.0))
+                              {
+                                 record_parameter = "";
+                              }
+                              else
+                              {
+                                 record_parameter = air_temp;
+                              }
+                              
+                              int int_minuten_5 = int_record_minuten / 5;
+
+                              sensor_waarde_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_parameter;           // so every 5 minutes storage (=array position)
+                              datum_tijd_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_datum_tijd_met_minuten; // so every 5 minutes storage (=array position)
+                              
+                           } // if ((air_temp.compareTo("") != 0) && (air_temp != null))
+                        
+                        } // if ((int_obs_age >= 0) && (int_obs_age <= main_RS232_RS422.MAX_AGE_STARX_OBS_DATA))
+                        
+/*                        
                         number_read_commas = 0;
                         pos = 0;
                         pos2 = -1;
@@ -1351,6 +1765,7 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
                               datum_tijd_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_datum_tijd_met_minuten; // so every 5 minutes storage (=array position)
                            } // if (pos2 - pos >= 2)
                         } // if (record.length() > pos + 1 + 12)
+*/                     
                      } // if (doorgaan_in_record)
                   } // if ( (record.length() > 18) etc.
                } // while ((record = in.readLine()) != null)
@@ -1374,6 +1789,16 @@ private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()
    } // for (int i = aantal_intelezen_files; i >= 0; i--)
    //cal_file_datum_tijd = null;
 }
+
+
+
+
+   public
+   RS232_view(String title) throws HeadlessException
+   {
+      super(title);
+   }
+
 
 
 
@@ -1899,7 +2324,7 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
       /* title of this sensor data screen */
       if (main.mode_grafiek.equals(main.MODE_PRESSURE))
       {
-         if (main.RS232_connection_mode == 3)                                              // AWS
+         if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)  // AWS connected
          {   
             //setTitle(main.APPLICATION_NAME + " sensor data graph pressure (1 minute average)");
             setTitle(main.APPLICATION_NAME + " sensor data graph pressure");

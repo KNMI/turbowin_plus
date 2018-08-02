@@ -4,6 +4,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
 /*
  * mywind.java
  *
@@ -459,18 +460,20 @@ public class mywind extends javax.swing.JFrame {
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-    private void initSynopparameters() 
-    {
-       // AWS
-       if ( (main.true_wind_dir_from_AWS_present || main.true_wind_speed_from_AWS_present) && (!(main.wind_source.equals(main.MEASURED_OFF_BOW))) ) // EUCAWS AWS connected
-       {
-          String info = "TurboWin+ will on the wind input form always display the measured relative wind of the connected AWS\n";
-          info += "Please change the appropriate settings\n";
-          info += "(see: Maintenance -> Station data -> wind meta data -> measured; apparent speed and app. dir)";
+   private void initSynopparameters() 
+   {
+      // AWS
+      if (!(main.wind_source.equals(main.MEASURED_OFF_BOW)) && (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10))
+      {
+         //if ( (main.true_wind_dir_from_AWS_present || main.true_wind_speed_from_AWS_present) && (!(main.wind_source.equals(main.MEASURED_OFF_BOW))) ) // EUCAWS AWS connected
+         //{
+            String info = "On the wind input form TurboWin+ always display the measured apparent wind of the connected AWS\n";
+            info += "Please change the appropriate setting\n";
+            info += "check: Maintenance -> Station data -> wind meta data -> \"measured; apparent speed and app. dir (OFF THE BOW, clockwise)\"";
        
-          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " warning", JOptionPane.WARNING_MESSAGE);
-       }
-       
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " warning", JOptionPane.WARNING_MESSAGE);
+         //}
+      } //  
        
        // put back earlier inserted values (of, voor source, de waarde uit de configuratie file als die later niet veranderd is)
        //
@@ -546,6 +549,8 @@ public class mywind extends javax.swing.JFrame {
        int_true_wind_dir         = main.INVALID;
        int_true_wind_speed       = main.INVALID;
        int_difference_sll_wl     = main.INVALID;
+       int_relative_wind_dir     = main.INVALID;   // only for main screen if AWS connected
+       int_relative_wind_speed   = main.INVALID;   // only for main screen if AWS connected
 
        // scope only this module (no static)
        //max_height_deck_cargo     = "";
@@ -586,10 +591,8 @@ public class mywind extends javax.swing.JFrame {
     private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK_button_actionPerformed
       // TODO add your handling code here:
         
-      //if ( (main.relative_wind_dir_from_AWS_present == false) && (main.relative_wind_speed_from_AWS_present == false) &&
-      //     (main.true_wind_dir_from_AWS_present == false)     && (main.true_wind_speed_from_AWS_present == false) )
-      if ( (main.true_wind_dir_from_AWS_present == false) && (main.true_wind_speed_from_AWS_present == false) ) 
-      {
+   if ( (main.true_wind_dir_from_AWS_present == false) && (main.true_wind_speed_from_AWS_present == false) ) 
+   {
        
       // initialisation 
       Reset_All_Wind_Vars();
@@ -845,7 +848,6 @@ public class mywind extends javax.swing.JFrame {
          }
          
          
-         ///////////////////////////////////////////
          else if ( (ship_ground_course.trim().equals("stationary")) && (float_ship_ground_speed > 0.01) )
          {
             JOptionPane.showMessageDialog(null, "if ship's ground course is stationary, ship's ground speed must be 0.0", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
@@ -856,7 +858,6 @@ public class mywind extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "if ship's ground speed is 0.0, ship's ground course must be stationary", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
             Reset_All_Wind_Vars(); 
          }
-        
          
           
           
@@ -870,6 +871,9 @@ public class mywind extends javax.swing.JFrame {
       */
       if (checks_ok == true)
       {   
+         int_relative_wind_dir   = main.INVALID;                               // only for showing on main screen. Can be overwritten in Function Bereken_True_wind2()
+         int_relative_wind_speed = main.INVALID;                               // only for showing on main screen. Can be overwritten in Function Bereken_True_wind2() 
+         
          // estimated wind, intermediate results and iw code
          //
          if (main.wind_source.equals(main.ESTIMATED_TRUE) == true)
@@ -887,7 +891,7 @@ public class mywind extends javax.swing.JFrame {
              
             if (wind_dir.trim().equals("variable") == true)
             {
-               int_true_wind_dir = WIND_DIR_VARIABLE;                     // consistent met berekende waarde
+               int_true_wind_dir = WIND_DIR_VARIABLE;                         // consistent met berekende waarde
             }
             else
             {
@@ -1199,108 +1203,112 @@ public class mywind extends javax.swing.JFrame {
       
       if (checks_ok == true)  
       {
-         if (main.RS232_connection_mode == 3)                        // AWS connected mode
+         // komt tie hier ooit in ????
+         if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)  // AWS connected mode
          {
-            main.jTextField16.setForeground(main.input_color_from_observer);   // true wind speed field
-            main.jTextField17.setForeground(main.input_color_from_observer);   // true wind dir field
+            main.jTextField16.setForeground(main.input_color_from_observer);   // true wind 
+            main.jTextField17.setForeground(main.input_color_from_observer);   // relative wind 
             
-            // because now both, true wind speed and dir , will be overwritten
+            // because now both, true wind (speed and dir) and relative wind (dir and speed) will be overwritten
             main.true_wind_speed_from_AWS_present = false;
             main.true_wind_dir_from_AWS_present = false;
+            
+            main.relative_wind_speed_from_AWS_present = false;
+            main.relative_wind_dir_from_AWS_present = false;
          }
       } // if (checks_ok == true)
       
-      } // if ( (main.true_wind_dir_from_AWS_present == false) && etc.
-      else // so true wind speed and true wind direction from AWS are present
-      {
-         main.max_height_deck_cargo = jTextField6.getText().trim();
-         main.diff_sll_wl           = jTextField7.getText().trim();
+   } // if ( (main.true_wind_dir_from_AWS_present == false) && etc.
+   else // so true wind speed and true wind direction from AWS are present
+   {
+      main.max_height_deck_cargo = jTextField6.getText().trim();
+      main.diff_sll_wl           = jTextField7.getText().trim();
 
-         // max. height deck cargo
-         //
-         try 
-         {
-            int_max_height_deck_cargo = Integer.parseInt(main.max_height_deck_cargo.trim());
-         }
-         catch (NumberFormatException e){/* ... */}
+      // max. height deck cargo
+      //
+      try 
+      {
+         int_max_height_deck_cargo = Integer.parseInt(main.max_height_deck_cargo.trim());
+      }
+      catch (NumberFormatException e){/* ... */}
        
       
-         // difference sll(summer load line) - water line
-         //
-         try 
-         {
-            int_difference_sll_wl = Integer.parseInt(main.diff_sll_wl.trim());
-         }
-         catch (NumberFormatException e){/* ... */}
-         
-         
-         // max. height deck cargo above sll
-         //
-         if ((int_max_height_deck_cargo < 0 || int_max_height_deck_cargo > 100 || int_max_height_deck_cargo == main.INVALID))
-         {   
-            JOptionPane.showMessageDialog(null, "Max. height deck cargo above summer load line must be in range 0 - 100 (no decimals)", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-            Reset_All_Wind_Vars();
-         }
-      
-         // difference between summer load line and water line
-         //
-         else if ((int_difference_sll_wl < -10 || int_difference_sll_wl > 50 || int_difference_sll_wl == main.INVALID))
-         {   
-            JOptionPane.showMessageDialog(null, "Difference between summer load line and water line must be in range -10 - 50 (no decimals)", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-            Reset_All_Wind_Vars();
-         }
-         else
-         {
-            checks_ok = true;
-         }    
-         
-      } // else (so true wind speed and true wind direction from AWS are present)
-      
-      
+      // difference sll(summer load line) - water line
       //
-      // final processing
-      //
-      if (checks_ok == true)  
+      try 
       {
-         /* max height deck cargo and diff sll-wl can be set in this wind input page but also on station data page (Maintenance)
+         int_difference_sll_wl = Integer.parseInt(main.diff_sll_wl.trim());
+      }
+      catch (NumberFormatException e){/* ... */}
+         
+         
+      // max. height deck cargo above sll
+      //
+      if ((int_max_height_deck_cargo < 0 || int_max_height_deck_cargo > 100 || int_max_height_deck_cargo == main.INVALID))
+      {   
+         JOptionPane.showMessageDialog(null, "Max. height deck cargo above summer load line must be in range 0 - 100 (no decimals)", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         Reset_All_Wind_Vars();
+      }
+      
+      // difference between summer load line and water line
+      //
+      else if ((int_difference_sll_wl < -10 || int_difference_sll_wl > 50 || int_difference_sll_wl == main.INVALID))
+      {   
+         JOptionPane.showMessageDialog(null, "Difference between summer load line and water line must be in range -10 - 50 (no decimals)", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         Reset_All_Wind_Vars();
+      }
+      else
+      {
+         checks_ok = true;
+      }    
+         
+   } // else (so true wind speed and true wind direction from AWS are present)
+      
+      
+   //
+   // final processing
+   //
+   if (checks_ok == true)  
+   {
+      /* max height deck cargo and diff sll-wl can be set in this wind input page but also on station data page (Maintenance)
 
-         /* NB main.configuratie_regels[0] - main.configuratie_regels[14] occupied by station data */
-         /* NB main.configuratie_regels[15] - main.configuratie_regels[16] occupied by email settings */
-         /* NB main.configuratie_regels[18] occupied by email settings */
+      /* NB main.configuratie_regels[0] - main.configuratie_regels[14] occupied by station data */
+      /* NB main.configuratie_regels[15] - main.configuratie_regels[16] occupied by email settings */
+      /* NB main.configuratie_regels[18] occupied by email settings */
 
-         main.configuratie_regels[13] = "";
-         main.configuratie_regels[13] = main.MAX_HEIGHT_DECK_CARGO_TXT + main.max_height_deck_cargo.trim();
+      main.configuratie_regels[13] = "";
+      main.configuratie_regels[13] = main.MAX_HEIGHT_DECK_CARGO_TXT + main.max_height_deck_cargo.trim();
 
-         main.configuratie_regels[14] = "";
-         main.configuratie_regels[14] = main.DIFF_SLL_WL_TXT + main.diff_sll_wl.trim();
+      main.configuratie_regels[14] = "";
+      main.configuratie_regels[14] = main.DIFF_SLL_WL_TXT + main.diff_sll_wl.trim();
 
 
-         // write meta (station) data to muffins or configuration files
-         if (main.offline_mode_via_cmd == true)
-         {
-            main.schrijf_configuratie_regels();          
-         }
-         else // so offline via turbowin_jws_offline.jnlp or online (webstart) mode
-         {
-            main.set_muffin();
-            main.schrijf_configuratie_regels();   // backup for muffin
-         }   
+      // write meta (station) data to muffins or configuration files
+      if (main.offline_mode_via_cmd == true)
+      {
+         main.schrijf_configuratie_regels();          
+      }
+      else // so offline via turbowin_jws_offline.jnlp or online (webstart) mode
+      {
+         main.set_muffin();
+         main.schrijf_configuratie_regels();   // backup for muffin
+      }   
   
      
-         /* update wind fields on main screen */
-         main.wind_fields_update();
+      /* update wind fields on main screen */
+      main.wind_fields_update();
           
-         /* close this input page */
-         setVisible(false);
-         dispose();
+      /* close this input page */
+      setVisible(false);
+      dispose();
 
-         /* next screen if in_next_screen mode */
-         if (main.in_next_sequence == true)
-         {
-            next_screen();
-         }
+      /* next screen if in_next_screen mode */
+      if (main.in_next_sequence == true)
+      {
+         next_screen();
+      }
           
-      } // if (checks_ok == true)
+   } // if (checks_ok == true)
 
     }//GEN-LAST:event_OK_button_actionPerformed
     
@@ -1359,16 +1367,18 @@ public class mywind extends javax.swing.JFrame {
 
       double ho = int_ship_heading;
       double Co = int_ship_ground_course;
-      double C  = float_ship_ground_speed; // dus in knots kan verderop omgezet worden naar m/s
+      double C  = float_ship_ground_speed;      // dus in knots kan verderop omgezet worden naar m/s
       double A  = int_wind_speed;
       double Po = int_wind_dir;
-      double Ro = 0;                      // per definitie (aanname bij VOS)
-      double Ao_mat;                      // apparent wind speed [mathemetical] 
-      double Co_mat;                      // ground course ship [mathemetical]
-      double Tu;                          // eastward component true wind
-      double Tv;                          // northward component true wind
-      double T;                           // true wind speed
-      double To;                          // tue wind direction
+      double Ro = 0;                            // per definitie (aanname bij VOS)
+      double Ao_mat;                            // apparent wind speed [mathemetical] 
+      double Co_mat;                            // ground course ship [mathemetical]
+      double Tu;                                // eastward component true wind
+      double Tv;                                // northward component true wind
+      double T;                                 // true wind speed
+      double To;                                // tue wind direction
+      int_relative_wind_dir = int_wind_dir;     // only for showing on main screen
+      int_relative_wind_speed = int_wind_speed; // only for showing on main screen
 
 
       // indien windspeed in m/s dan ook C (float_ship_ground_speed) omzetten naar m/s
@@ -1859,37 +1869,42 @@ public class mywind extends javax.swing.JFrame {
    public static final double BOOGGRAAD         = 0.0174532925;              // voor Berekenwind
     
    // var's scope this module + myturbowin.java main module (all of type: static)
-   public static String wind_dir                = "";
-   public static String wind_speed              = "";
-   public static String ship_ground_course      = "";    
-   public static String ship_ground_speed       = "";
-   public static String ship_heading            = "";
-   public static String dd_code                 = "";
-   public static String ff_code                 = "";
-   public static String fff00_code              = "";           // var name '00fff_code' not possible/accepted so used 'fff00_code' as var name
-   public static String iw_code                 = "";
-   public static String HDG_code                = "";
-   public static String COG_code                = "";
-   public static String SOG_code                = "";
-   public static String SLL_code                = "";
-   public static String sl_code                 = "";
-   public static String hh_code                 = "";
-   public static String RWD_code                = "";
-   public static String RWS_code                = "";
-   public static int int_true_wind_dir          = main.INVALID;
-   public static int int_true_wind_speed        = main.INVALID;
-   public static int int_difference_sll_wl      = main.INVALID;
-   public static int int_true_wind_gust_speed   = main.INVALID;  // only for dashboard
- 
+   public static String wind_dir                    = "";
+   public static String wind_speed                  = "";
+   public static String ship_ground_course          = "";    
+   public static String ship_ground_speed           = "";
+   public static String ship_heading                = "";
+   public static String dd_code                     = "";
+   public static String ff_code                     = "";
+   public static String fff00_code                  = "";           // var name '00fff_code' not possible/accepted so used 'fff00_code' as var name
+   public static String iw_code                     = "";
+   public static String HDG_code                    = "";
+   public static String COG_code                    = "";
+   public static String SOG_code                    = "";
+   public static String SLL_code                    = "";
+   public static String sl_code                     = "";
+   public static String hh_code                     = "";
+   public static String RWD_code                    = "";
+   public static String RWS_code                    = "";
+   public static int int_true_wind_dir              = main.INVALID;
+   public static int int_true_wind_speed            = main.INVALID;
+   public static int int_difference_sll_wl          = main.INVALID;
+   public static int int_true_wind_gust_speed       = main.INVALID;  // only for dashboard
+   public static int int_relative_wind_dir          = main.INVALID;  // only for main screen if AWS connected
+   public static int int_relative_wind_speed        = main.INVALID;  // only for main screen if AWS connected
+   public static double double_true_wind_speed      = main.INVALID;  // only for dashboard;
+   public static double double_relative_wind_speed  = main.INVALID;  // only for dashboard;
+   public static double double_true_wind_gust_speed = main.INVALID;  // only for dashboard;
+   
    // var's scope only this module (no static)
-   private int int_wind_dir                     = main.INVALID;
-   private int int_wind_speed                   = main.INVALID;
-   private int int_ship_ground_course           = main.INVALID;
-   private int int_ship_heading                 = main.INVALID;
-   private int int_max_height_deck_cargo        = main.INVALID;
+   private int int_wind_dir                         = main.INVALID;
+   private int int_wind_speed                       = main.INVALID;
+   private int int_ship_ground_course               = main.INVALID;
+   private int int_ship_heading                     = main.INVALID;
+   private int int_max_height_deck_cargo            = main.INVALID;
    //private int int_difference_sll_wl            = main.INVALID;
-   private float float_ship_ground_speed        = main.INVALID;
-   private boolean checks_ok                    = false;
+   private float float_ship_ground_speed            = main.INVALID;
+   private boolean checks_ok                        = false;
 }
 
 

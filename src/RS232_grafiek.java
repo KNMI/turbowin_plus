@@ -420,7 +420,7 @@ public void paintComponent(Graphics g)
          }
          else if (k == 3)                        // bottom right; graph d (wind speed)
          {
-            test_aanduiding_y = "30 kts";
+            test_aanduiding_y = "100 kts";
          }
       
 			FontRenderContext context_y = g2.getFontRenderContext();
@@ -469,7 +469,14 @@ public void paintComponent(Graphics g)
                }
                else if (k == 3)   // bottom right; graph d; wind speed
                {
-                  aanduiding = Integer.toString(int_aanduiding) + " kts";
+                  if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+                  {
+                     aanduiding = Integer.toString(int_aanduiding) + " kts";
+                  }
+                  else
+                  {
+                     aanduiding = Integer.toString(int_aanduiding) + " m/s";
+                  }
                }
          
                // indications at left y-axis
@@ -774,10 +781,40 @@ public void paintComponent(Graphics g)
                {
                   try
                   {
-                     double sensor_waarde;
+                     double sensor_waarde = Double.MAX_VALUE;
                      
                      // m/s -> knots
-                     sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_d[i].trim()) * main.M_S_KNOT_CONVERSION;
+                     //sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_d[i].trim()) * main.M_S_KNOT_CONVERSION;
+                    
+                     // NB 4 options:
+                     // 1) measured/observed in m/s   -> dashboard and graph in knots
+                     // 2) measured/observed in m/s   -> dashboard and graph in m/s
+                     // 3) measured/observed in knots -> dashboard and graph in knots
+                     // 4) measured/observed in knots -> dashboard and graph in m/s
+                     
+                     if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+                     {
+                        if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in m/s and dashboard in knots
+                        {
+                           sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_d[i].trim()) * main.M_S_KNOT_CONVERSION;
+                        }
+                        else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in m/s and dashboard in m/s
+                        {
+                           sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_d[i].trim()); 
+                        }
+                     }
+                     else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+                     {
+                        if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in knots and dashboard in knots
+                        {
+                           sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_d[i].trim()); 
+                        }
+                        else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in knots and dashboard in m/s
+                        {
+                           sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_d[i].trim()) * main.KNOT_M_S_CONVERSION; 
+                        }   
+                     }
+                     
                
                      if ((RS232_view.mode_tijd_periode).equals(RS232_view.MODE_DAY))
                      {
@@ -956,7 +993,30 @@ public void paintComponent(Graphics g)
 			if (k == 3)                        // graph d; bottom right; wind speed 
 			{
 			   // m/s -> knots
-			   digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.M_S_KNOT_CONVERSION) / 10.0d;
+			   //digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.M_S_KNOT_CONVERSION) / 10.0d;
+            
+            if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in m/s and dashboard in knots
+               {
+                  digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.M_S_KNOT_CONVERSION) / 10.0d;
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in m/s and dashboard in m/s
+               {
+                  digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d; 
+               }
+            }
+            else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in knots and dashboard in knots
+               {
+                  digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in knots and dashboard in m/s
+               {
+                  digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.KNOT_M_S_CONVERSION) / 10.0d;
+               }   
+            }           
 			} 
 			else 
 			{
@@ -986,7 +1046,15 @@ public void paintComponent(Graphics g)
 				} 
 				else if (k == 3)              // graph d; bottom right; wind speed
 				{
-				   datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kts";
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)       // on graph (and dashboard) in knots
+               {
+				      datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kts";
+               }
+               else // m/s
+               {
+                  datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " m/s";
+               }
+               
 					test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 23 kts";
 				} 
 
@@ -1007,10 +1075,8 @@ public void paintComponent(Graphics g)
 				}
 			} //if ((digitale_sensor_waarde > -50) && (digitale_sensor_waarde < 1100)) // max/min of max limits of the parameters pressure, air temp, sst and wind speed
 			
-			
-//////////////////////////////////			
 
-			//break;
+			
 		
 			////////////////////////// START INPUT DATA /////////////////////////////	
 			
@@ -1283,7 +1349,7 @@ public void paintComponent(Graphics g)
       }
       else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
       {
-         test_aanduiding_y = "30 kts";
+         test_aanduiding_y = "100 kts";
       }
       else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
       {
@@ -1324,7 +1390,14 @@ public void paintComponent(Graphics g)
          }
          else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
          {
-            aanduiding = Integer.toString(int_aanduiding) + " kts";
+            if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+            {
+               aanduiding = Integer.toString(int_aanduiding) + " kts";
+            }
+            else
+            {
+              aanduiding = Integer.toString(int_aanduiding) + " m/s"; 
+            }
          }
          else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
          {
@@ -1401,8 +1474,9 @@ public void paintComponent(Graphics g)
       //
       String string_aanduiding = "";
       
-      if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)   // PTB220 or PTB330 or MintakaDuo or Mintaka Star (USB) or Mintaka Star WiFi connected
+      if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)   // PTB220 or PTB330 or MintakaDuo or Mintaka Star (USB) Mintaka Star WiFi 
       {
+         
          string_aanduiding = "All values at barometer height and no ic applied";
          // NB color is the color of the raster 
          //Font font_sensor_level_text = new Font("Serif", Font.BOLD, 14);
@@ -1414,7 +1488,19 @@ public void paintComponent(Graphics g)
          //double ascent_sensor_level_text = -bounds_string_aanduiding.getY();     // hoogte char's                      // ascent = helling/steilte (hoogte characters)
          //g2.drawString(string_aanduiding, (int)(links_boven_grafiek.getX()), (int)(2 * ascent_sensor_level_text));
       } 
-      else if (main.RS232_connection_mode == 3)
+      else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)      // StarX USB or StarX LAN connected 
+      {
+         if (main.mode_grafiek.equals(main.MODE_PRESSURE))      
+         {
+            //string_aanduiding = "All air pressure values at Mean Sea Level";          // till 22-06-2018
+            string_aanduiding = "All values at barometer height and no ic applied";     // from 22-06-2018
+         }  
+         else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))   
+         {
+            string_aanduiding = "All air temperature values at sensor height";
+         }  
+      }
+      else if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) // AWS connected
       {
          if (main.mode_grafiek.equals(main.MODE_PRESSURE))      
          {
@@ -1436,7 +1522,7 @@ public void paintComponent(Graphics g)
          {
             string_aanduiding = "All sea surface temperature values at sensor depth";
          }  
-      } // else if (main.RS232_connection_mode == 3)
+      } // else if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
       
       if (string_aanduiding.equals("") == false)
       {
@@ -1474,12 +1560,41 @@ public void paintComponent(Graphics g)
          {
             try
             {
-               double sensor_waarde;
+               double sensor_waarde = Double.MAX_VALUE;
                if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                {
                   // m/s -> knots
-                  sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) * main.M_S_KNOT_CONVERSION;
-               }
+                  //sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) * main.M_S_KNOT_CONVERSION;
+                 
+                  // NB 4 options:
+                  // 1) measured/observed in m/s   -> dashboard and graph in knots
+                  // 2) measured/observed in m/s   -> dashboard and graph in m/s
+                  // 3) measured/observed in knots -> dashboard and graph in knots
+                  // 4) measured/observed in knots -> dashboard and graph in m/s
+                     
+                  if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+                  {
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in m/s and dashboard in knots
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) * main.M_S_KNOT_CONVERSION;
+                     }
+                     else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in m/s and dashboard in m/s
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()); 
+                     }
+                  }
+                  else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+                  {
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in knots and dashboard in knots
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()); 
+                     }
+                     else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in knots and dashboard in m/s
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) * main.KNOT_M_S_CONVERSION; 
+                     }   
+                  }          
+               } // if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                else
                {
                   sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim());
@@ -1553,8 +1668,32 @@ public void paintComponent(Graphics g)
                if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                {
                   // m/s -> knots
-                 digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.M_S_KNOT_CONVERSION) / 10.0d; 
-               }
+                  //digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.M_S_KNOT_CONVERSION) / 10.0d; 
+                 
+                  if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+                  {
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in m/s and dashboard in knots
+                     {
+                        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.M_S_KNOT_CONVERSION) / 10.0d;
+                     }
+                     else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in m/s and dashboard in m/s
+                     {
+                        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d; 
+                     }
+                  } 
+                  else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+                  {
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in knots and dashboard in knots
+                     {
+                        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
+                     }
+                     else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in knots and dashboard in m/s
+                     {
+                        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10 * main.KNOT_M_S_CONVERSION) / 10.0d;
+                     }   
+                  }        
+                    
+               } //  if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                else
                {
                   digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;  // eg 998.19 -> 998.2
@@ -1582,7 +1721,15 @@ public void paintComponent(Graphics g)
                   }
                   else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                   {
-                     datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kts";
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+                     {
+                        datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " kts";
+                     }
+                     else
+                     {
+                        datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " m/s";
+                     }
+                     
                      test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 23 kts";							
                   }
                   else if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
@@ -1672,7 +1819,38 @@ public void paintComponent(Graphics g)
                try
                {
                   // m/s -> knots
-                  double sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_2[i].trim()) * main.M_S_KNOT_CONVERSION;
+                  //double sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_2[i].trim()) * main.M_S_KNOT_CONVERSION;
+                  
+                  double sensor_waarde = Double.MAX_VALUE;
+                  // NB 4 options:
+                  // 1) measured/observed in m/s   -> dashboard and graph in knots
+                  // 2) measured/observed in m/s   -> dashboard and graph in m/s
+                  // 3) measured/observed in knots -> dashboard and graph in knots
+                  // 4) measured/observed in knots -> dashboard and graph in m/s
+                     
+                  if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+                  {
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in m/s and dashboard in knots
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_2[i].trim()) * main.M_S_KNOT_CONVERSION;
+                     }
+                     else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in m/s and dashboard in m/s
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_2[i].trim()); 
+                     }
+                  }
+                  else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+                  {
+                     if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in knots and dashboard in knots
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_2[i].trim()); 
+                     }
+                     else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in knots and dashboard in m/s
+                     {
+                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_2[i].trim()) * main.KNOT_M_S_CONVERSION; 
+                     }   
+                  }      
+                  
                
                   if ((RS232_view.mode_tijd_periode).equals(RS232_view.MODE_DAY))
                   {

@@ -199,7 +199,7 @@ public class mydatetime extends javax.swing.JFrame {
       }
       
 
-      if (main.RS232_connection_mode == 3)                       // AWS connected mode  
+      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) // AWS connected mode  
       {
          jList1.setEnabled(false);
          jList2.setEnabled(false);
@@ -208,7 +208,7 @@ public class mydatetime extends javax.swing.JFrame {
       }
       
       
-      if (main.RS232_connection_mode == 3)                       // AWS connected mode
+      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) // AWS connected mode
       {   
          jLabel1.setForeground(main.input_color_from_aws);        // year label
          jLabel2.setForeground(main.input_color_from_aws);        // month label

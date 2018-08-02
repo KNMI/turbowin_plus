@@ -62,7 +62,8 @@ public class myserversettings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
@@ -78,15 +79,19 @@ public class myserversettings extends javax.swing.JFrame {
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton1.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton2.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Cancel_button_actionPerformed(evt);
          }
       });

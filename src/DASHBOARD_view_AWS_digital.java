@@ -255,7 +255,8 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       jPanel5 = new javax.swing.JPanel();
       jPanel4 = new javax.swing.JPanel();
@@ -270,8 +271,10 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setPreferredSize(new java.awt.Dimension(1000, 800));
-      addWindowListener(new java.awt.event.WindowAdapter() {
-         public void windowClosed(java.awt.event.WindowEvent evt) {
+      addWindowListener(new java.awt.event.WindowAdapter()
+      {
+         public void windowClosed(java.awt.event.WindowEvent evt)
+         {
             Dashboard_view_AWS_digital_windowClosed(evt);
          }
       });
@@ -362,8 +365,10 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
 
       jPanel1.setBackground(new java.awt.Color(255, 250, 240));
       jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
-      jPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
-         public void componentResized(java.awt.event.ComponentEvent evt) {
+      jPanel1.addComponentListener(new java.awt.event.ComponentAdapter()
+      {
+         public void componentResized(java.awt.event.ComponentEvent evt)
+         {
             Dashboard_AWS_digital_componentResizedHandler(evt);
          }
       });
@@ -514,7 +519,7 @@ private void init_dasboard_AWS_digital_timer()
 
   // Martin var's
    private final int DELAY_UPDATE_AWS_DIGITAL_SENSOR_LOOP                 = 60000; // 1 min                          // time in millisec to wait after timer is started to fire first event (10 min = 10 * 1000 * 60 * 10 = 600000)
-   private final int INITIAL_DELAY_UPDATE_AWS_DIGITAL_SENSOR_LOOP         = 30000; // 1000 = 1 sec              // time in millisec to wait after timer is started to fire first event
+   private final int INITIAL_DELAY_UPDATE_AWS_DIGITAL_SENSOR_LOOP         = 0; // 1000 = 1 sec              // time in millisec to wait after timer is started to fire first event
    public static Timer dashboard_update_AWS_digital_timer;
    public static boolean dashboard_update_AWS_digital_timer_is_gecreeerd;
 

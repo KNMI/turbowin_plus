@@ -30,7 +30,8 @@ public class RS232_settings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       buttonGroup1 = new javax.swing.ButtonGroup();
       buttonGroup2 = new javax.swing.ButtonGroup();
@@ -57,6 +58,10 @@ public class RS232_settings extends javax.swing.JFrame {
       jRadioButton5 = new javax.swing.JRadioButton();
       jRadioButton10 = new javax.swing.JRadioButton();
       jRadioButton11 = new javax.swing.JRadioButton();
+      jRadioButton12 = new javax.swing.JRadioButton();
+      jRadioButton13 = new javax.swing.JRadioButton();
+      jRadioButton14 = new javax.swing.JRadioButton();
+      jRadioButton15 = new javax.swing.JRadioButton();
       jLabel6 = new javax.swing.JLabel();
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
@@ -81,7 +86,7 @@ public class RS232_settings extends javax.swing.JFrame {
       jLabel7 = new javax.swing.JLabel();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-      setTitle("Serial/USB or WiFi connection settings");
+      setTitle("Serial/USB or LAN connection settings");
       setMinimumSize(new java.awt.Dimension(1000, 700));
       setPreferredSize(new java.awt.Dimension(1000, 700));
       setResizable(false);
@@ -118,9 +123,11 @@ public class RS232_settings extends javax.swing.JFrame {
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel1Layout.createSequentialGroup()
             .addGap(20, 20, 20)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-               .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-               .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+               .addGroup(jPanel1Layout.createSequentialGroup()
+                  .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                  .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+               .addGroup(jPanel1Layout.createSequentialGroup()
                   .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                      .addComponent(jLabel1)
                      .addComponent(jLabel3)
@@ -128,15 +135,15 @@ public class RS232_settings extends javax.swing.JFrame {
                      .addComponent(jLabel2)
                      .addComponent(jLabel8)
                      .addComponent(jLabel10))
-                  .addGap(27, 27, 27)
-                  .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                     .addComponent(jComboBox5, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jComboBox3, 0, 181, Short.MAX_VALUE)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                  .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                     .addComponent(jComboBox3, 0, 206, Short.MAX_VALUE)
                      .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jTextField1))))
-            .addContainerGap(20, Short.MAX_VALUE))
+                     .addComponent(jComboBox4, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jComboBox5, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+                  .addGap(20, 20, 20))))
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,58 +180,112 @@ public class RS232_settings extends javax.swing.JFrame {
       jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
       buttonGroup1.add(jRadioButton1);
-      jRadioButton1.setText("Vaisala PTB220 barometer");
-      jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton1.setText("Vaisala PTB220 serial");
+      jRadioButton1.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             PTB220_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton2);
-      jRadioButton2.setText("Vaisala PTB330 barometer");
-      jRadioButton2.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton2.setText("Vaisala PTB330 serial");
+      jRadioButton2.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             PTB330_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton3);
-      jRadioButton3.setText("EUCOS AWS");
-      jRadioButton3.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton3.setText("EUCOS AWS serial");
+      jRadioButton3.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             AWS_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton4);
       jRadioButton4.setText("none");
-      jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton4.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             none_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton5);
-      jRadioButton5.setText("Mintaka Duo barometer via USB");
-      jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton5.setText("Mintaka Duo USB");
+      jRadioButton5.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton10);
-      jRadioButton10.setText("Mintaka Star barometer via USB");
-      jRadioButton10.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton10.setText("Mintaka Star USB");
+      jRadioButton10.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_Star_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton11);
-      jRadioButton11.setText("Mintaka Star barometer via WiFi");
-      jRadioButton11.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton11.setText("Mintaka Star LAN");
+      jRadioButton11.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_Star_WiFi_connected_itenStateChanged(evt);
+         }
+      });
+
+      buttonGroup1.add(jRadioButton12);
+      jRadioButton12.setText("OMC-140 AWS serial");
+      jRadioButton12.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
+            AWS_OMC_serial_connected_itemStateChanged(evt);
+         }
+      });
+
+      buttonGroup1.add(jRadioButton13);
+      jRadioButton13.setText("Mintaka Star + StarX USB");
+      jRadioButton13.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
+            Mintaka_StarX_USB_connected_itemStateChanged(evt);
+         }
+      });
+
+      buttonGroup1.add(jRadioButton14);
+      jRadioButton14.setText("Mintaka Star +  StarX LAN");
+      jRadioButton14.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
+            Mintaka_StarX_WiFi_connected_itemStateChanged(evt);
+         }
+      });
+
+      buttonGroup1.add(jRadioButton15);
+      jRadioButton15.setText("OMC-140 AWS LAN");
+      jRadioButton15.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
+            AWS_OMC_ethernet_connected_itemStateChanged(evt);
          }
       });
 
@@ -235,26 +296,42 @@ public class RS232_settings extends javax.swing.JFrame {
          .addGroup(jPanel2Layout.createSequentialGroup()
             .addGap(20, 20, 20)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jRadioButton11)
-               .addComponent(jRadioButton10)
-               .addComponent(jRadioButton5)
                .addComponent(jRadioButton3)
                .addComponent(jRadioButton2)
-               .addComponent(jRadioButton1)
-               .addComponent(jRadioButton4))
-            .addContainerGap(122, Short.MAX_VALUE))
+               .addComponent(jRadioButton4)
+               .addGroup(jPanel2Layout.createSequentialGroup()
+                  .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                     .addComponent(jRadioButton5)
+                     .addComponent(jRadioButton10)
+                     .addComponent(jRadioButton11)
+                     .addComponent(jRadioButton1))
+                  .addGap(29, 29, 29)
+                  .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                     .addComponent(jRadioButton14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jRadioButton12)
+                     .addComponent(jRadioButton15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jRadioButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addContainerGap(40, Short.MAX_VALUE))
       );
       jPanel2Layout.setVerticalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel2Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jRadioButton5)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(jRadioButton5)
+               .addComponent(jRadioButton13))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jRadioButton10)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(jRadioButton10)
+               .addComponent(jRadioButton14))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jRadioButton11)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(jRadioButton11)
+               .addComponent(jRadioButton15))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jRadioButton1)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(jRadioButton1)
+               .addComponent(jRadioButton12))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jRadioButton2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -267,15 +344,19 @@ public class RS232_settings extends javax.swing.JFrame {
       jLabel6.setText("instrument port settings");
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton1.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton2.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Cancel_button_actionPerformed(evt);
          }
       });
@@ -289,16 +370,20 @@ public class RS232_settings extends javax.swing.JFrame {
 
       buttonGroup2.add(jRadioButton6);
       jRadioButton6.setText("GPS (NMEA 0183)");
-      jRadioButton6.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton6.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             GPS_NMEA_0183_itemStateChanged(evt);
          }
       });
 
       buttonGroup2.add(jRadioButton7);
       jRadioButton7.setText("none");
-      jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton7.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             none_GPS_NMEA_0183_itemStateChanged(evt);
          }
       });
@@ -356,7 +441,7 @@ public class RS232_settings extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addComponent(jRadioButton9)
                .addComponent(jRadioButton8))
-            .addContainerGap(57, Short.MAX_VALUE))
+            .addContainerGap(66, Short.MAX_VALUE))
       );
       jPanel5Layout.setVerticalGroup(
          jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,19 +460,23 @@ public class RS232_settings extends javax.swing.JFrame {
          .addGroup(jPanel4Layout.createSequentialGroup()
             .addGap(20, 20, 20)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addGroup(jPanel4Layout.createSequentialGroup()
-                  .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jLabel14)
-                     .addComponent(jLabel15)
-                     .addComponent(jLabel16))
-                  .addGap(18, 18, 18)
-                  .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                     .addComponent(jComboBox7, javax.swing.GroupLayout.Alignment.LEADING, 0, 186, Short.MAX_VALUE)
-                     .addComponent(jTextField2)
-                     .addComponent(jComboBox6, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                .addComponent(jLabel17)
-               .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addContainerGap(20, Short.MAX_VALUE))
+               .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                  .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGroup(jPanel4Layout.createSequentialGroup()
+                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel14)
+                        .addComponent(jLabel15)
+                        .addComponent(jLabel16))
+                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                           .addGap(26, 26, 26)
+                           .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                           .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                           .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+            .addContainerGap(27, Short.MAX_VALUE))
       );
       jPanel4Layout.setVerticalGroup(
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,7 +504,7 @@ public class RS232_settings extends javax.swing.JFrame {
 
       jLabel13.setText("GPS port settings");
 
-      jLabel7.setText("instrument connected (USB or serial port or WiFi)");
+      jLabel7.setText("instrument connected (USB or serial port or LAN)");
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
@@ -424,33 +513,32 @@ public class RS232_settings extends javax.swing.JFrame {
          .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addGroup(layout.createSequentialGroup()
+                  .addContainerGap()
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jSeparator1)))
+               .addGroup(layout.createSequentialGroup()
+                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                     .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                           .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                           .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                           .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                           .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(108, 108, 108)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                           .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                           .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                              .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                              .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+                           .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
                      .addGroup(layout.createSequentialGroup()
                         .addGap(400, 400, 400)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                     .addGroup(layout.createSequentialGroup()
-                        .addGap(92, 92, 92)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                           .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                           .addGroup(layout.createSequentialGroup()
-                              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                              .addGap(130, 130, 130)
-                              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)))
-                           .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                  .addGap(0, 109, Short.MAX_VALUE))
-               .addGroup(layout.createSequentialGroup()
-                  .addContainerGap()
-                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jSeparator1))))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                  .addGap(0, 58, Short.MAX_VALUE)))
             .addContainerGap())
       );
       layout.setVerticalGroup(
@@ -506,39 +594,67 @@ public class RS232_settings extends javax.swing.JFrame {
       //
       // type instrument connected instrument
       //
-      if (jRadioButton1.isSelected() == true) // PTB220 connected
+      if (jRadioButton1.isSelected() == true)              // PTB220 connected
       {
          main.RS232_connection_mode = 1;
-      } else if (jRadioButton2.isSelected() == true) // PTB330 connected
+      } 
+      else if (jRadioButton2.isSelected() == true)         // PTB330 connected
       {
          main.RS232_connection_mode = 2;
-      } else if (jRadioButton3.isSelected() == true) // EUCOS AWS connected
+      } 
+      else if (jRadioButton3.isSelected() == true)         // EUCOS AWS connected
       {
          main.RS232_connection_mode = 3;
-      } else if (jRadioButton4.isSelected() == true) // NONE
+      } 
+      else if (jRadioButton4.isSelected() == true)         // NONE
       {
          main.RS232_connection_mode = 0;
-      } else if (jRadioButton5.isSelected() == true) // Mintaka Duo connected
+      } 
+      else if (jRadioButton5.isSelected() == true)         // Mintaka Duo connected
       {
          main.RS232_connection_mode = 4;
-      } else if (jRadioButton10.isSelected() == true) // Mintaka Star USB connected (NB there is also a Mintaka Star with WiFi)
+      } 
+      else if (jRadioButton10.isSelected() == true)         // Mintaka Star USB connected (NB there is also a Mintaka Star with WiFi)
       {
          main.RS232_connection_mode = 5;
          // NB Mintaka Star has an integrated GPS (see below, GPS connected)!
-      } else if (jRadioButton11.isSelected() == true) // Mintaka Star WiFi connected (NB there is also a Mintaka Star with USB)
+      } 
+      else if (jRadioButton11.isSelected() == true)        // Mintaka Star WiFi connected (NB there is also a Mintaka Star with USB)
       {
          main.RS232_connection_mode = 6;
          // NB Mintaka Star has an integrated GPS (see below, GPS connected)!
-      } else {
+      } 
+      else if (jRadioButton13.isSelected() == true)        // Mintaka Star + StarX USB connected (NB there is also a Mintaka Star + StarX with WiFi)
+      {
+         main.RS232_connection_mode = 7;
+         // NB Mintaka Star + StarX has an integrated GPS (see below, GPS connected)!
+      } 
+      else if (jRadioButton14.isSelected() == true)        // Mintaka Star + StarX WiFi connected (NB there is also a Mintaka Star + StarX with USB)
+      {
+         main.RS232_connection_mode = 8;
+         // NB Mintaka Star + StarX has an integrated GPS (see below, GPS connected)!
+      } 
+      else if (jRadioButton12.isSelected() == true)        // OMC-140 AWS serial connected
+      {
+         main.RS232_connection_mode = 9;
+      } 
+      else if (jRadioButton15.isSelected() == true)        // OMC-140 AWS ethernet LAN connected
+      {
+         main.RS232_connection_mode = 10;
+      } 
+      else 
+      {
          main.RS232_connection_mode = 0;
       }
 
       // instrument bits per second
       //
-      if (jComboBox2.getSelectedItem() != null) // nothing selected, returns null 
+      if (jComboBox2.getSelectedItem() != null)            // nothing selected, returns null 
       {
          main.bits_per_second = (Integer) jComboBox2.getSelectedItem();
-      } else {
+      } 
+      else 
+      {
          main.bits_per_second = 0;
       }
 
@@ -548,7 +664,8 @@ public class RS232_settings extends javax.swing.JFrame {
       {
          int hulp_data_bits = (Integer) jComboBox3.getSelectedItem();
 
-         switch (hulp_data_bits) {
+         switch (hulp_data_bits) 
+         {
             case 7:
                main.data_bits = 7;//SerialPort.DATABITS_7;
                break;
@@ -559,7 +676,9 @@ public class RS232_settings extends javax.swing.JFrame {
                main.data_bits = 0;
                break;
          } // switch (hulp_data_bits)
-      } else {
+      } 
+      else 
+      {
          main.data_bits = 0;
       }
 
@@ -569,7 +688,8 @@ public class RS232_settings extends javax.swing.JFrame {
       {
          String hulp_parity = (String) jComboBox4.getSelectedItem();
 
-         switch (hulp_parity) {
+         switch (hulp_parity) 
+         {
             case "none":
                main.parity = SerialPort.NO_PARITY;//SerialPort.PARITY_NONE;
                break;
@@ -583,7 +703,9 @@ public class RS232_settings extends javax.swing.JFrame {
                main.parity = 99;                                    // 99 = non-existing value
                break;
          } // switch (hulp_parity)
-      } else {
+      } 
+      else 
+      {
          main.parity = 99;                                                      // 99 = non-existing value
       }
 
@@ -593,7 +715,8 @@ public class RS232_settings extends javax.swing.JFrame {
       {
          int hulp_stop_bits = (Integer) jComboBox1.getSelectedItem();
 
-         switch (hulp_stop_bits) {
+         switch (hulp_stop_bits) 
+         {
             case 1:
                main.stop_bits = SerialPort.ONE_STOP_BIT;//SerialPort.STOPBITS_1;
                break;
@@ -604,7 +727,8 @@ public class RS232_settings extends javax.swing.JFrame {
                main.stop_bits = 0;
                break;
          } // switch (hulp_stop_bits)
-      } else {
+      } else 
+      {
          main.stop_bits = 0;
       }
 
@@ -613,7 +737,9 @@ public class RS232_settings extends javax.swing.JFrame {
       if (jComboBox5.getSelectedItem() != null) // nothing selected, returns null 
       {
          main.prefered_COM_port_number = (String) jComboBox5.getSelectedItem();
-      } else {
+      } 
+      else 
+      {
          main.prefered_COM_port_number = "";
       }
 
@@ -626,24 +752,34 @@ public class RS232_settings extends javax.swing.JFrame {
       // NB see Function: meta_data_from_configuration_regels_into_global_vars() [main.java]
       //    here generic name : prefered_COM_port will be used (=prefered_COM_port_number or prefered_COM_port_name)
       //
-      /////////////////// GPS (NMEA 0183) connected (or integrated GPS of the Mintaka Star) //////////////////
+      /////////////////// GPS (NMEA 0183) connected (or integrated GPS of the Mintaka Star/StarX) //////////////////
       //
-      // note in case of Mintaka Star: main.RS232_GPS_connection_mode = 3; (see above, type instrument connected instrument)
-      //      because Mintaka Star has an integrated GPS
+      // note in case of Mintaka Star/StarX: main.RS232_GPS_connection_mode = 3/4; (see above, type instrument connected instrument)
+      //      because Mintaka Star/StarX has an integrated GPS
       // type GPS connected
       //     
-      if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) // Mintaka Star (USB or WiFi) with integrated GPS
+      if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)     // Mintaka Star (USB or WiFi) with integrated GPS
       {
-         main.RS232_GPS_connection_mode = 3;                                     // integrated GPS of Mintaka Star
-      } else {
-         if (jRadioButton6.isSelected() == true) // GPS NMEA 0183 connected
+         main.RS232_GPS_connection_mode = 3;                                      // integrated GPS of Mintaka Star
+      } 
+      else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)// Mintaka StarX (USB or WiFi) with integrated GPS
+      {
+         main.RS232_GPS_connection_mode = 4;                                      // integrated GPS of Mintaka StarX
+      }
+      else 
+      {
+         if (jRadioButton6.isSelected() == true)      // GPS NMEA 0183 connected
          {
             main.RS232_GPS_connection_mode = 1;
-         } else if (jRadioButton7.isSelected() == true) // NONE
+         } 
+         else if (jRadioButton7.isSelected() == true) // NONE
          {
             main.RS232_GPS_connection_mode = 0;
-         } else {
-            main.RS232_GPS_connection_mode = 3;                                     // integrated GPS of Mintaka Star
+         } 
+         else 
+         {
+            //main.RS232_GPS_connection_mode = 3;                                     // integrated GPS of Mintaka Star
+            main.RS232_GPS_connection_mode = 0;   // from 18 April 2018
          }
       } // else
 
@@ -652,7 +788,9 @@ public class RS232_settings extends javax.swing.JFrame {
       if (jComboBox6.getSelectedItem() != null) // nothing selected, returns null 
       {
          main.GPS_bits_per_second = (Integer) jComboBox6.getSelectedItem();
-      } else {
+      } 
+      else 
+      {
          main.GPS_bits_per_second = 0;
       }
 
@@ -661,11 +799,13 @@ public class RS232_settings extends javax.swing.JFrame {
       if (jComboBox7.getSelectedItem() != null) // nothing selected, returns null 
       {
          main.prefered_GPS_COM_port_number = (String) jComboBox7.getSelectedItem();
-      } else {
+      } 
+      else 
+      {
          main.prefered_GPS_COM_port_number = "";
       }
 
-      // (prefered) COM port (OS X)
+      // GPS (prefered) COM port (OS X)
       //
       main.prefered_GPS_COM_port_name = jTextField2.getText().trim();
 
@@ -678,10 +818,13 @@ public class RS232_settings extends javax.swing.JFrame {
       if (jRadioButton8.isSelected() == true) // use RMC sentence
       {
          main.RS232_GPS_sentence = 1;
-      } else if (jRadioButton9.isSelected() == true) // use GGA sentence
+      } 
+      else if (jRadioButton9.isSelected() == true) // use GGA sentence
       {
          main.RS232_GPS_sentence = 2;
-      } else {
+      } 
+      else 
+      {
          main.RS232_GPS_sentence = 0;                // default; nothing selected
       }
 
@@ -689,41 +832,119 @@ public class RS232_settings extends javax.swing.JFrame {
       ////////////////// checks /////////////////
       //
       // NB see also: function: OK_button_actionPerformed() [mystationdata.java]
-      // a connected barometer is only possible in combination with setting: "barometer reading NOT at MSL"
-      if (doorgaan == true) {
+      
+      if (doorgaan == true) 
+      {
+         // a connected barometer is only possible in combination with setting: "barometer reading NOT at MSL"
          if (((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2) || (main.RS232_connection_mode == 4) || (main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6)) && // PTB220 or PTB330 or MintakaDuo or Mintaka Star USB and WiFi
-                 (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_YES) == true)) {
+              (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_YES) == true)) 
+         {
             main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_NO;
             main.configuratie_regels[10] = main.PRESSURE_READING_MSL_TXT + main.pressure_reading_msl_yes_no.trim();
 
             info = "TurboWin+ will always retrieve the pressure at instrument level (never at MSL) of the connected barometer\n";
             info += "TurboWin+ has automatically changed the setting \"does the reading indicate MSL pressure\" to \"no\" (see: Maintenance -> Station data)";
             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+            doorgaan = true;
+         }
+      }
+      
+      if (doorgaan)
+      {  
+         if ((main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) && main.obs_format.equals(main.FORMAT_AWS) == false)
+         {
+            info = "Do not forget to set obs format to \"AWS connected\". (Maintenance -> Obs format settings)";
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+            doorgaan = true;
+         }
+      }
+      
+      // PTB330 with max 4800 bps (because with higher settings the incomming data is not correct anymore [missing QNH])
+      if (doorgaan)
+      {
+         if ((main.RS232_connection_mode == 2) && (main.bits_per_second > 4800))
+         {
+            info = "For PTB330 'bits per second' is max 4800";
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.WARNING_MESSAGE);
+            doorgaan = false;
+         }
+      }
+      
+      if (doorgaan)
+      {
+         // warning if AUTOMATICALLY was not selected for instrument port name (for serial and USB connections)
+         if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 3 ||
+             main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 7 ||
+             main.RS232_connection_mode == 9)
+         {
+            if (main.prefered_COM_port_number.length() > 2)    // there was something selected
+            {
+               if (main.prefered_COM_port_number.equals("AUTOMATICALLY") == false)
+               {
+                  info = "It is recommended to set the instrument COM port number to \"AUTOMATICALLY\",\nselect the other instrument COM port numbers only when testing";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+                  doorgaan = true;
+               }
+            }
+         }
+      }
+      
+      if (doorgaan)
+      {
+         // warning if AUTOMATICALLY was not selected for GPS port name (for seria/USB connections)
+         if (main.RS232_GPS_connection_mode == 1)
+         {
+            if (main.prefered_GPS_COM_port_number.length() > 2)    // there was something selected
+            {
+               if (main.prefered_GPS_COM_port_number.equals("AUTOMATICALLY") == false)
+               {
+                  info = "It is recommended to set the GPS COM port number to \"AUTOMATICALLY\",\nselect the other GPS COM port numbers only when testing";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+                  doorgaan = true;
+               }
+            }   
          }
       }
 
       // AWS and GPS can not be checked both
-      if (doorgaan) {
-         if ((main.RS232_connection_mode == 3) && (main.RS232_GPS_connection_mode != 0)) {
+      if (doorgaan) 
+      {
+         if ((main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) && (main.RS232_GPS_connection_mode != 0)) 
+         {
             info = "If an AWS is connected a GPS cannot be connected";
             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.WARNING_MESSAGE);
             doorgaan = false;
          }
       }
 
-      // if GPS is connected then there must be also a sentence (RMC or GGA) checked (but not in the case of the Mintaka Star with integrated GPS)
-      if (doorgaan) {
-         if ((main.RS232_GPS_connection_mode != 0 && main.RS232_GPS_connection_mode != 3) && (main.RS232_GPS_sentence == 0)) {
+      // if GPS is connected then there must be also a sentence (RMC or GGA) checked (but not in the case of the Mintaka Star or StarX with integrated GPS)
+      if (doorgaan) 
+      {
+         if ((main.RS232_GPS_connection_mode != 0 && main.RS232_GPS_connection_mode != 3 && main.RS232_GPS_connection_mode != 4) && (main.RS232_GPS_sentence == 0)) 
+         {
             info = "If a GPS is connected a GPS sentence type (RMC or GGA) must be also selected";
             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.WARNING_MESSAGE);
             doorgaan = false;
          }
       }
+      
+      // if GPS is connected then there must be also GPS bps checked (but not in the case of the Mintaka Star or StarX with integrated GPS)
+      if (doorgaan) 
+      {
+         if ((main.RS232_GPS_connection_mode != 0 && main.RS232_GPS_connection_mode != 3 && main.RS232_GPS_connection_mode != 4) && (main.GPS_bits_per_second == 0)) 
+         {
+            info = "If a GPS is connected the GPS port setting 'bits per second' must be also selected";
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.WARNING_MESSAGE);
+            doorgaan = false;
+         }
+      }
 
-      // Mintaka Star USB/WiFi (integrated GPS) and seperated GPS (NMEA 0178) can not be checked together
-      if (doorgaan) {
-         if ((main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) && (main.RS232_GPS_connection_mode == 1)) {
-            info = "If a Mintaka Star (integrated GPS) is connected a second seperated GPS cannot be connected";
+      // Mintaka Star or StarX USB/WiFi (integrated GPS) and seperated GPS (NMEA 0178) can not be checked together
+      if (doorgaan) 
+      {
+         if ((main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) && (main.RS232_GPS_connection_mode == 1)) 
+         {
+            info = "If a Mintaka Star or StarX (integrated GPS) is connected a second seperated GPS cannot be connected";
             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.WARNING_MESSAGE);
             doorgaan = false;
          }
@@ -732,11 +953,14 @@ public class RS232_settings extends javax.swing.JFrame {
       //
       ////////////////// save the RS232 (RS422) settings data ///////////////////////
       //
-      if (doorgaan == true) {
+      if (doorgaan == true) 
+      {
          // write meta (station) data to muffins or configuration files
-         if (main.offline_mode_via_cmd == true) {
+         if (main.offline_mode_via_cmd == true) 
+         {
             main.schrijf_configuratie_regels();
-         } else // so offline_via_jnlp mode or online (webstart) mode
+         } 
+         else // so offline_via_jnlp mode or online (webstart) mode
          {
             main.set_muffin();
             main.schrijf_configuratie_regels();
@@ -754,30 +978,25 @@ public class RS232_settings extends javax.swing.JFrame {
 
    }//GEN-LAST:event_OK_button_actionPerformed
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void Cancel_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel_button_actionPerformed
       // TODO add your handling code here:
       setVisible(false);
       dispose();
    }//GEN-LAST:event_Cancel_button_actionPerformed
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void AWS_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_AWS_connected_itemStateChanged
       // TODO add your handling code here:
       if (jRadioButton3.isSelected() == true) // EUCAWS AWS
@@ -799,7 +1018,7 @@ public class RS232_settings extends javax.swing.JFrame {
          jTextField1.setEnabled(true);                        // port (OS X)
 
       } // if (jRadioButton3.isSelected() == true)
-      else if (jRadioButton3.isSelected() == false) // EUCAWS AWS
+      else if (jRadioButton3.isSelected() == false)           // EUCAWS AWS
       {
          //JOptionPane.showMessageDialog(null, "test radiobutton AWS was deselected",  main.APPLICATION_NAME + " test", JOptionPane.INFORMATION_MESSAGE);
 
@@ -820,15 +1039,13 @@ public class RS232_settings extends javax.swing.JFrame {
       } // else if (jRadioButton3.isSelected() == false)
    }//GEN-LAST:event_AWS_connected_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void none_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_none_connected_itemStateChanged
       // TODO add your handling code here:
 
@@ -860,15 +1077,13 @@ public class RS232_settings extends javax.swing.JFrame {
       }
    }//GEN-LAST:event_none_connected_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void PTB220_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PTB220_connected_itemStateChanged
       // TODO add your handling code here:
 
@@ -888,7 +1103,9 @@ public class RS232_settings extends javax.swing.JFrame {
          jComboBox5.setEnabled(true);                          // port (windows and Linux)
          jTextField1.setEnabled(true);                         // port (OS X)
 
-      } else if (jRadioButton1.isSelected() == false) {
+      } 
+      else if (jRadioButton1.isSelected() == false) 
+      {
          jComboBox2.setEnabled(true);                          // bits per seconde
          jComboBox3.setEnabled(true);                          // data bits
          jComboBox4.setEnabled(true);                          // parity none
@@ -898,15 +1115,13 @@ public class RS232_settings extends javax.swing.JFrame {
       }
    }//GEN-LAST:event_PTB220_connected_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void PTB330_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PTB330_connected_itemStateChanged
       // TODO add your handling code here:
 
@@ -926,7 +1141,9 @@ public class RS232_settings extends javax.swing.JFrame {
          jComboBox5.setEnabled(true);                          // port (Windows and Linux)
          jTextField1.setEnabled(true);                         // port (OS X)
 
-      } else if (jRadioButton2.isSelected() == false) {
+      } 
+      else if (jRadioButton2.isSelected() == false) 
+      {
          jComboBox2.setEnabled(true);                          // bits per seconde
          jComboBox3.setEnabled(true);                          // data bits
          jComboBox4.setEnabled(true);                          // parity none
@@ -936,15 +1153,13 @@ public class RS232_settings extends javax.swing.JFrame {
       }
    }//GEN-LAST:event_PTB330_connected_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void Mintaka_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Mintaka_connected_itemStateChanged
       // TODO add your handling code here:
 
@@ -964,7 +1179,9 @@ public class RS232_settings extends javax.swing.JFrame {
          jComboBox5.setEnabled(true);                          // port (Windows and Linux)
          jTextField1.setEnabled(true);                         // port (OS X)
 
-      } else if (jRadioButton5.isSelected() == false) {
+      } 
+      else if (jRadioButton5.isSelected() == false) 
+      {
          jComboBox2.setEnabled(true);                          // bits per seconde
          jComboBox3.setEnabled(true);                          // data bits
          jComboBox4.setEnabled(true);                          // parity none
@@ -974,15 +1191,13 @@ public class RS232_settings extends javax.swing.JFrame {
       }
    }//GEN-LAST:event_Mintaka_connected_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void GPS_NMEA_0183_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GPS_NMEA_0183_itemStateChanged
       // TODO add your handling code here:
 
@@ -1011,15 +1226,13 @@ public class RS232_settings extends javax.swing.JFrame {
 
    }//GEN-LAST:event_GPS_NMEA_0183_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void none_GPS_NMEA_0183_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_none_GPS_NMEA_0183_itemStateChanged
       // TODO add your handling code here:
 
@@ -1037,7 +1250,8 @@ public class RS232_settings extends javax.swing.JFrame {
          jTextField2.setEnabled(false);                        // port (OS X)
          jRadioButton8.setEnabled(false);                      // use RMC sentence
          jRadioButton9.setEnabled(false);                      // use GGA sentence
-      } else if (jRadioButton7.isSelected() == false) // NONE GPS            
+      } 
+      else if (jRadioButton7.isSelected() == false) // NONE GPS            
       {
          jComboBox6.setEnabled(true);                          // bits per seconde
          jComboBox7.setEnabled(true);                          // data bits
@@ -1047,15 +1261,13 @@ public class RS232_settings extends javax.swing.JFrame {
       }
    }//GEN-LAST:event_none_GPS_NMEA_0183_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void Mintaka_Star_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Mintaka_Star_connected_itemStateChanged
       // TODO add your handling code here:
 
@@ -1075,7 +1287,9 @@ public class RS232_settings extends javax.swing.JFrame {
          jComboBox5.setEnabled(true);                          // port (Windows and Linux)
          jTextField1.setEnabled(true);                         // port (OS X)
 
-      } else if (jRadioButton10.isSelected() == false) {
+      } 
+      else if (jRadioButton10.isSelected() == false) 
+      {
          jComboBox2.setEnabled(true);                          // bits per seconde
          jComboBox3.setEnabled(true);                          // data bits
          jComboBox4.setEnabled(true);                          // parity none
@@ -1086,15 +1300,12 @@ public class RS232_settings extends javax.swing.JFrame {
 
    }//GEN-LAST:event_Mintaka_Star_connected_itemStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void Mintaka_Star_WiFi_connected_itenStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Mintaka_Star_WiFi_connected_itenStateChanged
       // TODO add your handling code here:
 
@@ -1116,7 +1327,9 @@ public class RS232_settings extends javax.swing.JFrame {
          jComboBox5.setEnabled(false);                         // port (Windows and Linux)
          jTextField1.setEnabled(false);                        // port (OS X)
 
-      } else if (jRadioButton11.isSelected() == false) {
+      } 
+      else if (jRadioButton11.isSelected() == false) 
+      {
          jComboBox2.setEnabled(true);                          // bits per seconde
          jComboBox3.setEnabled(true);                          // data bits
          jComboBox4.setEnabled(true);                          // parity none
@@ -1126,15 +1339,183 @@ public class RS232_settings extends javax.swing.JFrame {
       }
    }//GEN-LAST:event_Mintaka_Star_WiFi_connected_itenStateChanged
 
-   /**
-    * ********************************************************************************************
-    */
+   
+   
+   /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
    /*                                                                                             */
-   /**
-    * ********************************************************************************************
-    */
+   /*                                                                                             */
+   /***********************************************************************************************/    
+   private void Mintaka_StarX_USB_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Mintaka_StarX_USB_connected_itemStateChanged
+      // TODO add your handling code here:
+      
+      if (jRadioButton13.isSelected() == true) // Mintaka Star + StarX USB
+      {
+         jComboBox2.setSelectedIndex(-1);                      // bits per seconde          -1 indicates no selection
+         jComboBox3.setSelectedIndex(-1);                      // data bits                 -1 indicates no selection
+         jComboBox4.setSelectedIndex(-1);                      // parity none               -1 indicates no selection
+         jComboBox1.setSelectedIndex(-1);                      // stop bits                 -1 indicates no selection
+         jComboBox5.setSelectedIndex(1);                       // port (Windows and Linux)   0 = blanco; 1 = "AUTOMATICALLY" 
+         jTextField1.setText("AUTOMATICALLY");                 // port (OS X)
+
+         jComboBox2.setEnabled(true);                          // bits per seconde
+         jComboBox3.setEnabled(true);                          // data bits
+         jComboBox4.setEnabled(true);                          // parity none
+         jComboBox1.setEnabled(true);                          // stop bits
+         jComboBox5.setEnabled(true);                          // port (Windows and Linux)
+         jTextField1.setEnabled(true);                         // port (OS X)
+
+      } 
+      else if (jRadioButton13.isSelected() == false) 
+      {
+         jComboBox2.setEnabled(true);                          // bits per seconde
+         jComboBox3.setEnabled(true);                          // data bits
+         jComboBox4.setEnabled(true);                          // parity none
+         jComboBox1.setEnabled(true);                          // stop bits
+         jComboBox5.setEnabled(true);                          // port (Windows and Linux)
+         jTextField1.setEnabled(true);                         // port (OS X)
+      }
+      
+   }//GEN-LAST:event_Mintaka_StarX_USB_connected_itemStateChanged
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void Mintaka_StarX_WiFi_connected_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Mintaka_StarX_WiFi_connected_itemStateChanged
+      // TODO add your handling code here:
+    if (jRadioButton14.isSelected() == true) // Mintaka Star + StarX WiFi
+      {
+         //System.out.println("+++  Mintaka_StarX_WiFi_connected_itenStateChanged. jRadioButton11.isSelected()");
+
+         jComboBox2.setSelectedIndex(-1);                      // bits per seconde          -1 indicates no selection
+         jComboBox3.setSelectedIndex(-1);                      // data bits                 -1 indicates no selection
+         jComboBox4.setSelectedIndex(-1);                      // parity none               -1 indicates no selection
+         jComboBox1.setSelectedIndex(-1);                      // stop bits                 -1 indicates no selection
+         jComboBox5.setSelectedIndex(-1);                      // port (Windows and Linux)   0 = blanco; 1 = "AUTOMATICALLY" 
+         jTextField1.setText("");                              // port (OS X)
+
+         jComboBox2.setEnabled(false);                         // bits per seconde
+         jComboBox3.setEnabled(false);                         // data bits
+         jComboBox4.setEnabled(false);                         // parity none
+         jComboBox1.setEnabled(false);                         // stop bits
+         jComboBox5.setEnabled(false);                         // port (Windows and Linux)
+         jTextField1.setEnabled(false);                        // port (OS X)
+
+      } 
+      else if (jRadioButton14.isSelected() == false) 
+      {
+         jComboBox2.setEnabled(true);                          // bits per seconde
+         jComboBox3.setEnabled(true);                          // data bits
+         jComboBox4.setEnabled(true);                          // parity none
+         jComboBox1.setEnabled(true);                          // stop bits
+         jComboBox5.setEnabled(true);                          // port (Windows and Linux)
+         jTextField1.setEnabled(true);                         // port (OS X)
+      }  
+      
+   }//GEN-LAST:event_Mintaka_StarX_WiFi_connected_itemStateChanged
+
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/   
+   private void AWS_OMC_ethernet_connected_itemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_AWS_OMC_ethernet_connected_itemStateChanged
+   {//GEN-HEADEREND:event_AWS_OMC_ethernet_connected_itemStateChanged
+      // TODO add your handling code here:
+         if (jRadioButton15.isSelected() == true)                 // AWS OMC-140 ethernet
+      {
+         jComboBox2.setSelectedIndex(-1);                      // bits per seconde          -1 indicates no selection
+         jComboBox3.setSelectedIndex(-1);                      // data bits                 -1 indicates no selection
+         jComboBox4.setSelectedIndex(-1);                      // parity none               -1 indicates no selection
+         jComboBox1.setSelectedIndex(-1);                      // stop bits                 -1 indicates no selection
+         jComboBox5.setSelectedIndex(-1);                      // port (Windows and Linux)   0 = blanco; 1 = "AUTOMATICALLY" 
+         jTextField1.setText("");                              // port (OS X)
+
+         jComboBox2.setEnabled(false);                         // bits per seconde
+         jComboBox3.setEnabled(false);                         // data bits
+         jComboBox4.setEnabled(false);                         // parity none
+         jComboBox1.setEnabled(false);                         // stop bits
+         jComboBox5.setEnabled(false);                         // port (Windows and Linux)
+         jTextField1.setEnabled(false);                        // port (OS X)
+
+      } 
+      else if (jRadioButton15.isSelected() == false) 
+      {
+         jComboBox2.setEnabled(true);                          // bits per seconde
+         jComboBox3.setEnabled(true);                          // data bits
+         jComboBox4.setEnabled(true);                          // parity none
+         jComboBox1.setEnabled(true);                          // stop bits
+         jComboBox5.setEnabled(true);                          // port (Windows and Linux)
+         jTextField1.setEnabled(true);                         // port (OS X)
+      }  
+
+   }//GEN-LAST:event_AWS_OMC_ethernet_connected_itemStateChanged
+
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/   
+   private void AWS_OMC_serial_connected_itemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_AWS_OMC_serial_connected_itemStateChanged
+   {//GEN-HEADEREND:event_AWS_OMC_serial_connected_itemStateChanged
+      // TODO add your handling code here:
+         // TODO add your handling code here:
+      if (jRadioButton12.isSelected() == true)                // OMC-140 serial AWS
+      {
+         //JOptionPane.showMessageDialog(null, "test radiobutton AWS was selected",  main.APPLICATION_NAME + " test", JOptionPane.INFORMATION_MESSAGE);
+
+         //jComboBox2.setSelectedItem(4800);                    // bits per seconde
+         jComboBox3.setSelectedItem(8);                       // data bits
+         jComboBox4.setSelectedItem("none");                  // parity none
+         jComboBox1.setSelectedItem(1);                       // stop bits
+         jComboBox5.setSelectedIndex(1);                      // port (Windows and Linux)    -1 indicates no selection; 0 = blanco; 1 = "AUTOMATICALLY"
+         jTextField1.setText("AUTOMATICALLY");                // port (OS X) 
+
+         //jComboBox2.setEnabled(false);                        // bits per seconde
+         jComboBox3.setEnabled(false);                        // data bits
+         jComboBox4.setEnabled(false);                        // parity none
+         jComboBox1.setEnabled(false);                        // stop bits
+         jComboBox5.setEnabled(true);                         // port (Windows and Linux)
+         jTextField1.setEnabled(true);                        // port (OS X)
+
+      } // if (jRadioButton12.isSelected() == true)
+      else if (jRadioButton12.isSelected() == false)           // EUCAWS AWS
+      {
+         //JOptionPane.showMessageDialog(null, "test radiobutton AWS was deselected",  main.APPLICATION_NAME + " test", JOptionPane.INFORMATION_MESSAGE);
+
+         jComboBox2.setSelectedIndex(-1);                     // bits per seconde         -1 indicates no selection
+         jComboBox3.setSelectedIndex(-1);                     // data bits                -1 indicates no selection
+         jComboBox4.setSelectedIndex(-1);                     // parity none              -1 indicates no selection
+         jComboBox1.setSelectedIndex(-1);                     // stop bits                -1 indicates no selection
+         jComboBox5.setSelectedIndex(-1);                     // port (Windows and Linux) -1 indicates no selection
+         jTextField1.setText("");                             // port (OS X) 
+
+         jComboBox2.setEnabled(true);                         // bits per seconde
+         jComboBox3.setEnabled(true);                         // data bits
+         jComboBox4.setEnabled(true);                         // parity none
+         jComboBox1.setEnabled(true);                         // stop bits
+         jComboBox5.setEnabled(true);                         // port (Windows and Linux)
+         jTextField1.setEnabled(true);                        // port (OS X)
+
+      } // else if (jRadioButton12.isSelected() == false)
+
+   }//GEN-LAST:event_AWS_OMC_serial_connected_itemStateChanged
+   
+   
+   /************************************************************************************************/
+   /*                                                                                              */
+   /*                                                                                              */
+   /*                                                                                              */
+   /************************************************************************************************/
    private void initComponents2() {
       // NB open the GUI form, select JList component, go to Code
       //    properties and set "Type Parameters" property to <Integer>   (or <String> etc)
@@ -1342,25 +1723,49 @@ public class RS232_settings extends javax.swing.JFrame {
       if (main.RS232_connection_mode == 0) // NONE
       {
          jRadioButton4.setSelected(true);
-      } else if (main.RS232_connection_mode == 1) // PTB220 connected
+      } 
+      else if (main.RS232_connection_mode == 1) // PTB220 connected
       {
          jRadioButton1.setSelected(true);
-      } else if (main.RS232_connection_mode == 2) // PTB330 connected
+      } 
+      else if (main.RS232_connection_mode == 2) // PTB330 connected
       {
          jRadioButton2.setSelected(true);
-      } else if (main.RS232_connection_mode == 3) // AWS connected
+      } 
+      else if (main.RS232_connection_mode == 3) // EUCOS AWS connected
       {
          jRadioButton3.setSelected(true);
-      } else if (main.RS232_connection_mode == 4) // Mintaka Duo connected
+      } 
+      else if (main.RS232_connection_mode == 4) // Mintaka Duo connected
       {
          jRadioButton5.setSelected(true);
-      } else if (main.RS232_connection_mode == 5) // Mintaka Star USB connected
+      } 
+      else if (main.RS232_connection_mode == 5) // Mintaka Star USB connected
       {
          jRadioButton10.setSelected(true);
-      } else if (main.RS232_connection_mode == 6) // Mintaka Star WiFi connected
+      } 
+      else if (main.RS232_connection_mode == 6) // Mintaka Star WiFi LAN connected
       {
          jRadioButton11.setSelected(true);
-      } else {
+      } 
+      else if (main.RS232_connection_mode == 7) // Mintaka Star + Star X USB connected
+      {
+         jRadioButton13.setSelected(true);
+      } 
+      else if (main.RS232_connection_mode == 8) // Mintaka Star + Star X WiFi connected
+      {
+         jRadioButton14.setSelected(true);
+      }
+      else if (main.RS232_connection_mode == 9) // OMC-140 AWS serial connected
+      {
+         jRadioButton12.setSelected(true);
+      } 
+      else if (main.RS232_connection_mode == 10) // OMC-140 AWS ethernet LAN connected
+      {
+         jRadioButton15.setSelected(true);
+      } 
+      else 
+      {
          jRadioButton4.setSelected(true);         // NONE
       }
       //System.out.println("+++ initComponents2()= ");
@@ -1369,7 +1774,8 @@ public class RS232_settings extends javax.swing.JFrame {
       jComboBox3.setSelectedItem(main.data_bits);
       jComboBox1.setSelectedItem(main.stop_bits);
 
-      switch (main.parity) {
+      switch (main.parity) 
+      {
          case SerialPort.NO_PARITY://SerialPort.PARITY_NONE:
             jComboBox4.setSelectedItem("none");
             break;
@@ -1389,33 +1795,45 @@ public class RS232_settings extends javax.swing.JFrame {
       //System.out.println("+++ prefered_COM_port_name = " + main.prefered_COM_port_name);
       // set (previous) selected values instrument COM port number for Windows and Linux
       //
-      if (main.prefered_COM_port_number.equals("")) {
+      if (main.prefered_COM_port_number.equals("")) 
+      {
          if (main.RS232_connection_mode == 0) // NONE connected
          {
             jComboBox5.setSelectedIndex(-1);                      // -1 indicates no selection  0 = blanco; 1 = AUTOMATICALLY
-         } else if (main.prefered_COM_port_name.equals("") == false)// something available for OS X com port name field
+         } 
+         else if (main.prefered_COM_port_name.equals("") == false)// something available for OS X com port name field
          {
             jComboBox5.setSelectedIndex(-1);                      // -1 indicates no selection  0 = blanco; 1 = AUTOMATICALLY
-         } else {
+         } 
+         else 
+         {
             jComboBox5.setSelectedIndex(1);                       // -1 indicates no selection  0 = blanco; 1 = AUTOMATICALLY
          }
-      } else {
+      } else 
+      {
          jComboBox5.setSelectedItem(main.prefered_COM_port_number);
       }
       //System.out.println("+++ initComponents2() COM port number; (String)jComboBox5.getSelectedItem() = " + (String)jComboBox5.getSelectedItem());
 
       // set (previous) selected values instrument COM port name for OS X
       //
-      if (main.prefered_COM_port_name.equals("")) {
+      if (main.prefered_COM_port_name.equals("")) 
+      {
          if (main.RS232_connection_mode == 0) // NONE connected
          {
             jTextField1.setText("");
-         } else if (main.prefered_COM_port_number.equals("") == false) {
+         } 
+         else if (main.prefered_COM_port_number.equals("") == false) 
+         {
             jTextField1.setText("");
-         } else {
+         } 
+         else 
+         {
             jTextField1.setText("AUTOMATICALLY");
          }
-      } else {
+      } 
+      else 
+      {
          jTextField1.setText(main.prefered_COM_port_name);
       }
 
@@ -1521,14 +1939,17 @@ public class RS232_settings extends javax.swing.JFrame {
 
       // set (previous) selected values GPS type
       //
-      if (main.RS232_GPS_connection_mode == 0) // NONE
+      if (main.RS232_GPS_connection_mode == 0)                       // NONE
       {
          jRadioButton7.setSelected(true);
-      } else if (main.RS232_GPS_connection_mode == 1) // GPS NMEA 0183
+      } 
+      else if (main.RS232_GPS_connection_mode == 1)                  // GPS NMEA 0183
       {
          jRadioButton6.setSelected(true);
-      } else {
-         jRadioButton7.setSelected(true);             // NONE
+      } 
+      else 
+      {
+         jRadioButton7.setSelected(true);                             // NONE
       }
 
       // GPS bits per second (NB mostly 4800)
@@ -1537,29 +1958,39 @@ public class RS232_settings extends javax.swing.JFrame {
 
       // set (previous) selected values GPS com port number for Windows and Linux
       //
-      if (main.prefered_GPS_COM_port_number.equals("")) {
-         if (main.RS232_GPS_connection_mode == 0) // NONE connected
+      if (main.prefered_GPS_COM_port_number.equals("")) 
+      {
+         if (main.RS232_GPS_connection_mode == 0)                     // NONE connected
          {
             jComboBox7.setSelectedIndex(-1);                          // -1 indicates no selection  0 = blanco; 1 = AUTOMATICALLY
-         } else if (main.prefered_GPS_COM_port_name.equals("") == false)// something available for OS X com port name field
+         } 
+         else if (main.prefered_GPS_COM_port_name.equals("") == false)// something available for OS X com port name field
          {
             jComboBox7.setSelectedIndex(-1);                          // -1 indicates no selection  0 = blanco; 1 = AUTOMATICALLY
-         } else {
+         } 
+         else 
+         {
             jComboBox7.setSelectedIndex(1);                           // -1 indicates no selection  0 = blanco; 1 = AUTOMATICALLY
          }
-      } else {
+      } 
+      else 
+      {
          jComboBox7.setSelectedItem(main.prefered_GPS_COM_port_number);
       }
 
       // set (previous) selected values GPS com port name for OS X
       //
-      if (main.prefered_GPS_COM_port_name.equals("")) {
+      if (main.prefered_GPS_COM_port_name.equals("")) 
+      {
          if (main.RS232_GPS_connection_mode == 0) // NONE connected
          {
             jTextField2.setText("");
-         } else if (main.prefered_GPS_COM_port_number.equals("") == false) {
+         } 
+         else if (main.prefered_GPS_COM_port_number.equals("") == false) 
+         {
             jTextField2.setText("");
-         } else {
+         } else 
+         {
             jTextField2.setText("AUTOMATICALLY");
          }
       } else {
@@ -1571,7 +2002,8 @@ public class RS232_settings extends javax.swing.JFrame {
       if (main.RS232_GPS_sentence == 1) // RMC
       {
          jRadioButton8.setSelected(true);                                           // RMC button
-      } else if (main.RS232_GPS_sentence == 2)                                      // GGA
+      } 
+      else if (main.RS232_GPS_sentence == 2)                                        // GGA
       {
          jRadioButton9.setSelected(true);                                           // GGA button
       }
@@ -1588,7 +2020,7 @@ public class RS232_settings extends javax.swing.JFrame {
          Mintaka_Star_WiFi_connected_itenStateChanged(null);       
       }
       
-      if (main.RS232_GPS_connection_mode == 0 || main.RS232_GPS_connection_mode == 3) // none seperated GPS or an integrated Mintaka Star GPS
+      if (main.RS232_GPS_connection_mode == 0 || main.RS232_GPS_connection_mode == 3 || main.RS232_GPS_connection_mode == 4) // none seperated GPS or an integrated Mintaka Star or StarX GPS
       {
          none_GPS_NMEA_0183_itemStateChanged(null);
       }
@@ -1663,6 +2095,10 @@ public class RS232_settings extends javax.swing.JFrame {
    private javax.swing.JRadioButton jRadioButton1;
    private javax.swing.JRadioButton jRadioButton10;
    private javax.swing.JRadioButton jRadioButton11;
+   private javax.swing.JRadioButton jRadioButton12;
+   private javax.swing.JRadioButton jRadioButton13;
+   private javax.swing.JRadioButton jRadioButton14;
+   private javax.swing.JRadioButton jRadioButton15;
    private javax.swing.JRadioButton jRadioButton2;
    private javax.swing.JRadioButton jRadioButton3;
    private javax.swing.JRadioButton jRadioButton4;

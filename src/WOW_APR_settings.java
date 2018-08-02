@@ -34,10 +34,12 @@ public class WOW_APR_settings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       buttonGroup1 = new javax.swing.ButtonGroup();
       buttonGroup2 = new javax.swing.ButtonGroup();
+      buttonGroup3 = new javax.swing.ButtonGroup();
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
       jSeparator1 = new javax.swing.JSeparator();
@@ -61,7 +63,6 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       jRadioButton6 = new javax.swing.JRadioButton();
       jRadioButton7 = new javax.swing.JRadioButton();
       jRadioButton8 = new javax.swing.JRadioButton();
-      jLabel7 = new javax.swing.JLabel();
       jLabel10 = new javax.swing.JLabel();
       jLabel11 = new javax.swing.JLabel();
       jPanel5 = new javax.swing.JPanel();
@@ -76,23 +77,35 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       jLabel16 = new javax.swing.JLabel();
       jLabel3 = new javax.swing.JLabel();
       jLabel4 = new javax.swing.JLabel();
+      jPanel6 = new javax.swing.JPanel();
+      jPanel7 = new javax.swing.JPanel();
+      jRadioButton9 = new javax.swing.JRadioButton();
+      jRadioButton10 = new javax.swing.JRadioButton();
+      jRadioButton11 = new javax.swing.JRadioButton();
+      jCheckBox3 = new javax.swing.JCheckBox();
+      jLabel7 = new javax.swing.JLabel();
+      jLabel17 = new javax.swing.JLabel();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-      setTitle("WOW and APR settings");
+      setTitle("WOW and APR and AWSR settings");
       setMinimumSize(new java.awt.Dimension(1000, 700));
       setPreferredSize(new java.awt.Dimension(1000, 700));
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton1.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton2.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Cancel_button_actionPerformed(evt);
          }
       });
@@ -102,14 +115,18 @@ public class WOW_APR_settings extends javax.swing.JFrame {
 
       jLabel5.setForeground(java.awt.Color.blue);
       jLabel5.setText("<html><u>wow.metoffice.gov.uk</u></html>");
-      jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-         public void mouseClicked(java.awt.event.MouseEvent evt) {
+      jLabel5.addMouseListener(new java.awt.event.MouseAdapter()
+      {
+         public void mouseClicked(java.awt.event.MouseEvent evt)
+         {
             WOW_link_mouseClicked(evt);
          }
-         public void mouseEntered(java.awt.event.MouseEvent evt) {
+         public void mouseEntered(java.awt.event.MouseEvent evt)
+         {
             WOW_link_mouseEntered(evt);
          }
-         public void mouseExited(java.awt.event.MouseEvent evt) {
+         public void mouseExited(java.awt.event.MouseEvent evt)
+         {
             WOW_link_mouseExited(evt);
          }
       });
@@ -157,7 +174,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
                      .addComponent(jRadioButton3)
                      .addComponent(jRadioButton4)
                      .addComponent(jRadioButton5))
-                  .addGap(0, 0, Short.MAX_VALUE))))
+                  .addGap(0, 131, Short.MAX_VALUE))))
       );
       jPanel2Layout.setVerticalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,24 +199,20 @@ public class WOW_APR_settings extends javax.swing.JFrame {
          .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+               .addComponent(jLabel6)
                .addGroup(jPanel1Layout.createSequentialGroup()
-                  .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                  .addContainerGap())
-               .addGroup(jPanel1Layout.createSequentialGroup()
+                  .addComponent(jLabel1)
+                  .addGap(63, 63, 63)
                   .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jLabel6)
-                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                           .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                           .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                     .addComponent(jLabel2))
-                  .addGap(62, 84, Short.MAX_VALUE))))
+                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+               .addGroup(jPanel1Layout.createSequentialGroup()
+                  .addComponent(jCheckBox1)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                  .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+               .addComponent(jLabel2)
+               .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(42, Short.MAX_VALUE))
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,11 +229,11 @@ public class WOW_APR_settings extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jLabel2)
                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(18, 18, 18)
+            .addGap(37, 37, 37)
             .addComponent(jLabel6)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(62, Short.MAX_VALUE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
       jPanel2.getAccessibleContext().setAccessibleName("");
@@ -228,10 +241,11 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
       jPanel3.setPreferredSize(new java.awt.Dimension(400, 383));
 
-      jCheckBox2.setText("report pressure automatically (connect barometer + GPS)");
+      jCheckBox2.setText("report pressure automatically (barometer* + GPS)");
       jCheckBox2.setActionCommand("");
 
       jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+      jPanel4.setPreferredSize(new java.awt.Dimension(340, 93));
 
       buttonGroup2.add(jRadioButton6);
       jRadioButton6.setText("1 hour");
@@ -252,7 +266,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
                .addComponent(jRadioButton6)
                .addComponent(jRadioButton7)
                .addComponent(jRadioButton8))
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap(121, Short.MAX_VALUE))
       );
       jPanel4Layout.setVerticalGroup(
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,28 +280,23 @@ public class WOW_APR_settings extends javax.swing.JFrame {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
-      jLabel7.setText("reporting interval");
-
       javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
       jPanel3.setLayout(jPanel3Layout);
       jPanel3Layout.setHorizontalGroup(
          jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel3Layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-               .addComponent(jLabel7)
-               .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-               .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
-            .addContainerGap(56, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+               .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(47, Short.MAX_VALUE))
       );
       jPanel3Layout.setVerticalGroup(
          jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel3Layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jCheckBox2)
-            .addGap(18, 18, 18)
-            .addComponent(jLabel7)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
@@ -351,15 +360,80 @@ public class WOW_APR_settings extends javax.swing.JFrame {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
-      jLabel16.setText("WOW and/or APR");
+      jLabel16.setText("For WOW, APR and AWSR");
 
       jLabel3.setForeground(java.awt.Color.blue);
       jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel3.setText("--- minimise TurboWin+ after WOW or APR settings are set ---");
+      jLabel3.setText("--- minimise TurboWin+ after WOW or APR or AWSR settings are set ---");
 
       jLabel4.setForeground(java.awt.Color.blue);
       jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel4.setText("--- after a restart of this computer you have to restart TurboWin+ to continue automatic reporting ---");
+
+      jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+      jPanel7.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+      buttonGroup3.add(jRadioButton9);
+      jRadioButton9.setText("1 hour");
+
+      buttonGroup3.add(jRadioButton10);
+      jRadioButton10.setText("3 hours (intermediate and main hours)");
+
+      buttonGroup3.add(jRadioButton11);
+      jRadioButton11.setText("6 hours (main hours)");
+
+      javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+      jPanel7.setLayout(jPanel7Layout);
+      jPanel7Layout.setHorizontalGroup(
+         jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(jPanel7Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+               .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                  .addComponent(jRadioButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                  .addComponent(jRadioButton10, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
+               .addComponent(jRadioButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(26, Short.MAX_VALUE))
+      );
+      jPanel7Layout.setVerticalGroup(
+         jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(jPanel7Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jRadioButton9)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jRadioButton10)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jRadioButton11)
+            .addContainerGap())
+      );
+
+      jCheckBox3.setText("report all measured data automatically (AWS connected)");
+
+      javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+      jPanel6.setLayout(jPanel6Layout);
+      jPanel6Layout.setHorizontalGroup(
+         jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(jPanel6Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+               .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+      );
+      jPanel6Layout.setVerticalGroup(
+         jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jCheckBox3)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap())
+      );
+
+      jLabel7.setText("AWSR (Automatic Weather Station Reports)");
+
+      jLabel17.setText("* recommended: static head or flexible tube to measure outside pressure");
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
@@ -368,31 +442,35 @@ public class WOW_APR_settings extends javax.swing.JFrame {
          .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addGroup(layout.createSequentialGroup()
-                  .addGap(400, 400, 400)
-                  .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addGap(18, 18, 18)
-                  .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addGap(0, 0, Short.MAX_VALUE))
-               .addGroup(layout.createSequentialGroup()
                   .addContainerGap()
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                      .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                      .addComponent(jSeparator1)
                      .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                .addGroup(layout.createSequentialGroup()
-                  .addGap(31, 31, 31)
-                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jLabel16)
+                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                      .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                           .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                           .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                           .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                           .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)))
+                        .addGap(400, 400, 400)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                     .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                           .addGroup(layout.createSequentialGroup()
+                              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE))
+                              .addGap(52, 52, 52)
+                              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                 .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                           .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                           .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                  .addGap(0, 51, Short.MAX_VALUE)))
             .addContainerGap())
       );
       layout.setVerticalGroup(
@@ -405,12 +483,16 @@ public class WOW_APR_settings extends javax.swing.JFrame {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addGroup(layout.createSequentialGroup()
-                  .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                  .addGap(208, 208, 208))
-               .addGroup(layout.createSequentialGroup()
-                  .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                  .addComponent(jLabel16)))
+                  .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jLabel17)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                  .addComponent(jLabel7)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                  .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+               .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
+            .addGap(23, 23, 23)
+            .addComponent(jLabel16)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(26, 26, 26)
@@ -441,6 +523,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       // initialise
       jCheckBox1.setSelected(false);
       jCheckBox2.setSelected(false);
+      jCheckBox3.setSelected(false);
       jRadioButton1.setSelected(false);
       jRadioButton2.setSelected(false);
       jRadioButton3.setSelected(false);
@@ -449,6 +532,9 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       jRadioButton6.setSelected(false);
       jRadioButton7.setSelected(false);
       jRadioButton8.setSelected(false);
+      jRadioButton9.setSelected(false);
+      jRadioButton10.setSelected(false);
+      jRadioButton11.setSelected(false);
       jTextField1.setText("");
       jTextField2.setText("");
       jTextField4.setText("");
@@ -516,11 +602,51 @@ public class WOW_APR_settings extends javax.swing.JFrame {
          jRadioButton8.setSelected(true);
       }
       
-      // common WOW and APR average draught
+
+      // AWSR (Automatic Weather Station Reports)
+      if (main.AWSR == true) 
+      {
+         jCheckBox3.setSelected(true);
+      } 
+
+      // AWSR reporting(upload)interval
+      if (main.AWSR_reporting_interval.equals("1"))
+      {
+         jRadioButton9.setSelected(true);
+      }
+      else if (main.AWSR_reporting_interval.equals("3"))
+      {
+         jRadioButton10.setSelected(true);
+      }
+      if (main.AWSR_reporting_interval.equals("6"))
+      {
+         jRadioButton11.setSelected(true);
+      }
+   
+      
+      // common WOW and APR and AWSR average draught
       jTextField4.setText(main.WOW_APR_average_draught);
       
-      // common WOW and APR barometer instrument correction (note: can also be set in the barometer reading input screen)
+      // common WOW and APR and AWSR barometer instrument correction (note: can also be set in the barometer reading input screen)
       jTextField5.setText(main.barometer_instrument_correction);
+      
+      
+      // disable AWSR in case of EUCAWS connected
+      if (main.RS232_connection_mode == 3)         // EUCAWS connected
+      {
+         // reset
+         jCheckBox3.setSelected(false);
+         jRadioButton9.setSelected(false);
+         jRadioButton10.setSelected(false);
+         jRadioButton11.setSelected(false);
+
+         // disable
+         jCheckBox3.setEnabled(false);
+         jRadioButton9.setEnabled(false);
+         jRadioButton10.setEnabled(false);
+         jRadioButton11.setEnabled(false);
+         jLabel7.setEnabled(false);
+      } // if (main.RS232_connection_mode == 3)
       
    }
    
@@ -637,12 +763,31 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       else if (jRadioButton8.isSelected())
       {
          main.APR_reporting_interval = "6";
-      }        
+      }   
       
-      // common WOW and APR average draught
+
+      // AWSR reporting
+      main.AWSR = jCheckBox3.isSelected() == true;
+              
+      // AWSR upload interval
+      if (jRadioButton9.isSelected())
+      {
+         main.AWSR_reporting_interval = "1";
+      }
+      else if (jRadioButton10.isSelected())
+      {
+         main.AWSR_reporting_interval = "3";
+      }   
+      else if (jRadioButton11.isSelected())
+      {
+         main.AWSR_reporting_interval = "6";
+      }   
+
+      
+      // common WOW and APR and AWSR average draught
       main.WOW_APR_average_draught = jTextField4.getText().trim(); 
       
-      // common WOW and APR barometeter instrument correction (note this can also be set in the barometer reading input page)
+      // common WOW and APR and AWSR barometeter instrument correction (note this can also be set in the barometer reading input page)
       main.barometer_instrument_correction = jTextField5.getText().trim(); 
       
       
@@ -677,7 +822,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       
       ///////////////// checking APR inserted data ////////////
       //
-      if ((main.APR == true) && checks_ok)          // so WOW publication requested
+      if ((main.APR == true) && checks_ok)          // so APR reporting requested
       {
          // APR reporting interval
          if (checks_ok && main.APR_reporting_interval.equals(""))
@@ -687,12 +832,34 @@ public class WOW_APR_settings extends javax.swing.JFrame {
          }
       } // if ((main.APR == true) && checks_ok)  
       
+
+      ///////////////// checking AWSR inserted data ////////////
+      //
+      if ((main.AWSR == true) && checks_ok)          // so AWS reporting requested
+      {
+         // AWSR reporting interval
+         if (checks_ok && main.AWSR_reporting_interval.equals(""))
+         {
+            JOptionPane.showMessageDialog(null, "AWSR reporting interval not selected", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            Reset_All_AWSR_Vars();                     // checks_ok will be set in this function also                           
+         }
+      } // if ((main.APR == true) && checks_ok)  
+
       
-      //////////// checking common WOW-APR inserted data //////////////
+      /////////////// APR and AWSR can't be checked both at the same time ////////
+      if ((main.APR == true && main.AWSR == true) && checks_ok) 
+      {
+         JOptionPane.showMessageDialog(null, "APR AND AWSR reporting can't be checked both at one time", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+         Reset_All_APR_Vars();                      // checks_ok will be set in this function also      
+         Reset_All_AWSR_Vars();                     // checks_ok will be set in this function also
+      }
+      
+      
+      //////////// checking common WOW-APR-AWSR inserted data //////////////
       //
       if ((main.WOW || main.APR) && checks_ok)
       {
-         // WOW and APR draught
+         // WOW and APR and AWSR draught
          try
          {
             double double_WOW_APR_average_draught = Double.parseDouble(main.WOW_APR_average_draught);
@@ -700,16 +867,16 @@ public class WOW_APR_settings extends javax.swing.JFrame {
             if (main.WOW_APR_average_draught.equals("") || !(double_WOW_APR_average_draught >= 0 && double_WOW_APR_average_draught <= 50))
             {
                JOptionPane.showMessageDialog(null, "average draught not in range 0.0 - 50.0", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-               Reset_All_common_WOW_APR_Vars();     // checks_ok will be set in this function also 
+               Reset_All_common_WOW_APR_AWSR_Vars();     // checks_ok will be set in this function also 
             }
          }
          catch (NumberFormatException e) 
          {
             JOptionPane.showMessageDialog(null, "average draught not in range 0.0 - 50.0", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            Reset_All_common_WOW_APR_Vars();     // checks_ok will be set in this function also  
+            Reset_All_common_WOW_APR_AWSR_Vars();     // checks_ok will be set in this function also  
          }    
          
-         // WOW and APR ic 
+         ////////// WOW and APR and AWSR barometer ic /////////
          if (checks_ok)
          {
             try
@@ -719,13 +886,13 @@ public class WOW_APR_settings extends javax.swing.JFrame {
                if (main.barometer_instrument_correction.equals("") || !(double_barometer_instrument_correction >= -4.0 || double_barometer_instrument_correction <= 4.0))
                {
                   JOptionPane.showMessageDialog(null, "barometer instrument correction not in range -4.0 - 4.0", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                  Reset_All_common_WOW_APR_Vars();     // checks_ok will be set in this function also  
+                  Reset_All_common_WOW_APR_AWSR_Vars();     // checks_ok will be set in this function also  
                }             
             }
             catch (NumberFormatException e) 
             { 
                JOptionPane.showMessageDialog(null, "barometer_instrument_correction not in range -4.0 - 4.0", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-               Reset_All_common_WOW_APR_Vars();     // checks_ok will be set in this function also  
+               Reset_All_common_WOW_APR_AWSR_Vars();     // checks_ok will be set in this function also  
             }  
          } // if (checks_ok)
       } // if ((main.WOW || main.APR) && checks_ok)
@@ -774,7 +941,10 @@ public class WOW_APR_settings extends javax.swing.JFrame {
          {
             APR_additional_requirements_checks();
          }
-         
+         if (main.AWSR)
+         {
+            AWSR_additional_requirements_checks();
+         }         
       } // if (checks_ok)
       
    }//GEN-LAST:event_OK_button_actionPerformed
@@ -788,15 +958,17 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    /***********************************************************************************************/   
    private void WOW_additional_requirements_checks()
    {
+      // called from: OK_button_actionPerformed() [WOW_APR_settings.java]
+      //
       // NB see also: RS232_check_WOW_settings() [main_RS232_RS422.java]
       
       String info = "";
    
       
       // PTB220 or PTB330 or MintakeDuo connected?
-      if (main.RS232_connection_mode == 0 || main.RS232_connection_mode == 3)   // 0 = no instrument connected, 3 = EUCAWS connected
+      if (main.RS232_connection_mode == 0 || main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9)   // 0 = no instrument connected, 3 or 9 = AWS connected
       {
-         info = "[WOW] Barometer connection unknown (select: Maintenance -> Serial/USB connection settings)"; 
+         info = "[WOW] Barometer connection unknown (select: Maintenance -> Serial/USB/LAN connection settings)"; 
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
       }
    }
@@ -810,22 +982,24 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    /***********************************************************************************************/   
    private void APR_additional_requirements_checks()
    {
+      // called from: OK_button_actionPerformed() [WOW_APR_settings.java]
+      //
       // NB see also: RS232_check_APR_settings() [main_RS232_RS422.java]
       
       String info = "";
       
       
       // Barometer connected?
-      if (main.RS232_connection_mode == 0 || main.RS232_connection_mode == 3)   // 0 = no instrument connected, 3 = EUCAWS connected
+      if (main.RS232_connection_mode == 0 || main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9)   // 0 = no instrument connected, 3 or 9 = AWS connected
       {
-         info = "[APR] Barometer connection unknown (select: Maintenance -> Serial/USB connection settings)"; 
+         info = "[APR] Barometer connection unknown (select: Maintenance -> Serial/USB/LAN connection settings)"; 
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
       }        
            
       // GPS connected?      
       if (main.RS232_GPS_connection_mode == 0)                                  // 0 no GPS connected
       {
-         info = "[APR] GPS connection unknown (select: Maintenance -> Serial/USB connection settings)";
+         info = "[APR] GPS connection unknown (select: Maintenance -> Serial/USB/LAN connection settings)";
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
       }
    
@@ -865,6 +1039,77 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    }
    
    
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void AWSR_additional_requirements_checks()
+   {
+      // called from: OK_button_actionPerformed() [WOW_APR_settings.java]
+      //
+      // NB see also: RS422_check_AWSR_settings() [main_RS232_RS422.java]
+      
+      String info = "";
+      
+      
+      // AWS connected? (not for EUCAWS)
+      if (main.RS232_connection_mode != 9 && main.RS232_connection_mode != 10)   // 9 or 10 = OMC 140 AWS connected
+      {
+         info = "[AWSR] AWS connection unknown (select: Maintenance -> Serial/USB/LAN connection settings)"; 
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      }        
+           
+      // GPS connected?      
+      //if (main.RS232_GPS_connection_mode == 0)                                  // 0 no GPS connected
+      //{
+      //   info = "[AWSR] GPS connection unknown (select: Maintenance -> Serial/USB/LAN connection settings)";
+      //   JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      //}
+   
+      // call sign
+      if (main.call_sign.trim().equals("") == true || main.call_sign.trim().length() < 2)
+      {
+         info = "[AWSR] Call sign unknown (select: Maintenance -> Station data)";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      }
+   
+      // height barometer
+      if (main.barometer_above_sll.trim().equals("") == true || main.barometer_above_sll.trim().length() < 1)
+      {
+         info = "[AWSR] Height of the barometer above SLL unknown (select: Maintenance -> Station data)";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      }
+      if (main.keel_sll.trim().equals("") == true || main.keel_sll.trim().length() < 1)
+      {
+         info = "[AWSR] Distance of bottom of the keel to SLL unknown (select: Maintenance -> Station data)";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      }
+
+      // logs folder        
+      if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2)
+      {
+         info = "[AWSR] Logs folder unknown (select: Maintenance -> Log files settings)";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      }
+   
+      // obs format
+      //if (main.obs_format.equals(main.FORMAT_101) == false)
+      //{
+      //   info = "[AWSR] In AWSR mode the obs format must be '101' (select: Maintenance -> Obs format setting)"; 
+      //   JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      //}            
+      if (main.obs_format.equals(main.FORMAT_AWS) == false)
+      {
+         // NB AWS mode is always rporting with format101
+         info = "[AWSR] In AWSR mode the obs format must be \"AWS connected\" (select: Maintenance -> Obs format setting)"; 
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " please do not forget", JOptionPane.INFORMATION_MESSAGE);
+      }            
+   
+   
+   }
+   
+   
    
    /***********************************************************************************************/
    /*                                                                                             */
@@ -881,6 +1126,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       main.WOW_reporting_interval         = "";
       //main.WOW_average_height_barometer   = "";   
    }
+   
    
    
    /***********************************************************************************************/
@@ -903,11 +1149,26 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/   
-   private void Reset_All_common_WOW_APR_Vars()
+   private void Reset_All_AWSR_Vars()
    {
       checks_ok                            = false;
       
-      main.WOW_APR_average_draught         = "";      
+      main.AWSR                            = false;      // yes or no send automated AWS reports (not for EuCAWS)
+      main.AWSR_reporting_interval         = "";
+   }
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Reset_All_common_WOW_APR_AWSR_Vars()
+   {
+      checks_ok                            = false;
+      
+      main.WOW_APR_average_draught         = "";         // NB also used by AWSR  
       main.barometer_instrument_correction = "";
    }
  
@@ -993,10 +1254,12 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.ButtonGroup buttonGroup1;
    private javax.swing.ButtonGroup buttonGroup2;
+   private javax.swing.ButtonGroup buttonGroup3;
    private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton2;
    private javax.swing.JCheckBox jCheckBox1;
    private javax.swing.JCheckBox jCheckBox2;
+   private javax.swing.JCheckBox jCheckBox3;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel10;
    private javax.swing.JLabel jLabel11;
@@ -1005,6 +1268,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    private javax.swing.JLabel jLabel14;
    private javax.swing.JLabel jLabel15;
    private javax.swing.JLabel jLabel16;
+   private javax.swing.JLabel jLabel17;
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
    private javax.swing.JLabel jLabel4;
@@ -1018,7 +1282,11 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    private javax.swing.JPanel jPanel3;
    private javax.swing.JPanel jPanel4;
    private javax.swing.JPanel jPanel5;
+   private javax.swing.JPanel jPanel6;
+   private javax.swing.JPanel jPanel7;
    private javax.swing.JRadioButton jRadioButton1;
+   private javax.swing.JRadioButton jRadioButton10;
+   private javax.swing.JRadioButton jRadioButton11;
    private javax.swing.JRadioButton jRadioButton2;
    private javax.swing.JRadioButton jRadioButton3;
    private javax.swing.JRadioButton jRadioButton4;
@@ -1026,6 +1294,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
    private javax.swing.JRadioButton jRadioButton6;
    private javax.swing.JRadioButton jRadioButton7;
    private javax.swing.JRadioButton jRadioButton8;
+   private javax.swing.JRadioButton jRadioButton9;
    private javax.swing.JSeparator jSeparator1;
    private javax.swing.JTextField jTextField1;
    private javax.swing.JTextField jTextField2;

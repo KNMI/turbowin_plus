@@ -452,8 +452,40 @@ public class mybarograph extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2() 
    {
-      //setMaximumSize(new java.awt.Dimension(800, 600));
+      // FOR ACTUAL SITUATION: see main.java
+      // global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default) 
+      //        (instrument type)      1 = barometer PTB220 serial
+      //                               2 = barometer PTB330 serial
+      //                               3 = EUCOS AWS (EUCAWS) serial
+      //                               4 = barometer Mintaka Duo USB
+      //                               5 = barometer Mintaka Star (USB)
+      //                               6 = barometer Mintaka Star (WiFi; access point mode or station mode)
+      //                               7 = barometer + temp/vocht Mintaka Star + StarX (USBl)
+      //                               8 = barometer + temp/vocht Mintaka Star + StarX (WiFi; access point mode or station mode)
+      //                               9 = OMC-140 AWS (Observator) serial
+      //                               10= OMC-140 AWS (Observator) ethernet LAN
 
+      
+      // AWS connected?
+      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9|| main.RS232_connection_mode == 10)
+      {
+         local_AWS_connected = true;
+      }
+      else
+      {
+         local_AWS_connected = false; 
+      }
+      
+      // barometer connected?
+      if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)
+      {
+         local_barometer_connected = true;
+      }
+      else
+      {
+         local_barometer_connected = false;
+      }   
+      
       
       // hide Back/Stop buttons if not in next_screen_mode
       if (main.in_next_sequence == false)
@@ -471,7 +503,7 @@ public class mybarograph extends javax.swing.JFrame {
       
       // amount pressure tendency
       //
-      if (main.RS232_connection_mode == 3)                        // AWS connected mode
+      if (local_AWS_connected)                                   // AWS connected mode
       {
          jTextField1.setForeground(main.input_color_from_aws);    // amount of pressure tendency 
          jTextField1.setEditable(false);
@@ -480,13 +512,13 @@ public class mybarograph extends javax.swing.JFrame {
       
       // characteristic tendency
       //
-      if (main.RS232_connection_mode == 3)                        // AWS connected mode
+      if (local_AWS_connected)                                    // AWS connected mode
       {
          jLabel14.setForeground(main.input_color_from_aws);        // characteristic label
          jLabel15.setForeground(main.input_color_from_aws);        // characteristic label
          jLabel16.setForeground(main.input_color_from_aws);        // characteristic label
          
-         jRadioButton1.setEnabled(false);                         // characteristic
+         jRadioButton1.setEnabled(false);                          // characteristic
          jRadioButton2.setEnabled(false); 
          jRadioButton3.setEnabled(false); 
          jRadioButton4.setEnabled(false); 
@@ -498,7 +530,7 @@ public class mybarograph extends javax.swing.JFrame {
          jRadioButton10.setEnabled(false); 
          jRadioButton11.setEnabled(false);
          jRadioButton12.setEnabled(false);
-      } // if (main.RS232_connection_mode == 3)
+      } 
       
    }
 
@@ -696,7 +728,13 @@ public class mybarograph extends javax.swing.JFrame {
       }
       else if (main.RS232_connection_mode == 5 ||main.RS232_connection_mode == 6)           // Mintaka Star USB or Mintaka Sar WiFi connected
       {
-         main_RS232_RS422.RS232_Mintaka_Star_Read_Sensor_Data_a_ppp_Data_Files_For_Obs();   // this function will set 'pressure_amount_tendency' and 'a_code'
+         boolean StarX = false;
+         main_RS232_RS422.RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_a_ppp_Data_Files_For_Obs(StarX);   // this function will set 'pressure_amount_tendency' and 'a_code'
+      }
+      else if (main.RS232_connection_mode == 7 ||main.RS232_connection_mode == 8)           // Mintaka StarX USB or Mintaka StarX WiFi connected
+      {
+         boolean StarX = true;
+         main_RS232_RS422.RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_a_ppp_Data_Files_For_Obs(StarX);   // this function will set 'pressure_amount_tendency' and 'a_code'
       }
       else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)          // PTB220 or PTB330 connected
       {
@@ -704,46 +742,89 @@ public class mybarograph extends javax.swing.JFrame {
       }
 
       
-      // amount of pressure  tendency (if no barometer connected, because than RS232 applicable)
+      // amount of pressure tendency (if no barometer connected, because then RS232 applicable)
       //
-      if ( (pressure_amount_tendency.compareTo("") != 0) && (main.RS232_connection_mode != 1 && main.RS232_connection_mode != 2 && main.RS232_connection_mode != 4) )
+      if ( (pressure_amount_tendency.compareTo("") != 0) && (local_barometer_connected == false) )
       {
          jTextField1.setText(pressure_amount_tendency); 
       }
       
       
-      // characteristic of pressure tendency (if no barometer connected, because than RS232 applicable))
+      // characteristic of pressure tendency (if no barometer connected, because then RS232 applicable))
       //
-      if ( (a_code.compareTo("") != 0) && (main.RS232_connection_mode != 1 && main.RS232_connection_mode != 2 && main.RS232_connection_mode != 4) )
+      if ( (a_code.compareTo("") != 0) && (local_barometer_connected == false) )
       {
-         // pressure higher than 3hrs ago
-         if (a_code.equals(A_0))
-            jRadioButton1.setSelected(true);
+         // pressure the same as 3hrs ago?
+         //
+         // NB neccessary in the case of a = 0 or a = 5 (they could be lower/ higher or the same; see graphs a =  0 has 2 selection options and a = 5 has 2 selection options)
+         //
+         boolean hulp_pressure_tendency_0_0 = false;
+         if (pressure_amount_tendency.compareTo("") != 0) 
+         {
+            double hulp_pressure_amount_tendency = Double.valueOf(pressure_amount_tendency); 
+            if (hulp_pressure_amount_tendency < 0.01)
+            {
+               hulp_pressure_tendency_0_0 = true;
+               //System.out.println("hulp_pressure_tendency_0_0 = " + hulp_pressure_tendency_0_0);
+            }
+         } // if (pressure_amount_tendency.compareTo("") != 0) 
+         
+         
+         // pressure higher than 3hrs ago (or the same in case of a = 0)
+         if (a_code.equals(A_0) || a_code.equals(A_0_SAME))                      // NB A_0 and A_0_SAME have the same value (0); so you need boolean hulp_pressure_tendency_0_0
+         {   
+            if (hulp_pressure_tendency_0_0)
+            {
+               jRadioButton9.setSelected(true); // the same
+            }
+            else
+            {
+               jRadioButton1.setSelected(true); // higher
+            }
+         }   
          else if (a_code.equals(A_1))
+         {
             jRadioButton2.setSelected(true);
+         }   
          else if (a_code.equals(A_2))
+         {
             jRadioButton3.setSelected(true);
+         }   
          else if (a_code.equals(A_3))
+         {   
             jRadioButton4.setSelected(true);
+         }
          
-         // pressure lower than 3hrs ago
-         else if (a_code.equals(A_5))
-            jRadioButton5.setSelected(true);
+         // pressure lower than 3hrs ago (or the same in case of a = 5)
+         else if (a_code.equals(A_5) || a_code.equals(A_5_SAME))                 // NB A_5 and A_5_SAME have the same value (5); so you need boolean hulp_pressure_tendency_0_0
+         {
+            if (hulp_pressure_tendency_0_0)
+            {
+               jRadioButton11.setSelected(true);  // the same
+            }
+            else
+            {   
+               jRadioButton5.setSelected(true);   // lower
+            }
+         }
          else if (a_code.equals(A_6))
+         {
             jRadioButton6.setSelected(true);
+         }
          else if (a_code.equals(A_7))
+         {
             jRadioButton7.setSelected(true);
+         }
          else if (a_code.equals(A_8))
+         {   
             jRadioButton8.setSelected(true);
+         }
          
-         // pressure the same as 3hrs ago
-         else if (a_code.equals(A_0_SAME))
-            jRadioButton9.setSelected(true);
-         else if (a_code.equals(A_4))                                
+         // pressure the same as 3hrs ago  
+         else if (a_code.equals(A_4)) 
+         {   
             jRadioButton10.setSelected(true);
-         else if (a_code.equals(A_5_SAME))                                
-            jRadioButton11.setSelected(true);
-         
+         }   
       } // if (a_code.compareTo("") != 0)
       else
       {   
@@ -763,7 +844,7 @@ public class mybarograph extends javax.swing.JFrame {
         // TODO add your handling code here:
        
        
-       if (main.RS232_connection_mode != 3)                        // not AWS
+       if (local_AWS_connected == false)                        // not AWS
        {
        
        // initialisation
@@ -904,7 +985,7 @@ public class mybarograph extends javax.swing.JFrame {
 
        } // if (checks_ok == true)    
        
-       } // if (main.RS232_connection_mode != 3)                        // not AWS
+       } // if (local_AWS_connected == false)                      
        else      // AWS connected mode
        {
           checks_ok = true;
@@ -933,6 +1014,7 @@ public class mybarograph extends javax.swing.JFrame {
     }//GEN-LAST:event_OK_button_actionPerformed
 
 
+    
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -952,6 +1034,7 @@ public class mybarograph extends javax.swing.JFrame {
     }//GEN-LAST:event_Cancel_button_actionPermed
 
 
+    
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -962,6 +1045,7 @@ public class mybarograph extends javax.swing.JFrame {
        main.internet_mouseClicked(BAROGRAAF_HELP_DIR);
     }//GEN-LAST:event_Internet_button_mouseClicked
 
+    
     
    /***********************************************************************************************/
    /*                                                                                             */
@@ -976,6 +1060,7 @@ public class mybarograph extends javax.swing.JFrame {
        previous_screen();
     }//GEN-LAST:event_Back_button_actionPerformed
 
+    
 
    /***********************************************************************************************/
    /*                                                                                             */
@@ -1098,4 +1183,6 @@ private void next_screen()
    // scope only this module
    private boolean checks_ok                            = false; 
    private double double_pressure_amount_tendency       = main.INVALID;
+   private boolean local_AWS_connected;
+   private boolean local_barometer_connected;
 }

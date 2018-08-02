@@ -184,7 +184,27 @@ public class mypassword extends javax.swing.JFrame {
              form.setSize(1000, 700);
              form.setVisible(true);
           }
-          
+          else if (main.mode.equals(main.MAINTENANCE_SHOW_DATA))
+          {
+             // open maintenance show data
+             mymaintenancedata form = new mymaintenancedata();
+             form.setExtendedState(MAXIMIZED_BOTH);                      // full screen
+             form.setVisible(true);
+          }
+          else if (main.mode.equals(main.MAINTENANCE_IMPORT_DATA))
+          {
+             // open maintenance import data
+             mymaintenancedata form = new mymaintenancedata();
+             form.setExtendedState(MAXIMIZED_BOTH);                      // full screen
+             form.setVisible(true);
+          }
+          else if (main.mode.equals(main.MAINTENANCE_EXPORT_DATA))
+          {
+             // open maintenance export data
+             mymaintenancedata form = new mymaintenancedata();
+             form.setExtendedState(MAXIMIZED_BOTH);                      // full screen
+             form.setVisible(true);
+          }
           
        } // if (("TurboWin " + password.trim()).equals("TurboWin JWS" + dummy))
        else // thus password not correct

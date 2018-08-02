@@ -357,7 +357,16 @@ public void paintComponent(Graphics g)
    
    low_limit = 0;
    max_limit = 800;
-   label_instrument = "Wind gust true [kts]";
+   
+   if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+   {
+      label_instrument = "Wind gust true [kts]";
+   }
+   else
+   {
+     label_instrument = "Wind gust true [m/s]"; 
+   }
+   
    reading_present = main.true_wind_gust_from_AWS_present;
    reading = main_RS232_RS422.dashboard_int_last_update_record_true_wind_gust; 
    draw_AWS_digital_instrument(g2d, low_limit, max_limit, label_instrument, reading_present, reading);
@@ -371,7 +380,16 @@ public void paintComponent(Graphics g)
    
    low_limit = 0;
    max_limit = 400;
-   label_instrument = "Wind speed rel [kts]";
+   
+   if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+   {
+      label_instrument = "Wind speed rel [kts]";
+   }
+   else
+   {
+      label_instrument = "Wind speed rel [m/s]";
+   }
+   
    reading_present = main.relative_wind_speed_from_AWS_present;
    reading = main_RS232_RS422.dashboard_int_last_update_record_relative_wind_speed;
    draw_AWS_digital_instrument(g2d, low_limit, max_limit, label_instrument, reading_present, reading);
@@ -413,7 +431,16 @@ public void paintComponent(Graphics g)
    
    low_limit = 0;
    max_limit = 400;
-   label_instrument = "Wind speed true [kts]";
+   
+   if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
+   {
+      label_instrument = "Wind speed true [kts]";
+   }
+   else
+   {
+      label_instrument = "Wind speed true [m/s]";
+   }
+   
    reading_present = main.true_wind_speed_from_AWS_present;
    reading = main_RS232_RS422.dashboard_int_last_update_record_true_wind_speed;
    draw_AWS_digital_instrument(g2d, low_limit, max_limit, label_instrument, reading_present, reading);
