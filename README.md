@@ -11,6 +11,20 @@ It can run for weeks in the background.  The memory footprint is low and the cpu
 using extended threading the application is always responsive. Furthermore in TurboWeb mode the app size 
 is very small (<3 Mb).
 
+================================== VERSION 3.1.0 =====================================
+[Version 3.1.0 compared to version 3.0.6]
+- many smaller changes and updates
+
+noticeable new items in this version:
+- overview of configuration (maintenance) data
+- Full support of OMC-140 AWS
+- Full support of the Mintaka StarX
+- Observed data on geographical map
+- selectable wind speed units in graphs and dashboards
+- Latest observation window
+- New option to insert Relative Humidity
+
+
 ================================== VERSION 3.0.6 =====================================
 [Version 3.0.6 compared to version 3.0.5]
 
