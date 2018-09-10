@@ -12,12 +12,16 @@ using extended threading the application is always responsive. Furthermore in Tu
 is very small (<3 Mb).
 
 
+
 ================================== VERSION 3.1.2 ====================================
+- minor bug fix; true wind and apparent eind values in manual mode not updated on main screen
+after sending obs
+- JPMS (Java Platform Module System) version available
+- In JPMS version updated JSerialComm library (1.3.11 -> 2.1.1)
 
 ================================== VERSION 3.1.1 ====================================
-
-================================== VERSION 3.1.0 ====================================
 - minor bug fix; true wind and apparent wind values in manual mode not updated on main screen 
+after completing wind input form
 
 ================================== VERSION 3.1.0 =====================================
 [Version 3.1.0 compared to version 3.0.6]
