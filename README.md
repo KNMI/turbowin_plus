@@ -11,6 +11,11 @@ It can run for weeks in the background.  The memory footprint is low and the cpu
 using extended threading the application is always responsive. Furthermore in TurboWeb mode the app size 
 is very small (<3 Mb).
 
+
+================================== VERSION 3.1.2 ====================================
+
+================================== VERSION 3.1.1 ====================================
+
 ================================== VERSION 3.1.0 ====================================
 - minor bug fix; true wind and apparent wind values in manual mode not updated on main screen 
 
