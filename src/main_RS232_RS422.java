@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
@@ -11302,7 +11304,8 @@ private boolean RS422_check_AWSR_settings()
    } 
    
    // AWSR reporting interval
-   if (main.APR_reporting_interval.equals(""))
+   //if (main.APR_reporting_interval.equals(""))
+   if (main.AWSR_reporting_interval.equals(""))   
    {
       message = "[AWSR] AWSR reporting interval unknown (select: Maintenance -> WOW/APR/AWSR settings)";
       main.log_turbowin_system_message(message);
@@ -15172,17 +15175,31 @@ public static void RS422_initialise_AWS_Sensor_Data_For_Display()
       mytemp.sea_water_temp                       = "";
    }
    
-   if (main.jTextField16.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   //if (main.jTextField16.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   //{
+   //   mywind.int_true_wind_speed                  = main.INVALID;      // integer
+   //   mywind.wind_speed                           = "";
+   //}
+   //
+   //if (main.jTextField17.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   //{
+   //   mywind.int_true_wind_dir                    = main.INVALID;      // integer
+   //   mywind.wind_dir                             = "";
+   //}
+   if (main.jTextField16.getForeground().getRGB() != main.input_color_from_observer.getRGB())  // apparent wind
    {
-      mywind.int_true_wind_speed                  = main.INVALID;      // integer
+      mywind.int_relative_wind_dir                = main.INVALID;
+      mywind.int_relative_wind_speed              = main.INVALID;
       mywind.wind_speed                           = "";
-   }
-   
-   if (main.jTextField17.getForeground().getRGB() != main.input_color_from_observer.getRGB())
-   {
-      mywind.int_true_wind_dir                    = main.INVALID;      // integer
       mywind.wind_dir                             = "";
    }
+   
+   if (main.jTextField17.getForeground().getRGB() != main.input_color_from_observer.getRGB())  // true wind
+   {
+      mywind.int_true_wind_speed                  = main.INVALID;      // integer
+      mywind.int_true_wind_dir                    = main.INVALID;      // integer
+   }
+
    
 }
 
