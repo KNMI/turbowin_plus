@@ -7,13 +7,13 @@ created with NetBeans IDE
 
 
 TurboWin+ (TurboWeb) was especially designed for running in the background eg when collecting sensor data. 
-It can run for weeks in the background.  The memory footprint is low and the cpu usage is minimal and by 
+It can run for weeks in the background. The memory footprint is low and the cpu usage is minimal and by 
 using extended threading the application is always responsive. 
 
 
 
 ================================== VERSION 3.1.2 ====================================
-- minor bug fix; true wind and apparent eind values in manual mode not updated on main screen
+- minor bug fix; true wind and apparent wind values in manual mode not updated on main screen
 after sending obs
 - JPMS (Java Platform Module System) version available
 - In JPMS version updated JSerialComm library (1.3.11 -> 2.1.1)
