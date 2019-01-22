@@ -5,11 +5,9 @@ see: https://projects.knmi.nl/turbowin
 
 created with NetBeans IDE
 
-TurboWin+ covers several areas of marine surface measurements
-TurboWin+ is a user friendly system that assists the observer with many menus, pictures, photos,
-forms, help pages, output options, and automated calculations in reporting marine observations. It also
-provides for the automated compilation, archiving of observations, and ease of transmission ashore to
-Meteorological Centers. TurboWin+ can also display measured data of Automatic Weather Stations. 
+TurboWin+ covers several areas of marine surface measurements. TurboWin+ is a user friendly system that 
+assists the observer with many menus, pictures, photos, forms, help pages, output options, and automated 
+calculations in reporting marine observations. It also provides for the automated compilation, archiving of observations, and ease of transmission ashore to Meteorological Centers. TurboWin+ can also display measured data of Automatic Weather Stations. 
 TurboWin+ (TurboWeb) was especially designed for running in the background eg when collecting sensor data. 
 It can run for weeks in the background. The memory footprint is low and the cpu usage is minimal and by 
 using extended threading the application is always responsive. 
