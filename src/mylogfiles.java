@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -15,7 +17,7 @@ import javax.swing.JOptionPane;
  *
  * @author  Martin
  */
-public class mylogfiles extends javax.swing.JFrame {
+final public class mylogfiles extends javax.swing.JFrame {
 
     /** Creates new form mylogfiles */
     public mylogfiles() {

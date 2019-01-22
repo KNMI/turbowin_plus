@@ -1,3 +1,5 @@
+package turbowin;
+
 //import java.io.BufferedWriter;
 //import java.io.FileWriter;
 import java.net.URL;
@@ -15,7 +17,7 @@ import javax.swing.SwingWorker;
  *
  * @author  Martin
  */
-public class mywind extends javax.swing.JFrame {
+final public class mywind extends javax.swing.JFrame {
     
     /** Creates new form mywind */
     public mywind() {
@@ -1890,6 +1892,7 @@ public class mywind extends javax.swing.JFrame {
    public static int int_true_wind_speed            = main.INVALID;
    public static int int_difference_sll_wl          = main.INVALID;
    public static int int_true_wind_gust_speed       = main.INVALID;  // only for dashboard
+   public static int int_true_wind_gust_dir         = main.INVALID;  // only for dashboard
    public static int int_relative_wind_dir          = main.INVALID;  // only for main screen if AWS connected
    public static int int_relative_wind_speed        = main.INVALID;  // only for main screen if AWS connected
    public static double double_true_wind_speed      = main.INVALID;  // only for dashboard;

@@ -1,3 +1,5 @@
+package turbowin;
+
 import javax.swing.JOptionPane;
 /*
  * mywaves.java
@@ -9,7 +11,7 @@ import javax.swing.JOptionPane;
  *
  * @author  stam
  */
-public class mywaves extends javax.swing.JFrame {
+final public class mywaves extends javax.swing.JFrame {
    
    /** Creates new form mywaves */
    public mywaves() {

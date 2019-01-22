@@ -1,3 +1,5 @@
+package turbowin;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
@@ -11,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author  stam
  */
-public class mydatetime extends javax.swing.JFrame {
+final public class mydatetime extends javax.swing.JFrame {
    
    /** Creates new form mydatetime */
    public mydatetime() {
@@ -30,13 +32,13 @@ public class mydatetime extends javax.swing.JFrame {
    private void initComponents() {
 
       jScrollPane1 = new javax.swing.JScrollPane();
-      jList1 = new javax.swing.JList();
+      jList1 = new javax.swing.JList<>();
       jScrollPane2 = new javax.swing.JScrollPane();
-      jList2 = new javax.swing.JList();
+      jList2 = new javax.swing.JList<>();
       jScrollPane3 = new javax.swing.JScrollPane();
-      jList3 = new javax.swing.JList();
+      jList3 = new javax.swing.JList<>();
       jScrollPane4 = new javax.swing.JScrollPane();
-      jList4 = new javax.swing.JList();
+      jList4 = new javax.swing.JList<>();
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
       jButton3 = new javax.swing.JButton();
@@ -52,35 +54,35 @@ public class mydatetime extends javax.swing.JFrame {
       setMinimumSize(new java.awt.Dimension(800, 600));
       setResizable(false);
 
-      jList1.setModel(new javax.swing.AbstractListModel() {
-         String[] strings = { "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030" };
+      jList1.setModel(new javax.swing.AbstractListModel<String>() {
+         String[] strings = { "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032" };
          public int getSize() { return strings.length; }
-         public Object getElementAt(int i) { return strings[i]; }
+         public String getElementAt(int i) { return strings[i]; }
       });
       jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
       jList1.setPreferredSize(new java.awt.Dimension(40, 320));
       jScrollPane1.setViewportView(jList1);
 
-      jList2.setModel(new javax.swing.AbstractListModel() {
+      jList2.setModel(new javax.swing.AbstractListModel<String>() {
          String[] strings = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
          public int getSize() { return strings.length; }
-         public Object getElementAt(int i) { return strings[i]; }
+         public String getElementAt(int i) { return strings[i]; }
       });
       jList2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
       jScrollPane2.setViewportView(jList2);
 
-      jList3.setModel(new javax.swing.AbstractListModel() {
+      jList3.setModel(new javax.swing.AbstractListModel<String>() {
          String[] strings = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
          public int getSize() { return strings.length; }
-         public Object getElementAt(int i) { return strings[i]; }
+         public String getElementAt(int i) { return strings[i]; }
       });
       jList3.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
       jScrollPane3.setViewportView(jList3);
 
-      jList4.setModel(new javax.swing.AbstractListModel() {
+      jList4.setModel(new javax.swing.AbstractListModel<String>() {
          String[] strings = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23" };
          public int getSize() { return strings.length; }
-         public Object getElementAt(int i) { return strings[i]; }
+         public String getElementAt(int i) { return strings[i]; }
       });
       jList4.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
       jScrollPane4.setViewportView(jList4);
@@ -357,8 +359,9 @@ public class mydatetime extends javax.swing.JFrame {
 
             len = 2;                                                               // MM_code always 2 characters width e.g. 03
             if (MM_code.length() < len)                                            // pad on left with zeros
-            MM_code = "0000000000".substring(0, len - MM_code.length()) + MM_code;
-
+            {   
+               MM_code = "0000000000".substring(0, len - MM_code.length()) + MM_code;
+            }
 
             // determine code figures for day of the month (for obs and IMMT)
             //
@@ -366,8 +369,9 @@ public class mydatetime extends javax.swing.JFrame {
       
             len = 2;                                                               // YY_code always 2 characters width e.g. 03
             if (YY_code.length() < len)                                            // pad on left with zeros
-            YY_code = "0000000000".substring(0, len - YY_code.length()) + YY_code;
-      
+            {   
+               YY_code = "0000000000".substring(0, len - YY_code.length()) + YY_code;
+            }
       
             // determine code figures for hour of obs (for obs and IMMT)
             //
@@ -375,8 +379,9 @@ public class mydatetime extends javax.swing.JFrame {
       
             len = 2;                                                               // GG_code always 2 characters width e.g. 03
             if (GG_code.length() < len)                                            // pad on left with zeros
-            GG_code = "0000000000".substring(0, len - GG_code.length()) + GG_code;
-        
+            {   
+               GG_code = "0000000000".substring(0, len - GG_code.length()) + GG_code;
+            }
          } // if (checks_ok == true)
       } // if (main.RS232_connection_mode != 3)
       else                                               // AWS connected mode
@@ -467,10 +472,10 @@ public class mydatetime extends javax.swing.JFrame {
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
    private javax.swing.JLabel jLabel4;
-   private javax.swing.JList jList1;
-   private javax.swing.JList jList2;
-   private javax.swing.JList jList3;
-   private javax.swing.JList jList4;
+   private javax.swing.JList<String> jList1;
+   private javax.swing.JList<String> jList2;
+   private javax.swing.JList<String> jList3;
+   private javax.swing.JList<String> jList4;
    private javax.swing.JScrollPane jScrollPane1;
    private javax.swing.JScrollPane jScrollPane2;
    private javax.swing.JScrollPane jScrollPane3;

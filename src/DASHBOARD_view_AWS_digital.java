@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -132,7 +134,7 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       //    of the moment that the dasboard was closed, and after approx 1 minute it will be updated. 
       //    NOW it will update the dashboard immediately
       jPanel1.repaint();     
-}
+   }
      
    
  
@@ -255,14 +257,14 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jPanel5 = new javax.swing.JPanel();
       jPanel4 = new javax.swing.JPanel();
       jPanel3 = new javax.swing.JPanel();
       jLabel1 = new javax.swing.JLabel();
       jLabel3 = new javax.swing.JLabel();
+      jButton1 = new javax.swing.JButton();
       jPanel2 = new javax.swing.JPanel();
       jLabel2 = new javax.swing.JLabel();
       /*
@@ -270,12 +272,12 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       */jPanel1 = new DASHBOARD_grafiek_AWS_digital();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-      setPreferredSize(new java.awt.Dimension(1000, 800));
-      addWindowListener(new java.awt.event.WindowAdapter()
-      {
-         public void windowClosed(java.awt.event.WindowEvent evt)
-         {
+      addWindowListener(new java.awt.event.WindowAdapter() {
+         public void windowClosed(java.awt.event.WindowEvent evt) {
             Dashboard_view_AWS_digital_windowClosed(evt);
+         }
+         public void windowDeiconified(java.awt.event.WindowEvent evt) {
+            Dashboard_view_AWS_digital_windowDeiconified(evt);
          }
       });
 
@@ -316,15 +318,24 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
 
       jLabel3.setText("--- meters updated every minute ---");
 
+      jButton1.setText("make visual observation");
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            make_observation_actionPerformed(evt);
+         }
+      });
+
       javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
       jPanel3.setLayout(jPanel3Layout);
       jPanel3Layout.setHorizontalGroup(
          jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 344, Short.MAX_VALUE)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(260, 260, 260)
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+            .addGap(260, 260, 260)
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
       );
       jPanel3Layout.setVerticalGroup(
@@ -333,8 +344,9 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
             .addContainerGap()
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jLabel1)
-               .addComponent(jLabel3))
-            .addContainerGap(15, Short.MAX_VALUE))
+               .addComponent(jLabel3)
+               .addComponent(jButton1))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
       getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
@@ -350,14 +362,14 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel2Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1175, Short.MAX_VALUE)
             .addContainerGap())
       );
       jPanel2Layout.setVerticalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
             .addContainerGap(15, Short.MAX_VALUE)
-            .addComponent(jLabel2)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addContainerGap())
       );
 
@@ -365,10 +377,8 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
 
       jPanel1.setBackground(new java.awt.Color(255, 250, 240));
       jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
-      jPanel1.addComponentListener(new java.awt.event.ComponentAdapter()
-      {
-         public void componentResized(java.awt.event.ComponentEvent evt)
-         {
+      jPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
+         public void componentResized(java.awt.event.ComponentEvent evt) {
             Dashboard_AWS_digital_componentResizedHandler(evt);
          }
       });
@@ -377,7 +387,7 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       jPanel1.setLayout(jPanel1Layout);
       jPanel1Layout.setHorizontalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGap(0, 1104, Short.MAX_VALUE)
+         .addGap(0, 1175, Short.MAX_VALUE)
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,9 +422,52 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
    /*                                                                                             */
    /*                                                                                             */
    /*                                                                                             */
+   /***********************************************************************************************/      
+   private void make_observation_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_make_observation_actionPerformed
+      // TODO add your handling code here:
+      if (main.mainClass != null)
+      {   
+          if ((turbowin.main.ICONIFIED & main.mainClass.getExtendedState()) == turbowin.main.ICONIFIED)
+         {
+            if (turbowin.main.trayIcon != null)
+            {
+               main.mainClass.tray.remove(turbowin.main.trayIcon) ; 
+               //System.out.println("remove icon");
+            }
+         }
+         
+         main.mainClass.setExtendedState(NORMAL);
+         main.mainClass.setVisible(true); 
+         
+      } // if (main.mainClass != null)      
+      
+   }//GEN-LAST:event_make_observation_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/    
+   private void Dashboard_view_AWS_digital_windowDeiconified(java.awt.event.WindowEvent evt)//GEN-FIRST:event_Dashboard_view_AWS_digital_windowDeiconified
+   {//GEN-HEADEREND:event_Dashboard_view_AWS_digital_windowDeiconified
+      // TODO add your handling code here:
+      
+      System.out.println("--- AWS Dashboard digital (jPanel1) deiconified");
+      jPanel1.repaint();       
+   }//GEN-LAST:event_Dashboard_view_AWS_digital_windowDeiconified
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
    /***********************************************************************************************/   
    private void Dashboard_view_AWS_digital_windowClosed(java.awt.event.WindowEvent evt) {                                                 
       // TODO add your handling code here:
+      
       if (dashboard_update_AWS_digital_timer_is_gecreeerd == true)  
       {
          if (dashboard_update_AWS_digital_timer.isRunning())
@@ -426,9 +479,6 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       dashboard_update_AWS_digital_timer = null;
       
       dashboard_update_AWS_digital_timer_is_gecreeerd = false;         
-      
-      
-      //System.out.println("+++ closing Dashboard_view_AWS_digital_windowClosed");
    }       
    
    
@@ -483,19 +533,16 @@ private void init_dasboard_AWS_digital_timer()
                break;
             }
          }
-      } catch (ClassNotFoundException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_view_AWS_digital.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (InstantiationException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_view_AWS_digital.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_view_AWS_digital.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
          java.util.logging.Logger.getLogger(DASHBOARD_view_AWS_digital.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
+      //</editor-fold>
+      
         //</editor-fold>
 
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable() {
+         @Override
          public void run() {
             new DASHBOARD_view_AWS_digital().setVisible(true);
          }
@@ -503,6 +550,7 @@ private void init_dasboard_AWS_digital_timer()
    }
 
    // Variables declaration - do not modify//GEN-BEGIN:variables
+   public static javax.swing.JButton jButton1;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
    public static javax.swing.JLabel jLabel3;
@@ -523,8 +571,8 @@ private void init_dasboard_AWS_digital_timer()
    public static Timer dashboard_update_AWS_digital_timer;
    public static boolean dashboard_update_AWS_digital_timer_is_gecreeerd;
 
-   public static Timer dashboard_update_timer_AWS_digital;
-   public static boolean dashboard_update_timer_AWS_digital_is_gecreeerd;
+   //public static Timer dashboard_update_timer_AWS_digital;
+   //public static boolean dashboard_update_timer_AWS_digital_is_gecreeerd;
    public static boolean night_vision;
    private JPopupMenu popup;
    private static Color background_color_panel1;

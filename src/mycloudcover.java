@@ -1,3 +1,5 @@
+package turbowin;
+
 import javax.swing.JOptionPane;
 /*
  * mycloudcover.java
@@ -9,7 +11,7 @@ import javax.swing.JOptionPane;
  *
  * @author  Martin
  */
-public class mycloudcover extends javax.swing.JFrame {
+final public class mycloudcover extends javax.swing.JFrame {
     
     /** Creates new form mycloudcover */
     public mycloudcover() {

@@ -1,3 +1,5 @@
+package turbowin;
+
 /*
  * mypastweather.java
  *
@@ -10,7 +12,7 @@
  *
  * @author  Martin
  */
-public class mypastweather extends javax.swing.JFrame {
+final public class mypastweather extends javax.swing.JFrame {
     
     /** Creates new form mypastweather */
     public mypastweather() {

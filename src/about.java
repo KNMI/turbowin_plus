@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -20,7 +22,7 @@ import javax.swing.SwingWorker;
  *
  * @author  Martin
  */
-public class about extends javax.swing.JFrame {
+final public class about extends javax.swing.JFrame {
 
     /** Creates new form about */
     public about() {
@@ -48,6 +50,8 @@ public class about extends javax.swing.JFrame {
       jLabel6 = new javax.swing.JLabel();
       jLabel3 = new javax.swing.JLabel();
       jLabel5 = new javax.swing.JLabel();
+      jLabel7 = new javax.swing.JLabel();
+      jLabel8 = new javax.swing.JLabel();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("About TurboWin+");
@@ -102,6 +106,28 @@ public class about extends javax.swing.JFrame {
       jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel5.setText("onboard voluntary observing ships");
 
+      jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel7.setText("TurboWin+ is free software and open-source software (GPLv3)");
+
+      jLabel8.setForeground(new java.awt.Color(51, 0, 255));
+      jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel8.setText("<html><u>TurboWin+ was made possible by E-SURFMAR</u></html>");
+      jLabel8.addMouseListener(new java.awt.event.MouseAdapter()
+      {
+         public void mouseClicked(java.awt.event.MouseEvent evt)
+         {
+            Info_About_ESURFMAR_link_mouseClicked(evt);
+         }
+         public void mouseEntered(java.awt.event.MouseEvent evt)
+         {
+            Info_About_ESURFMAR_link_mouseEntered(evt);
+         }
+         public void mouseExited(java.awt.event.MouseEvent evt)
+         {
+            Info_About_ESURFMAR_link_mouseExited(evt);
+         }
+      });
+
       javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
       jPanel1Layout.setHorizontalGroup(
@@ -110,15 +136,21 @@ public class about extends javax.swing.JFrame {
          .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-               .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-               .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
-            .addContainerGap())
+               .addComponent(jLabel8)
+               .addGroup(jPanel1Layout.createSequentialGroup()
+                  .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                  .addContainerGap())))
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
+            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, Short.MAX_VALUE)
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel6)
@@ -126,7 +158,9 @@ public class about extends javax.swing.JFrame {
             .addComponent(jLabel3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel5)
-            .addContainerGap())
+            .addGap(18, 18, 18)
+            .addComponent(jLabel7)
+            .addGap(24, 24, 24))
       );
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -135,33 +169,33 @@ public class about extends javax.swing.JFrame {
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                .addGroup(layout.createSequentialGroup()
                   .addContainerGap()
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                     .addComponent(jSeparator1)
+                     .addComponent(jLabel4)
                      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addContainerGap())
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 150, Short.MAX_VALUE)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(148, 148, 148))
+            .addContainerGap(150, Short.MAX_VALUE))
       );
       layout.setVerticalGroup(
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(27, 27, 27)
+            .addGap(20, 20, 20)
             .addComponent(jLabel1)
             .addGap(18, 18, 18)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, Short.MAX_VALUE)
             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(18, 18, 18)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(15, 15, 15))
+            .addContainerGap())
       );
 
       pack();
@@ -223,7 +257,7 @@ private void Info_about_web_start_link_mouseClicked(java.awt.event.MouseEvent ev
             URI uri = null;
             try
             {
-               String http_adres = "http://projects.knmi.nl/turbowin/";  //"www.knmi.nl/samenw/turbowin/"; 
+               String http_adres = "https://projects.knmi.nl/turbowin/"; //"http://projects.knmi.nl/turbowin/";  //"www.knmi.nl/samenw/turbowin/"; 
                uri = new URI(http_adres);
                desktop.browse(uri);
             }
@@ -287,7 +321,6 @@ private void Info_about_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST
 
 
 
-
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -296,8 +329,111 @@ private void Info_about_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST
 private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_mouseExited
 // TODO add your handling code here:
 
-    setCursor(Cursor.getDefaultCursor());
+   setCursor(Cursor.getDefaultCursor());
 }//GEN-LAST:event_Info_about_mouseExited
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+   private void Info_About_ESURFMAR_link_mouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseClicked
+      // TODO add your handling code here:
+      
+      new SwingWorker<Integer, Void>()
+      {
+         @Override
+         protected Integer doInBackground() throws Exception
+         {
+            Integer code = 0;                              // ok
+            Desktop desktop = null;
+
+            // Before more Desktop API is used, first check
+            // whether the API is supported by this particular
+            // virtual machine (VM) on this particular host.
+            if (Desktop.isDesktopSupported())
+            {
+               desktop = Desktop.getDesktop();
+               URI uri = null;
+               try
+               {
+                  String http_adres = "http://eumetnet.eu/activities/observations-programme/current-activities/e-surfmar/";  
+                  uri = new URI(http_adres);
+                  desktop.browse(uri);
+               }
+               catch (IOException | URISyntaxException ioe) 
+               { 
+                  code = -2;
+               }
+            } // if (Desktop.isDesktopSupported())
+            else
+            {
+               //JOptionPane.showMessageDialog(null, "Error invoking default web browser (-Desktop-method not supported on this computer system)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               code = -1;
+            } // else
+
+            return code;
+
+         } // protected Integer doInBackground() throws Exception
+      
+         @Override
+         protected void done()
+         {
+            try
+            {
+               Integer response_code = get();
+
+               if (response_code == -1)
+               {
+                  String message = "[GENERAL] Error invoking default web browser (-Desktop-method not supported on this computer system)";
+                  JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  main.log_turbowin_system_message(message);
+               }   
+               else if (response_code == -2)
+               {
+                  String message = "[GENERAL] Error invoking E_SURFMAR URL (Info -> About)";
+                  JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  main.log_turbowin_system_message(message);
+               }   
+            } // try
+            catch (InterruptedException | ExecutionException ex) 
+            {   
+               String message = "[GENERAL] Error invoking default web browser; " + ex.toString(); 
+               main.log_turbowin_system_message(message);
+               //main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+            } // catch
+         } // protected void done()      
+      }.execute(); // new SwingWorker<Void, Void>()
+   
+   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseClicked
+
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/   
+   private void Info_About_ESURFMAR_link_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseEntered
+      // TODO add your handling code here:
+      
+      setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseEntered
+
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/   
+   private void Info_About_ESURFMAR_link_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseExited
+      // TODO add your handling code here:
+      
+      setCursor(Cursor.getDefaultCursor());
+   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseExited
 
 
 
@@ -322,6 +458,8 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
    private javax.swing.JLabel jLabel4;
    private javax.swing.JLabel jLabel5;
    private javax.swing.JLabel jLabel6;
+   private javax.swing.JLabel jLabel7;
+   private javax.swing.JLabel jLabel8;
    private javax.swing.JPanel jPanel1;
    private javax.swing.JSeparator jSeparator1;
    // End of variables declaration//GEN-END:variables

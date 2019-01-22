@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,7 +25,7 @@ import javax.swing.table.TableCellEditor;
  *
  * @author Martin
  */
-public class myobserver extends javax.swing.JFrame {
+final public class myobserver extends javax.swing.JFrame {
 
     /** Creates new form myobserver */
     public myobserver() {

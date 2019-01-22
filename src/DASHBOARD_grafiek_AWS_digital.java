@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -257,7 +259,7 @@ public void paintComponent(Graphics g)
    //
    ///////////////////// "last updated date and time" bottom left screen [South panel]
    //
-   String updated_text_bottom_screen = "meters updated every minute. last updated: ";
+   String updated_text_bottom_screen = "last updated: ";
    String update_message_bottom_screen = "";
    
    if (main_RS232_RS422.dashboard_string_last_update_record_date_time.equals(""))
@@ -445,6 +447,28 @@ public void paintComponent(Graphics g)
    reading = main_RS232_RS422.dashboard_int_last_update_record_true_wind_speed;
    draw_AWS_digital_instrument(g2d, low_limit, max_limit, label_instrument, reading_present, reading);
 
+   
+   //////////  visual obs message based on VOT (button on bottom south panel) ////////
+   //
+   if (main.VOT_from_AWS_present)
+   {
+      if (main_RS232_RS422.dashboard_int_last_update_record_VOT >= 0 && main_RS232_RS422.dashboard_int_last_update_record_VOT < 100)
+      {
+         DASHBOARD_view_AWS_digital.jButton1.setEnabled(true);          // button: "make an visual observation"
+      }
+      else if (main_RS232_RS422.dashboard_int_last_update_record_VOT < 0)
+      {
+         DASHBOARD_view_AWS_digital.jButton1.setEnabled(false);
+      }
+      else // VOT >= 100 (eg harbour mode)
+      {
+         DASHBOARD_view_AWS_digital.jButton1.setEnabled(false);
+      }
+   } // if (main.VOT_from_AWS_present)
+   else
+   {
+      DASHBOARD_view_AWS_digital.jButton1.setEnabled(false);
+   }  
     
 }   
    

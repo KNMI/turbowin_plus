@@ -1,3 +1,5 @@
+package turbowin;
+
 /*
  * myvisibility.java
  *
@@ -8,7 +10,7 @@
  *
  * @author  Martin
  */
-public class myvisibility extends javax.swing.JFrame {
+final public class myvisibility extends javax.swing.JFrame {
     
     /** Creates new form myvisibility */
     public myvisibility() {

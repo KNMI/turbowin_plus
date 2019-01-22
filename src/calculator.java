@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
@@ -11,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author hometrainer
  */
-public class calculator extends javax.swing.JFrame {
+final public class calculator extends javax.swing.JFrame {
 
    /**
     * Creates new form calculator
@@ -78,7 +80,6 @@ public class calculator extends javax.swing.JFrame {
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("Calculator");
-      setPreferredSize(new java.awt.Dimension(350, 550));
       setResizable(false);
 
       jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));

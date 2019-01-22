@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -449,8 +451,7 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jPanel1 = new javax.swing.JPanel();
       jLabel1 = new javax.swing.JLabel();
@@ -475,9 +476,7 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("Latest Observation");
-      setMaximumSize(new java.awt.Dimension(400, 300));
       setMinimumSize(new java.awt.Dimension(400, 300));
-      setPreferredSize(new java.awt.Dimension(400, 300));
       setResizable(false);
 
       jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -582,10 +581,8 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
       );
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             OK_button_actionPerformed(evt);
          }
       });
@@ -661,20 +658,18 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
                break;
             }
          }
-      } catch (ClassNotFoundException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_latest_obs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (InstantiationException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_latest_obs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_latest_obs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
          java.util.logging.Logger.getLogger(DASHBOARD_latest_obs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
+      //</editor-fold>
+      //</editor-fold>
+      
         //</editor-fold>
         //</editor-fold>
 
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable() {
+         @Override
          public void run() {
             new DASHBOARD_latest_obs().setVisible(true);
          }

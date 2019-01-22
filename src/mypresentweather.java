@@ -1,5 +1,9 @@
+package turbowin;
+
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 /*
  * mypresentweather.java
  *
@@ -10,7 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author  stam
  */
-public class mypresentweather extends javax.swing.JFrame {
+final public class mypresentweather extends javax.swing.JFrame {
    
    /** Creates new form mypresentweather */
    public mypresentweather() {
@@ -18,6 +22,7 @@ public class mypresentweather extends javax.swing.JFrame {
       initComponents2();
       initSynopparameters();
       setLocation(main.x_pos_frame, main.y_pos_frame);
+      
    }
 
 
@@ -54,7 +59,8 @@ public class mypresentweather extends javax.swing.JFrame {
    {
 
       // no precip. present weather
-      jList1.setModel(new javax.swing.AbstractListModel() 
+      ListModel<String> no_precip_model = new AbstractListModel<String>()
+      //jList1.setModel(new javax.swing.AbstractListModel() 
       {
          String[] strings = { "not determined",                                                           // index 0
 	                           "thunder audible during the last 10 minutes",                               // index 1
@@ -66,14 +72,19 @@ public class mypresentweather extends javax.swing.JFrame {
                               "shallow fog or mist",                                                      // index 7
                               "haze, dust, sand, smoke or blowing spray",                                 // index 8 
                               "phenomena without significance" };                                         // index 9
-            @Override
+         @Override
          public int getSize() { return strings.length; }
-            @Override
-         public Object getElementAt(int i) { return strings[i]; }
-      });
+         @Override
+         public String getElementAt(int i) { return strings[i]; }
+         
+      };
+      jList1.setModel(no_precip_model); 
+      
+      
       
       // precip. present weather
-      jList2.setModel(new javax.swing.AbstractListModel() 
+      //jList2.setModel(new javax.swing.AbstractListModel() 
+      ListModel<String> precip_model = new AbstractListModel<String>()        
       {
          String[] strings = { "not determined",                                                           // index 0
                               "thunderstorm* at time of obs",                                             // index 1
@@ -82,15 +93,33 @@ public class mypresentweather extends javax.swing.JFrame {
                               "solid precipitation, not in showers",                                      // index 4
                               "rain",                                                                     // index 5 
                               "drizzle" };                                                                // index 6
-            @Override
+         @Override
          public int getSize() { return strings.length; }
-            @Override
-         public Object getElementAt(int i) { return strings[i]; }
-      });
+         @Override
+         public String getElementAt(int i) { return strings[i]; }   
+      };
+      jList2.setModel(precip_model); 
+      
  
       // specific present weather 
-      model3 = new javax.swing.DefaultListModel();
+      //model3 = new javax.swing.DefaultListModel();
+      //jList3.setModel(model3); 
+      
+      // jList3.setModel(model3); 
+      //ListModel<String> specific_weather_model = new AbstractListModel<String>()
+      //{
+      //   String[] strings = { };
+      //   @Override
+      //   public int getSize() { return strings.length; }
+      //   @Override
+      //   public String getElementAt(int i) { return strings[i]; }   
+      //};
+      //jList3.setModel(specific_weather_model); 
+      
+      model3 = new DefaultListModel<>();
       jList3.setModel(model3); 
+      
+      
       
       
       // put back earlier inserted values  
@@ -107,6 +136,7 @@ public class mypresentweather extends javax.swing.JFrame {
       
             model3.removeAllElements();
             model3.addElement(ww_not_determined);
+            //model3.addElement((String)ww_not_determined);
   
             jList3.setSelectedValue(present_weather, false);
          } // if (ww_code.equals("//"))
@@ -177,11 +207,11 @@ public class mypresentweather extends javax.swing.JFrame {
    private void initComponents() {
 
       jScrollPane1 = new javax.swing.JScrollPane();
-      jList1 = new javax.swing.JList();
+      jList1 = new javax.swing.JList<>();
       jScrollPane2 = new javax.swing.JScrollPane();
-      jList2 = new javax.swing.JList();
+      jList2 = new javax.swing.JList<>();
       jScrollPane3 = new javax.swing.JScrollPane();
-      jList3 = new javax.swing.JList();
+      jList3 = new javax.swing.JList<>();
       jSeparator1 = new javax.swing.JSeparator();
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
@@ -1160,9 +1190,9 @@ public class mypresentweather extends javax.swing.JFrame {
    private javax.swing.JLabel jLabel7;
    private javax.swing.JLabel jLabel8;
    private javax.swing.JLabel jLabel9;
-   private javax.swing.JList jList1;
-   private javax.swing.JList jList2;
-   private javax.swing.JList jList3;
+   private javax.swing.JList<String> jList1;
+   private javax.swing.JList<String> jList2;
+   private javax.swing.JList<String> jList3;
    private javax.swing.JScrollPane jScrollPane1;
    private javax.swing.JScrollPane jScrollPane2;
    private javax.swing.JScrollPane jScrollPane3;
@@ -1284,6 +1314,5 @@ public class mypresentweather extends javax.swing.JFrame {
    private int int_ww_code                            = main.INVALID;
    private boolean checks_ok                          = false;
    private boolean general_weather_condition_selected = false;
-   private DefaultListModel model3;                           // for specific weather
-
+   private DefaultListModel<String> model3;                           // for specific weather
 }

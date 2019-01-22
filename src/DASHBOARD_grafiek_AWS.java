@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -223,7 +225,7 @@ public void paintComponent(Graphics g)
    //
    ///////////////////// "last updated date and time" bottom left screen [South panel]
    //
-   String updated_text_bottom_screen = "dials updated every minute. last updated: ";
+   String updated_text_bottom_screen = "last updated: ";
    String update_message = "";
    
    if (main_RS232_RS422.dashboard_string_last_update_record_date_time.equals(""))
@@ -376,6 +378,30 @@ public void paintComponent(Graphics g)
    draw_AWS_instrument_face_wind_speed(g2d, wind_mode);
    draw_AWS_anemometer_hand(g2d, wind_mode);
    draw_AWS_instrument_face_central_knob(g2d);
+   
+   
+   //
+   ///////////////////// "make visual observation" button (south panel)
+   //
+   if (main.VOT_from_AWS_present)
+   {
+      if (main_RS232_RS422.dashboard_int_last_update_record_VOT >= 0 && main_RS232_RS422.dashboard_int_last_update_record_VOT < 100)
+      {
+         DASHBOARD_view_AWS.jButton1.setEnabled(true);          // button: "make an visual observation"
+      }
+      else if (main_RS232_RS422.dashboard_int_last_update_record_VOT < 0)
+      {
+         DASHBOARD_view_AWS.jButton1.setEnabled(false);
+      }
+      else // VOT >= 100 (eg harbour mode)
+      {
+         DASHBOARD_view_AWS.jButton1.setEnabled(false);
+      }
+   } // if (main.VOT_from_AWS_present)
+   else
+   {
+      DASHBOARD_view_AWS.jButton1.setEnabled(false);
+   }  
    
 }   
    

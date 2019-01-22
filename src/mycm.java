@@ -1,3 +1,5 @@
+package turbowin;
+
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -12,7 +14,7 @@ import javax.swing.SwingWorker;
  *
  * @author  stam
  */
-public class mycm extends javax.swing.JFrame 
+final public class mycm extends javax.swing.JFrame 
 {
    
    /** Creates new form myCM */

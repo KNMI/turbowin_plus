@@ -15131,6 +15131,8 @@ public static void RS422_initialise_AWS_Sensor_Data_For_Display()
    main.true_wind_speed_from_AWS_present          = false;
    main.true_wind_dir_from_AWS_present            = false;
    main.true_wind_gust_from_AWS_present           = false;
+   main.true_wind_gust_dir_from_AWS_present       = false;
+   main.VOT_from_AWS_present                      = false;
    
    mydatetime.year                                = "";
    mydatetime.month                               = "";
@@ -15152,6 +15154,7 @@ public static void RS422_initialise_AWS_Sensor_Data_For_Display()
    mybarometer.pressure_msl_corrected             = "";
    mybarograph.pressure_amount_tendency           = "";
    mybarograph.a_code                             = "";
+   main.VOT                                       = Integer.MAX_VALUE;
    
    if (main.jTextField36.getForeground().getRGB() != main.input_color_from_observer.getRGB())
    {
@@ -15496,14 +15499,17 @@ private void RS422_Read_AWS_Sensor_Data_For_Display()
                               {
                                  myposition.latitude_hemisphere = "South";
                                  myposition.latitude_degrees = record_aws_latitude.substring(1, record_aws_latitude.indexOf("."));   // -12.344 -> 12
-                              } else 
+                              } 
+                              else 
                               {
                                  myposition.latitude_hemisphere = "North";
                                  myposition.latitude_degrees = record_aws_latitude.substring(0, record_aws_latitude.indexOf("."));   // 12.344 -> 12
                               }
 
-                              double decimal_degrees_lat = Double.parseDouble(record_aws_latitude);
-                                       //double double_minutes_lat = (decimal_degrees_lat - Math.floor(decimal_degrees_lat)) * 60;
+                              //double decimal_degrees_lat = Double.parseDouble(record_aws_latitude);
+                              double decimal_degrees_lat = Math.abs(Double.parseDouble(record_aws_latitude));
+                              
+                              //double double_minutes_lat = (decimal_degrees_lat - Math.floor(decimal_degrees_lat)) * 60;
                               //
                               //BigDecimal bd = new BigDecimal(double_minutes_lat).setScale(1, RoundingMode.HALF_UP);  // one decimal, rounded e.g. 2.12939 -> 2.1
                               //double_minutes_lat = bd.doubleValue();
@@ -15555,7 +15561,8 @@ private void RS422_Read_AWS_Sensor_Data_For_Display()
                               }
 
                               double decimal_degrees_lon = Math.abs(Double.parseDouble(record_aws_longitude));
-                                       //double double_minutes_lon = (decimal_degrees_lon - Math.floor(decimal_degrees_lon)) * 60;
+                              
+                              //double double_minutes_lon = (decimal_degrees_lon - Math.floor(decimal_degrees_lon)) * 60;
                               //
                               //BigDecimal bd = new BigDecimal(double_minutes_lon).setScale(1, RoundingMode.HALF_UP);  // one decimal, rounded e.g. 2.12939 -> 2.1
                               //double_minutes_lon = bd.doubleValue();
@@ -16013,10 +16020,33 @@ private void RS422_Read_AWS_Sensor_Data_For_Display()
                            } // if (pos2 - pos >= 2)
                         } // if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
                      } // else if (number_read_commas == main.TRUE_WIND_GUST_COMMA_NUMBER)
-                     //
                      // max wind gust direction from 10min [format WDX.x]
                      //
-                     // -- not for displaying in TurboWin+
+                     else if (number_read_commas == main.TRUE_WIND_GUST_DIR_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_true_wind_gust_dir = laatste_record.substring(pos + 1, pos2);
+                              double double_true_wind_gust_dir = Double.parseDouble(record_aws_true_wind_gust_dir);
+
+                              int int_true_wind_gust_dir = (int) Math.round(double_true_wind_gust_dir);
+
+                              if (int_true_wind_gust_dir == 0) 
+                              {
+                                 int_true_wind_gust_dir = 360;
+                              }
+
+                              mywind.int_true_wind_gust_dir = int_true_wind_gust_dir;
+
+                              main.true_wind_gust_dir_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter true wind gust dir is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // if (laatste_record.length() > pos + 1 + 12)
+                     } // else if (number_read_commas == etc.                         
                      //
                      // supply voltage [format VV.v]
                      //
@@ -16035,10 +16065,9 @@ private void RS422_Read_AWS_Sensor_Data_For_Display()
                            int pos2 = laatste_record.indexOf(",", pos + 1);
                            if (pos2 - pos >= 2) // between commas at least 1 char
                            {
-                              //String record_aws_VOT = laatste_record.substring(pos + 1, pos2);
                               int int_VOT = Integer.parseInt(laatste_record.substring(pos + 1, pos2));
-                              //String hulp_VOT = Integer.toString(Math.abs(int_VOT));
-
+                              main.VOT = int_VOT;  // for dashboard Meteo France
+                              
                               if (int_VOT < 0) 
                               {
                                  main.jTextField4.setForeground(Color.RED);
@@ -16092,6 +16121,8 @@ private void RS422_Read_AWS_Sensor_Data_For_Display()
 
                                  main.jMenuItem46.setEnabled(true);                  // Obs to AWS
                               }
+                              
+                              main.VOT_from_AWS_present = true;
 
                               //System.out.println("+++ parameter VOT is aanwezig");
                            } // if (pos2 - pos >= 2)
@@ -17987,11 +18018,99 @@ private void RS422_update_AWS_dasboard_values()
       @Override
       protected Void doInBackground() throws Exception
       {
-         // last update date time
+         // 'last update' date time [PC based]
          //
          //
-         dashboard_string_last_update_record_date_time = main.sdf_tsl_2.format(new Date()) + " UTC";   // // new Date() -> always in UTC 
+         dashboard_string_last_update_record_date_time = main.sdf_tsl_2.format(new Date()) + " UTC";   // new Date() -> always in UTC 
    
+         
+         // measured at (date, time) [part of the outputs AWS string]
+         //
+         //
+         if (main.date_from_AWS_present)
+         {
+            dashboard_string_last_update_record_date = mydatetime.day + " " + mydatetime.month + " " + mydatetime.year;
+         }
+         else
+         {
+            dashboard_string_last_update_record_date = "";
+         }
+         
+         if (main.time_from_AWS_present)
+         {
+            dashboard_string_last_update_record_time = mydatetime.hour + ":" + mydatetime.minute;
+         }
+         else
+         {
+            dashboard_string_last_update_record_time = "";
+         }
+         
+         
+         
+         // latitude 
+         //
+         //
+         if (main.latitude_from_AWS_present)
+         {   
+            dashboard_string_last_update_record_latitude = myposition.latitude_degrees + "°" + myposition.latitude_minutes + "' " + myposition.latitude_hemisphere.substring(0, 1);
+         }
+         else
+         {
+            dashboard_string_last_update_record_latitude = "";
+         }
+           
+         
+         // longitude 
+         //
+         //
+         if (main.longitude_from_AWS_present)
+         {
+            dashboard_string_last_update_record_longitude = myposition.longitude_degrees + "°" + myposition.longitude_minutes + "' " + myposition.longitude_hemisphere.substring(0, 1);
+         }
+         else
+         {
+            dashboard_string_last_update_record_longitude = "";
+         }
+           
+         
+         // SOG
+         //
+         //
+         if (main.SOG_from_AWS_present)
+         {
+            dashboard_string_last_update_record_SOG = mywind.ship_ground_speed;
+         }
+         else
+         {
+            dashboard_string_last_update_record_SOG = "";
+         }
+         
+         
+         // COG
+         //
+         //
+         if (main.COG_from_AWS_present)
+         {
+            dashboard_string_last_update_record_COG = mywind.ship_ground_course;
+         }
+         else
+         {
+            dashboard_string_last_update_record_COG = "";
+         }
+        
+         
+         // Heading
+         //
+         //
+         if (main.true_heading_from_AWS_present)
+         {
+            dashboard_string_last_update_record_heading = mywind.ship_heading;
+         }
+         else
+         {
+            dashboard_string_last_update_record_heading = "";
+         }
+         
    
          // air pressure sensor_height
          //
@@ -18021,6 +18140,20 @@ private void RS422_update_AWS_dasboard_values()
          else
          {
             dashboard_double_last_update_record_MSL_pressure_ic = Double.MAX_VALUE;
+         }
+         
+         
+         // air pressure tendency
+         //
+         //
+         //
+         if (main.pressure_tendency_from_AWS_present)                // set in Function: RS422_Read_AWS_Sensor_Data_For_Display()
+         {
+            dashboard_double_last_update_record_pressure_tendency = Double.parseDouble(mybarograph.pressure_amount_tendency);
+         }
+         else
+         {
+            dashboard_double_last_update_record_pressure_tendency = Double.MAX_VALUE;
          }
    
    
@@ -18075,6 +18208,20 @@ private void RS422_update_AWS_dasboard_values()
          {
             dashboard_int_last_update_record_relative_wind_dir = Integer.MAX_VALUE;
          }
+         
+         
+         
+         // true wind gust dir
+         //
+         //
+         if (main.true_wind_gust_dir_from_AWS_present) 
+         {
+            dashboard_int_last_update_record_true_wind_gust_dir = mywind.int_true_wind_gust_dir;
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_true_wind_gust_dir = Integer.MAX_VALUE;
+         }
    
    
          // true wind speed
@@ -18088,25 +18235,25 @@ private void RS422_update_AWS_dasboard_values()
             // 3) measured/observed in knots -> dashboard and graph in knots
             // 4) measured/observed in knots -> dashboard and graph in m/s
             
-            //if (main.wind_units.indexOf(main.M_S) == 0)                          // wind_units set to m/s by observer in Maintenance -> Station data
-            //{
-            //   dashboard_int_last_update_record_true_wind_speed = (int) Math.round((double)mywind.int_true_wind_speed * main.M_S_KNOT_CONVERSION);
-            //}
-            //else
-            //{
-            //   dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;
-            //}
             
             if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
             {
                if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
                {
-                  //dashboard_int_last_update_record_true_wind_speed = (int) Math.round((double)mywind.int_true_wind_speed * main.M_S_KNOT_CONVERSION);
+                  // rounding up! (11 m/s -> 21.4 knots -> roundend 21 knots = Bf 5 but 11 m/s = Bf 6 !!!)
                   dashboard_int_last_update_record_true_wind_speed = (int) Math.round(mywind.double_true_wind_speed * main.M_S_KNOT_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
                }
                else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
                {
                   dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;    
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m);
                }
             }
             else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
@@ -18114,11 +18261,18 @@ private void RS422_update_AWS_dasboard_values()
                if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
                {
                   dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed; 
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed); 
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m);
                }
                else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
                {
-                  //dashboard_int_last_update_record_true_wind_speed = (int) Math.round((double)mywind.int_true_wind_speed * main.KNOT_M_S_CONVERSION); 
                   dashboard_int_last_update_record_true_wind_speed = (int) Math.round(mywind.double_true_wind_speed * main.KNOT_M_S_CONVERSION);  
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
                }   
             }
          } 
@@ -18139,25 +18293,23 @@ private void RS422_update_AWS_dasboard_values()
             // 3) measured/observed in knots -> dashboard and graph in knots
             // 4) measured/observed in knots -> dashboard and graph in m/s
             
-            //if (main.wind_units.indexOf(main.M_S) == 0)   
-            //{
-            //   dashboard_int_last_update_record_relative_wind_speed = (int) Math.round((double)(Integer.parseInt(mywind.wind_speed) * main.M_S_KNOT_CONVERSION));
-            //}
-            //else
-            //{
-            //?   dashboard_int_last_update_record_relative_wind_speed = Integer.parseInt(mywind.wind_speed);
-            //}
-            
             if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
             {
                if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
                {
-                  //dashboard_int_last_update_record_relative_wind_speed = (int) Math.round((double)mywind.int_relative_wind_speed * main.M_S_KNOT_CONVERSION);
                   dashboard_int_last_update_record_relative_wind_speed = (int) Math.round(mywind.double_relative_wind_speed * main.M_S_KNOT_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
                }
                else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
                {
-                  dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed;    
+                  dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed;   
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m);
                }
             }
             else if (main.wind_units.indexOf(main.KNOTS) != -1)             // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
@@ -18165,11 +18317,18 @@ private void RS422_update_AWS_dasboard_values()
                if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
                {
                   dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed; 
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed); 
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m);
                }
                else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
                {
-                  //dashboard_int_last_update_record_relative_wind_speed = (int) Math.round((double)mywind.int_relative_wind_speed * main.KNOT_M_S_CONVERSION); 
                   dashboard_int_last_update_record_relative_wind_speed = (int) Math.round(mywind.double_relative_wind_speed * main.KNOT_M_S_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
                }   
             }
          } 
@@ -18190,25 +18349,24 @@ private void RS422_update_AWS_dasboard_values()
             // 3) measured/observed in knots -> dashboard and graph in knots
             // 4) measured/observed in knots -> dashboard and graph in m/s
             
-            //if (main.wind_units.indexOf(main.M_S) == 0)   
-            //{
-            //   dashboard_int_last_update_record_true_wind_gust = (int) Math.round((double)mywind.int_true_wind_gust_speed * main.M_S_KNOT_CONVERSION);
-            //}
-            //else
-            //{
-            //   dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;
-            //}
             
             if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
             {
                if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
                {
-                  //dashboard_int_last_update_record_true_wind_gust = (int) Math.round((double)mywind.int_true_wind_gust_speed * main.M_S_KNOT_CONVERSION);
                   dashboard_int_last_update_record_true_wind_gust = (int) Math.round(mywind.double_true_wind_gust_speed * main.M_S_KNOT_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION); 
                }
                else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
                {
-                  dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;    
+                  dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;  
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m);
                }
             }
             else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
@@ -18216,11 +18374,18 @@ private void RS422_update_AWS_dasboard_values()
                if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
                {
                   dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed; 
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed); 
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m);
                }
                else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
                {
-                  //dashboard_int_last_update_record_true_wind_gust = (int) Math.round((double)mywind.int_true_wind_gust_speed * main.KNOT_M_S_CONVERSION); 
                   dashboard_int_last_update_record_true_wind_gust = (int) Math.round(mywind.double_true_wind_gust_speed * main.KNOT_M_S_CONVERSION);  
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION);
                }   
             }
          } 
@@ -18241,6 +18406,19 @@ private void RS422_update_AWS_dasboard_values()
          {
             dashboard_double_last_update_record_sst = Double.MAX_VALUE;        
          }
+         
+         
+         // VOT
+         //
+         //
+         if (main.VOT_from_AWS_present)
+         {
+            dashboard_int_last_update_record_VOT = main.VOT;
+         }
+         else
+         {
+            dashboard_int_last_update_record_VOT = Integer.MAX_VALUE;
+         }
   
          return null;
       } // protected Void doInBackground() throws Exception
@@ -18248,6 +18426,115 @@ private void RS422_update_AWS_dasboard_values()
 
 }
 
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+private double RS422_convert_wind_speed_to_10m(double wind_speed_at_anemometer_height)
+{
+	 //double num_hoogte_anemometer_ship;
+    //char* endptr;
+	 //string info                       = "\0";
+    //char char_hulpje[10];
+    //const double Zo                   = 0.0002;
+    //double herleidingsfactor;
+
+
+    /* om de wind van sensor hoogte naar 10 meter nivo te reduceren:                  */
+    /*                                                                                */
+    /* zie: Guide to Meteorological Instruments and Methods of Observation [WMO no.8] */
+    /*                                                                                */
+    /* Uc = U.Cf.Ct. ln(10/Zou) . ln(60/Zou) ln(10/Zo)                                */
+    /*               ---------    --------------------                                */
+    /*               ln(z/Zou)    ln(10/Zou) ln(60/Zo)                                */
+    /*                                                                                */
+    /* waarbij:                                                                       */
+    /* Uc = wind speed op 10 meter                                                    */
+    /* U = wind speed op sensor hoogte                                                */
+    /* z = sensor hoogte                                                              */
+    /* Zou = roughness length of the terrain upstream of the wind station             */
+    /* Z0 = rougness length in the application                                        */
+    /* Cf = flow distortion factor                                                    */
+    /* Ct = topographic correction                                                    */
+    /*                                                                                */
+    /* ter vereenvoudiging: Cf = 1                                                    */
+    /*                      Ct = 1                                                    */
+    /*                      Zo = Zou                                                  */
+    /* dan:                                                                           */
+    /*                                                                                */
+    /* Uc =  U. ln(10/Zo)                                                             */
+    /*          ---------                                                             */
+    /*          ln(z/Zo)                                                              */
+    /*                                                                                */
+    /*  volgens annex "the effective roughness length"van de zelfde publicatie        */
+    /* moet voor Zo voor "open sea, fetch at least 5 km" genomen worden 0.0002        */
+    /*                                                                                */
+    /*                                                                                */
+    /* voor het gemak: herleidingsfactor =  ln(10/Zo)                                 */
+    /*                                      ---------                                 */
+    /*                                      ln(z/Zo)                                  */
+    /*                                                                                */
+
+
+	// if (hoogte_anemometer_ship.compare("\0") != 0)
+   //	 {
+	//	 num_hoogte_anemometer_ship = strtod(hoogte_anemometer_ship.c_str(), &endptr);
+   //   if (num_hoogte_anemometer_ship >= 1 && num_hoogte_anemometer_ship <= 200)
+   //    {
+   //       herleidingsfactor = log(10 / Zo) / (log(num_hoogte_anemometer_ship / Zo));
+   //       num_true_wind_speed = int((double(num_true_wind_speed) * herleidingsfactor) + 0.5);
+//
+	//	    /* ook de obs_wind_speed omzetten */
+	//	    sprintf(char_hulpje, "%d", num_true_wind_speed);
+	//	    obs_wind_speed = string(char_hulpje);
+   //    }
+   //    else // hoogte buiten range
+	//    {
+	//	    info = "Height anemometer outside range 1 - 200 metres, windspeed unreliable. ";
+	//	    info += "Please correct anemometer height (Maintenance | Station data | fixed sea station).";
+	//	    MessageBox(info.c_str(), "TurboWin warning", MB_OK | MB_ICONWARNING);
+	//    } // else (hoogte buiten range
+//
+	// } // if (hoogte_anemometer.compare("\0") != 0)
+	// else // hoogte anemometer niet ingevuld
+	// {
+	//	 info = "Height anemometer not available, windspeed unreliable. ";
+	//	 info += "Please insert anemometer height (Maintenance | Station data | ship).";
+	//	 MessageBox(info.c_str(), "TurboWin warning", MB_OK | MB_ICONWARNING);
+	// } // else (hoogte anemometer niet ingevuld
+   
+   final double Zo = 0.0002;
+   int int_height_anemometer = Integer.MAX_VALUE;
+   double wind_speed_10m = main.INVALID;
+   
+   if (!main.height_anemometer.trim().equals(""))
+   {
+      try
+      {
+         int_height_anemometer = Integer.parseInt(main.height_anemometer);   
+      }
+      catch (NumberFormatException ex)
+      {
+          int_height_anemometer = Integer.MAX_VALUE;        
+      }       
+   } // if (!main.height_anemometer.trim().equals(""))
+   
+   
+   if ( (int_height_anemometer > 10 && int_height_anemometer < 200) && 
+        (wind_speed_at_anemometer_height >= 0 && wind_speed_at_anemometer_height < 500) )
+   {
+      double conversion_factor = Math.log(10 / Zo) / (Math.log(int_height_anemometer / Zo));
+  
+      wind_speed_10m = wind_speed_at_anemometer_height * conversion_factor;
+      
+   }
+   
+   
+   return wind_speed_10m;
+}
 
 
 
@@ -18281,7 +18568,7 @@ private static final long TIMEDIFF_AWSR_DATA                                    
 private final double HPA_TO_INHG                                                = 0.02952998751;      // WOW
 private final int DELAY_NEW_DATA_CHECK_LOOP                                     = 60000;     // time between checks new aws data in msec (e.g. 1 min = 1 * 60 * 1000 = 60000)
 private final int INITIAL_DELAY_NEW_DATA_CHECK_LOOP                             = 60000;     // time to wait after start up in msec (e.g. 2 min = 2 * 60 * 1000 = 120000)
-private final long MAX_AGE_AWS_DATA                                             = 300000;    // time in msec (e.g. 5 min = 5 * 60 * 1000 = 300000) // before listening thread cancelling/restarting
+private final long MAX_AGE_AWS_DATA                                             = 120000;//300000;    // time in msec (e.g. 5 min = 5 * 60 * 1000 = 300000) // before listening thread cancelling/restarting
 private final int APR_RETRY_MINUTES                                             = 3;         // APR
 private final int AWSR_RETRY_MINUTES                                            = 3;         // AWSR
 public static final int AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS                       = 777;       // APR; symbolic value, only to indicate the ship is at the great lakes but mabe in a lock (not possible to determine height corr)
@@ -18363,19 +18650,32 @@ public static int AWSR_server_response_code                                     
 private String format_101_obs                                                   = "";
 
 // Dashboard
-public static double dashboard_double_last_update_record_pressure_ic            = Double.MAX_VALUE;
-public static double dashboard_double_last_update_record_ppp                    = Double.MAX_VALUE;
-public static String dashboard_string_last_update_record_date_time              = "";
-public static double dashboard_double_last_update_record_MSL_pressure_ic        = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_pressure_ic              = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_ppp                      = Double.MAX_VALUE;
+public static String dashboard_string_last_update_record_date_time                = "";  // pc based (NOT output string based)
+public static String dashboard_string_last_update_record_date                     = "";  // AWS output string based (mwasured at)
+public static String dashboard_string_last_update_record_time                     = "";  // AWS output string based (mwasured at)
+public static String dashboard_string_last_update_record_latitude                 = "";
+public static String dashboard_string_last_update_record_longitude                = "";
+public static String dashboard_string_last_update_record_SOG                      = "";
+public static String dashboard_string_last_update_record_COG                      = "";  
+public static String dashboard_string_last_update_record_heading                  = ""; 
+public static double dashboard_double_last_update_record_MSL_pressure_ic          = Double.MAX_VALUE;
 public static double dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
-public static double dashboard_double_last_update_record_air_temp               = Double.MAX_VALUE;
-public static int dashboard_int_last_update_record_true_wind_dir                = Integer.MAX_VALUE;
-public static int dashboard_int_last_update_record_true_wind_speed              = Integer.MAX_VALUE;
-public static int dashboard_int_last_update_record_true_wind_gust               = Integer.MAX_VALUE;
-public static int dashboard_int_last_update_record_relative_wind_dir            = Integer.MAX_VALUE;
-public static int dashboard_int_last_update_record_relative_wind_speed          = Integer.MAX_VALUE;
-public static double dashboard_double_last_update_record_sst                    = Double.MAX_VALUE;
-public static double dashboard_double_last_update_record_humidity               = Double.MAX_VALUE;
-        
+public static double dashboard_double_last_update_record_air_temp                 = Double.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_dir                  = Integer.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_speed                = Integer.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_gust                 = Integer.MAX_VALUE;   // true wind gust speed
+public static int dashboard_int_last_update_record_relative_wind_dir              = Integer.MAX_VALUE;
+public static int dashboard_int_last_update_record_relative_wind_speed            = Integer.MAX_VALUE;
+public static double dashboard_double_last_update_record_sst                      = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_humidity                 = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_pressure_tendency        = Double.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_gust_dir             = Integer.MAX_VALUE;  
+public static int dashboard_int_last_update_record_VOT                            = Integer.MAX_VALUE; 
+
+public static int dashboard_int_last_update_record_true_wind_speed_10m            = Integer.MAX_VALUE;  // only used on wind radar dashboard
+public static int dashboard_int_last_update_record_true_wind_gust_10m             = Integer.MAX_VALUE;  // only used on wind radar dashboard
+public static int dashboard_int_last_update_record_relative_wind_speed_10m        = Integer.MAX_VALUE;  // only used on wind radar dashboard
 
 } // public class main_RS232_RS422

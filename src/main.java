@@ -67,12 +67,14 @@ import javax.jnlp.SingleInstanceListener;
 import javax.jnlp.SingleInstanceService;
 import javax.jnlp.UnavailableServiceException;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -80,6 +82,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 //import jssc.SerialPortException;
 
 //import netscape.javascript.JSObject;
+
 
 
 
@@ -284,6 +287,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 * main.configuratie_regels[45]                                  -> AWSR (Automatic Weather Station Reports) [true/false]
 * main.configuratie_regels[46]                                  -> AWSR reporting interval
 * main.configuratie_regels[47]                                  -> wind speed units graphs/dasboard
+* main.configuratie_regels[48]                                  -> ship type
+* main.configuratie_regels[49]                                  -> height anemometer above WL
 * 
 * lezen via: - read_muffin()
 *            - lees_configuratie_regels()
@@ -611,6 +616,8 @@ public class main extends javax.swing.JFrame {
       jMenuItem55 = new javax.swing.JMenuItem();
       jMenuItem56 = new javax.swing.JMenuItem();
       jMenuItem57 = new javax.swing.JMenuItem();
+      jMenuItem63 = new javax.swing.JMenuItem();
+      jMenuItem64 = new javax.swing.JMenuItem();
       jMenu7 = new javax.swing.JMenu();
       jMenuItem36 = new javax.swing.JMenuItem();
       jMenuItem62 = new javax.swing.JMenuItem();
@@ -628,6 +635,9 @@ public class main extends javax.swing.JFrame {
       addWindowListener(new java.awt.event.WindowAdapter() {
          public void windowClosing(java.awt.event.WindowEvent evt) {
             main_windowClosing(evt);
+         }
+         public void windowDeiconified(java.awt.event.WindowEvent evt) {
+            main_windowDeiconified(evt);
          }
          public void windowIconified(java.awt.event.WindowEvent evt) {
             main_windowIconfied(evt);
@@ -2286,6 +2296,22 @@ public class main extends javax.swing.JFrame {
       });
       jMenu9.add(jMenuItem57);
 
+      jMenuItem63.setText("AWS hybrid");
+      jMenuItem63.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Dashboard_AWS_hybrid_actionPerformed(evt);
+         }
+      });
+      jMenu9.add(jMenuItem63);
+
+      jMenuItem64.setText("AWS wind radar");
+      jMenuItem64.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Dashboard_AWS_radar_actionPerformed(evt);
+         }
+      });
+      jMenu9.add(jMenuItem64);
+
       jMenuBar1.add(jMenu9);
 
       jMenu7.setText("Info");
@@ -3066,7 +3092,14 @@ public static void check_and_set_datetime_v2()
    else
    {
       use_system_date_time_for_updating = false;   // see Function: main_RS232_RS422.set_datetime_while_collecting_sensor_data()
-   }
+      
+      // warning that APR will not work!!
+      if (APR == true)
+      {
+         String info = "If this computer is not running on the correct date/time, APR (Automated Pressure Reports) will stop working!";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " warning", JOptionPane.WARNING_MESSAGE);
+      }
+   } // else
 
 
    /* clear memory as soon as possible */
@@ -3255,7 +3288,10 @@ private void read_muffin()
                // "TurboWIn+ started" message to log (logs dir must be known!)
                log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
    
-               // log memory staistics
+               // log Java version
+               log_java_version();
+               
+               // log memory statistics
                log_memory_statistics();
                
                // deleting old (> 3 months) turbowin system logs
@@ -3494,27 +3530,41 @@ private void disable_output_menu_items()
 private void disable_dashboard_menu_items()
 {
    // if no AWS connected 
-   if (RS232_connection_mode != 3 && RS232_connection_mode != 9&& RS232_connection_mode != 10)  // not AWS connected mode
+   if (RS232_connection_mode != 3 && RS232_connection_mode != 9 && RS232_connection_mode != 10)  // not AWS connected mode
    {
-      // disable Dasboard AWS (analog)
-      jMenuItem56.setEnabled(false);                          // Dashboard - AWS [analog)
+      // disable Dashboard AWS (analog)
+      jMenuItem56.setEnabled(false);                           // Dashboard - AWS [analog)
                   
       // disable Dasboard AWS (digital)
-      jMenuItem57.setEnabled(false);                          // Dashboard - AWS [digital)
+      jMenuItem57.setEnabled(false);                           // Dashboard - AWS [digital)
+      
+      // disable Dashboard AWS (hybrid)
+      jMenuItem63.setEnabled(false);                           // Dashboard - AWS [hybrid)
+      
+      // disable Dashboard AWS (wind radar)
+      jMenuItem64.setEnabled(false);                           // Dashboard - AWS [wind radar)
    }
              
    // if no barometer connected 
    if (RS232_connection_mode != 1 && RS232_connection_mode != 2 && RS232_connection_mode != 4 && RS232_connection_mode != 5 && RS232_connection_mode != 6 && RS232_connection_mode != 7 && RS232_connection_mode != 8)  
    {
-      jMenuItem55.setEnabled(false);                          // Dashboard - barometer
+      jMenuItem55.setEnabled(false);                           // Dashboard - barometer
    }   
           
    
    // if AWS connected 
    if (RS232_connection_mode == 3 || RS232_connection_mode == 9|| RS232_connection_mode == 10) // AWS connected mode
    {
-      jMenuItem58.setEnabled(false);                             // Dashboard - latest obs
+      jMenuItem58.setEnabled(false);                            // Dashboard - latest obs
    }
+   
+   
+   // for DWD (Germany) even if an AWS is connected, wind radar always disabled! 
+   //if (recruiting_country.indexOf("GERMANY") != -1)
+   //{
+   //   // disable Dashboard AWS (wind radar)
+   //   jMenuItem64.setEnabled(false);                            // Dashboard - AWS [wind radar)        
+   //}
 }
 
 
@@ -4406,9 +4456,9 @@ public static void set_muffin()
       configuratie_regels[44] = main.UPLOAD_URL_TXT + main.upload_URL;   
       configuratie_regels[45] = main.AWSR_TXT + String.valueOf(main.AWSR);                              // boolean
       configuratie_regels[46] = main.AWSR_REPORTING_INTERVAL_TXT + main.AWSR_reporting_interval;
-      
       configuratie_regels[47] = main.WIND_UNITS_DASHBOARD_TXT + main.wind_units_dashboard.trim();  
-      
+      configuratie_regels[48] = main.SHIP_TYPE_DASHBOARD_TXT + main.ship_type_dashboard;  
+      configuratie_regels[49] = main.HEIGHT_ANEMOMETER_TXT + main.height_anemometer; 
    }
    
     
@@ -4605,6 +4655,9 @@ public static void set_muffin()
             {
                // "TurboWin+ started" message to log (logs dir must be known!)
                log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+               
+               // log Java version
+               log_java_version();
                
                // log memory staistics
                log_memory_statistics();
@@ -5074,6 +5127,18 @@ public static void meta_data_from_configuration_regels_into_global_vars()
             wind_units_dashboard = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
          }
          
+         // ship type for visual dashboard
+         if (configuratie_regels[teller].indexOf(SHIP_TYPE_DASHBOARD_TXT) != -1)
+         {
+            ship_type_dashboard = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // anemometer height above WL
+         if (configuratie_regels[teller].indexOf(HEIGHT_ANEMOMETER_TXT) != -1)
+         {
+            height_anemometer = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
       } // if ((configuratie_regels[teller] != null) etc.
    } // for (teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++)
 
@@ -5416,13 +5481,8 @@ private static void check_meta_data()
    /*                                                                                             */
    /***********************************************************************************************/
    private void Input_waves_menu_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Input_waves_menu_actionPerformed
-// TODO add your handling code here:
-      //if (waves_form == null)
-      //{
-      //   waves_form = new mywaves();              
-      //   waves_form.setSize(800, 600);
-      //}
-      //waves_form.setVisible(true); 
+      // TODO add your handling code here:
+      
       
       mywaves form = new mywaves();               
       form.setSize(800, 600);
@@ -6767,7 +6827,7 @@ private static void check_meta_data()
 private void Info_About_menu_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Info_About_menu_actionPerformed
 // TODO add your handling code here:
    about form = new about();               
-   form.setSize(400, 300);
+   form.setSize(400, 350);
    form.setVisible(true); 
    
 }//GEN-LAST:event_Info_About_menu_actionPerformed
@@ -9668,7 +9728,7 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-   private void Output_obs_to_AWS_actionPerformed(java.awt.event.ActionEvent evt) {                                                   
+   private void Output_obs_to_AWS_actionPerformed(java.awt.event.ActionEvent evt) {      
       // TODO add your handling code here:
       String message_info = "";
       String log_info     = "";
@@ -11337,7 +11397,6 @@ private boolean checking_level_3()
    return level_3_ok;
 }
 
-
    
    
 /***********************************************************************************************/
@@ -11348,6 +11407,23 @@ private boolean checking_level_3()
    private void main_windowIconfied(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_main_windowIconfied
       // TODO add your handling code here:
       
+      // NB on the latest Linux desktops (GNOME, Cinnamon, Xubuntu) issues with iconifying
+      //    looks like the evt event WINDOW_ICONIFIED is send several times
+      //
+      boolean use_system_tray = false;
+      
+      OSType ostype = detect_OS();
+      switch (ostype)
+      {
+         case WINDOWS: use_system_tray = true;
+                       break;
+         default:      use_system_tray = false;   
+                       break;
+      }
+      
+      
+      if (use_system_tray)
+      {
       //Check the SystemTray is supported
       if (!SystemTray.isSupported()) 
       {
@@ -11540,8 +11616,6 @@ private boolean checking_level_3()
             MenuItem dashboard_digital_Item = new MenuItem("dashboard digital");
             popup.add(dashboard_digital_Item);
             
-            popup.addSeparator();
-            
             dashboard_digital_Item.addActionListener(new ActionListener() 
             {
                @Override
@@ -11550,6 +11624,33 @@ private boolean checking_level_3()
                   Dashboard_AWS_digital_actionPerformed(null);  
                } // public void actionPerformed(ActionEvent e)
             });        
+            
+            MenuItem dashboard_hybrid_Item = new MenuItem("dashboard hybrid");
+            popup.add(dashboard_hybrid_Item);
+            
+            dashboard_hybrid_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Dashboard_AWS_hybrid_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });     
+            
+            MenuItem dashboard_radar_Item = new MenuItem("dashboard wind radar");
+            popup.add(dashboard_radar_Item);
+            
+            dashboard_radar_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Dashboard_AWS_radar_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });              
+            
+            
+            popup.addSeparator();
             
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             MenuItem wind_dir_graph_Item = new MenuItem("wind direction graph");
@@ -11787,8 +11888,17 @@ private boolean checking_level_3()
             public void actionPerformed(ActionEvent e) 
             {
                setExtendedState(NORMAL); 
+               // restoring old windows state
+               //int state = getExtendedState();
+               //state = state & ~turbowin.main.ICONIFIED;
+               //setExtendedState(state);
+               
                setVisible(true); 
                tray.remove(trayIcon);
+               
+               // NB there will be no deiconified windows system message! (in case of the system tray)
+               main_window_updating_date_time();
+               
             } // public void actionPerformed(ActionEvent e)
          });
         
@@ -11805,6 +11915,7 @@ private boolean checking_level_3()
          }      
          
       } // else (so system tray available)
+      } // if (use_system_tray)
    }//GEN-LAST:event_main_windowIconfied
 
    
@@ -12169,16 +12280,16 @@ private boolean checking_level_3()
       
       if (dashboard_form_AWS != null)
       {
-         if (DASHBOARD_view_AWS.dashboard_update_timer_AWS_is_gecreeerd == true)  
+         if (DASHBOARD_view_AWS.dashboard_update_AWS_timer_is_gecreeerd == true)  
          {
-            if (DASHBOARD_view_AWS.dashboard_update_timer_AWS.isRunning())
+            if (DASHBOARD_view_AWS.dashboard_update_AWS_timer.isRunning())
             {
-               DASHBOARD_view_AWS.dashboard_update_timer_AWS.stop();
+               DASHBOARD_view_AWS.dashboard_update_AWS_timer.stop();
             }
          }
-         DASHBOARD_view_AWS.dashboard_update_timer_AWS = null;
+         DASHBOARD_view_AWS.dashboard_update_AWS_timer = null;
       
-         DASHBOARD_view_AWS.dashboard_update_timer_AWS_is_gecreeerd = false;
+         DASHBOARD_view_AWS.dashboard_update_AWS_timer_is_gecreeerd = false;
           
          //graph_form.dispose();
          dashboard_form_AWS.setVisible(false);
@@ -12204,16 +12315,16 @@ private boolean checking_level_3()
       
       if (dashboard_form_AWS_digital != null)
       {
-         if (DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital_is_gecreeerd == true)  
+         if (DASHBOARD_view_AWS_digital.dashboard_update_AWS_digital_timer_is_gecreeerd == true)  
          {
-            if (DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital.isRunning())
+            if (DASHBOARD_view_AWS_digital.dashboard_update_AWS_digital_timer.isRunning())
             {
-               DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital.stop();
+               DASHBOARD_view_AWS_digital.dashboard_update_AWS_digital_timer.stop();
             }
          }
-         DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital = null;
+         DASHBOARD_view_AWS_digital.dashboard_update_AWS_digital_timer = null;
       
-         DASHBOARD_view_AWS_digital.dashboard_update_timer_AWS_digital_is_gecreeerd = false;
+         DASHBOARD_view_AWS_digital.dashboard_update_AWS_digital_timer_is_gecreeerd = false;
           
          //graph_form.dispose();
          dashboard_form_AWS_digital.setVisible(false);
@@ -12312,6 +12423,315 @@ private boolean checking_level_3()
       
    }//GEN-LAST:event_Info_Obs_Map_menu_actionPerformed
 
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private void Dashboard_AWS_hybrid_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Dashboard_AWS_hybrid_actionPerformed
+      // TODO add your handling code here:
+      
+      if (dashboard_form_AWS_hybrid != null)
+      {
+         if (DASHBOARD_view_AWS_hybrid.dashboard_update_timer_AWS_hybrid_is_gecreeerd == true)  
+         {
+            if (DASHBOARD_view_AWS_hybrid.dashboard_update_timer_AWS_hybrid.isRunning())
+            {
+               DASHBOARD_view_AWS_hybrid.dashboard_update_timer_AWS_hybrid.stop();
+            }
+         }
+         DASHBOARD_view_AWS_hybrid.dashboard_update_timer_AWS_hybrid = null;
+      
+         DASHBOARD_view_AWS_hybrid.dashboard_update_timer_AWS_hybrid_is_gecreeerd = false;
+          
+         dashboard_form_AWS_hybrid.setVisible(false);
+      }      
+      
+      dashboard_form_AWS_hybrid = new DASHBOARD_view_AWS_hybrid();
+      dashboard_form_AWS_hybrid.setExtendedState(MAXIMIZED_BOTH); 
+      dashboard_form_AWS_hybrid.setVisible(true);       
+      
+   }//GEN-LAST:event_Dashboard_AWS_hybrid_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Dashboard_AWS_radar_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Dashboard_AWS_radar_actionPerformed
+      // TODO add your handling code here:
+      if (dashboard_form_AWS_radar != null)
+      {
+         if (DASHBOARD_view_AWS_radar.dashboard_update_timer_AWS_radar_is_gecreeerd == true)  
+         {
+            if (DASHBOARD_view_AWS_radar.dashboard_update_timer_AWS_radar.isRunning())
+            {
+               DASHBOARD_view_AWS_radar.dashboard_update_timer_AWS_radar.stop();
+            }
+         }
+         DASHBOARD_view_AWS_radar.dashboard_update_timer_AWS_radar = null;
+      
+         DASHBOARD_view_AWS_radar.dashboard_update_timer_AWS_radar_is_gecreeerd = false;
+          
+         dashboard_form_AWS_radar.setVisible(false);
+      }      
+      
+      dashboard_form_AWS_radar = new DASHBOARD_view_AWS_radar();
+      dashboard_form_AWS_radar.setExtendedState(MAXIMIZED_BOTH); 
+      dashboard_form_AWS_radar.setVisible(true);       
+   }//GEN-LAST:event_Dashboard_AWS_radar_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void main_windowDeiconified(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_main_windowDeiconified
+      // TODO add your handling code here:
+      
+      //System.out.println("+++ Function main_windowDeiconified():" + evt);
+   /*   
+      OSType ostype = detect_OS();
+      switch (ostype)
+      {
+         case WINDOWS: break;         // for Windows: this will be done in Function: main_windowIconfied() [main.java]
+         default:      main_window_updating_message();
+                       break;
+      }
+   */   
+      main_window_updating_date_time();
+      
+   }//GEN-LAST:event_main_windowDeiconified
+
+   
+      
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/      
+   private void main_window_updating_date_time()
+   {                                         
+      // TODO add your handling code here: 
+       
+      
+      // called from: - main_windowDeiconified() [main.java]   // in case os = NOT WINDOWS
+      //              - main_windowIconfied() [main.java]      // in case os = WINDOWS
+      
+      
+      if ((RS232_connection_mode == 3) || (RS232_connection_mode == 9) || (RS232_connection_mode == 10)) // AWS connected
+      {
+         //System.out.println("+++ " + evt);
+      
+         String info = "Screen will be updated within max 1 minute";
+         
+         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog updating_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(2000, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               updating_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         updating_dialog.setVisible(true); 
+      
+      }
+      // update the obs date and time on the main screen
+      //if (RS232_connection_mode == 0)    // no instrument/AWS connection 
+      else // no AWS connected (so nothing connected or a barometer connected)
+      {
+         if (use_system_date_time_for_updating == true) // was confirmed by the user at TurboWin+ startup (Function: check_and_set_datetime_v2())
+         {
+            // silently update the date time fields on the main screen
+            
+            ///////// UTC computer time
+            //
+            cal_systeem_datum_tijd_UTC = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // gives system date and time in UTC of this moment
+            cal_systeem_datum_tijd_UTC.getTime();                                 // effectueren
+
+            //int system_year_UTC          = cal_systeem_datum_tijd_UTC.get(Calendar.YEAR);
+            //int system_month_UTC         = cal_systeem_datum_tijd_UTC.get(Calendar.MONTH);        // The first month of the year is JANUARY which is 0
+            //int system_day_of_month_UTC  = cal_systeem_datum_tijd_UTC.get(Calendar.DAY_OF_MONTH); // The first day of the month has value 1
+            //int system_hour_of_day_UTC   = cal_systeem_datum_tijd_UTC.get(Calendar.HOUR_OF_DAY);  // HOUR_OF_DAY: 24 hour clock; HOUR : 12 hour clock
+            int system_minute_UTC        = cal_systeem_datum_tijd_UTC.get(Calendar.MINUTE);
+
+            //if (system_minute_UTC <= 9)
+            //{
+            //    hulp_system_minute_UTC = "0" + Integer.toString(system_minute_UTC);
+            //}
+            //else
+            //{
+            //   hulp_system_minute_UTC = Integer.toString(system_minute_UTC);
+            //
+            //String system_UTC_string = "system: " + convert_month(system_month_UTC) + " " + system_day_of_month_UTC + ", " + system_year_UTC + " " + system_hour_of_day_UTC + "." + hulp_system_minute_UTC + " UTC";
+      
+   
+            ///////// obs time
+            //
+            if (system_minute_UTC > 30)
+            {
+               cal_systeem_datum_tijd_UTC.add(Calendar.HOUR_OF_DAY, 1);   // add 1 hour
+               cal_systeem_datum_tijd_UTC.getTime();
+            }
+
+            int obs_year          = cal_systeem_datum_tijd_UTC.get(Calendar.YEAR);
+            int obs_month         = cal_systeem_datum_tijd_UTC.get(Calendar.MONTH);        // The first month of the year is JANUARY which is 0
+            int obs_day_of_month  = cal_systeem_datum_tijd_UTC.get(Calendar.DAY_OF_MONTH); // The first day of the month has value 1
+            int obs_hour_of_day   = cal_systeem_datum_tijd_UTC.get(Calendar.HOUR_OF_DAY);  // HOUR_OF_DAY: 24 hour clock; HOUR : 12 hour clock
+
+            //String obs_UTC_string = "obs: " + convert_month(obs_month) + " " + obs_day_of_month + ", " + obs_year + " " + obs_hour_of_day + ".00 UTC";   
+
+
+            mydatetime.year  = Integer.toString(obs_year);                     // for progress main screen and IMMT
+            mydatetime.month = convert_month(obs_month);                       // for progress main screen
+            mydatetime.day   = Integer.toString(obs_day_of_month);             // for progress main screen
+            mydatetime.hour  = Integer.toString(obs_hour_of_day);              // for progress main screen
+
+            // update date and time on TurboWin+ main screen 
+            date_time_fields_update();
+            
+         } //if (use_system_date_time_for_updating == true)
+         
+         
+         // NB in case of a connected AWS or barometer a timer will already update the date time field on the main screen
+         //check_and_set_datetime_v2();    // NB var use_system_date_time_for_updating = true can be set here, used in case of an connected barometer
+      }
+      
+   }       
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   /**/
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+/*
+   private void Output_obs_by_Gmail_FM13()
+   {
+      // This function called by: Output_obs_by_Gmail_actionPerformed()
+      
+      // https://dzone.com/articles/sending-mail-using-javamail-api-for-gmail-server
+      // https://myaccount.google.com/lesssecureapps
+      //
+      //
+      //
+      //
+      //
+
+      new SwingWorker<Void, Void>()
+      {
+         @Override
+         protected Void doInBackground() throws Exception
+         {
+         
+            String obs_email_subject_new = obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
+            String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + obs_write;
+                     
+            // NB Use %0A for carriage returns, %20 for spaces [see "urlEncode(obs_write)"]
+            // if ddmmyyyy in subject field -> replace by actual utc date of observation 
+            //String obs_email_subject_new = urlEncode(obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00"));
+            //String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + urlEncode(obs_write);
+            
+            
+            // Recipient's email ID needs to be mentioned.
+            //String to = "xyz@gmail.com";//change accordingly
+            //String to = obs_email_recipient;
+            String to = "martin.stam@home.nl";
+
+            // Sender's email ID needs to be mentioned
+            //String from = "abc@gmail.com";//change accordingly
+            String gmail_from = "turbowin.observations@gmail.com";//change accordingly
+            
+            
+            //final String username = "abc";//change accordingly
+            final String gmail_username = "turbowin observations";//change accordingly
+            
+            //final String password = "*****";//change accordingly
+            final String gmail_password = "****!!";//change accordingly
+
+            // Assuming you are sending email through relay.jangosmtp.net
+            String host = "smtp.gmail.com";
+
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.port", "587");   
+            
+            
+            
+            //Establishing a session with required user details
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(gmail_from, gmail_password);
+            }
+            });
+            
+            try 
+            {
+               //Creating a Message object to set the email content
+               MimeMessage msg = new MimeMessage(session);
+            
+               
+               //Storing the comma seperated values to email addresses
+               //String to = "recepient1@email.com,recepient2@gmail.com";
+               //Parsing the String with defualt delimiter as a comma by marking the boolean as true and storing the email
+               
+               //addresses in an array of InternetAddress objects
+               InternetAddress[] address = InternetAddress.parse(to, true);
+               
+               //Setting the recepients from the address variable
+               msg.setRecipients(Message.RecipientType.TO, address);
+               String timeStamp = new SimpleDateFormat("yyyymmdd_hh-mm-ss").format(new Date());
+               msg.setSubject("Sample Mail : " + timeStamp);
+               msg.setSentDate(new Date());
+               msg.setText("Sampel System Generated mail");
+               msg.setHeader("XPriority", "1");
+               Transport.send(msg);
+               System.out.println("Mail has been sent successfully");
+            } 
+            catch (MessagingException mex) 
+            {
+               System.out.println("Unable to send an email" + mex);
+            }
+            
+            
+            return null;
+
+         } // protected Void doInBackground() throws Exception
+
+         @Override
+         protected void done()
+         {
+            IMMT_log();
+         
+            Reset_all_meteo_parameters();
+         } // protected void done()
+
+      }.execute(); // new SwingWorker<Void, Void>()
+   }
+*/  
  
    
    /***********************************************************************************************/
@@ -12800,7 +13220,7 @@ private boolean checking_level_3()
                 //  doorgaan2 = false;
                //} // else
                
-               System.out.println("IMMT log number of records: " + teller1);
+               System.out.println("--- IMMT log number of records: " + teller1);
                
                
              
@@ -12836,7 +13256,7 @@ private boolean checking_level_3()
                   {
                      teller2 = -1;
                   }
-                  System.out.println("IMMT log displaying from record number: " + (teller2 + 1));
+                  System.out.println("--- IMMT log displaying from record number: " + Math.abs(teller2 + 1));
                   
                   
                   try (BufferedReader in2 = new BufferedReader(new FileReader(volledig_path_immt))) // try with resources
@@ -13957,6 +14377,23 @@ private void initComponents2()
    }
 */
    
+   boolean use_system_tray = false;
+      
+   OSType ostype = detect_OS();
+   switch (ostype)
+   {
+      case WINDOWS: use_system_tray = true;
+                    break;
+      default:      use_system_tray = false;    
+                    break;
+   }   
+   
+   if (use_system_tray == false)
+   {
+      // over write text: "--- when minimised see system tray ---")
+      jLabel8.setText("--- when minimised see launcher bar ---");
+   }
+   
    
    /* title of main screen */
    setTitle(APPLICATION_NAME);                   // fixed
@@ -14372,6 +14809,9 @@ private void initComponents2()
    // all specific RS232 and RS422 functions
    RS232_RS422 = new main_RS232_RS422();
    
+   // for hybrid and radar dashboard
+   myship = null;
+   
    /* read stored meta (station) data from muffins or from configuration files */
    if (offline_mode_via_cmd == true) // offline mode
    {
@@ -14438,6 +14878,31 @@ private void initComponents2()
    // NB not available in this stage so see: check_meta_data() [main.java]
    
 }  
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void log_java_version()
+{
+   // called from: - read_muffin()
+   //              - lees_configuratie_regels()
+
+   //String java_version = System.getProperty("java.fullversion");
+   String java_version = System.getProperty("java.version");
+   String java_vendor = System.getProperty("java.svendor");
+   
+   if (java_vendor == null)
+   {
+      java_vendor = "OpenJDK";  
+   }
+   
+   log_turbowin_system_message("[GENERAL] Java version: " + java_vendor + " " + java_version);
+}
+
 
 
 /***********************************************************************************************/
@@ -17943,21 +18408,29 @@ public static void log_turbowin_system_message(final String message)
 }
 
 
+
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
+   /**
+   * @param args the command line arguments
+   */
+   public static void main(String args[])        
+   {
+      java.awt.EventQueue.invokeLater(new Runnable() 
+      {
          @Override
-            public void run() {
-                new main().setVisible(true);
-            }
-        });
+         public void run() 
+         {
+            //new main().setVisible(true);
+            
+            // nb below insteadof new main().setVisible(true); because now there is a reference to the main class (which is used in hybrid and wind radar dashboards)
+            mainClass = new main(); 
+            mainClass.setVisible(true);
+         }
+      });
     }
     
  
@@ -18092,6 +18565,8 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem60;
    private javax.swing.JMenuItem jMenuItem61;
    private javax.swing.JMenuItem jMenuItem62;
+   private javax.swing.JMenuItem jMenuItem63;
+   private javax.swing.JMenuItem jMenuItem64;
    private javax.swing.JMenuItem jMenuItem7;
    private javax.swing.JMenuItem jMenuItem8;
    private javax.swing.JMenuItem jMenuItem9;
@@ -18239,6 +18714,16 @@ public static void log_turbowin_system_message(final String message)
    public static final String AWSR_TXT                      = "AWSR               : ";   // t/m : is 20 characters
    public static final String AWSR_REPORTING_INTERVAL_TXT   = "AWSR rep. int.     : ";   // t/m : is 20 characters
    public static final String WIND_UNITS_DASHBOARD_TXT      = "wind units dashbrd : ";   // t/m : is 20 characters
+   public static final String SHIP_TYPE_DASHBOARD_TXT       = "ship type dashbrd  : ";   // t/m : is 20 characters
+   public static final String HEIGHT_ANEMOMETER_TXT         = "anemometer-WL      : ";   // t/m : is 20 characters
+   
+   public static final String CONTAINER_SHIP                = "container_ship";
+   public static final String BULK_CARRIER                  = "bulk_carrier";
+   public static final String OIL_TANKER                    = "oil_tanker";
+   public static final String LNG_TANKER                    = "LNG_tanker";
+   public static final String PASSENGER_SHIP                = "passenger_tanker";
+   public static final String NEUTRAL_SHIP                  = "neutral_ship";
+   public static final String GENERAL_CARGO_SHIP            = "general_cargo_ship";
    
    public static final String ESTIMATED_TRUE                = "estimated; true speed and true direction";
    public static final String MEASURED_OFF_BOW              = "measured; apparent speed and apparent direction (OFF THE BOW, clockwise)";
@@ -18307,8 +18792,8 @@ public static void log_turbowin_system_message(final String message)
    
    // public var's
    public static final String APPLICATION_NAME              = "TurboWin+";                // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "3.1.3 JPMS (build 03-September-2018)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING
-   public static final String DASHBOARD_LOGO                = "sot.png";
+   public static final String APPLICATION_VERSION           = "3.2.0 JPMS (build 20-January-2019)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String DASHBOARD_LOGO                = "sot.png";              // analogue and digital dashboard 
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
    public static String user_dir;
@@ -18328,6 +18813,7 @@ public static void log_turbowin_system_message(final String message)
    public static String max_height_deck_cargo               = "";                     // meta data
    public static String diff_sll_wl                         = "";                     // meta data
    public static String pressure_reading_msl_yes_no         = "";                     // meta data
+   public static String height_anemometer                   = "";                     // meta data
    public static String logs_dir                            = "";                     // meta data (in this folder e.g. immt.log)
    public static String coded_obs_total                     = "";
    public static String obs_email_recipient                 = "";                     // meta data (myemailsettings.java)
@@ -18337,6 +18823,7 @@ public static void log_turbowin_system_message(final String message)
    public static String mode                                = "";
    public static String wind_units                          = "";                     // meta data (wind units observed/measured)
    public static String wind_units_dashboard                = "";                     // meta data (wind units graphs/dashboard)
+   public static String ship_type_dashboard                 = "";                     // meta data (for dashboard)
    
    //public static String OL_maps_obs_year                    = "";                     // for date time in infowindow on OL maps
    //public static String OL_maps_obs_month                   = "";                     // for date time in infowindow on OL maps
@@ -18473,6 +18960,7 @@ public static void log_turbowin_system_message(final String message)
    public static SimpleDateFormat sdf_tsl_2;                              // TurboWin system logs
    public static boolean sensor_data_file_ophalen_timer_is_gecreeerd = false;              // static!
    
+   public static int VOT                                           = Integer.MAX_VALUE; // for dashboard Meteo France
    
    // NB parameters like position, date time and air pressure etc. are always not editable by the observer in AWS mode (so not necessary to keep a boolean record of these parameters)
    public static boolean date_from_AWS_present                     = false;
@@ -18494,8 +18982,10 @@ public static void log_turbowin_system_message(final String message)
    public static boolean true_wind_speed_from_AWS_present          = false;
    public static boolean true_wind_dir_from_AWS_present            = false;
    public static boolean true_wind_gust_from_AWS_present           = false;
+   public static boolean true_wind_gust_dir_from_AWS_present       = false;
    public static boolean displayed_aws_data_obsolate               = false;   // for DASHBOARD; set in Function: RS422_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
    public static boolean displayed_barometer_data_obsolate         = false;   // for DASHBOARD; set in Function: RS232_WiFi_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
+   public static boolean VOT_from_AWS_present                      = false;   // for DASHBOARD
    
    public static final int NUMBER_COM_PORTS                        = 20;     // used by checking COM ports meteorological instrument (barometer, EUCAWS) and also for GPS
    public static final int LENGTE_SMD_STRING                       = 14;//14;//1024;//20;  // 20 is willekeurig, moet nog precies bepaald worden
@@ -18522,7 +19012,7 @@ public static void log_turbowin_system_message(final String message)
    public static final int TRUE_WIND_SPEED_COMMA_NUMBER            = 17;  //             --"--
    public static final int TRUE_WIND_DIR_COMMA_NUMBER              = 18;  //             --"--
    public static final int TRUE_WIND_GUST_COMMA_NUMBER             = 19;  //             --"--
-   // NB --- max wind gust dir                                       20
+   public static final int TRUE_WIND_GUST_DIR_COMMA_NUMBER         = 20;  //             --"--
    // NB --- supply voltage                                          21
    // NB --- internal temperature                                    22
    public static final int VOT_COMMA_NUMBER                        = 23; //              --"--
@@ -18547,8 +19037,10 @@ public static void log_turbowin_system_message(final String message)
    
    private RS232_view graph_form;
    private DASHBOARD_view dashboard_form;
-   private DASHBOARD_view_AWS dashboard_form_AWS;
-   private DASHBOARD_view_AWS_digital dashboard_form_AWS_digital;
+   private DASHBOARD_view_AWS dashboard_form_AWS;                   // analogue
+   private DASHBOARD_view_AWS_digital dashboard_form_AWS_digital;   // digital
+   private DASHBOARD_view_AWS_hybrid dashboard_form_AWS_hybrid;     // hybrid
+   private DASHBOARD_view_AWS_radar dashboard_form_AWS_radar;       // wind radar
    
    public static final Color input_color_from_aws                   = Color.RED;  // color for text fields if input was measured by AWS (manually input of that text field disabled)
    public static final Color input_color_from_observer              = Color.BLACK;
@@ -18576,6 +19068,10 @@ public static void log_turbowin_system_message(final String message)
    
    SystemTray tray = null;
    JPopupMenu popup_input;
+   
+   public static ship myship;
+   
+   public static main mainClass;
    
 }
 

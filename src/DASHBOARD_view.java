@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -81,6 +83,9 @@ public class DASHBOARD_view extends javax.swing.JFrame {
       addWindowListener(new java.awt.event.WindowAdapter() {
          public void windowClosed(java.awt.event.WindowEvent evt) {
             DASBOARD_view_windowClosed(evt);
+         }
+         public void windowDeactivated(java.awt.event.WindowEvent evt) {
+            Dashboard_view_windowDeiconified(evt);
          }
       });
 
@@ -335,6 +340,21 @@ public class DASHBOARD_view extends javax.swing.JFrame {
 
    
    
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Dashboard_view_windowDeiconified(java.awt.event.WindowEvent evt)//GEN-FIRST:event_Dashboard_view_windowDeiconified
+   {//GEN-HEADEREND:event_Dashboard_view_windowDeiconified
+      // TODO add your handling code here:
+      
+      System.out.println("--- Barometer Dashboard (jPanel1) deiconified");
+      jPanel1.repaint();  
+   }//GEN-LAST:event_Dashboard_view_windowDeiconified
+
+   
+   
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -388,19 +408,16 @@ private void init_dasboard_timer()
                break;
             }
          }
-      } catch (ClassNotFoundException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (InstantiationException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
-         java.util.logging.Logger.getLogger(DASHBOARD_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
          java.util.logging.Logger.getLogger(DASHBOARD_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
+      //</editor-fold>
+      
         //</editor-fold>
 
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable() {
+         @Override
          public void run() {
             new DASHBOARD_view().setVisible(true);
          }

@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Cursor;
 import java.io.BufferedReader;
@@ -68,6 +70,8 @@ public class mysystem_log extends javax.swing.JFrame {
    }// </editor-fold>//GEN-END:initComponents
 
    
+   
+
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -75,7 +79,6 @@ public class mysystem_log extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
-      //public static String newline = System.getProperty("line.separator");
       final String newline = System.getProperty("line.separator");
       
       
@@ -89,24 +92,63 @@ public class mysystem_log extends javax.swing.JFrame {
          protected String doInBackground() throws Exception
          {
             String file_line = null;
+            int teller1 = 0;                                     // for counting total number of records in immt (first loop)
+            int teller2 = -1;                                    // for counting numer of records in immt_list (second loop)
+            boolean doorgaan = true;
+            
             
             String file_naam = "turbowin_system_" + main.sdf_tsl_1.format(new Date()) + ".txt";     
             String volledig_path_turbowin_system_logs = main.logs_dir + java.io.File.separator + main.TURBOWIN_SYSTEM_LOGS_DIR + java.io.File.separator + file_naam;
   
-            // extend title with full path of the system log txt file (can be used to point the observer to the file for eg forwarding to a Met Centre in case of problems)
+            // extend title with full path of the system log txt file (can be used to point the observer to the file for eg forwarding to a Met Centre in case of a problems)
             setTitle("TurboWin+ system log [" + volledig_path_turbowin_system_logs + "]");
             
-            try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_turbowin_system_logs)))   
+            try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_turbowin_system_logs)))   // try with resources
             {
-               while ((file_line = in.readLine()) != null)
+               while ((in.readLine()) != null)   
                {
-                  publish(new String[] { file_line });
+                  teller1++;
                }
             } // try
             catch (FileNotFoundException ex)
             {
                JOptionPane.showMessageDialog(null, "Reading error 'TurboWin+ system log' file or no TurboWin+ events logged for the current month", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);        
+               doorgaan = false;
             }
+            System.out.println("--- system log number of records: " + teller1);
+            
+            
+            if (doorgaan)
+            {
+               // truck to display always the last 1000 records if > 1000 records stored in immt log
+               if (teller1 > 5000)
+               {
+                  teller2 = (teller1 -5000) * -1;   // e.g. teller1 = 1700 -> teller2 = -700;
+               }
+               else
+               {
+                  teller2 = -1;
+               }
+               System.out.println("--- system log displaying from record number: " + Math.abs(teller2 + 1));
+               
+               try (BufferedReader in2 = new BufferedReader(new FileReader(volledig_path_turbowin_system_logs)))   // try with resources
+               {
+                  while ((file_line = in2.readLine()) != null)
+                  {
+                     teller2++;
+                     if (teller2 >= 0)
+                     {
+                        publish(new String[] { file_line });
+                     }
+                  } // while ((file_line = in2.readLine()) != null)
+               }
+               catch (FileNotFoundException ex)
+               {
+                  JOptionPane.showMessageDialog(null, "Reading error 'TurboWin+ system log' file or no TurboWin+ events logged for the current month", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);        
+                  doorgaan = false;
+               }
+               
+            } // if (doorgaan)
             
             return null;
          } // protected Void doInBackground() throws Exception
@@ -137,6 +179,9 @@ public class mysystem_log extends javax.swing.JFrame {
       }.execute(); // new SwingWorker<Void, Void>()
       
    }
+
+   
+   
    
    
    
@@ -156,19 +201,16 @@ public class mysystem_log extends javax.swing.JFrame {
                break;
             }
          }
-      } catch (ClassNotFoundException ex) {
-         java.util.logging.Logger.getLogger(mysystem_log.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (InstantiationException ex) {
-         java.util.logging.Logger.getLogger(mysystem_log.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
-         java.util.logging.Logger.getLogger(mysystem_log.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
          java.util.logging.Logger.getLogger(mysystem_log.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
+      //</editor-fold>
+      
         //</editor-fold>
 
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable() {
+         @Override
          public void run() {
             new mysystem_log().setVisible(true);
          }

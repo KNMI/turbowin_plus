@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import javax.swing.JOptionPane;
 
@@ -10,7 +12,7 @@ import javax.swing.JOptionPane;
  *
  * @author hometrainer
  */
-public class myobsformat extends javax.swing.JFrame {
+final public class myobsformat extends javax.swing.JFrame {
 
    /**
     * Creates new form myobsformat

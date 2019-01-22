@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Cursor;
 import java.awt.Font;
@@ -42,8 +44,7 @@ public
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jScrollPane1 = new javax.swing.JScrollPane();
       jTextArea1 = new javax.swing.JTextArea();
@@ -462,27 +463,18 @@ public
             }
          }
       }
-      catch (ClassNotFoundException ex)
+      catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex)
       {
          java.util.logging.Logger.getLogger(mymaintenancedata.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
-      catch (InstantiationException ex)
-      {
-         java.util.logging.Logger.getLogger(mymaintenancedata.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      }
-      catch (IllegalAccessException ex)
-      {
-         java.util.logging.Logger.getLogger(mymaintenancedata.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      }
-      catch (javax.swing.UnsupportedLookAndFeelException ex)
-      {
-         java.util.logging.Logger.getLogger(mymaintenancedata.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      }
+      //</editor-fold>
+
         //</editor-fold>
 
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable()
       {
+         @Override
          public void run()
          {
             new mymaintenancedata().setVisible(true);

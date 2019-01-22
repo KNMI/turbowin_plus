@@ -1,7 +1,8 @@
+package turbowin;
+
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 
 /*
  * To change this template, choose Tools | Templates
@@ -18,7 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author Martin
  */
-public class myice1 extends javax.swing.JFrame {
+final public class myice1 extends javax.swing.JFrame {
 
     /** Creates new form myice1 */
     public myice1() {
@@ -81,27 +82,27 @@ public class myice1 extends javax.swing.JFrame {
       jLabel1.setText("concentration or arrangement of sea ice");
 
       jComboBox1.setMaximumRowCount(11);
-      jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+      jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       jLabel2.setText("stage of development");
 
       jComboBox2.setMaximumRowCount(11);
-      jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+      jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       jLabel3.setText("ice of land origin");
 
       jComboBox3.setMaximumRowCount(11);
-      jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+      jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       jLabel4.setText("bearing of principal ice edge");
 
       jComboBox4.setMaximumRowCount(11);
-      jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+      jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       jLabel5.setText("ice situation and trend over preceding three hours");
 
       jComboBox5.setMaximumRowCount(11);
-      jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+      jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);

@@ -1,3 +1,5 @@
+package turbowin;
+
 //import java.awt.Toolkit;
 //import java.io.BufferedInputStream;
 //import java.io.IOException;
@@ -15,7 +17,7 @@ import javax.swing.SwingWorker;
  *
  * @author  stam
  */
-public class mych extends javax.swing.JFrame 
+final public class mych extends javax.swing.JFrame 
 {
    
    /** Creates new form mych */

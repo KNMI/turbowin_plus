@@ -1,3 +1,5 @@
+package turbowin;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,8 +10,7 @@
 
  @author Martin
  */
-public
-   class processing extends javax.swing.JFrame
+final public class processing extends javax.swing.JFrame
 {
 
    /** Creates new form processing */
@@ -27,8 +28,7 @@ public
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jLabel1 = new javax.swing.JLabel();
 
@@ -80,27 +80,18 @@ public
             }
          }
       }
-      catch (ClassNotFoundException ex)
+      catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex)
       {
          java.util.logging.Logger.getLogger(processing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
-      catch (InstantiationException ex)
-      {
-         java.util.logging.Logger.getLogger(processing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      }
-      catch (IllegalAccessException ex)
-      {
-         java.util.logging.Logger.getLogger(processing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      }
-      catch (javax.swing.UnsupportedLookAndFeelException ex)
-      {
-         java.util.logging.Logger.getLogger(processing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      }
+      //</editor-fold>
+
         //</editor-fold>
 
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable()
       {
+         @Override
          public
             void run()
          {

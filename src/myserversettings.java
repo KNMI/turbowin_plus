@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -17,7 +19,7 @@ import javax.swing.JPopupMenu;
  *
  * @author stam
  */
-public class myserversettings extends javax.swing.JFrame {
+final public class myserversettings extends javax.swing.JFrame {
 
    /* inner class popupListener */
    class PopupListener extends MouseAdapter 
@@ -62,8 +64,7 @@ public class myserversettings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
@@ -75,23 +76,18 @@ public class myserversettings extends javax.swing.JFrame {
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("server settings");
       setMinimumSize(new java.awt.Dimension(1000, 700));
-      setPreferredSize(new java.awt.Dimension(1000, 700));
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton2.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Cancel_button_actionPerformed(evt);
          }
       });
@@ -278,15 +274,11 @@ public class myserversettings extends javax.swing.JFrame {
                break;
             }
          }
-      } catch (ClassNotFoundException ex) {
-         java.util.logging.Logger.getLogger(myserversettings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (InstantiationException ex) {
-         java.util.logging.Logger.getLogger(myserversettings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
-         java.util.logging.Logger.getLogger(myserversettings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
          java.util.logging.Logger.getLogger(myserversettings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
+      //</editor-fold>
+      
         //</editor-fold>
 
       /* Create and display the form */

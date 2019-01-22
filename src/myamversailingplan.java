@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -34,7 +36,7 @@ import javax.swing.table.TableCellEditor;
  *
  * @author Martin
  */
-public class myamversailingplan extends javax.swing.JFrame {
+final public class myamversailingplan extends javax.swing.JFrame {
 
     /** Creates new form myamversailingplan */
     public myamversailingplan() {

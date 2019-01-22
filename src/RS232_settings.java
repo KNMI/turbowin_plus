@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import com.fazecast.jSerialComm.SerialPort;
 import javax.swing.ComboBoxModel;
@@ -13,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author hometrainer
  */
-public class RS232_settings extends javax.swing.JFrame {
+final public class RS232_settings extends javax.swing.JFrame {
 
    /**
     * Creates new form RS232_settings
@@ -30,8 +32,7 @@ public class RS232_settings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       buttonGroup1 = new javax.swing.ButtonGroup();
       buttonGroup2 = new javax.swing.ButtonGroup();
@@ -41,11 +42,11 @@ public class RS232_settings extends javax.swing.JFrame {
       jLabel2 = new javax.swing.JLabel();
       jLabel3 = new javax.swing.JLabel();
       jLabel4 = new javax.swing.JLabel();
-      jComboBox1 = new javax.swing.JComboBox<Integer>();
-      jComboBox2 = new javax.swing.JComboBox<Integer>();
-      jComboBox3 = new javax.swing.JComboBox<Integer>();
-      jComboBox4 = new javax.swing.JComboBox<String>();
-      jComboBox5 = new javax.swing.JComboBox<String>();
+      jComboBox1 = new javax.swing.JComboBox<>();
+      jComboBox2 = new javax.swing.JComboBox<>();
+      jComboBox3 = new javax.swing.JComboBox<>();
+      jComboBox4 = new javax.swing.JComboBox<>();
+      jComboBox5 = new javax.swing.JComboBox<>();
       jLabel8 = new javax.swing.JLabel();
       jTextField1 = new javax.swing.JTextField();
       jLabel10 = new javax.swing.JLabel();
@@ -71,11 +72,11 @@ public class RS232_settings extends javax.swing.JFrame {
       jRadioButton6 = new javax.swing.JRadioButton();
       jRadioButton7 = new javax.swing.JRadioButton();
       jPanel4 = new javax.swing.JPanel();
-      jComboBox6 = new javax.swing.JComboBox<Integer>();
+      jComboBox6 = new javax.swing.JComboBox<>();
       jLabel14 = new javax.swing.JLabel();
       jLabel15 = new javax.swing.JLabel();
       jLabel16 = new javax.swing.JLabel();
-      jComboBox7 = new javax.swing.JComboBox<String>();
+      jComboBox7 = new javax.swing.JComboBox<>();
       jLabel17 = new javax.swing.JLabel();
       jTextField2 = new javax.swing.JTextField();
       jPanel5 = new javax.swing.JPanel();
@@ -88,7 +89,6 @@ public class RS232_settings extends javax.swing.JFrame {
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("Serial/USB or LAN connection settings");
       setMinimumSize(new java.awt.Dimension(1000, 700));
-      setPreferredSize(new java.awt.Dimension(1000, 700));
       setResizable(false);
 
       jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -100,16 +100,6 @@ public class RS232_settings extends javax.swing.JFrame {
       jLabel3.setText("parity");
 
       jLabel4.setText("stop bits");
-
-      jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-      jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-      jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-      jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-      jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       jLabel8.setText("port number*");
 
@@ -181,110 +171,88 @@ public class RS232_settings extends javax.swing.JFrame {
 
       buttonGroup1.add(jRadioButton1);
       jRadioButton1.setText("Vaisala PTB220 serial");
-      jRadioButton1.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             PTB220_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton2);
       jRadioButton2.setText("Vaisala PTB330 serial");
-      jRadioButton2.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton2.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             PTB330_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton3);
       jRadioButton3.setText("EUCOS AWS serial");
-      jRadioButton3.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton3.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             AWS_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton4);
       jRadioButton4.setText("none");
-      jRadioButton4.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             none_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton5);
       jRadioButton5.setText("Mintaka Duo USB");
-      jRadioButton5.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             Mintaka_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton10);
       jRadioButton10.setText("Mintaka Star USB");
-      jRadioButton10.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton10.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             Mintaka_Star_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton11);
       jRadioButton11.setText("Mintaka Star LAN");
-      jRadioButton11.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton11.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             Mintaka_Star_WiFi_connected_itenStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton12);
       jRadioButton12.setText("OMC-140 AWS serial");
-      jRadioButton12.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton12.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             AWS_OMC_serial_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton13);
       jRadioButton13.setText("Mintaka Star + StarX USB");
-      jRadioButton13.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton13.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             Mintaka_StarX_USB_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton14);
       jRadioButton14.setText("Mintaka Star +  StarX LAN");
-      jRadioButton14.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton14.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             Mintaka_StarX_WiFi_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton15);
       jRadioButton15.setText("OMC-140 AWS LAN");
-      jRadioButton15.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton15.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             AWS_OMC_ethernet_connected_itemStateChanged(evt);
          }
       });
@@ -344,19 +312,15 @@ public class RS232_settings extends javax.swing.JFrame {
       jLabel6.setText("instrument port settings");
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton2.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Cancel_button_actionPerformed(evt);
          }
       });
@@ -370,20 +334,16 @@ public class RS232_settings extends javax.swing.JFrame {
 
       buttonGroup2.add(jRadioButton6);
       jRadioButton6.setText("GPS (NMEA 0183)");
-      jRadioButton6.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton6.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             GPS_NMEA_0183_itemStateChanged(evt);
          }
       });
 
       buttonGroup2.add(jRadioButton7);
       jRadioButton7.setText("none");
-      jRadioButton7.addItemListener(new java.awt.event.ItemListener()
-      {
-         public void itemStateChanged(java.awt.event.ItemEvent evt)
-         {
+      jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             none_GPS_NMEA_0183_itemStateChanged(evt);
          }
       });
@@ -412,15 +372,11 @@ public class RS232_settings extends javax.swing.JFrame {
       jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
       jPanel4.setPreferredSize(new java.awt.Dimension(326, 147));
 
-      jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
       jLabel14.setText("bits per second");
 
       jLabel15.setText("port number*");
 
       jLabel16.setText("port name**");
-
-      jComboBox7.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
       jLabel17.setText("* Windows and Linux   ** OS X");
 
@@ -559,7 +515,7 @@ public class RS232_settings extends javax.swing.JFrame {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-               .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
+               .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jLabel9)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -949,7 +905,19 @@ public class RS232_settings extends javax.swing.JFrame {
             doorgaan = false;
          }
       }
+      
+      // for security (if first AWSR was activated and second the connection was (re)set to EUCAWS)
+      if (doorgaan)
+      {
+         if (main.RS232_connection_mode == 3)    // EUCAWS serial connected
+         { 
+            // tp be sure
+            main.AWSR = false;
+            main.AWSR_reporting_interval = "";
+         }
+      }
 
+      
       //
       ////////////////// save the RS232 (RS422) settings data ///////////////////////
       //

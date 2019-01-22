@@ -1,3 +1,5 @@
+package turbowin;
+
 
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -17,7 +19,7 @@ import javax.swing.SwingWorker;
  *
  * @author Martin
  */
-public class WOW_APR_settings extends javax.swing.JFrame {
+final public class WOW_APR_settings extends javax.swing.JFrame {
 
    /**
     * Creates new form WOW_settings
@@ -34,8 +36,7 @@ public class WOW_APR_settings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       buttonGroup1 = new javax.swing.ButtonGroup();
       buttonGroup2 = new javax.swing.ButtonGroup();
@@ -89,23 +90,18 @@ public class WOW_APR_settings extends javax.swing.JFrame {
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("WOW and APR and AWSR settings");
       setMinimumSize(new java.awt.Dimension(1000, 700));
-      setPreferredSize(new java.awt.Dimension(1000, 700));
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton2.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Cancel_button_actionPerformed(evt);
          }
       });
@@ -115,18 +111,14 @@ public class WOW_APR_settings extends javax.swing.JFrame {
 
       jLabel5.setForeground(java.awt.Color.blue);
       jLabel5.setText("<html><u>wow.metoffice.gov.uk</u></html>");
-      jLabel5.addMouseListener(new java.awt.event.MouseAdapter()
-      {
-         public void mouseClicked(java.awt.event.MouseEvent evt)
-         {
+      jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
             WOW_link_mouseClicked(evt);
          }
-         public void mouseEntered(java.awt.event.MouseEvent evt)
-         {
+         public void mouseEntered(java.awt.event.MouseEvent evt) {
             WOW_link_mouseEntered(evt);
          }
-         public void mouseExited(java.awt.event.MouseEvent evt)
-         {
+         public void mouseExited(java.awt.event.MouseEvent evt) {
             WOW_link_mouseExited(evt);
          }
       });
@@ -1230,15 +1222,12 @@ public class WOW_APR_settings extends javax.swing.JFrame {
                break;
             }
          }
-      } catch (ClassNotFoundException ex) {
-         java.util.logging.Logger.getLogger(WOW_APR_settings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (InstantiationException ex) {
-         java.util.logging.Logger.getLogger(WOW_APR_settings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
-         java.util.logging.Logger.getLogger(WOW_APR_settings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-      } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
          java.util.logging.Logger.getLogger(WOW_APR_settings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
+      //</editor-fold>
+      //</editor-fold>
+      
         //</editor-fold>
         //</editor-fold>
 

@@ -1,3 +1,5 @@
+package turbowin;
+
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -17,7 +19,7 @@ import javax.swing.SwingWorker;
  *
  * @author  Martin
  */
-public class mybarograph extends javax.swing.JFrame {
+final public class mybarograph extends javax.swing.JFrame {
     
     /** Creates new form mybarograph */
     public mybarograph() {
@@ -467,7 +469,7 @@ public class mybarograph extends javax.swing.JFrame {
 
       
       // AWS connected?
-      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9|| main.RS232_connection_mode == 10)
+      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
       {
          local_AWS_connected = true;
       }
