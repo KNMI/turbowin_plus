@@ -10,7 +10,26 @@ TurboWin+ (TurboWeb) was especially designed for running in the background eg wh
 It can run for weeks in the background. The memory footprint is low and the cpu usage is minimal and by 
 using extended threading the application is always responsive. 
 
-
+================================== VERSION 3.2.0 ====================================
+New items in this version:
+• ' hybrid' dashboard for visualising measured data (see Fig 13 in
+“TurboWin+_AWS_monitoring_displays.pdf”). Mix of digital and analog view, summary of
+measured data with a wind rose with selectable ship type and true wind arrow, indicating
+true direction and force of the measured wind.
+• 'wind radar' dashboard for visualising measured data (see Fig 14 - Fig 23 in
+“TurboWin+_AWS_monitoring_displays.pdf”). The most extensive dashboard in
+TurboWin+. All measured data is displayed. Amongst the wind speed measured at
+anemometer height also with the to 10m reduced wind speed (the international reference
+level). On the wind radar screen the ship type is selectable and the relative (orange colour)
+and true wind (yellow colour) arrows are depicted. The background is the appropriate
+Beaufort image
+• TurboWin+ system tray iconify on Linux removed. System tray support was skipped or
+discouraged on most of the latest versions of the most used Linux desktops (GNOME,
+Cinnamon, Xubuntu, Xfce). From now, on Linux, after minimizing, the TurboWin+ app will
+be visible as minimized on the launcher or docker bar and not as an icon on the status bar
+any more
+• Added statement “TurboWin+ is free software and open-source software (GPLv3)” and
+added link to E-SURFMAR. Menu: Info → About
 
 ================================== VERSION 3.1.2 ====================================
 - minor bug fix; true wind and apparent wind values in manual mode not updated on main screen
