@@ -13,7 +13,7 @@ TurboWin+ was especially designed for running in the background eg when collecti
 It can run for weeks in the background. The memory footprint is low and the cpu usage is minimal and by 
 using extended threading the application is always responsive. 
 
-================================== VERSION 3.2.0 ====================================
+================================== VERSION 3.2.0 ================================
 New items in this version:
 
 • ' hybrid' dashboard for visualising measured data (see Fig 13 in
@@ -38,17 +38,17 @@ any more
 • Added statement “TurboWin+ is free software and open-source software (GPLv3)” and
 added link to E-SURFMAR. Menu: Info → About
 
-================================== VERSION 3.1.2 ====================================
+================================== VERSION 3.1.2 ===============================
 - minor bug fix; true wind and apparent wind values in manual mode not updated on main screen
 after sending obs
 - JPMS (Java Platform Module System) version available
 - In JPMS version updated JSerialComm library (1.3.11 -> 2.1.1)
 
-================================== VERSION 3.1.1 ====================================
+================================== VERSION 3.1.1 ===============================
 - minor bug fix; true wind and apparent wind values in manual mode not updated on main screen 
 after completing wind input form
 
-================================== VERSION 3.1.0 =====================================
+================================== VERSION 3.1.0 ===============================
 [Version 3.1.0 compared to version 3.0.6]
 - many smaller changes and updates
 
@@ -62,7 +62,7 @@ noticeable new items in this version:
 - New option to insert Relative Humidity
 
 
-================================== VERSION 3.0.6 =====================================
+================================== VERSION 3.0.6 ==============================
 [Version 3.0.6 compared to version 3.0.5]
 
 This update contains a not visible new feature which  will not add any functionality but could be very useful: 
@@ -76,7 +76,7 @@ always reconnect automatically. For more info see: https://www.taskjunction.com/
 
 
 
-================================== VERSION 3.0.5 =====================================
+================================== VERSION 3.0.5 =================================
 [Version 3.0.5 compared to version 3.0.0]
 - Better Dashboard scaling for low screen resolutions (and enlarged fonts accordingly)
 - Changed the Dashboard background from WMO picture to (tiled) SOT-JCOMM logo (after counting the votes)
@@ -88,7 +88,7 @@ always reconnect automatically. For more info see: https://www.taskjunction.com/
 
 
 
-================================== VERSION 3.0.0 =====================================
+================================== VERSION 3.0.0 ================================
 
 [Noticeable new items in TurboWin+ (TurboWeb) 3.0 compared to TurboWin+ (TurboWeb) 2.6]
 
