@@ -30,38 +30,54 @@ public class ship
    /***********************************************************************************************/
    public ship()
    {
-      color_white                       = Color.WHITE;
-      color_black                       = Color.BLACK;
-      color_life_boat                   = new Color(255, 69, 0);                       // orange-red
-      color_deck_passenger_ship         = new Color(222,184, 135);  //new Color(205,133, 63);  
-      color_acc_passenger_ship          = new Color(255, 218, 185);
-      color_deck_general_cargo_ship     = new Color(210, 105, 30);
-      color_hatches_general_cargo_ship  = Color.LIGHT_GRAY;
-      color_pool_1                      = new Color(100, 149, 237);                    // sarboard and aft swimming pool edge; color between inner swimming pool and outer pool; for depth effect
-      color_pool_2                      = new Color(0, 0, 205);                        // inner swimming pool (pool bottom)
-      color_pool_3                      = new Color(0, 255, 255, 100);                 // outer swimming pool (covering pool bottom and edges (semi transparent)
-      color_funnel_passenger_ship       = Color.LIGHT_GRAY;
-      color_bridge_container_ship       = new Color(245,255,250); 
-      color_bridge_oil_tanker           = Color.GRAY;  
-      color_bulk_carrier                = new Color(204, 69, 50, 255);                 // red-brown
-      color_lng_tanks                   = Color.RED;
-      color_deck_lng_tanker             = Color.LIGHT_GRAY; 
-      color_deck_oil_tanker             = new Color(0, 100, 70);                       // green-blue
-      color_pipes_oil_tanker            = Color.LIGHT_GRAY;  
-      color_deck                        = new Color(176,196,222, 255);                                  // light steel blue (alpha 255 = 100% opaque)
-      //color_bridge_container_ship = new Color(245,255,250);                                     // mint cream
-      int alpha_container               = 128;
-      color_container_1                 = new Color(255, 51, 51, alpha_container);              // red      
-      color_container_2                 = new Color(178, 34, 34, alpha_container);              // firebrick red
-      color_container_3                 = new Color(240,128,128, alpha_container);              // light coral red
-      color_container_4                 = new Color(70,130,180, alpha_container);               // steel blue
-      color_container_5                 = new Color(30,144,255, alpha_container);               // dodger blue
-      color_container_6                 = new Color(65,105,225, alpha_container);               // royal blue
-      color_container_7                 = new Color(255,245,238, alpha_container);              // sea shell white
-      color_container_8                 = new Color(245,255,250, alpha_container);              // mint crean white
-      color_container_9                 = new Color(244,164,96, alpha_container);               // sandy brown
-      color_container_10                = new Color(255,127,80, alpha_container);               // coral red
-   }
+      color_white                        = Color.WHITE;
+      color_black                        = Color.BLACK;
+      color_life_boat                    = new Color(255, 69, 0);                                // orange-red
+      color_deck_passenger_ship          = new Color(222,184, 135);   
+      color_acc_passenger_ship           = new Color(255, 218, 185);
+      color_deck_general_cargo_ship      = new Color(210, 105, 30);
+      color_deck_research_vessel         = new Color(36, 128, 55);    
+      color_deck1_ferry                  = new Color(70, 130, 180);                              // main deck        // steel blue
+      color_deck2_ferry                  = new Color(123, 163, 201);                             // bridge deck      // between steel blue and light steel blue
+      color_deck3_ferry                  = new Color(176, 196, 222);                             // upper/top deck   // light steel blue
+      color_funnel_ferry                 = new Color(173, 216, 220);//new Color(70, 130, 180);
+      color_deck_ro_ro                   = Color.DARK_GRAY;
+      color_lanes_ro_ro                  = new Color(255, 255, 0, 128);                          // yellow, semi transparent
+      color_crane_research_vessel        = new Color(204, 69, 50, 255);                          // red-brown
+      color_hoist_research_vessel        = new Color(0, 102, 204, 255);                          // blue
+      color_cradle_research_vessel       = new Color(255, 165, 0, 255);                          // orange
+      color_night_crane_research_vessel  = new Color(204, 69, 50, 64);                           // red-brown, semi transparent
+      color_night_hoist_research_vessel  = new Color(0, 102, 204, 64);                           // blue, semi transparent
+      color_night_cradle_research_vessel = new Color(255, 165, 0, 64);                           // orange, semi transparent
+      color_hatches_general_cargo_ship   = Color.LIGHT_GRAY;
+      color_pool_1                       = new Color(100, 149, 237);                             // starboard and aft swimming pool edge; color between inner swimming pool and outer pool; for depth effect
+      color_pool_2                       = new Color(0, 0, 205);                                 // inner swimming pool (pool bottom)
+      color_pool_3                       = new Color(0, 255, 255, 100);                          // outer swimming pool (covering pool bottom and edges (semi transparent)
+      color_funnel_passenger_ship        = Color.LIGHT_GRAY;
+      color_bridge_container_ship        = new Color(245,255,250); 
+      color_bridge_oil_tanker            = Color.GRAY;  
+      color_bridge_research_vessel       = new Color(60, 159, 113); 
+      color_bridge_ro_ro_ship            = new Color(60, 159, 113);
+      color_bulk_carrier                 = new Color(204, 69, 50, 255);                          // red-brown
+      color_lng_tanks                    = Color.RED;
+      color_deck_lng_tanker              = Color.LIGHT_GRAY; 
+      color_deck_oil_tanker              = new Color(0, 100, 70);                                // green-blue
+      color_pipes_oil_tanker             = Color.LIGHT_GRAY;  
+      color_deck                         = new Color(176,196,222, 255);                          // light steel blue (NB alpha 255 = 100% opaque)
+      color_medium_gray                  = new Color(128, 128, 128);
+      int alpha_container                = 128;                                                  // semi transparent
+      color_container_1                  = new Color(255, 51, 51, alpha_container);              // red      
+      color_container_2                  = new Color(178, 34, 34, alpha_container);              // firebrick red
+      color_container_3                  = new Color(240,128,128, alpha_container);              // light coral red
+      color_container_4                  = new Color(70,130,180, alpha_container);               // steel blue
+      color_container_5                  = new Color(30,144,255, alpha_container);               // dodger blue
+      color_container_6                  = new Color(65,105,225, alpha_container);               // royal blue
+      color_container_7                  = new Color(255,245,238, alpha_container);              // sea shell white
+      color_container_8                  = new Color(245,255,250, alpha_container);              // mint crean white
+      color_container_9                  = new Color(244,164,96, alpha_container);               // sandy brown
+      color_container_10                 = new Color(255,127,80, alpha_container);               // coral red
+      
+   } 
  
    
    
@@ -94,7 +110,8 @@ public class ship
       //
       //
       // eg see http://what-when-how.com/introduction-to-computer-graphics-using-java-2d-and-3d/basic-principles-of-two-dimensional-graphics-introduction-to-computer-graphics-using-java-2d-and-3d-part-2/
-
+      //
+      
       double x = 0;
       double y = 0;
       double x1 = 0;
@@ -123,17 +140,18 @@ public class ship
 
       //////////// bow ////////
       //
-      x = 0;                                                             // control point quadTo; relative to origin (centre of wind rose)
-      y = -(wind_rose_diameter / 2.0);                                   // control point quadTo; relative to origin (centre of wind rose)
-      double bow_height_virtual = ship_breadth * 2;  //2.5                  // quadTo; vertical distance from control point to start end end point       
-
+      x = 0;                                                                // control point quadTo; relative to origin (centre of wind rose)
+      y = -(wind_rose_diameter / 2.0);                                      // control point quadTo; relative to origin (centre of wind rose)
+      double bow_height_virtual = ship_breadth * 2;                         // NB factor 2.0 is indication of the bow curve; quadTo; quadTo; vertical distance from control point to start end end point       
+      y = -(wind_rose_diameter / 2.0) + (bow_height_virtual * 0.1);         // NB factor 0.1 depends on factor used in bow_height_virtual
+      
       ///////////// main ship section (rectangle shape) ///////////
       //
       x1 = -ship_breadth / 2.0; //x;
       y1 = y + bow_height_virtual;
       x2 = ship_breadth / 2.0;
       y2 = y1;
-      double ship_length_main = Math.abs(y1) * 2;                              // so the length of the main mid section
+      double ship_length_main = Math.abs(y1) * 2.3;                       // so the length of the main mid section; NB factor 2.3 depends on the factor used at bow_height_virtual and y
 
       ///////////// aft ship (trapezium shape) ///////////
       //
@@ -171,13 +189,6 @@ public class ship
       }
       g2d.fill(ship);
 
-      //System.out.println("x = "  + x);
-      //System.out.println("x1 = "  + x1);
-      //System.out.println("x2 = "  + x2);
-      //System.out.println("y = "  + y);
-      //System.out.println("y1 = "  + y1);
-      //System.out.println("y2 = "  + y2);
-      
       
       /////////////// ship bridge /////////
       //
@@ -186,7 +197,7 @@ public class ship
       double acc_height = (y6 - y3) / 2;                        
       double bridge_indention = ship_breadth / 5;
       double dist_origin_bridge = y3 - bridge_height;
-      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention);
+      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention, night_mode);
 
       
       ////////////// hatches ////////////
@@ -201,7 +212,15 @@ public class ship
       {
          if (y_hatch + (hatch_length + hatch_intermediate / 2) < (ship_length_main / 2 - bridge_height)) 
          {
-            g2d.setPaint(color_hatches_general_cargo_ship);
+            if (night_mode)
+            {
+               g2d.setPaint(color_medium_gray);
+            }
+            else
+            {
+               g2d.setPaint(color_hatches_general_cargo_ship);
+            }
+            
             g2d.fill(new Rectangle2D.Double(x_hatch, y_hatch, hatch_breath, hatch_length));
             
             // hatch sections
@@ -278,7 +297,14 @@ public class ship
          
          Shape shape_crane_pillar = new Ellipse2D.Double(x_pillar_crane, y_pillar_crane, width_crane_pillar, height_crane_pillar);
 
-         g2d.setPaint(color_white);
+         if (night_mode)
+         {
+            g2d.setPaint(Color.LIGHT_GRAY);
+         }
+         else
+         {
+            g2d.setPaint(color_white);
+         }
          g2d.fill(shape_crane_pillar);
       
          g2d.setColor(Color.LIGHT_GRAY);
@@ -304,7 +330,14 @@ public class ship
       ///////////////// crane arms /////////////
       //
       g2d.setStroke(new BasicStroke(3.0f)); 
-      g2d.setColor(color_white);
+      if (night_mode)
+      {
+         g2d.setColor(Color.LIGHT_GRAY);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
       
       double y3_first_arm = y1_second_arm - width_crane_pillar;   // NB y1_first_arm to y3_first_arm - 4 = arm length
       double y3_second_arm = y1_third_arm - width_crane_pillar;   // NB y1_second_arm to y3_second_arm - 4 = arm length
@@ -478,6 +511,1258 @@ public class ship
       //System.out.println("y1 = "  + y1);
       //System.out.println("y2 = "  + y2);
    }
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   public void draw_research_vessel(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
+   {
+      //
+      //          (x,y).
+      //               
+      //
+      //               ^
+      //             /   \
+      //            /     \
+      //           /       \
+      //  (x1,y1) |         | (x2,y2)                                    y - ^
+      //          |         |                                                |
+      //          |         |                                                |
+      //          |    *    |   * = origin (0,0)                             |
+      //          |         |                                     x-  <--------------> x+
+      //          |         |                                                |
+      //          |         |                                                |
+      //  (x3,y3) ----------- (x4,y4)                                        |
+      //          \         /                                                v
+      //   (x6,y6) --------- (x5,y5)                                      y+
+      //
+      //
+      //
+      // eg see http://what-when-how.com/introduction-to-computer-graphics-using-java-2d-and-3d/basic-principles-of-two-dimensional-graphics-introduction-to-computer-graphics-using-java-2d-and-3d-part-2/
+
+      double x = 0;
+      double y = 0;
+      double x1 = 0;
+      double y1 = 0;
+      double x2 = 0;
+      double y2 = 0;
+      double x3 = 0;
+      double y3 = 0;
+      double x4 = 0;
+      double y4 = 0;
+      double x5 = 0;
+      double y5 = 0;
+      double x6 = 0;
+      double y6 = 0;
+
+      // ship_breadth is leading for scaling
+      //
+      double ship_breadth = wind_rose_diameter / 8.0;
+
+      ////////////// course line ///////////////
+      //
+      g2d.setColor(color_black);
+      float[] dash = {2f, 0f, 2f};
+      g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash, 1.0f));
+      g2d.draw(new Line2D.Double(0, wind_rose_diameter / 2 + ship_breadth, 0, -wind_rose_diameter / 2 - ship_breadth));
+
+      //////////// bow ////////
+      //
+      x = 0;                                                             // control point quadTo; relative to origin (centre of wind rose)
+      y = -(wind_rose_diameter / 2.0);                                   // control point quadTo; relative to origin (centre of wind rose)
+      double bow_height_virtual = ship_breadth * 2.5;                    // quadTo; vertical distance from control point to start end end point       
+
+      ///////////// main ship section (rectangle shape) ///////////
+      //
+      x1 = -ship_breadth / 2.0; //x;
+      y1 = y + bow_height_virtual;
+      x2 = ship_breadth / 2.0;
+      y2 = y1;
+      double ship_length = Math.abs(y1) * 2;                              // so the length of the main mid section
+
+      ///////////// aft ship (trapezium shape) ///////////
+      //
+      x3 = x1;
+      x4 = x3 + ship_breadth;
+      x5 = x4 - (ship_breadth / 7);
+      x6 = x3 + (ship_breadth / 7);
+      y3 = y1 + ship_length;
+      y4 = y3;
+      y5 = y3 + (ship_breadth * 1.2);
+      y6 = y5;
+
+      ////////////// total ship ///////////////
+      //
+      GeneralPath ship = new GeneralPath();
+      ship.moveTo(x1, y1);
+      ship.quadTo(x, y, x2, y2);
+      ship.lineTo(x4, y4);
+      ship.lineTo(x5, y5);
+      ship.lineTo(x6, y6);
+      ship.lineTo(x3, y3);
+      ship.closePath();
+
+      // ship contour
+      g2d.setStroke(new BasicStroke(2.0f));
+      if (night_mode)
+      {
+         g2d.setColor(color_black);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(ship);
+      
+      // ship fill
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {   
+         g2d.setPaint(color_deck_research_vessel);
+      }
+      g2d.fill(ship);
+
+      
+      ///////// deck curve on fore ship /////////
+      //
+      double y_control = -(wind_rose_diameter / 2.0);                                   // control point quadTo; relative to origin (centre of wind rose)
+      bow_height_virtual = ship_breadth * 2.5;                                   // quadTo; vertical distance from control point to start end end point       
+      
+      double x1_curve = x1;
+      double y1_curve = y1;
+      double ctrx_curve = 0;
+      double ctry_curve = y_control + bow_height_virtual / 1.1;
+      double x2_curve = x1_curve + ship_breadth;
+      double y2_curve = y1_curve;
+ 
+      QuadCurve2D quad = new QuadCurve2D.Double(x1_curve, y1_curve, ctrx_curve, ctry_curve, x2_curve, y2_curve);
+      g2d.setStroke(new BasicStroke(2.0f));
+      
+      if (night_mode)
+      {
+         g2d.setColor(color_medium_gray);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(quad);
+
+      
+      ///////////////////// ship bridge ///////////////////
+      //
+      //
+      //
+      //                   ------------
+      //                  /            \
+      //                 /              \
+      //                /(x5,y5)         \(x6,y6)
+      //  (x1,y1)---------------------------------(x2,y2)
+      //         |                               |
+      //         |                               |
+      //  (x4,y4)---------------------------------(x3,y3)
+      //                
+      //
+      //
+      // NB
+      //    bridge_height = distance y2 -> y3
+      //    bridge_indention = x1 -> x5
+      //
+      // NB
+      //    all relative to origin (0, 0)
+      //
+      // NB read in this bridge section "x1_bridge" for "x1" etc
+      //
+   
+      
+      double bridge_height = ship_breadth / 5;                    
+      double bridge_indention = ship_breadth / 5;
+      double dist_origin_bridge = 0 - bridge_height;  
+      
+      double bridge_overhang = 5;
+      double x1_bridge = -ship_breadth / 2 - bridge_overhang;
+      double x2_bridge = ship_breadth / 2 + bridge_overhang;
+      double x3_bridge = x2_bridge;
+      double x4_bridge = x1_bridge;
+      double x5_bridge = x1_bridge + bridge_indention;
+      double x6_bridge = x2_bridge - bridge_indention;
+      double y1_bridge = dist_origin_bridge; //0;
+      double y2_bridge = y1_bridge;
+      double y3_bridge = y1_bridge + bridge_height;
+      double y4_bridge = y3_bridge;
+      double y5_bridge = y1_bridge;
+      double y6_bridge = y1_bridge;
+       
+
+      GeneralPath bridge = new GeneralPath();
+      bridge.moveTo(x1_bridge, y1_bridge);
+      bridge.lineTo(x5_bridge, y5_bridge);
+      bridge.quadTo(x, y1_bridge - (ship_breadth / 4), x6_bridge, y6_bridge);
+      bridge.lineTo(x2_bridge, y2_bridge);
+      bridge.lineTo(x3_bridge, y3_bridge);
+      bridge.lineTo(x4_bridge, y4_bridge);
+      bridge.closePath();
+
+      // bridge contour
+      g2d.setStroke(new BasicStroke(5.0f));
+      if (night_mode)
+      {
+         g2d.setColor(color_medium_gray);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(bridge);
+      
+      // bridge fill
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {   
+         g2d.setPaint(color_bridge_research_vessel);
+      }
+      g2d.fill(bridge);
+      
+      
+      //////// satellite dome (middle bridge) ///////
+      //
+      double dome_diameter = ship_breadth / 4;
+      double x1_dome = 0 - dome_diameter / 2;                           // middle of the bridge
+      double y1_dome = y4_bridge - dome_diameter;                 // middle of the bridge
+      Shape shape_dome = new Ellipse2D.Double(x1_dome, y1_dome, dome_diameter, dome_diameter);
+      
+      // fill dome
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {
+         g2d.setPaint(color_white);
+      }
+      g2d.fill(shape_dome);
+      
+      // contour dome
+      g2d.setStroke(new BasicStroke(1.0f));
+      g2d.setColor(color_black);
+      g2d.draw(shape_dome);
+
+      
+     
+      /////////////////// crane pillar /////////////////
+      //
+      //                          ___
+      //                         /   \
+      //       (x1_arm,y1_arm)  |     | (x2_arm,y2_arm)     <-- pillar crane
+      //                        |\___/|
+      //                        |     |
+      //                        |     |
+      //                        |     |
+      //                        |     |                     <-- arm crane
+      //                        |     |
+      //                        |     |
+      //                        |     |
+      //                         -----
+      //        (x3_arm,y3_arm)          (x4_arm,y4_arm)
+      //
+      //
+      
+      double width_crane_pillar = ship_breadth * 0.15;
+      double height_crane_pillar = width_crane_pillar;
+      double x_pillar_crane = x2 - width_crane_pillar;//0;
+      double y_pillar_crane = (y4 - y3_bridge) / 2;                // crane position in the middle of bridge and where the indention/curve of the aft ship starts
+      
+      double x1_arm = x_pillar_crane;
+      double x2_arm = x_pillar_crane + width_crane_pillar;
+      double arm_slope = 4;
+      double x3_arm = x1_arm + arm_slope;
+      double x4_arm = x2_arm - arm_slope;
+      
+      // if the (ship) figure is very small
+      if (x4_arm < x3_arm)
+      {
+         x3_arm = x1_arm;
+         x4_arm = x2_arm;
+      }
+      
+      Shape shape_crane_pillar = new Ellipse2D.Double(x_pillar_crane, y_pillar_crane, width_crane_pillar, height_crane_pillar);
+      if (night_mode)
+      {
+         g2d.setPaint(color_night_crane_research_vessel);
+      }
+      else
+      {
+         g2d.setPaint(color_crane_research_vessel);
+      }
+      g2d.fill(shape_crane_pillar);
+      
+      if (night_mode)
+      {
+         g2d.setColor(color_night_crane_research_vessel); 
+      }
+      else
+      {
+         g2d.setColor(color_crane_research_vessel);
+      }
+      g2d.setStroke(new BasicStroke(1.0f));
+      g2d.draw(shape_crane_pillar);
+      
+      
+      ///////////////// crane arm /////////////
+      //
+      g2d.setStroke(new BasicStroke(3.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(color_night_crane_research_vessel);
+      }
+      else
+      {
+         g2d.setColor(color_crane_research_vessel);
+      }
+      
+      double y1_arm = y_pillar_crane + (height_crane_pillar / 2);
+      double y2_arm = y1_arm;  
+      double y3_arm = y1_arm - (y4 - y3_bridge) / 2;    // arm length = y4 - y3_bridge) / 2
+      double y4_arm = y3_arm;
+         
+      double xPoints[] = {x1_arm, x3_arm, x4_arm, x2_arm};
+      double yPoints[] = {y1_arm, y3_arm, y4_arm, y2_arm};         // -values for y goes/points to the bow
+
+      GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);
+      polygon.moveTo(xPoints[0], yPoints[0]);
+      for (int index = 1; index < xPoints.length; index++) 
+      {
+         polygon.lineTo(xPoints[index], yPoints[index]);
+      }
+      polygon.closePath();
+      g2d.draw(polygon);  
+         
+      // crane arm reinforcement part
+      double x1_sub = x1_arm + (arm_slope / 2);
+      double x2_sub = x2_arm - (arm_slope / 2);
+      double y1_sub = (y1_arm + y3_arm) / 2;
+      double y2_sub = y1_sub;    
+      g2d.draw(new Line2D.Double(x1_sub, y1_sub, x2_sub, y2_sub));
+      
+      
+      ////////////////////// equipment containers //////////////////
+      //
+      //               x1                           x2
+      //                |                           |
+      //                |                           |
+      //  (x4_bridge,y4_bridge)                    (x3_bridge,y3_bridge)
+      //               -------------------------------                          rear side bridge   
+      //                |                           |
+      //   (x1_c,y1_c)  |---| (x2_c,y2_c)           |
+      //                |   |                       |
+      //                |   |                       |
+      //                |   |                       |                                
+      //    (x5_c,y5_c) |-- | (x6_c,y6_c)           |
+      //                |   |                       |                                
+      //                |   |                       |
+      //                |   |                       |
+      //   (x4_c,y4_c)  |---| (x3_c,y3_c)           |
+      //                |                           |
+      //                |                           |
+      //        (x3,y3) |                           | (x4,y4)
+      //                 \                         /
+      //                  \                       /
+      //                port                  starboard
+      //
+      //
+      //
+      double x1_container = x1;
+      double x2_container = x1_container + (ship_breadth * 0.2); 
+      double x3_container = x2_container;
+      double x4_container = x1_container;       
+      double y1_container = y4_bridge + (ship_breadth * 0.3);                             
+      double y2_container = y1_container;
+      double y3_container = y3 - (ship_breadth * 0.3);
+      double y4_container = y3_container;
+              
+      double xPoints_container[] = {x1_container, x2_container, x3_container, x4_container};
+      double yPoints_container[] = {y1_container, y2_container, y3_container, y4_container};                   // -values for y goes/points to the bow
+
+      GeneralPath polygon_container = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints_container.length);
+      polygon_container.moveTo(xPoints_container[0], yPoints_container[0]);
+      for (int index = 1; index < xPoints_container.length; index++)            
+      {
+         polygon_container.lineTo(xPoints_container[index], yPoints_container[index]);
+      }
+      polygon_container.closePath();   
+      
+      // container fill
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {
+         // NB these (reearch/equipment containers are always white!
+         g2d.setPaint(color_white);
+      }
+      g2d.fill(polygon_container);  
+      
+      // container contour
+      g2d.setStroke(new BasicStroke(1.0f)); 
+      g2d.setColor(color_black);
+      g2d.draw(polygon_container);
+      
+      // makes 2 containers
+      double x5_container = x1_container;
+      double x6_container = x2_container;     
+      double y5_container = (y1_container + y4_container) / 2;
+      double y6_container = y5_container;
+      
+      GeneralPath container_mid = new GeneralPath();
+      container_mid.moveTo(x5_container, y5_container);
+      container_mid.lineTo(x6_container, y6_container);
+      container_mid.closePath();
+      g2d.draw(container_mid);
+      
+      //////////////// container cradle /////////////////
+      //
+      //
+      //                  (x7_c,y7_c)    
+      //    (x5_c,y5_c) |-------| (x6_c,y6_c)           
+      //                |   |   |                                                    
+      //                |   |   |    
+      //                |   |   |   
+      //                |   |   |   
+      //                |   |   |   
+      //                |   |   |
+      //                |   |   |                       
+      //   (x4_c,y4_c)  |-------|  (x3_c,y3_c)          
+      //                  (x8_c,y8_c)
+      //
+      //
+      
+      double x7_container = (x5_container + x6_container) / 2;
+      double x8_container = x7_container;     
+      double y7_container = y5_container;
+      double y8_container = y4_container;
+
+      
+      // NB drawing the cradle lines via GeneralPath is also ok
+      // 
+      // GeneralPath container_cradle = new GeneralPath();
+      // container_cradle.moveTo(x5_container, y5_container);
+      // container_cradle.lineTo(x6_container, y6_container);
+      // 
+      // container_cradle.moveTo(x7_container, y7_container);
+      // container_cradle.lineTo(x8_container, y8_container);
+      //
+      // container_cradle.moveTo(x4_container, y4_container);
+      // container_cradle.lineTo(x3_container, y3_container);
+      //
+      // container_cradle.closePath();
+      //
+      // g2d.setStroke(new BasicStroke(2.0f)); 
+      // g2d.setColor(Color.ORANGE);
+      // g2d.draw(container_cradle);
+      
+      g2d.setStroke(new BasicStroke(2.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(color_night_cradle_research_vessel);
+      }
+      else
+      {
+         g2d.setColor(color_cradle_research_vessel);
+      }
+      g2d.draw(new Line2D.Double(x5_container, y5_container, x6_container, y6_container));
+      g2d.draw(new Line2D.Double(x7_container, y7_container, x8_container, y8_container));
+      g2d.draw(new Line2D.Double(x4_container, y4_container, x3_container, y3_container));
+     
+      
+      ///////////////////// aft hoist constuction /////////////////
+      //
+      //
+      //             port                        starboard
+      //               |                             |
+      //               |                             |
+      //               |                             |
+      //               |                             |
+      //  (x1_hoist,y1_hoist)                    (x2_hoist,y2_hoist)  
+      //               |    ---------------------    |                        
+      //               |   /                      \  |
+      //               | /                          \|                            
+      //               -------------------------------                        <--- stern
+      //        (x6,y6)                                (x5,y5)  
+      //
+      //
+      
+      double x1_hoist = x6 + (ship_breadth / 10);
+      double x2_hoist = x5 - (ship_breadth / 10);  
+      double y1_hoist = y6 - (ship_length / 17);                               // NB ship_length = the length of the main mid section
+      double y2_hoist = y1_hoist;  
+      
+      double xPoints_hoist[] = {x6, x1_hoist, x2_hoist, x5};
+      double yPoints_hoist[] = {y6, y1_hoist, y2_hoist, y5};                   // -values for y goes/points to the bow
+   
+      g2d.setStroke(new BasicStroke(3.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(color_night_hoist_research_vessel);
+      }
+      else
+      {
+         g2d.setColor(color_hoist_research_vessel);
+      }
+      
+      GeneralPath polygon_hoist = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints_hoist.length);
+      polygon_hoist.moveTo(xPoints_hoist[0], yPoints_hoist[0]);
+      for (int index = 1; index < xPoints_hoist.length; index++)              // NB do not close the polygon!
+      {
+         polygon_hoist.lineTo(xPoints_hoist[index], yPoints_hoist[index]);
+      }
+      //polygon_hoist.closePath();                                            // NB do not close the polygon!
+      g2d.draw(polygon_hoist);  
+      
+   }
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   public void draw_ro_ro_ship(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
+   {
+      //
+      //          (x,y).
+      //               
+      //
+      //               ^
+      //             /   \
+      //            /     \
+      //           /       \
+      //  (x1,y1) |         | (x2,y2)                                    y - ^
+      //          |         |                                                |
+      //          |         |                                                |
+      //          |    *    |   * = origin (0,0)                             |
+      //          |         |                                     x-  <--------------> x+
+      //          |         |                                                |
+      //          |         |                                                |
+      //  (x3,y3) ----------- (x4,y4)                                        |
+      //          \         /                                                v
+      //   (x6,y6) --------- (x5,y5)                                      y+
+      //
+      //
+      //
+      // eg see http://what-when-how.com/introduction-to-computer-graphics-using-java-2d-and-3d/basic-principles-of-two-dimensional-graphics-introduction-to-computer-graphics-using-java-2d-and-3d-part-2/
+
+      double x = 0;
+      double y = 0;
+      double x1 = 0;
+      double y1 = 0;
+      double x2 = 0;
+      double y2 = 0;
+      double x3 = 0;
+      double y3 = 0;
+      double x4 = 0;
+      double y4 = 0;
+      double x5 = 0;
+      double y5 = 0;
+      double x6 = 0;
+      double y6 = 0;
+
+      // ship_breadth is leading for scaling
+      //
+      double ship_breadth = wind_rose_diameter / 8.0;
+
+      ////////////// course line ///////////////
+      //
+      g2d.setColor(color_black);
+      float[] dash = {2f, 0f, 2f};
+      g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash, 1.0f));
+      g2d.draw(new Line2D.Double(0, wind_rose_diameter / 2 + ship_breadth, 0, -wind_rose_diameter / 2 - ship_breadth));
+
+      //////////// bow ////////
+      //
+      x = 0;                                                             // control point quadTo; relative to origin (centre of wind rose)
+      double bow_height_virtual = ship_breadth * 1.1;                    // NB factor 1.1 is indication of the bow curve; quadTo; vertical distance from control point to start end end point       
+      y = -(wind_rose_diameter / 2.0) + (bow_height_virtual * 0.6);      // NB fator 0.6 depends on factor used in bow_height_virtual
+      
+      ///////////// main ship section (rectangle shape) ///////////
+      //
+      x1 = -ship_breadth / 2.0; 
+      y1 = y + bow_height_virtual;  
+      x2 = ship_breadth / 2.0;
+      y2 = y1;
+      double ship_length = Math.abs(y1) * 1.65;                          // so the length of the main mid section; nb factor 1.65 depends on the factor used at bow_height_virtual and y
+
+      ///////////// aft ship (trapezium shape) ///////////
+      //
+      x3 = x1;
+      x4 = x3 + ship_breadth;
+      x5 = x4; // - (ship_breadth / 7);  // so in fact here not a trapezium but a simple square
+      x6 = x3; // + (ship_breadth / 7);
+      y3 = y1 + ship_length;
+      y4 = y3;
+      y5 = y3 + (ship_breadth * 1.2);
+      y6 = y5;
+      
+
+      ////////////// total ship ///////////////
+      //
+      GeneralPath ship = new GeneralPath();
+      ship.moveTo(x1, y1);
+      ship.quadTo(x, y, x2, y2);
+      ship.lineTo(x4, y4);
+      ship.lineTo(x5, y5);
+      ship.lineTo(x6, y6);
+      ship.lineTo(x3, y3);
+      ship.closePath();
+
+      // fill total ship
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {   
+         g2d.setPaint(color_deck_ro_ro);
+      }
+      g2d.fill(ship);
+      
+      // contour total ship
+      g2d.setStroke(new BasicStroke(2.0f));
+      if (night_mode)
+      {
+         g2d.setColor(color_medium_gray);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(ship);
+      
+      
+      //////////// fill the bow ////////
+      GeneralPath bow = new GeneralPath();
+      bow.moveTo(x1, y1);
+      bow.quadTo(x, y, x2, y2);
+      bow.lineTo(x1, y1);
+      bow.closePath();
+      
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {   
+         g2d.setPaint(color_white);
+      }
+      g2d.fill(bow);
+      
+      
+      ////////////////// deck lanes ////////////
+      //
+      // NB drawing the deck lanes before drawing the bridge
+      //
+      
+      g2d.setStroke(new BasicStroke(1.0f)); 
+      g2d.setColor(Color.BLACK);
+      
+      // draw horizontal line as begin point deck lanes (where the bow begins)
+      if (night_mode)
+      {
+         g2d.setColor(color_medium_gray);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(new Line2D.Double(x1, y1, x2, y2));
+      
+      int number_lanes = 8;
+      double lane_breadth = ship_breadth / number_lanes;
+      g2d.setColor(color_lanes_ro_ro);
+      for (int i = 1; i < number_lanes; i++)
+      {
+         // draw 7 lines (do not over-write the port and starboard ship contour line)
+         double x1_lane = x1 + (i * lane_breadth);
+         double x2_lane = x1_lane;                    // always vertical line
+         double y1_lane = y1;
+         double y2_lane = y6;
+         g2d.draw(new Line2D.Double(x1_lane, y1_lane, x2_lane, y2_lane));
+      }
+      
+      
+      ///////////////////// ship bridge ////////////////////
+      //
+      //
+      //
+      //            (x3,y3)           (x4,y4)
+      //                   ------------
+      //                  /            \
+      //                 /              \
+      //                /(x2,y2)         \(x5,y5)
+      //  (x1,y1)---------------------------------(x6,y6)            <---- dist_origin_bridge
+      //         |                               |
+      //         |                               |
+      // (x12,y12)---------------------------------(x7,y7)
+      //            | (x11,y11)         (x8,y8)|
+      //            |                          |
+      //            |                          |
+      //            |                          |
+      //            |                          |
+      //  (x10,y10) ---------------------------- (x9,y9)            <--- y3 (aft of ship mid section)
+      //
+      //
+      //
+      //
+      // NB
+      //    bridge_height = distance y1 -> y12
+      //    bridge_indention = x1 -> x2
+      //
+      //    bridge_height2 = distance y2 -> y3         // bridge expansion
+      //    bridge_indention2 = x2 -> x3               // bridge expansion
+      //
+      //    acc_indention = x12 -> x11
+      //    acc_height = y10 -> y12
+      //
+      // NB
+      //    all relative to origin (0, 0)
+      //
+      // NB read in this bridge section "x1_bridge" for "x1" etc
+      //
+      //
+      // NB drawing bridge after drawing the deck lanes
+      //
+   
+      
+      double bridge_height = ship_breadth / 9;                    
+      double bridge_indention = ship_breadth / 3;
+      double bridge_height2 = ship_breadth / 10;        // bridge expansion                   
+      double bridge_indention2 = ship_breadth / 10;     // bridge expansion
+      double dist_origin_bridge = 0 + (y3 / 3);         // NB y3 always positve (because always on aft ship)
+      
+      double bridge_overhang = 3;
+      double acc_indention = bridge_overhang;//ship_breadth / 12;
+      
+      double x1_bridge = -ship_breadth / 2 - bridge_overhang;
+      double x2_bridge = x1_bridge + bridge_indention;
+      double x3_bridge = x2_bridge + bridge_indention2;
+      
+      double x12_bridge = x1_bridge;
+      double x11_bridge = x12_bridge + acc_indention;
+      double x10_bridge = x11_bridge;
+      
+      double x6_bridge = ship_breadth / 2 + bridge_overhang;
+      double x5_bridge = x6_bridge - bridge_indention;
+      double x4_bridge = x5_bridge - bridge_indention2;
+      
+      double x7_bridge = x6_bridge;
+      double x8_bridge = x7_bridge - acc_indention;
+      double x9_bridge = x8_bridge;
+      
+      double y1_bridge = dist_origin_bridge;        
+      double y2_bridge = y1_bridge;       
+      double y3_bridge = y2_bridge - bridge_height2;        
+      double y4_bridge = y3_bridge ;      
+      double y5_bridge = y1_bridge;       
+      double y6_bridge = y1_bridge;     
+      double y7_bridge = y6_bridge + bridge_height;   
+      
+      double acc_height = y3 - y7_bridge;
+      
+      double y8_bridge = y7_bridge;    
+      double y9_bridge = y8_bridge + acc_height;
+      double y10_bridge = y9_bridge;
+      double y11_bridge = y8_bridge;
+      double y12_bridge = y8_bridge;
+      
+      double xPoints_bridge[] = {x1_bridge, x2_bridge, x3_bridge, x4_bridge, x5_bridge, x6_bridge, x7_bridge, x8_bridge, x9_bridge, x10_bridge, x11_bridge, x12_bridge};
+      double yPoints_bridge[] = {y1_bridge, y2_bridge, y3_bridge, y4_bridge, y5_bridge, y6_bridge, y7_bridge, y8_bridge, y9_bridge, y10_bridge, y11_bridge, y12_bridge};                   // -values for y goes/points to the bow
+
+      GeneralPath polygon_bridge = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints_bridge.length);
+      polygon_bridge.moveTo(xPoints_bridge[0], yPoints_bridge[0]);
+      for (int index = 1; index < xPoints_bridge.length; index++)            
+      {
+         polygon_bridge.lineTo(xPoints_bridge[index], yPoints_bridge[index]);
+      }
+      polygon_bridge.closePath();   
+      
+      // bridge fill
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {
+         g2d.setPaint(color_bridge_ro_ro_ship);
+      }
+      g2d.fill(polygon_bridge);  
+      
+      // bridge contour
+      g2d.setStroke(new BasicStroke(2.0f)); 
+      
+      if (night_mode)
+      {
+         g2d.setColor(color_medium_gray);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(polygon_bridge);
+      
+      // draw horizontal lines as indication of a 2nd deck aft accomodation
+      double between_acc = 5;
+      g2d.draw(new Line2D.Double(x10_bridge, y10_bridge - between_acc, x9_bridge, y9_bridge - between_acc));
+      
+      
+      //////// satellite dome's (on bridge)  ///////
+      //
+      double dome_diameter = ship_breadth / 10;
+      double x1_dome = 0 - dome_diameter / 2;                      // just on the centre line                               
+      double y1_dome = y12_bridge;                                         
+      //double x2_dome = x1_dome;                                    // 2nd dome behind the 1st one                           
+      //double y2_dome = y1_dome + (dome_diameter * 2);
+      
+      Shape shape_dome_1 = new Ellipse2D.Double(x1_dome, y1_dome, dome_diameter, dome_diameter);
+      //Shape shape_dome_2 = new Ellipse2D.Double(x2_dome, y2_dome, dome_diameter, dome_diameter);
+      
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_white);
+      }
+      g2d.fill(shape_dome_1);
+      //g2d.fill(shape_dome_2);
+      
+      // contour domes
+      g2d.setStroke(new BasicStroke(1.0f)); 
+      g2d.setPaint(color_black);
+      g2d.draw(shape_dome_1);
+      //g2d.draw(shape_dome_2);
+      
+      
+      ///////////// stern ramp   ////////////
+      //
+      g2d.setStroke(new BasicStroke(6.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(Color.DARK_GRAY);
+      }
+      else
+      {
+         g2d.setColor(color_bridge_ro_ro_ship);
+      }
+      double x1_ramp = x1 + lane_breadth;
+      double x2_ramp = x2 - lane_breadth;
+      g2d.draw(new Line2D.Double(x1_ramp, y6, x2_ramp, y5));
+   }      
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   public void draw_ferry(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
+   {
+      //
+      //          (x,y).
+      //               
+      //
+      //               ^
+      //             /   \
+      //            /     \
+      //           /       \
+      //  (x1,y1) |         | (x2,y2)                                    y - ^
+      //          |         |                                                |
+      //          |         |                                                |
+      //          |    *    |   * = origin (0,0)                             |
+      //          |         |                                     x-  <--------------> x+
+      //          |         |                                                |
+      //          |         |                                                |
+      //  (x3,y3) ----------- (x4,y4)                                        |
+      //          \         /                                                v
+      //   (x6,y6) --------- (x5,y5)                                      y+
+      //
+      //
+      //
+      // eg see http://what-when-how.com/introduction-to-computer-graphics-using-java-2d-and-3d/basic-principles-of-two-dimensional-graphics-introduction-to-computer-graphics-using-java-2d-and-3d-part-2/
+
+      double x = 0;
+      double y = 0;
+      double x1 = 0;
+      double y1 = 0;
+      double x2 = 0;
+      double y2 = 0;
+      double x3 = 0;
+      double y3 = 0;
+      double x4 = 0;
+      double y4 = 0;
+      double x5 = 0;
+      double y5 = 0;
+      double x6 = 0;
+      double y6 = 0;
+
+      // ship_breadth is leading for scaling
+      //
+      double ship_breadth = wind_rose_diameter / 8.0;
+
+      ////////////// course line ///////////////
+      //
+      g2d.setColor(color_black);
+      float[] dash = {2f, 0f, 2f};
+      g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash, 1.0f));
+      g2d.draw(new Line2D.Double(0, wind_rose_diameter / 2 + ship_breadth, 0, -wind_rose_diameter / 2 - ship_breadth));
+
+      //////////// bow ////////
+      //
+      x = 0;                                                             // control point quadTo; relative to origin (centre of wind rose)
+      double bow_height_virtual = ship_breadth * 1.2;                    // NB factor 1.2 indicates the bow curve; quadTo; vertical distance from control point to start end end point       
+      y = -(wind_rose_diameter / 2.0) + (bow_height_virtual * 0.5);      // NB factor 0.5 depends on factor used in bow_height_virtual
+      
+      ///////////// main ship section (rectangle shape) ///////////
+      //
+      x1 = -ship_breadth / 2.0; 
+      y1 = y + bow_height_virtual;  
+      x2 = ship_breadth / 2.0;
+      y2 = y1;
+      double ship_length = Math.abs(y1) * 1.7;                          // so the length of the main mid section; nb factor 1.7 depends on the factor used at bow_height_virtual and y
+
+      ///////////// aft ship (trapezium shape) ///////////
+      //
+      x3 = x1;
+      x4 = x3 + ship_breadth;
+      x5 = x4; // - (ship_breadth / 7);  // so in fact here not a trapezium but a simple square
+      x6 = x3; // + (ship_breadth / 7);
+      y3 = y1 + ship_length;
+      y4 = y3;
+      y5 = y3 + (ship_breadth * 1.2);
+      y6 = y5;
+
+      ////////////// total ship ///////////////
+      //
+      GeneralPath ship = new GeneralPath();
+      ship.moveTo(x1, y1);
+      ship.quadTo(x, y, x2, y2);
+      ship.lineTo(x4, y4);
+      ship.lineTo(x5, y5);
+      ship.lineTo(x6, y6);
+      ship.lineTo(x3, y3);
+      ship.closePath();
+
+      g2d.setStroke(new BasicStroke(2.0f));
+      if (night_mode)
+      {
+         g2d.setPaint(color_black);
+      }
+      else
+      {
+         g2d.setPaint(color_white);
+      }
+      g2d.draw(ship);
+      
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {   
+         g2d.setPaint(color_deck1_ferry);
+      }
+      g2d.fill(ship);
+
+      
+      
+      ///////////////////// ship bridge ////////////////////
+      //
+      //
+      //
+      //            (x3,y3)           (x4,y4)
+      //                   ------------
+      //                  /            \
+      //                 /              \
+      //                /(x2,y2)         \(x5,y5)
+      //  (x1,y1)---------------------------------(x6,y6)            <---- dist_origin_bridge
+      //         |                               |
+      //         |                               |
+      // (x12,y12)---------------------------------(x7,y7)
+      //            | (x11,y11)         (x8,y8)|
+      //            |                          |
+      //            |                          |
+      //            |                          |
+      //            |                          |
+      //  (x10,y10) ---------------------------- (x9,y9)            <--- y3 (aft of ship mid section)
+      //
+      //
+      //
+      //
+      // NB
+      //    bridge_height = distance y1 -> y12
+      //    bridge_indention = x1 -> x2
+      //
+      //    bridge_height2 = distance y2 -> y3         // bridge expansion
+      //    bridge_indention2 = x2 -> x3               // bridge expansion
+      //
+      //    acc_indention = x12 -> x11
+      //    acc_height = y10 -> y12
+      //
+      // NB
+      //    all relative to origin (0, 0)
+      //
+      // NB read in this bridge section "x1_bridge" for "x1" etc
+      //
+      //
+      // NB drawing bridge after drawing the deck lanes
+      //
+   
+      
+      double bridge_height = ship_breadth / 9;                    
+      double bridge_indention = ship_breadth / 3;
+      double bridge_height2 = ship_breadth / 10;        // bridge expansion                   
+      double bridge_indention2 = ship_breadth / 10;     // bridge expansion
+      double dist_origin_bridge = y1; 
+      
+      double bridge_overhang = 3;
+      double acc_indention = ship_breadth / 8;
+      
+      double x1_bridge = -ship_breadth / 2 - bridge_overhang;
+      double x2_bridge = x1_bridge + bridge_indention;
+      double x3_bridge = x2_bridge + bridge_indention2;
+      
+      double x12_bridge = x1_bridge;
+      double x11_bridge = x12_bridge + acc_indention;
+      double x10_bridge = x11_bridge;
+      
+      double x6_bridge = ship_breadth / 2 + bridge_overhang;
+      double x5_bridge = x6_bridge - bridge_indention;
+      double x4_bridge = x5_bridge - bridge_indention2;
+      
+      double x7_bridge = x6_bridge;
+      double x8_bridge = x7_bridge - acc_indention;
+      double x9_bridge = x8_bridge;
+      
+      double y1_bridge = dist_origin_bridge;        
+      double y2_bridge = y1_bridge;       
+      double y3_bridge = y2_bridge - bridge_height2;        
+      double y4_bridge = y3_bridge ;      
+      double y5_bridge = y1_bridge;       
+      double y6_bridge = y1_bridge;     
+      double y7_bridge = y6_bridge + bridge_height;   
+      
+      double acc_height = (y6 - ship_breadth / 2) - y7_bridge;
+      
+      double y8_bridge = y7_bridge;    
+      double y9_bridge = y8_bridge + acc_height;
+      double y10_bridge = y9_bridge;
+      double y11_bridge = y8_bridge;
+      double y12_bridge = y8_bridge;
+      
+      double xPoints_bridge[] = {x1_bridge, x2_bridge, x3_bridge, x4_bridge, x5_bridge, x6_bridge, x7_bridge, x8_bridge, x9_bridge, x10_bridge, x11_bridge, x12_bridge};
+      double yPoints_bridge[] = {y1_bridge, y2_bridge, y3_bridge, y4_bridge, y5_bridge, y6_bridge, y7_bridge, y8_bridge, y9_bridge, y10_bridge, y11_bridge, y12_bridge};                   // -values for y goes/points to the bow
+
+      GeneralPath polygon_bridge = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints_bridge.length);
+      polygon_bridge.moveTo(xPoints_bridge[0], yPoints_bridge[0]);
+      for (int index = 1; index < xPoints_bridge.length; index++)            
+      {
+         polygon_bridge.lineTo(xPoints_bridge[index], yPoints_bridge[index]);
+      }
+      polygon_bridge.closePath();   
+      
+      // bridge fill
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_deck2_ferry);
+      }
+      g2d.fill(polygon_bridge);  
+      
+      // bridge contour
+      g2d.setStroke(new BasicStroke(2.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(Color.LIGHT_GRAY);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(polygon_bridge);
+      
+      
+      /////// top acc deck (upper deck/top deck) //////
+      //
+      //
+      //  (x13,y13)             (x14,y14)
+      //           -------------
+      //           |           |
+      //           |           |
+      //           |           |
+      //           |           |
+      //           |           |
+      //           _____________
+      //   (x16,y16)            (x15,y15)
+      //
+      //
+      double between_acc = 5;
+      double x13_bridge = x11_bridge + acc_indention;
+      double x14_bridge = x8_bridge - acc_indention;
+      double x15_bridge = x14_bridge;
+      double x16_bridge = x13_bridge;
+      double y13_bridge = y7_bridge + (between_acc * 4);
+      double y14_bridge = y13_bridge;
+      double y15_bridge = y9_bridge - (between_acc * 4);
+      double y16_bridge = y15_bridge;      
+       
+      double xPoints_top_deck[] = {x13_bridge, x14_bridge, x15_bridge, x16_bridge};
+      double yPoints_top_deck[] = {y13_bridge, y14_bridge, y15_bridge, y16_bridge};                   // -values for y goes/points to the bow
+        
+      GeneralPath polygon_top_deck = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints_top_deck.length);
+      polygon_top_deck.moveTo(xPoints_top_deck[0], yPoints_top_deck[0]);
+      for (int index = 1; index < xPoints_top_deck.length; index++)            
+      {
+         polygon_top_deck.lineTo(xPoints_top_deck[index], yPoints_top_deck[index]);
+      }
+      polygon_top_deck.closePath();        
+      
+      // top deck fill
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_deck3_ferry);
+      }
+      g2d.fill(polygon_top_deck);  
+              
+      // top deck contour
+      g2d.setStroke(new BasicStroke(2.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(color_medium_gray);
+      }
+      else
+      {
+         g2d.setColor(color_white);
+      }
+      g2d.draw(polygon_top_deck);        
+      
+       
+      ////////////// funnel /////////////
+      //
+      double x1_funnel = x16_bridge / 1.8; 
+      double width_funnel = Math.abs(x1_funnel) * 2;
+      double length_funnel = width_funnel * 1.5;
+      double y1_funnel = (y15_bridge / 2);
+
+      // fill funnel
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {
+         g2d.setPaint(color_funnel_ferry);
+      }
+      g2d.fill(new RoundRectangle2D.Double(x1_funnel, y1_funnel, width_funnel, length_funnel, 20, 20));
+      
+      // contour funnel
+      if (night_mode)
+      {
+         g2d.setPaint(color_black);
+      }
+      else
+      {
+         g2d.setPaint(Color.BLUE);
+      }
+      g2d.draw(new RoundRectangle2D.Double(x1_funnel, y1_funnel, width_funnel, length_funnel, 20, 20));
+
+      ///////////// pipes in funnel //////////////
+      //
+      g2d.setPaint(color_black);
+      double diameter_pipe = width_funnel / 4;
+      double x1_pipe;
+      double y1_pipe = 0;
+
+      for (int p = 0; p < 10; p++) 
+      {
+         x1_pipe = -(diameter_pipe / 2);
+         y1_pipe = (y1_funnel + diameter_pipe) + (p * diameter_pipe);
+
+         if ((diameter_pipe * (p + 1)) < (length_funnel - (diameter_pipe * 2))) 
+         {
+            Shape shape_pipe = new Ellipse2D.Double(x1_pipe, y1_pipe, diameter_pipe, diameter_pipe);
+            g2d.fill(shape_pipe);
+         } 
+         else 
+         {
+            break;
+         }
+      } // for (int p = 0; p < 10; p++)
+      
+      
+      //////// satellite dome's (on top deck)  ///////
+      //
+      double dome_diameter = ship_breadth / 8;
+      
+      double x1_dome = 0 - dome_diameter / 2;                                  // middle of the fore acc
+      double y1_dome = (y1_funnel - length_funnel + y13_bridge) / 2;           // between bridge and funnel
+      double x2_dome = 0 - dome_diameter / 2;                                  // middle of the fore acc
+      double y2_dome = y1_dome - (dome_diameter * 2);
+      
+      Shape shape_dome_1 = new Ellipse2D.Double(x1_dome, y1_dome, dome_diameter, dome_diameter);
+      Shape shape_dome_2 = new Ellipse2D.Double(x2_dome, y2_dome, dome_diameter, dome_diameter);
+      
+      if (night_mode)
+      {
+         g2d.setPaint(Color.LIGHT_GRAY);
+      }
+      else
+      {
+         g2d.setPaint(color_white);
+      }
+      g2d.fill(shape_dome_1);
+      g2d.fill(shape_dome_2);
+      
+      // contour domes
+      g2d.setStroke(new BasicStroke(1.0f)); 
+      g2d.setPaint(color_black);
+      g2d.draw(shape_dome_1);
+      g2d.draw(shape_dome_2);
+      
+      
+      ///////// stern ramp   ////////
+      g2d.setStroke(new BasicStroke(6.0f)); 
+      if (night_mode)
+      {
+         g2d.setColor(Color.DARK_GRAY);
+      }
+      else
+      {
+         g2d.setColor(Color.BLUE);
+      }
+      double x1_ramp = x1 + acc_indention;
+      double x2_ramp = x2 - acc_indention;
+      g2d.draw(new Line2D.Double(x1_ramp, y6, x2_ramp, y5));
+      
+   }      
    
    
    
@@ -684,7 +1969,7 @@ public class ship
 
       //////// ship bridge ////////
       double dist_origin_bridge = 0;
-      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention);
+      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention, night_mode);
 
    }
    
@@ -695,7 +1980,7 @@ public class ship
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-   public void draw_oil_tanker(Graphics2D g2d, double wind_rose_diameter) 
+   public void draw_oil_tanker(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
    {
       //
       //  (x,y)  .
@@ -794,7 +2079,7 @@ public class ship
       double acc_height = (y5 - y4) / 2; //17;                       
       double bridge_indention = ship_breadth / 4;
       double dist_origin_bridge = y3 - bridge_height;
-      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention);
+      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention, night_mode);
 
       ////////////// pipes  ////////////
       //
@@ -904,9 +2189,16 @@ public class ship
       g2d.setStroke(new BasicStroke((float) heli_circle_thickness));
       g2d.draw(shape_heli);
 
-      g2d.setPaint(Color.LIGHT_GRAY);
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else
+      {
+         g2d.setPaint(Color.LIGHT_GRAY);
+      }
       g2d.fill(shape_heli);
-      /*           
+   /*           
       // H in the middle of the Heli circle
       FontMetrics fm = g2d.getFontMetrics();
       String msg = "H";
@@ -921,7 +2213,7 @@ public class ship
       //g2d.drawString(msg, -msgWidth / 2, 0);     // NB msgAscent / 2.5 for vertical fine tuning)
       g2d.rotate(Math.toRadians(-90));                                // rest coordinate rotation   
       g2d.translate(-((float)x_heli + width_heli / 2), -(y_heli + height_heli / 2));
-       */
+   */
 
    }
 
@@ -932,7 +2224,7 @@ public class ship
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-   public void draw_lng_tanker(Graphics2D g2d, double wind_rose_diameter) 
+   public void draw_lng_tanker(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
    {
       //
       //  (x,y)  .
@@ -970,13 +2262,20 @@ public class ship
       ////////////// Bow (ellipse shape) //////////////
       //
       double bow_width = ship_breadth;
-      double bow_height = ship_breadth * 2.0;                                // total height of the ellipse, bur only the upper half will be visible as the bow        
+      double bow_height = ship_breadth * 2.0;                               // total height of the ellipse, bur only the upper half will be visible as the bow        
       Shape shape_bow = new Ellipse2D.Double(x, y, bow_width, bow_height);
 
       g2d.setStroke(new BasicStroke(1.0f));
-      g2d.draw(shape_bow);   // point East = 0 degrees (normally you would call East 90 degrees...) -> to the left
+      g2d.draw(shape_bow);                                                  // point East = 0 degrees (normally you would call East 90 degrees...) -> to the left
 
-      g2d.setPaint(color_deck_lng_tanker);
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {   
+         g2d.setPaint(color_deck_lng_tanker);
+      }
       g2d.fill(shape_bow);
 
       ///////////// main ship section (rectangle shape) ///////////
@@ -990,11 +2289,16 @@ public class ship
       g2d.setStroke(new BasicStroke(1.0f));
       g2d.draw(shape_midships);
 
-      //g2d.setPaint(color_deck);  
-      g2d.setPaint(color_deck_lng_tanker);
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_deck_lng_tanker);
+      }
       g2d.fill(shape_midships);
 
-      
 
       ///////////// aft ship (trapezium shape) ///////////
       //
@@ -1019,7 +2323,14 @@ public class ship
       polygon.closePath();
 
       // aft ship fill
-      g2d.setPaint(color_deck_lng_tanker);
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_deck_lng_tanker);
+      }
       g2d.fill(polygon);
 
       // aft ship contour
@@ -1032,7 +2343,7 @@ public class ship
       double acc_height = (y5 - y4) / 2; //17;                        
       double bridge_indention = ship_breadth / 5;
       double dist_origin_bridge = y3 - bridge_height;
-      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention);
+      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention, night_mode);
 
       ///////////// LNG tanks //////////
       //
@@ -1091,7 +2402,7 @@ public class ship
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-   public void draw_bulk_carrier(Graphics2D g2d, double wind_rose_diameter) 
+   public void draw_bulk_carrier(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
    {
       //
       //  (x,y)  .
@@ -1194,7 +2505,7 @@ public class ship
       double acc_height = (y5 - y4) / 2;//17;                     
       double bridge_indention = ship_breadth / 5;
       double dist_origin_bridge = y3 - bridge_height;
-      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention);
+      draw_ship_bridge(g2d, ship_breadth, bridge_height, acc_height, dist_origin_bridge, bridge_indention, night_mode);
 
       ////////////// hatches ////////////
       //
@@ -1206,28 +2517,16 @@ public class ship
 
       for (int i = 0; i < 20; i++) // max 20 hatches
       {
-
-         //if (y_hatch + (hatch_length + hatch_intermediate) > (ship_length - bridge_height))
-         //if (y_hatch + (hatch_length + hatch_intermediate) < 0)  
          if (y_hatch + (hatch_length + hatch_intermediate / 2) < (ship_length / 2 - bridge_height)) 
          {
-
-            //Shape shape_hatch = new Rectangle2D.Double(x_hatch, y_hatch, hatch_breath, hatch_length);
             g2d.setPaint(color_bulk_carrier);
-            //g2d.fill(shape_hatch);
             g2d.fill3DRect((int) x_hatch, (int) y_hatch, (int) hatch_breath, (int) hatch_length, true);   // raised hatches
-
-            // hatch contour
-            //g2d.setColor(color_black);
-            //g2d.setStroke(new BasicStroke(1.0f));
-            //g2d.draw(shape_hatch); 
             y_hatch += hatch_length + hatch_intermediate;
          } 
          else 
          {
             break;
          }
-
       } // for (int i = 0; i < 20; i++)
 
    }
@@ -1239,13 +2538,16 @@ public class ship
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-   private void draw_ship_bridge(Graphics2D g2d, double ship_breadth, double bridge_height, double acc_height, double dist_origin_bridge, double bridge_indention) 
+   private void draw_ship_bridge(Graphics2D g2d, double ship_breadth, double bridge_height, double acc_height, double dist_origin_bridge, double bridge_indention, boolean night_mode) 
    {
+      // NB ship bridge for a limited number od ships (not for all ship types)
+      
+      
       ///////////// ship bridge ////////////
       //
       //
       //
-      //  (x1,y1)----------------------------- (x2,y2)
+      //  (x1,y1)----------------------------- (x2,y2)          <---- dist_origin_bridge
       //         |                            |
       //         |   (x7,y7)        (x4,y4)   |
       //  (x8,y8)--------               -------(x3,y3)
@@ -1295,14 +2597,19 @@ public class ship
       polygon.closePath();
 
       // bridge fill
-      if (main.ship_type_dashboard.equals(main.CONTAINER_SHIP)) 
+      if (night_mode)
+      {
+         g2d.setPaint(Color.DARK_GRAY);
+      }
+      else if (main.ship_type_dashboard.equals(main.CONTAINER_SHIP)) 
       {
          g2d.setPaint(color_bridge_container_ship);
       } 
       else if (main.ship_type_dashboard.equals(main.OIL_TANKER)) 
       {
          g2d.setPaint(color_bridge_oil_tanker);
-      } else 
+      } 
+      else 
       {
          g2d.setPaint(Color.white);
       }
@@ -1311,7 +2618,14 @@ public class ship
       // bridge contour
       if (main.ship_type_dashboard.equals(main.OIL_TANKER)) 
       {
-         g2d.setColor(Color.white);
+         if (night_mode)
+         {
+            g2d.setColor(color_medium_gray);
+         }
+         else
+         {    
+            g2d.setColor(color_white);
+         }
       } 
       else 
       {
@@ -1328,7 +2642,7 @@ public class ship
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-   public void draw_passenger_ship(Graphics2D g2d, double wind_rose_diameter) 
+   public void draw_passenger_ship(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) 
    {
       double x_control = 0;
       double y_control = 0;
@@ -1370,7 +2684,15 @@ public class ship
       g2d.setStroke(new BasicStroke(1.0f));
       g2d.setPaint(color_black);
       g2d.draw(bow);
-      g2d.setPaint(color_deck_passenger_ship);
+      
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_deck_passenger_ship);
+      }
       g2d.fill(bow);
 
       ///////////// main ship section (rectangle shape) ///////////
@@ -1383,7 +2705,14 @@ public class ship
       g2d.setStroke(new BasicStroke(1.0f));
       g2d.draw(shape_midships);
 
-      g2d.setPaint(color_deck_passenger_ship);
+      if (night_mode)
+      {
+         g2d.setPaint(color_medium_gray);
+      }
+      else
+      {
+         g2d.setPaint(color_deck_passenger_ship);
+      }
       g2d.fill(shape_midships);
 
       ////////// ship bridge ////////////
@@ -1417,7 +2746,7 @@ public class ship
       //                                   |
       //                                   |
       //                                   |
-      //                 (x2,y2)           |              (x3,y3)
+      //                 (x2,y2)           |             (x3,y3)
       //                       ____________|____________                 ^ x = + (to starboard)
       //                      | \ ____________________/ |                |
       //                      |  |         |          | |                |
@@ -1425,7 +2754,7 @@ public class ship
       //  <--- fore ship      |  |         |          | |                |                             ----> aft ship    
       //                      |  | ________|__________| |                |
       //                      |_/_____________________\_|                |
-      //                 (x2,y1)           |              (x4,y4)        v x = - (to port)
+      //                 (x1,y1)           |              (x4,y4)        v x = - (to port)
       //                                   |
       //                                   |                   
       //                                   |   
@@ -1433,8 +2762,6 @@ public class ship
       //
       //
       //
-      //double pool_width = ship_breadth * 0.8;
-      //double pool_length = pool_width * 1.5;
       double pool_width = ship_breadth * 0.6;
       double pool_length = pool_width * 1.2;
       double pool_edge = 4;
@@ -1637,7 +2964,14 @@ public class ship
 
          if (k == 2) 
          {
-            g2d.setPaint(color_acc_passenger_ship);
+            if (night_mode)
+            {
+               g2d.setPaint(color_medium_gray); 
+            }  
+            else
+            {
+               g2d.setPaint(color_acc_passenger_ship);
+            }
             g2d.fill(gp);
          }
       } // for (int k = 0; k < 3; k++)
@@ -1648,7 +2982,15 @@ public class ship
       double x1_dome = 0 - dome_diameter / 2;            // middle of the fore acc
       double y1_dome = (y1_gp + y4_gp) / 2 - (dome_diameter / 2);
       Shape shape_dome = new Ellipse2D.Double(x1_dome, y1_dome, dome_diameter, dome_diameter);
-      g2d.setPaint(color_white);
+      
+      if (night_mode)
+      {
+         g2d.setPaint(Color.LIGHT_GRAY);
+      }
+      else
+      {
+         g2d.setPaint(color_white);
+      }
       g2d.fill(shape_dome);
       g2d.setPaint(color_black);
       g2d.draw(shape_dome);
@@ -1702,7 +3044,14 @@ public class ship
 
          if (k == 2) 
          {
-            g2d.setPaint(color_acc_passenger_ship);
+            if (night_mode)
+            {
+               g2d.setPaint(color_medium_gray); 
+            } 
+            else
+            {   
+               g2d.setPaint(color_acc_passenger_ship);
+            }
             g2d.fill(gp2);
          }
       } // for (int k = 0; k < 3; k++)
@@ -1795,16 +3144,32 @@ public class ship
    private final Color color_acc_passenger_ship;
    private final Color color_life_boat;
    private final Color color_funnel_passenger_ship;
+   private final Color color_funnel_ferry;
    private final Color color_bridge_oil_tanker;
    private final Color color_bridge_container_ship;
+   private final Color color_bridge_ro_ro_ship;
    private final Color color_bulk_carrier;
    private final Color color_lng_tanks;
    private final Color color_deck_lng_tanker;
    private final Color color_deck_oil_tanker;
    private final Color color_pipes_oil_tanker;
    private final Color color_deck;
+   private final Color color_deck_research_vessel;
+   private final Color color_crane_research_vessel;
+   private final Color color_hoist_research_vessel;
+   private final Color color_cradle_research_vessel;
+   private final Color color_bridge_research_vessel;
+   private final Color color_night_crane_research_vessel;
+   private final Color color_night_hoist_research_vessel;
+   private final Color color_night_cradle_research_vessel;
    private final Color color_deck_general_cargo_ship; 
+   private final Color color_deck1_ferry;
+   private final Color color_deck2_ferry;
+   private final Color color_deck3_ferry;
+   private final Color color_deck_ro_ro;
+   private final Color color_lanes_ro_ro;
    private final Color color_hatches_general_cargo_ship; 
+   private final Color color_medium_gray;
    private final Color color_container_1;
    private final Color color_container_2;
    private final Color color_container_3;
@@ -1815,6 +3180,6 @@ public class ship
    private final Color color_container_8;
    private final Color color_container_9;
    private final Color color_container_10;
-
+   
    
 }

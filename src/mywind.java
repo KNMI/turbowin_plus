@@ -1662,9 +1662,18 @@ final public class mywind extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void next_screen()
    {
-      mywaves form = new mywaves();
-      form.setSize(800, 600);
-      form.setVisible(true);
+      if (main.GUI_mode.equals(main.GUI_LIGHT))
+      {
+         myobserver form = new myobserver();
+         form.setSize(800, 600);
+         form.setVisible(true);
+      }
+      else
+      {
+         mywaves form = new mywaves();
+         form.setSize(800, 600);
+         form.setVisible(true);
+      }
    }
 
 

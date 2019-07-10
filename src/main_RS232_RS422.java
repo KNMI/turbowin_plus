@@ -4266,7 +4266,18 @@ public static void RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_PPPP_For_Obs(bo
                String pressure_sensor_height = "";
                   
                // NB pressure at sensor height = pressure reading + ic
-               double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+               //double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+               double double_barometer_instrument_correction = 0.0;
+               try
+               {
+                  double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+               }
+               catch (NumberFormatException ex)
+               {
+                  // eg if ic was never inserted ("barometer_instrument_correction" then empty string)
+                  double_barometer_instrument_correction = 0.0;        
+               }
+               
                if ((double_barometer_instrument_correction > -4.0) && (double_barometer_instrument_correction < 4.0))
                {        
                   // 1 digit precision
@@ -5084,7 +5095,17 @@ public static void RS232_Read_Sensor_Data_PPPP_For_Obs(boolean local_tray_icon_c
                   String pressure_sensor_height = "";
                   
                   // NB pressure at sensor height = pressure reading + ic
-                  double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                  //double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                  double double_barometer_instrument_correction = 0.0;
+                  try
+                  {
+                     double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim()); 
+                  }
+                  catch (NumberFormatException ex)
+                  {
+                     double_barometer_instrument_correction = 0.0;
+                  }
+                  
                   if ((double_barometer_instrument_correction > -4.0) && (double_barometer_instrument_correction < 4.0))
                   {        
                      //pressure_sensor_height = Double.toString(hulp_double_pressure_reading + double_barometer_instrument_correction);
@@ -5342,7 +5363,18 @@ public static void RS232_Mintaka_Duo_Read_Sensor_Data_PPPP_For_Obs(boolean local
                   String pressure_sensor_height = "";
                   
                   // NB pressure at sensor height = pressure reading + ic
-                  double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                  //double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                  double double_barometer_instrument_correction = 0.0;
+                  try
+                  {
+                     double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                  }
+                  catch (NumberFormatException ex) 
+                  {
+                     // eg if there is an empty "barometer_instrument_correction" string (never ic inserted)
+                     double_barometer_instrument_correction = 0.0;
+                  }
+                  
                   if ((double_barometer_instrument_correction > -4.0) && (double_barometer_instrument_correction < 4.0))
                   {        
                      //pressure_sensor_height = Double.toString(hulp_double_pressure_reading + double_barometer_instrument_correction);
@@ -11776,7 +11808,7 @@ private void RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR(final String de
                
                   if (APR_height_correction_pressure > -50.0 && APR_height_correction_pressure < 50.0)
                   {   
-                                         // ic correction (make it 0.0 if outside the range)
+                     // ic correction (make it 0.0 if outside the range)
                      double double_barometer_instrument_correction = 0.0;
                      
                      if (main.barometer_instrument_correction.equals("") == false)
@@ -11806,17 +11838,20 @@ private void RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR(final String de
    
                      ///////////////// pressure at MSL (+ ic) ///////////
                      //
-                     //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + Double.parseDouble(main.barometer_instrument_correction)); 
-                     sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+                     //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+                     double hulp_double_APR_pressure_MSL_not_rounded = hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction;
+                     BigDecimal bd = new BigDecimal(hulp_double_APR_pressure_MSL_not_rounded).setScale(2, RoundingMode.HALF_UP);
+                     double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
+                     sensor_data_record_APR_pressure_MSL_hpa = Double.toString(hulp_double_APR_pressure_MSL_rounded);
                      mybarometer.pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;   // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
-              
+                     
                      String message_msl = "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
                      main.log_turbowin_system_message(message_msl);
 
                      //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + Double.parseDouble(main.barometer_instrument_correction)); 
                      RS232_Send_Sensor_Data_to_APR(/*sensor_data_record_APR_pressure_MSL_hpa, hulp_double_APR_pressure_reading,*/ retry);
                      
-                     // for updating main screen (dit heeft hier geen zin omdat hij hier maar eens in de 1, 3 of 6 uur komt)
+                     // for updating main screen (NB dit heeft hier geen zin omdat hij hier maar eens in de 1, 3 of 6 uur komt)
                      //mybarometer.pressure_reading_corrected = df.format(hulp_double_APR_pressure_reading + Double.parseDouble(main.barometer_instrument_correction));
                      //mybarometer.pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;        
                   }
@@ -13220,10 +13255,13 @@ private void RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR(
    
                      ///////////////// pressure at MSL (+ ic) ///////////
                      //
-                     //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + Double.parseDouble(main.barometer_instrument_correction)); 
-                     sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+                     //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+                     double hulp_double_APR_pressure_MSL_not_rounded = hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction;
+                     BigDecimal bd = new BigDecimal(hulp_double_APR_pressure_MSL_not_rounded).setScale(2, RoundingMode.HALF_UP);
+                     double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
+                     sensor_data_record_APR_pressure_MSL_hpa = Double.toString(hulp_double_APR_pressure_MSL_rounded);
                      mybarometer.pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;   // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
-              
+                     
                      String message_msl = "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
                      main.log_turbowin_system_message(message_msl);
                     
@@ -13817,7 +13855,7 @@ private void RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR(final Strin
                
                   if (APR_height_correction_pressure > -50.0 && APR_height_correction_pressure < 50.0)
                   {   
-////////////////////////
+
                     // ic correction (make it 0.0 if outside the range)
                      double double_barometer_instrument_correction = 0.0;
                      
@@ -13848,14 +13886,16 @@ private void RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR(final Strin
    
                      ///////////////// pressure at MSL (+ ic) ///////////
                      //
-                     //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + Double.parseDouble(main.barometer_instrument_correction)); 
-                     sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+                     //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+                     double hulp_double_APR_pressure_MSL_not_rounded = hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction;
+                     BigDecimal bd = new BigDecimal(hulp_double_APR_pressure_MSL_not_rounded).setScale(2, RoundingMode.HALF_UP);
+                     double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
+                     sensor_data_record_APR_pressure_MSL_hpa = Double.toString(hulp_double_APR_pressure_MSL_rounded);
                      mybarometer.pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;   // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
-              
+                     
                      String message_msl = "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
                      main.log_turbowin_system_message(message_msl);
                      
-////////////////////////////////////////////////////////                     
                      //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + Double.parseDouble(main.barometer_instrument_correction)); 
                      RS232_Send_Sensor_Data_to_APR(/*sensor_data_record_APR_pressure_MSL_hpa, hulp_double_APR_pressure_reading,*/ retry);
                   }

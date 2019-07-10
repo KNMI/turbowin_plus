@@ -6,7 +6,9 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -28,7 +30,7 @@ final public class about extends javax.swing.JFrame {
     public about() {
         initComponents();
         initComponents2();
-        setLocation(main.x_pos_small_frame, main.y_pos_small_frame);
+        setLocation(main.x_pos_about_frame, main.y_pos_about_frame);
     }
 
     /** This method is called from within the constructor to
@@ -38,8 +40,7 @@ final public class about extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jSeparator1 = new javax.swing.JSeparator();
       jButton1 = new javax.swing.JButton();
@@ -52,17 +53,17 @@ final public class about extends javax.swing.JFrame {
       jLabel5 = new javax.swing.JLabel();
       jLabel7 = new javax.swing.JLabel();
       jLabel8 = new javax.swing.JLabel();
+      jLabel9 = new javax.swing.JLabel();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("About TurboWin+");
-      setMinimumSize(new java.awt.Dimension(400, 300));
+      setMinimumSize(new java.awt.Dimension(500, 500));
+      setPreferredSize(new java.awt.Dimension(500, 500));
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             OK_button_actionPerformed(evt);
          }
       });
@@ -74,18 +75,14 @@ final public class about extends javax.swing.JFrame {
       jLabel4.setForeground(new java.awt.Color(51, 0, 255));
       jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel4.setText("<html><u>Visit the TurboWin Web Site</u></html>");
-      jLabel4.addMouseListener(new java.awt.event.MouseAdapter()
-      {
-         public void mouseClicked(java.awt.event.MouseEvent evt)
-         {
+      jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
             Info_about_web_start_link_mouseClicked(evt);
          }
-         public void mouseEntered(java.awt.event.MouseEvent evt)
-         {
+         public void mouseEntered(java.awt.event.MouseEvent evt) {
             Info_about_mouseEntered(evt);
          }
-         public void mouseExited(java.awt.event.MouseEvent evt)
-         {
+         public void mouseExited(java.awt.event.MouseEvent evt) {
             Info_about_mouseExited(evt);
          }
       });
@@ -112,18 +109,14 @@ final public class about extends javax.swing.JFrame {
       jLabel8.setForeground(new java.awt.Color(51, 0, 255));
       jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel8.setText("<html><u>TurboWin+ was made possible by E-SURFMAR</u></html>");
-      jLabel8.addMouseListener(new java.awt.event.MouseAdapter()
-      {
-         public void mouseClicked(java.awt.event.MouseEvent evt)
-         {
+      jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
             Info_About_ESURFMAR_link_mouseClicked(evt);
          }
-         public void mouseEntered(java.awt.event.MouseEvent evt)
-         {
+         public void mouseEntered(java.awt.event.MouseEvent evt) {
             Info_About_ESURFMAR_link_mouseEntered(evt);
          }
-         public void mouseExited(java.awt.event.MouseEvent evt)
-         {
+         public void mouseExited(java.awt.event.MouseEvent evt) {
             Info_About_ESURFMAR_link_mouseExited(evt);
          }
       });
@@ -142,7 +135,7 @@ final public class about extends javax.swing.JFrame {
                      .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                      .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                      .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                   .addContainerGap())))
       );
       jPanel1Layout.setVerticalGroup(
@@ -178,9 +171,13 @@ final public class about extends javax.swing.JFrame {
                      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addContainerGap())
          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(150, Short.MAX_VALUE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(178, 178, 178)
+            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(178, 178, 178))
       );
       layout.setVerticalGroup(
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,13 +186,15 @@ final public class about extends javax.swing.JFrame {
             .addComponent(jLabel1)
             .addGap(18, 18, 18)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(18, 18, 18)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGap(15, 15, 15)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap())
+            .addGap(15, 15, 15))
       );
 
       pack();
@@ -216,6 +215,93 @@ private void initComponents2()
    //jLabel1.setText(main.APPLICATION_NAME + " 2.5.7 (build 22-August-2016)");
    jLabel1.setText(main.APPLICATION_NAME + " " + main.APPLICATION_VERSION);
    
+   //jLabel9.setPreferredSize(new Dimension (144, 144));            // so label13 will be 'reused' for the logo !!
+   //jLabel9.setVisible(true);
+   
+   if (main.GUI_logo.equals(main.LOGO_EUMETNET))
+   {
+      loadImage_about_logo(main.ICONS_DIRECTORY + "logo-eumetnet.png");
+   }
+   else if (main.GUI_logo.equals(main.LOGO_NOAA))
+   {
+      loadImage_about_logo(main.ICONS_DIRECTORY + "logo-noaa.png");
+   }
+   else if (main.GUI_logo.equals(main.LOGO_SOT))
+   {
+      loadImage_about_logo(main.ICONS_DIRECTORY + "logo-sot.png");
+   }
+   else // default
+   {
+      loadImage_about_logo(main.ICONS_DIRECTORY + "logo-eumetnet.png");
+   }   
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void loadImage_about_logo(final String imagePath) 
+{
+   new SwingWorker<ImageIcon, Object>() 
+   {
+      @Override
+      public ImageIcon doInBackground() 
+      {
+         return createImageIcon_about(imagePath);
+      }
+
+      @Override
+      public void done()
+      {
+         try
+         {        
+            ImageIcon logo_icon = get();
+            jLabel9.setIcon(logo_icon); 
+         } // try
+         catch (InterruptedException ignore) { }
+         catch (java.util.concurrent.ExecutionException e) 
+         {
+            String why;
+            Throwable cause = e.getCause();
+            if (cause != null) 
+            {
+               why = cause.getMessage();
+            } 
+            else 
+            {
+               why = e.getMessage();
+            }
+            //System.err.println("Error retrieving file: " + why);
+            JOptionPane.showMessageDialog(null, "Error retrieving file: " + why, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+         } // catch         
+      } //  public void done()
+   }.execute();
+} // private void loadImage(final String imagePath, final int index)
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public ImageIcon createImageIcon_about(String path_and_file)
+{
+   URL url = null;
+
+   try
+   {
+      url = getClass().getResource(path_and_file);
+   }
+   catch (Exception e) { /* ... */}
+
+   ImageIcon icon_glyph = new javax.swing.ImageIcon(url);
+
+   return icon_glyph;
 }
 
 
@@ -460,6 +546,7 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
    private javax.swing.JLabel jLabel6;
    private javax.swing.JLabel jLabel7;
    private javax.swing.JLabel jLabel8;
+   private javax.swing.JLabel jLabel9;
    private javax.swing.JPanel jPanel1;
    private javax.swing.JSeparator jSeparator1;
    // End of variables declaration//GEN-END:variables

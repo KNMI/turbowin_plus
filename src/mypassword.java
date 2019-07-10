@@ -207,6 +207,13 @@ final public class mypassword extends javax.swing.JFrame {
              form.setExtendedState(MAXIMIZED_BOTH);                      // full screen
              form.setVisible(true);
           }
+          else if (main.mode.equals(main.GUI_SETTINGS))
+          {
+             /* open GUI settings input page (light/full interface, Eumetnet/NOAA/SOT logo) */
+             myguisettings form = new myguisettings();
+             form.setSize(1000, 700);
+             form.setVisible(true);
+          }
           
        } // if (("TurboWin " + password.trim()).equals("TurboWin JWS" + dummy))
        else // thus password not correct

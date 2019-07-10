@@ -41,7 +41,8 @@ final public class myobserver extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       jSeparator1 = new javax.swing.JSeparator();
       jButton1 = new javax.swing.JButton();
@@ -62,21 +63,26 @@ final public class myobserver extends javax.swing.JFrame {
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton1.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton2.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Cancel_button_actionPerformed(evt);
          }
       });
 
       jTable1.setModel(new javax.swing.table.DefaultTableModel(
-         new Object [][] {
+         new Object [][]
+         {
             {null, null, null, null},
             {null, null, null, null},
             {null, null, null, null},
@@ -98,15 +104,19 @@ final public class myobserver extends javax.swing.JFrame {
             {null, null, null, null},
             {null, null, null, null}
          },
-         new String [] {
+         new String []
+         {
             "surname", "full initials*", "rank", "discharge book**"
          }
-      ) {
-         Class[] types = new Class [] {
+      )
+      {
+         Class[] types = new Class []
+         {
             java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
          };
 
-         public Class getColumnClass(int columnIndex) {
+         public Class getColumnClass(int columnIndex)
+         {
             return types [columnIndex];
          }
       });
@@ -125,8 +135,10 @@ final public class myobserver extends javax.swing.JFrame {
       jLabel3.setText("--- to clear table cells: double click appropriate cells and delete data ---");
 
       jButton3.setText("Internet");
-      jButton3.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton3.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Internet_button_actionPerformed(evt);
          }
       });
@@ -137,15 +149,19 @@ final public class myobserver extends javax.swing.JFrame {
       jLabel4.setMinimumSize(new java.awt.Dimension(338, 14));
 
       jButton4.setText("Back");
-      jButton4.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton4.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Back_button_actionPerformed(evt);
          }
       });
 
       jButton5.setText("Stop");
-      jButton5.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton5.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Stop_button_actionParformed(evt);
          }
       });
@@ -727,31 +743,41 @@ final public class myobserver extends javax.swing.JFrame {
     }//GEN-LAST:event_Back_button_actionPerformed
 
     
-    /***********************************************************************************************/
-    /*                                                                                             */
-    /*                                                                                             */
-    /*                                                                                             */
-    /***********************************************************************************************/
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
     private void Stop_button_actionParformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Stop_button_actionParformed
-       // TODO add your handling code here:
-       setVisible(false);
-       dispose();
+      // TODO add your handling code here:
+      setVisible(false);
+      dispose();
 
-       main.in_next_sequence = false;
+      main.in_next_sequence = false;
     }//GEN-LAST:event_Stop_button_actionParformed
 
 
-    /***********************************************************************************************/
-    /*                                                                                             */
-    /*                                                                                             */
-    /*                                                                                             */
-    /***********************************************************************************************/
-    private void previous_screen()
-    {
-       mycloudcover form = new mycloudcover();
-       form.setSize(800, 600);
-       form.setVisible(true);
-    }
+    
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private void previous_screen()
+   {
+      if (main.GUI_mode.equals(main.GUI_LIGHT))
+      {
+         mywind form = new mywind();
+         form.setSize(800, 600);
+         form.setVisible(true);  
+      }
+      else
+      {
+         mycloudcover form = new mycloudcover();
+         form.setSize(800, 600);
+         form.setVisible(true);
+      }
+   }
 
 
     /***********************************************************************************************/

@@ -296,6 +296,77 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
       popup.add(menuItem9);  
       
       
+      JMenuItem menuItem10 = new JMenuItem("research vessel");
+      menuItem10.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.RESEARCH_VESSEL;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem10);  
+      
+
+      JMenuItem menuItem11 = new JMenuItem("Ro-Ro ship");
+      menuItem11.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.RO_RO_SHIP;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem11);  
+      
+      JMenuItem menuItem12 = new JMenuItem("ferry");
+      menuItem12.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.FERRY;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem12);  
+      
+      
       MouseListener popupListener = new DASHBOARD_view_AWS_radar.PopupListener();
       addMouseListener(popupListener);
       

@@ -32,7 +32,8 @@ final public class RS232_settings extends javax.swing.JFrame {
     */
    @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+   private void initComponents()
+   {
 
       buttonGroup1 = new javax.swing.ButtonGroup();
       buttonGroup2 = new javax.swing.ButtonGroup();
@@ -171,88 +172,110 @@ final public class RS232_settings extends javax.swing.JFrame {
 
       buttonGroup1.add(jRadioButton1);
       jRadioButton1.setText("Vaisala PTB220 serial");
-      jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton1.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             PTB220_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton2);
       jRadioButton2.setText("Vaisala PTB330 serial");
-      jRadioButton2.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton2.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             PTB330_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton3);
-      jRadioButton3.setText("EUCOS AWS serial");
-      jRadioButton3.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton3.setText("EUCAWS AWS serial");
+      jRadioButton3.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             AWS_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton4);
       jRadioButton4.setText("none");
-      jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton4.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             none_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton5);
       jRadioButton5.setText("Mintaka Duo USB");
-      jRadioButton5.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton5.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton10);
       jRadioButton10.setText("Mintaka Star USB");
-      jRadioButton10.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton10.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_Star_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton11);
       jRadioButton11.setText("Mintaka Star LAN");
-      jRadioButton11.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton11.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_Star_WiFi_connected_itenStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton12);
       jRadioButton12.setText("OMC-140 AWS serial");
-      jRadioButton12.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton12.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             AWS_OMC_serial_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton13);
       jRadioButton13.setText("Mintaka Star + StarX USB");
-      jRadioButton13.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton13.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_StarX_USB_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton14);
       jRadioButton14.setText("Mintaka Star +  StarX LAN");
-      jRadioButton14.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton14.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             Mintaka_StarX_WiFi_connected_itemStateChanged(evt);
          }
       });
 
       buttonGroup1.add(jRadioButton15);
       jRadioButton15.setText("OMC-140 AWS LAN");
-      jRadioButton15.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton15.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             AWS_OMC_ethernet_connected_itemStateChanged(evt);
          }
       });
@@ -312,15 +335,19 @@ final public class RS232_settings extends javax.swing.JFrame {
       jLabel6.setText("instrument port settings");
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton1.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
+      jButton2.addActionListener(new java.awt.event.ActionListener()
+      {
+         public void actionPerformed(java.awt.event.ActionEvent evt)
+         {
             Cancel_button_actionPerformed(evt);
          }
       });
@@ -334,16 +361,20 @@ final public class RS232_settings extends javax.swing.JFrame {
 
       buttonGroup2.add(jRadioButton6);
       jRadioButton6.setText("GPS (NMEA 0183)");
-      jRadioButton6.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton6.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             GPS_NMEA_0183_itemStateChanged(evt);
          }
       });
 
       buttonGroup2.add(jRadioButton7);
       jRadioButton7.setText("none");
-      jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
-         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+      jRadioButton7.addItemListener(new java.awt.event.ItemListener()
+      {
+         public void itemStateChanged(java.awt.event.ItemEvent evt)
+         {
             none_GPS_NMEA_0183_itemStateChanged(evt);
          }
       });
@@ -432,7 +463,7 @@ final public class RS232_settings extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-            .addContainerGap(27, Short.MAX_VALUE))
+            .addContainerGap(26, Short.MAX_VALUE))
       );
       jPanel4Layout.setVerticalGroup(
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

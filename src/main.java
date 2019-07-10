@@ -5,8 +5,11 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -40,18 +43,15 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Objects;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
@@ -218,6 +218,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 *    DELETE/RENAME turbowin_plus_offline.cmd TO USE MUFFINS
 * 
 * ----------------------------------------------------------------------------------------------------------------------
+*
+*
 * global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default) 
 *             (instrument type)      1 = barometer PTB220 serial
 *                                    2 = barometer PTB330 serial
@@ -237,14 +239,35 @@ import javax.swing.UnsupportedLookAndFeelException;
 *                                        3 = GPS in Mintaka Star (USB, station mode, access point)
 *                                        4 = GPS in Mintaka StarX (USB, station mode, access point)
 *
+*
 * global var: RS232_GPS_sentence : 0 = no sentence
 *                                  1 = RMC
 *                                  2 = GGA
 * 
-* ----------------------------------------------------------------------------------------------------------------------
+*
 * global var obs_format:  - FORMAT_FM13
 *                         - FORMAT_101
 *                         - FORMAT_AWS
+*
+*
+* global var OSM_mode:    - OSM_ONLINE_MANUAL         // visual VOS (+ APR VOS)
+*                         - OSM_OFFLINE_MANUAL        // visual VOS (+ APR VOS)
+*                         - OSM_ONLINE_AWS_SENSOR
+*                         - OSM_OFFLINE_AWS_SENSOR
+*                         - OSM_ONLINE_AWS_VISUAL
+*                         - OSM_OFFLINE_AWS_VISUAL
+*
+*
+* global var GUI_mode     - GUI_FULL
+*                         - GUI_LIGHT
+*
+*
+* global var GUI_logo     - LOGO_EUMETNET
+*                         - LOGO_NOAA
+*                         - LOGO_SOT
+*
+*
+*
 * ----------------------------------------------------------------------------------------------------------------------
 * configuration data (bv call sign, imo nummer, hoogte deklading etc) wordt op 3 plaatsen weggeschreven: !!!
 *   - 1x in muffin (java cache)
@@ -289,6 +312,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 * main.configuratie_regels[47]                                  -> wind speed units graphs/dasboard
 * main.configuratie_regels[48]                                  -> ship type
 * main.configuratie_regels[49]                                  -> height anemometer above WL
+* main.configuratie_regels[50]                                  -> GUI_mode (light, full)
+* main.configuratie_regels[51]                                  -> GUI_logo (Eumetnet, NOAA, SOT)
+*
+*
+*
 * 
 * lezen via: - read_muffin()
 *            - lees_configuratie_regels()
@@ -445,7 +473,6 @@ public class main extends javax.swing.JFrame {
 
       jPanel1 = new javax.swing.JPanel();
       jToolBar1 = new javax.swing.JToolBar();
-      jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
       jButton3 = new javax.swing.JButton();
       jButton6 = new javax.swing.JButton();
@@ -584,6 +611,7 @@ public class main extends javax.swing.JFrame {
       jMenuItem42 = new javax.swing.JMenuItem();
       jMenuItem52 = new javax.swing.JMenuItem();
       jMenuItem54 = new javax.swing.JMenuItem();
+      jMenuItem71 = new javax.swing.JMenuItem();
       jSeparator2 = new javax.swing.JSeparator();
       jMenuItem27 = new javax.swing.JMenuItem();
       jMenuItem28 = new javax.swing.JMenuItem();
@@ -613,14 +641,23 @@ public class main extends javax.swing.JFrame {
       jMenuItem51 = new javax.swing.JMenuItem();
       jMenu9 = new javax.swing.JMenu();
       jMenuItem58 = new javax.swing.JMenuItem();
+      jMenuItem65 = new javax.swing.JMenuItem();
+      jSeparator8 = new javax.swing.JPopupMenu.Separator();
       jMenuItem55 = new javax.swing.JMenuItem();
       jMenuItem56 = new javax.swing.JMenuItem();
       jMenuItem57 = new javax.swing.JMenuItem();
       jMenuItem63 = new javax.swing.JMenuItem();
       jMenuItem64 = new javax.swing.JMenuItem();
+      jMenu10 = new javax.swing.JMenu();
+      jMenuItem66 = new javax.swing.JMenuItem();
+      jMenuItem62 = new javax.swing.JMenuItem();
+      jMenuItem68 = new javax.swing.JMenuItem();
+      jSeparator9 = new javax.swing.JPopupMenu.Separator();
+      jMenuItem67 = new javax.swing.JMenuItem();
+      jMenuItem69 = new javax.swing.JMenuItem();
+      jMenuItem70 = new javax.swing.JMenuItem();
       jMenu7 = new javax.swing.JMenu();
       jMenuItem36 = new javax.swing.JMenuItem();
-      jMenuItem62 = new javax.swing.JMenuItem();
       jMenuItem49 = new javax.swing.JMenuItem();
       jSeparator5 = new javax.swing.JPopupMenu.Separator();
       jMenuItem53 = new javax.swing.JMenuItem();
@@ -646,18 +683,6 @@ public class main extends javax.swing.JFrame {
 
       jToolBar1.setFloatable(false);
       jToolBar1.setRollover(true);
-
-      jButton1.setToolTipText("Call sign / VOS ID");
-      jButton1.setFocusable(false);
-      jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-      jButton1.setPreferredSize(new java.awt.Dimension(28, 28));
-      jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-      jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-         public void mouseClicked(java.awt.event.MouseEvent evt) {
-            call_sign_toolbar_mouseClicked(evt);
-         }
-      });
-      jToolBar1.add(jButton1);
 
       jButton2.setToolTipText("Date and Time");
       jButton2.setFocusable(false);
@@ -1720,7 +1745,7 @@ public class main extends javax.swing.JFrame {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-               .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+               .addComponent(jLabel10))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2076,6 +2101,14 @@ public class main extends javax.swing.JFrame {
          }
       });
       jMenu4.add(jMenuItem54);
+
+      jMenuItem71.setText("GUI settings...");
+      jMenuItem71.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maintenance_GUI_settings_actionPerformed(evt);
+         }
+      });
+      jMenu4.add(jMenuItem71);
       jMenu4.add(jSeparator2);
 
       jMenuItem27.setText("Observers...");
@@ -2272,6 +2305,15 @@ public class main extends javax.swing.JFrame {
       });
       jMenu9.add(jMenuItem58);
 
+      jMenuItem65.setText("Latest AWS measurements");
+      jMenuItem65.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Dashboard_latest_AWS_measurements_actionPerformed(evt);
+         }
+      });
+      jMenu9.add(jMenuItem65);
+      jMenu9.add(jSeparator8);
+
       jMenuItem55.setText("Barometer");
       jMenuItem55.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2314,6 +2356,60 @@ public class main extends javax.swing.JFrame {
 
       jMenuBar1.add(jMenu9);
 
+      jMenu10.setText("Maps");
+
+      jMenuItem66.setText("Obs's Map (offline)");
+      jMenuItem66.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_Obs_Manual_Map_Offline_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem66);
+
+      jMenuItem62.setText("AWS sensor Map (offline)");
+      jMenuItem62.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_AWS_Sensor_Map_Offline_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem62);
+
+      jMenuItem68.setText("AWS visual Map (offline)");
+      jMenuItem68.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_AWS_Visual_Map_Offline_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem68);
+      jMenu10.add(jSeparator9);
+
+      jMenuItem67.setText("Obs's Map (internet)");
+      jMenuItem67.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_Obs_Manual_Map_Online_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem67);
+
+      jMenuItem69.setText("AWS sensor Map (internet)");
+      jMenuItem69.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_AWS_Sensor_Map_Online_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem69);
+
+      jMenuItem70.setText("AWS Obs's visual Map (internet)");
+      jMenuItem70.setActionCommand("AWS visual Map (internet)");
+      jMenuItem70.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_AWS_Visual_Map_Online_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem70);
+
+      jMenuBar1.add(jMenu10);
+
       jMenu7.setText("Info");
 
       jMenuItem36.setText("Statistics (internet)");
@@ -2323,14 +2419,6 @@ public class main extends javax.swing.JFrame {
          }
       });
       jMenu7.add(jMenuItem36);
-
-      jMenuItem62.setText("Obs's Map (internet)");
-      jMenuItem62.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Info_Obs_Map_menu_actionPerformed(evt);
-         }
-      });
-      jMenu7.add(jMenuItem62);
 
       jMenuItem49.setText("Calculator...");
       jMenuItem49.addActionListener(new java.awt.event.ActionListener() {
@@ -2455,13 +2543,12 @@ public class main extends javax.swing.JFrame {
             {
                // toolbar icons
                //
-               //if (imagePath.equals(main.ICONS_DIRECTORY_R + java.io.File.separator + "call_sign.png"))
-               if (imagePath.equals(main.ICONS_DIRECTORY + "call_sign.png"))
-               {
-                  ImageIcon toolbar_img_call_sign = get();
-                  jButton1.setIcon(toolbar_img_call_sign);
-               }
-               else if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png"))
+               //if (imagePath.equals(main.ICONS_DIRECTORY + "call_sign.png"))
+               //{
+               //   ImageIcon toolbar_img_call_sign = get();
+               //   jButton1.setIcon(toolbar_img_call_sign);
+               //}
+               if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png"))
                {
                   ImageIcon toolbar_img_date_time = get();
                   jButton2.setIcon(toolbar_img_date_time);
@@ -2589,7 +2676,7 @@ public class main extends javax.swing.JFrame {
    private void initImages()
    {
       //loadImage(main.ICONS_DIRECTORY_R + java.io.File.separator + "call_sign.png");
-      loadImage(main.ICONS_DIRECTORY + "call_sign.png");
+      //loadImage(main.ICONS_DIRECTORY + "call_sign.png");
       loadImage(main.ICONS_DIRECTORY + "date_time.png");
       loadImage(main.ICONS_DIRECTORY + "position.png");
       loadImage(main.ICONS_DIRECTORY + "wind.png");
@@ -3305,6 +3392,15 @@ private void read_muffin()
  
                /* meta data (mystationdata.java), eg IMO number and call sign, must be present */
                check_meta_data();
+               
+               /* if indicated by the user (via Maintenance menu) set GUI light mode */
+               if (GUI_mode.equals(GUI_LIGHT))
+               {
+                  set_GUI_light_mode();
+               }
+               
+               /* pop-up menu */
+               create_popup_menu();                       // NB with dependency to GUI_mode
 
                /* check immt size (main.java) */
                check_immt_size();
@@ -3316,7 +3412,7 @@ private void read_muffin()
               
                // gray (disable) the not appropriate graph menu selection options 
                disable_graph_menu_items();
-               disable_dashboard_menu_items();
+               disable_dashboard_and_maps_menu_items();
                disable_output_menu_items();
                
                // GPS connected ? 
@@ -3527,7 +3623,7 @@ private void disable_output_menu_items()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-private void disable_dashboard_menu_items()
+private void disable_dashboard_and_maps_menu_items()
 {
    // if no AWS connected 
    if (RS232_connection_mode != 3 && RS232_connection_mode != 9 && RS232_connection_mode != 10)  // not AWS connected mode
@@ -3543,6 +3639,21 @@ private void disable_dashboard_menu_items()
       
       // disable Dashboard AWS (wind radar)
       jMenuItem64.setEnabled(false);                           // Dashboard - AWS [wind radar)
+      
+      // disable Latest AWS measurements
+      jMenuItem65.setEnabled(false);                           // Dashboard - Latest AWS measurements
+      
+      // disable Maps -> AWS sensor Map (offline)              // Maps -> AWS sensor Map (offline)  
+      jMenuItem62.setEnabled(false);                           // NB sensor_data files based 
+      
+      //disable Maps -> AWS visual Map (offline)               // Maps -> AWS visual Map (offline)
+      jMenuItem68.setEnabled(false);                           // NB IMMT based 
+      
+      // disable Maps -> AWS sensor Map (online)               // Maps -> AWS sensor Map (online)  
+      jMenuItem69.setEnabled(false);                           // NB sensor_data files based 
+      
+      // disable Maps -> AWS visual Map (online)               // Maps -> AWS visual Map (online) 
+      jMenuItem70.setEnabled(false);                           // NB IMMT based 
    }
              
    // if no barometer connected 
@@ -3553,9 +3664,42 @@ private void disable_dashboard_menu_items()
           
    
    // if AWS connected 
-   if (RS232_connection_mode == 3 || RS232_connection_mode == 9|| RS232_connection_mode == 10) // AWS connected mode
+   if (RS232_connection_mode == 3 || RS232_connection_mode == 9 || RS232_connection_mode == 10) // AWS connected mode
    {
+      // AWS connected BUT screen resolution < 1366 * 768: disable Dashboard AWS (analog) 
+      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      double width_screen = screenSize.getWidth();
+      double height_screen = screenSize.getHeight();
+      //System.out.println("--- Screen resolution AWS Dashboard wind radar: " + width_screen + " x " + height_screen);   
+      if ((width_screen < 1366) || (height_screen < 768))
+      {
+         jMenuItem56.setEnabled(false);                         // Dashboard - AWS [analog)
+      }
+      
+      // disable Dashboard - latest obs
       jMenuItem58.setEnabled(false);                            // Dashboard - latest obs
+      
+      // disable Maps -> Obs's Map (offline)                    // NB IMMT log based
+      jMenuItem66.setEnabled(false);                            // Maps -> Obs's Map (offline)
+      
+      // disable Maps -> Obs's Map (online)                     // NB IMMT log based
+      jMenuItem67.setEnabled(false);                            // Maps -> Obs's Map (online)
+   }
+   
+   
+   // online mode (TurboWeb)
+   //     NB disable all offline Maps links because these offline maps will never be present in TurboWeb mode 
+   //     (to keep TurboWeb as small as possible + they will always have an internet connection for the online Maps)
+   if (offline_mode == false)
+   {
+       // disable Maps -> Obs's Map (offline)                   // NB IMMT log based
+      jMenuItem66.setEnabled(false);                            // Maps -> Obs's Map (offline)
+      
+      // disable Maps -> AWS sensor Map (offline)               // Maps -> AWS sensor Map (offline)  
+      jMenuItem62.setEnabled(false);                            // NB sensor_data files based 
+      
+      // disable Maps -> AWS visual Map (offline)               // Maps -> AWS visual Map (offline)
+      jMenuItem68.setEnabled(false);                            // NB IMMT based 
    }
    
    
@@ -3769,6 +3913,7 @@ public static void set_muffin()
    }           
 
    
+   
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -3798,16 +3943,25 @@ public static void set_muffin()
       x_pos_frame = screenWidth / 2 - (800 / 2);
       y_pos_frame = screenHeight / 2 - (600 / 2);
     
-      // compute position of info-about screen
+      // compute position of latest obsabout screen
       x_pos_small_frame = screenWidth / 2 - (400 / 2);
       y_pos_small_frame = screenHeight / 2 - (300 / 2);
+      
+      // compute position of info-about screen
+      x_pos_about_frame = screenWidth / 2 - (500 / 2);
+      y_pos_about_frame = screenHeight / 2 - (500 / 2);
       
      // compute position of calculator screen
       x_pos_calculator_frame = screenWidth / 2 - (350 / 2);
       y_pos_calculator_frame = screenHeight / 2 - (550 / 2);
+      
+      // compute x-y location Dashboard latest measurements table screen
+      //x_pos_latestmeasurements_frame = screenWidth / 2 - (1000 / 2);
+      //y_pos_latestmeasurements_frame = screenHeight / 2 - (750 / 2);
        
    }      
 
+   
 
    /***********************************************************************************************/
    /*                                                                                             */
@@ -4459,6 +4613,8 @@ public static void set_muffin()
       configuratie_regels[47] = main.WIND_UNITS_DASHBOARD_TXT + main.wind_units_dashboard.trim();  
       configuratie_regels[48] = main.SHIP_TYPE_DASHBOARD_TXT + main.ship_type_dashboard;  
       configuratie_regels[49] = main.HEIGHT_ANEMOMETER_TXT + main.height_anemometer; 
+      configuratie_regels[50] = main.GUI_MODE_TXT + main.GUI_mode;
+      configuratie_regels[51] = main.GUI_LOGO_TXT + main.GUI_logo;        
    }
    
     
@@ -4471,7 +4627,7 @@ public static void set_muffin()
    {       
       /* NB input/output in een GUI altijd via een SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
-      /* This is a backup for writting to muffin !!! */
+      /* This is also a backup for writting to muffin !!! */
       /* backup (file configuration.txt) in: user dir (system defined) AND logs dir (user defined) */
 
       /* NB i.v.m. Swingworker backgroud proces kan het niet in 1 lus gebeuren */
@@ -4671,7 +4827,16 @@ public static void set_muffin()
  
                /* meta data (mystationdata.java), eg IMO number and call sign, must be present */
                check_meta_data();
-
+               
+               /* if indicated by the user (via Maintenance menu) set GUI light mode */
+               if (GUI_mode.equals(GUI_LIGHT))
+               {
+                  set_GUI_light_mode();
+               }
+               
+               /* pop-up menu */
+               create_popup_menu();                       // NB with dependency to GUI_mode
+               
                /* check immt size (main.java) */
                check_immt_size();
                
@@ -4685,9 +4850,9 @@ public static void set_muffin()
                //
                specific_connection_initComponents();
               
-               /* gray (disable) the not appropriate graph menu selection options */
+               /* gray (disable) the not appropriate graph/dashboard/maps menu selection options */
                disable_graph_menu_items();
-               disable_dashboard_menu_items();
+               disable_dashboard_and_maps_menu_items();
                disable_output_menu_items();
                
                
@@ -4714,6 +4879,357 @@ public static void set_muffin()
       
     }
 
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/   
+private void set_GUI_light_mode()
+{
+   // 
+   //////////// update title of main screen /////////
+   //
+   setTitle(APPLICATION_NAME + " light");                   
+   
+   
+   //
+   //////////////////// input menu /////////////////
+   //
+   jMenuItem6.setVisible(false);         // waves
+   jMenuItem12.setVisible(false);        // visibility
+   jMenuItem10.setVisible(false);        // present weather
+   jMenuItem11.setVisible(false);        // past weather
+   jMenuItem13.setVisible(false);        // Cl
+   jMenuItem14.setVisible(false);        // Cm
+   jMenuItem15.setVisible(false);        // Ch
+   jMenuItem16.setVisible(false);        // cloud cover + height
+   
+   
+   //
+   /////////////// menu bar (buttons+icons) /////////////
+   //
+   jButton5.setVisible(false);            // waves
+   jButton11.setVisible(false);           // visibility
+   jButton9.setVisible(false);            // present weather
+   jButton10.setVisible(false);           // past weather
+   jButton12.setVisible(false);           // clouds low
+   jButton13.setVisible(false);           // clouds middle
+   jButton14.setVisible(false);           // clouds high
+   jButton15.setVisible(false);           // cloud cover + height
+   
+   
+   ////////// NB pop-up_menu will also be adjusted see: create_popup_menu() [main.java] ///////////// 
+   //
+   
+   
+   //
+   /////////////// middle panel /////////////
+   //
+   
+   // PwPw (wind wave period)
+   jLabel23.setVisible(false);
+   jTextField23.setVisible(false);
+   
+   jPanel3.remove(jLabel23);
+   jPanel3.remove(jTextField23);
+   
+   // HwHw (wind wave period)
+   jLabel22.setVisible(false);
+   jTextField22.setVisible(false);
+   
+   jPanel3.remove(jLabel22);
+   jPanel3.remove(jTextField22);
+   
+   // dw1dw1 (1st swell dir)
+   jLabel24.setVisible(false);
+   jTextField24.setVisible(false);
+   
+   jPanel3.remove(jLabel24);
+   jPanel3.remove(jTextField24);
+   
+   // Pw1Pw1 (1st swell period)
+   jLabel26.setVisible(false);
+   jTextField26.setVisible(false);
+   
+   jPanel3.remove(jLabel26);
+   jPanel3.remove(jTextField26);
+   
+   // Hw1Hw1 (1st swell height)
+   jLabel25.setVisible(false);
+   jTextField25.setVisible(false);
+   
+   jPanel3.remove(jLabel25);
+   jPanel3.remove(jTextField25);
+   
+   // dw2dw2 (2ndt swell dir)
+   jLabel27.setVisible(false);
+   jTextField27.setVisible(false);
+   
+   jPanel3.remove(jLabel27);
+   jPanel3.remove(jTextField27);
+   
+   // Pw2Pw2 (2nd swell period)
+   jLabel29.setVisible(false);
+   jTextField29.setVisible(false);
+   
+   jPanel3.remove(jLabel29);
+   jPanel3.remove(jTextField29);
+   
+   // Hw2Hw2 (2nd swell height)
+   jLabel28.setVisible(false);
+   jTextField28.setVisible(false);
+   
+   jPanel3.remove(jLabel28);
+   jPanel3.remove(jTextField28);
+   
+   // VV
+   jLabel18.setVisible(false);
+   jTextField18.setVisible(false);
+   
+   jPanel3.remove(jLabel18);
+   jPanel3.remove(jTextField18);
+   
+   
+   //
+   //////////////// right panel ////////////
+   //
+   
+   // ww (present weather)
+   jLabel13.setVisible(false);                      // NB jLabel13 will be 'reused' for the logo
+   
+   jTextField13.setVisible(false);
+   jPanel2.remove(jTextField13);
+   
+   // W1
+   jLabel14.setVisible(false);
+   jTextField14.setVisible(false);
+   
+   jPanel2.remove(jLabel14);
+   jPanel2.remove(jTextField14);
+   
+   // W2
+   jLabel15.setVisible(false);
+   jTextField15.setVisible(false);
+   
+   jPanel2.remove(jLabel15);
+   jPanel2.remove(jTextField15);
+   
+   
+   // Cl
+   jLabel33.setVisible(false);
+   jTextField33.setVisible(false);
+   
+   jPanel2.remove(jLabel33);
+   jPanel2.remove(jTextField33);
+   
+   // Cm
+   jLabel34.setVisible(false);
+   jTextField34.setVisible(false);
+   
+   jPanel2.remove(jLabel34);
+   jPanel2.remove(jTextField34);
+   
+   // Ch
+   jLabel36.setVisible(false);
+   jTextField35.setVisible(false);
+   
+   jPanel2.remove(jLabel36);
+   jPanel2.remove(jTextField35);
+   
+   // N
+   jLabel30.setVisible(false);
+   jTextField30.setVisible(false);
+   
+   jPanel2.remove(jLabel30);
+   jPanel2.remove(jTextField30);
+   
+   // Nh
+   jLabel31.setVisible(false);
+   jTextField31.setVisible(false);
+   
+   jPanel2.remove(jLabel31);
+   jPanel2.remove(jTextField31);
+   
+   // h
+   jLabel32.setVisible(false);
+   jTextField32.setVisible(false);
+   
+   jPanel2.remove(jLabel32);
+   jPanel2.remove(jTextField33);
+   
+   
+   // set a new lay-out manager (from group-layout -> grid bag lay-out)
+   //
+   jPanel2.setLayout(new GridBagLayout());
+   double y_weight = 0.015;
+  
+   
+   // Eumetnet/NOAA/SOT logo
+   //
+   //jLabel13.setPreferredSize(new Dimension (144, 104));
+   jLabel13.setPreferredSize(new Dimension (144, 144));            // so label13 will be 'reused' for the logo !!
+   jLabel13.setVisible(true);
+   
+   if (GUI_logo.equals(LOGO_EUMETNET))
+   {
+      loadImage_logo(main.ICONS_DIRECTORY + "logo-eumetnet.png");
+   }
+   else if (GUI_logo.equals(LOGO_NOAA))
+   {
+      loadImage_logo(main.ICONS_DIRECTORY + "logo-noaa.png");
+   }
+   else if (GUI_logo.equals(LOGO_SOT))
+   {
+      loadImage_logo(main.ICONS_DIRECTORY + "logo-sot.png");
+   }
+   else // default
+   {
+      loadImage_logo(main.ICONS_DIRECTORY + "logo-eumetnet.png");
+   }
+   
+   GridBagConstraints c0 = new GridBagConstraints();
+   //c0.fill = GridBagConstraints.HORIZONTAL;
+   c0.gridx = 1;
+   c0.gridy = 0;
+   c0.weighty = 0.3;
+   c0.gridwidth = 5;
+   jPanel2.add(jLabel13, c0);
+   
+   // icing label
+   //
+   GridBagConstraints c1 = new GridBagConstraints();
+   c1.fill = GridBagConstraints.HORIZONTAL;
+   c1.gridx = 0;
+   c1.gridy = 1;
+   c1.ipadx = 40;
+   c1.insets = new Insets (0,8,0,0);           // top/left/bottom/right
+   c1.anchor = GridBagConstraints.LINE_START;
+   c1.weighty = y_weight;
+   jPanel2.add(jLabel19, c1);
+   
+   // icing textfield
+   //
+   GridBagConstraints c2 = new GridBagConstraints();
+   c2.fill = GridBagConstraints.HORIZONTAL;
+   c1.gridx = 1;
+   c2.gridy = 1;
+   c2.gridwidth = 4;
+   c2.ipadx = 180;
+   c2.insets = new Insets (0,0,0,6);
+   c2.anchor = GridBagConstraints.LINE_START;
+   c2.weighty = y_weight;
+   jPanel2.add(jTextField21, c2);
+   
+   // ice label
+   //
+   GridBagConstraints c3 = new GridBagConstraints();
+   c3.fill = GridBagConstraints.HORIZONTAL;
+   c3.gridx = 0;
+   c3.gridy = 3;
+   c3.ipadx = 40;
+   c3.insets = new Insets (0,8,0,0);
+   c3.anchor = GridBagConstraints.LINE_START;
+   c3.weighty = y_weight;
+   jPanel2.add(jLabel21, c3);
+   
+   // ice textfield
+   //
+   GridBagConstraints c4 = new GridBagConstraints();
+   c4.fill = GridBagConstraints.HORIZONTAL;
+   c4.gridx = 1;
+   c4.gridy = 3;
+   c4.gridwidth = 4;
+   c4.ipadx = 180;
+   c4.insets = new Insets (0,0,0,6);
+   c4.anchor = GridBagConstraints.LINE_START;
+   c4.weighty = y_weight;
+   jPanel2.add(jTextField19, c4);
+   
+   // observer label
+   //
+   GridBagConstraints c5 = new GridBagConstraints();
+   c5.fill = GridBagConstraints.HORIZONTAL;
+   c5.gridx = 0;
+   c5.gridy = 5;
+   c5.ipadx = 40;
+   c5.insets = new Insets (0,8,0,0);
+   c5.anchor = GridBagConstraints.LINE_START;
+   c5.weighty = y_weight;
+   jPanel2.add(jLabel20, c5);
+   
+   // observer textfield
+   //
+   GridBagConstraints c6 = new GridBagConstraints();
+   c6.fill = GridBagConstraints.HORIZONTAL;
+   c6.gridx = 1;
+   c6.gridy = 5;
+   c6.gridwidth = 4;
+   c6.ipadx = 180;
+   c6.insets = new Insets (0,0,0,6);
+   c6.anchor = GridBagConstraints.LINE_START;
+   c6.weighty = y_weight;
+   jPanel2.add(jTextField20, c6);
+   
+   
+   // repaint inmidiatelly
+   //
+   validate();
+}
+
+  
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+//   
+// The doInBackground method, which creates the image icon for the photograph, is invoked by the background thread. 
+// After the image icon is fully loaded, the done method is invoked on the event-dispatching thread. 
+// This updates the GUI to display the photograph
+//   
+// SwingWorker is only designed to be executed once. Executing a SwingWorker more than once will not result in invoking the doInBackground method twice.
+// see: http://java.sun.com/javase/6/docs/api/javax/swing/SwingWorker.html
+//
+private void loadImage_logo(final String imagePath) 
+{
+   new SwingWorker<ImageIcon, Object>() 
+   {
+      @Override
+      public ImageIcon doInBackground() 
+      {
+         return createImageIcon(imagePath);
+      }
+
+      @Override
+      public void done()
+      {
+         try
+         {        
+            ImageIcon logo_icon = get();
+            jLabel13.setIcon(logo_icon); 
+         } // try
+         catch (InterruptedException ignore) { }
+         catch (java.util.concurrent.ExecutionException e) 
+         {
+            String why;
+            Throwable cause = e.getCause();
+            if (cause != null) 
+            {
+               why = cause.getMessage();
+            } 
+            else 
+            {
+               why = e.getMessage();
+            }
+            //System.err.println("Error retrieving file: " + why);
+            JOptionPane.showMessageDialog(null, "Error retrieving file: " + why, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+         } // catch         
+      } //  public void done()
+   }.execute();
+} // private void loadImage(final String imagePath, final int index)
+  
    
    
 /***********************************************************************************************/
@@ -5137,6 +5653,18 @@ public static void meta_data_from_configuration_regels_into_global_vars()
          if (configuratie_regels[teller].indexOf(HEIGHT_ANEMOMETER_TXT) != -1)
          {
             height_anemometer = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // GUI mode (light/full)
+         if (configuratie_regels[teller].indexOf(GUI_MODE_TXT) != -1)
+         {
+            GUI_mode = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // GUI logo (EUMETNET/NOAAA/SOT)
+         if (configuratie_regels[teller].indexOf(GUI_LOGO_TXT) != -1)
+         {
+            GUI_logo = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
          }
          
       } // if ((configuratie_regels[teller] != null) etc.
@@ -6819,6 +7347,7 @@ private static void check_meta_data()
    }//GEN-LAST:event_Input_Barograph_menu_actionPerformed
 
 
+   
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -6827,7 +7356,8 @@ private static void check_meta_data()
 private void Info_About_menu_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Info_About_menu_actionPerformed
 // TODO add your handling code here:
    about form = new about();               
-   form.setSize(400, 350);
+   //form.setSize(400, 350);
+   form.setSize(500, 500);
    form.setVisible(true); 
    
 }//GEN-LAST:event_Info_About_menu_actionPerformed
@@ -8408,7 +8938,23 @@ private void char_pressure_tendency_mainscreen_mouseClicked(java.awt.event.Mouse
 /***********************************************************************************************/
 private void present_weather_mainscreen_mouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_present_weather_mainscreen_mouseClicked
    // TODO add your handling code here:
-   Input_Presentweather_menu_actionPerformed(null);
+   
+   // NB in light mode Label13 (present weather) will be reused for the logo (eumetnet, noaa, sot)
+   //    so no action if Label13 was become a label
+   if (!GUI_mode.equals(GUI_LIGHT))
+   {
+      Input_Presentweather_menu_actionPerformed(null);
+   }
+   
+   // in light mode Label13 = image without response on a right click
+   // now right clicking on the logo will invoke the popup menu
+   //if (GUI_mode.equals(GUI_LIGHT))
+   //{
+   //   {
+   //      JOptionPane.showMessageDialog(null, "right moude button clicked" ,  main.APPLICATION_NAME + " test", JOptionPane.ERROR_MESSAGE);
+   //      create_popup_menu();
+   //   }
+   // }
 }//GEN-LAST:event_present_weather_mainscreen_mouseClicked
 
 
@@ -8695,20 +9241,6 @@ private void masked_call_sign_mainscreen_mouseClicked(java.awt.event.MouseEvent 
    //}
 }//GEN-LAST:event_masked_call_sign_mainscreen_mouseClicked
 
-
-/***********************************************************************************************/
-/*                                                                                             */
-/*                                                                                             */
-/*                                                                                             */
-/***********************************************************************************************/
-private void call_sign_toolbar_mouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_call_sign_toolbar_mouseClicked
-   // TODO add your handling code here:
-   
-   //if (RS232_connection_mode != 3)
-   //{
-      Maintenance_Stationdata_actionPerformed(null);
-   //}
-}//GEN-LAST:event_call_sign_toolbar_mouseClicked
 
 
 /***********************************************************************************************/
@@ -9264,7 +9796,7 @@ private void Amver_SailingPlan_actionPerformed(java.awt.event.ActionEvent evt) {
       amver_report = AMVER_SP;              // AMVER sailing plan
 
       myamversailingplan form = new myamversailingplan();
-      form.setSize(1000, 700);
+      form.setSize(1000, 750);
       form.setVisible(true);
    }
 }//GEN-LAST:event_Amver_SailingPlan_actionPerformed
@@ -9309,7 +9841,7 @@ private void Amver_ArrivalReport_actionPerformed(java.awt.event.ActionEvent evt)
       amver_report = AMVER_FR;             // AMVER arrival(final) report
 
       myamversailingplan form = new myamversailingplan();
-      form.setSize(1000, 700);
+      form.setSize(1000, 750);
       form.setVisible(true);
    }
 }//GEN-LAST:event_Amver_ArrivalReport_actionPerformed
@@ -12410,19 +12942,6 @@ private boolean checking_level_3()
 
    
    
-   /***********************************************************************************************/
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /***********************************************************************************************/ 
-   private void Info_Obs_Map_menu_actionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Info_Obs_Map_menu_actionPerformed
-   {//GEN-HEADEREND:event_Info_Obs_Map_menu_actionPerformed
-      // TODO add your handling code here:
-      
-      main_IMMT_on_leaflet_map();
-      
-   }//GEN-LAST:event_Info_Obs_Map_menu_actionPerformed
-
    
    
    /***********************************************************************************************/
@@ -12508,6 +13027,239 @@ private boolean checking_level_3()
       main_window_updating_date_time();
       
    }//GEN-LAST:event_main_windowDeiconified
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Dashboard_latest_AWS_measurements_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Dashboard_latest_AWS_measurements_actionPerformed
+      // TODO add your handling code here:
+      
+      //if (mylatestmeasurements.compareTo("") != 0)
+      //{
+      //   JOptionPane.showMessageDialog(null, "Please close first a previously opened Latest AWS measuremnets form", main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
+      // }
+      //else
+      //{
+      //   latestmeasurements_report = MESUREMENTS_SP;              // AMVER sailing plan
+      //
+      //   mylatestmeasurements form = new mylatestmeasurements();
+      //   form.setSize(1000, 700);
+      //   form.setVisible(true);
+      //}     
+      
+      mylatestmeasurements form = new mylatestmeasurements();
+      form.setSize(1000, 700);
+      form.setVisible(true);
+      
+   }//GEN-LAST:event_Dashboard_latest_AWS_measurements_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void Maps_Obs_Manual_Map_Offline_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_Obs_Manual_Map_Offline_actionPerformed
+      // TODO add your handling code here:
+      
+      OSM_mode = main.OSM_OFFLINE_MANUAL;
+      Maps_OSM();
+   }//GEN-LAST:event_Maps_Obs_Manual_Map_Offline_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/      
+   private void Maps_Obs_Manual_Map_Online_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_Obs_Manual_Map_Online_actionPerformed
+      // TODO add your handling code here:
+      
+      OSM_mode = main.OSM_ONLINE_MANUAL;
+      Maps_OSM();
+   }//GEN-LAST:event_Maps_Obs_Manual_Map_Online_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/     
+   private void Maps_AWS_Sensor_Map_Offline_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_AWS_Sensor_Map_Offline_actionPerformed
+      // TODO add your handling code here:
+      
+      OSM_mode = main.OSM_OFFLINE_AWS_SENSOR;
+      Maps_OSM();
+   }//GEN-LAST:event_Maps_AWS_Sensor_Map_Offline_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/     
+   private void Maps_AWS_Visual_Map_Offline_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_AWS_Visual_Map_Offline_actionPerformed
+      // TODO add your handling code here:
+      
+      OSM_mode = main.OSM_OFFLINE_AWS_VISUAL;
+      Maps_OSM();
+   }//GEN-LAST:event_Maps_AWS_Visual_Map_Offline_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private void Maps_AWS_Sensor_Map_Online_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_AWS_Sensor_Map_Online_actionPerformed
+      // TODO add your handling code here:
+      
+      OSM_mode = main.OSM_ONLINE_AWS_SENSOR;
+      Maps_OSM();
+   }//GEN-LAST:event_Maps_AWS_Sensor_Map_Online_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private void Maps_AWS_Visual_Map_Online_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_AWS_Visual_Map_Online_actionPerformed
+      // TODO add your handling code here:
+      
+      OSM_mode = main.OSM_ONLINE_AWS_VISUAL;
+      Maps_OSM();
+   }//GEN-LAST:event_Maps_AWS_Visual_Map_Online_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Maintenance_GUI_settings_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maintenance_GUI_settings_actionPerformed
+      // TODO add your handling code here:
+      
+      mode = GUI_SETTINGS;
+      
+      mypassword form = new mypassword();
+      form.setSize(400, 300);
+      form.setVisible(true);
+   }//GEN-LAST:event_Maintenance_GUI_settings_actionPerformed
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Maps_OSM()
+   {
+      // called from: - Maps_Obs_Manual_Map_Online_actionPerformed() [main.java]
+      //              - Maps_Obs_Manual_Map_Offline_actionPerformed() [main.java]
+      //              - Maps_AWS_Sensor_Map_Offline_actionPerformed() [main.java]
+      //              - Maps_AWS_sensor_Map_Online_actionPerformed() [main.java]
+      //              - Maps_AWS_Visual_Map_Offline_actionPerformed() [main.java]
+      //              - Maps_AWS_Visual_Map_Online_actionPerformed() [main.java]
+      
+      
+      // for online and offline MAp
+      //OSM osm = OSM.getInstance();  // NB https://stackoverflow.com/questions/1441984/how-can-i-know-whether-an-instance-of-a-class-already-exists-in-memory
+     
+      if (osm_class == null)
+      {                                
+         osm_class = new OSM();
+      }
+
+      // OSM OFFLINE
+      //
+      if (OSM_mode.equals(OSM_OFFLINE_MANUAL) || OSM_mode.equals(OSM_OFFLINE_AWS_SENSOR) || OSM_mode.equals(OSM_OFFLINE_AWS_VISUAL))
+      {
+         new SwingWorker<Boolean, Void>()
+         {
+            @Override
+            protected Boolean doInBackground() throws Exception
+            {
+               boolean doorgaan = false;
+               doorgaan = osm_class.OSM_control_center();          // here will be checked if all the OSM files are already present, if not they will be copied from jar t destination
+
+               return doorgaan;
+               
+            } // protected Void doInBackground() throws Exception
+
+            @Override
+            protected void done()
+            {
+               try
+               {
+                  boolean doorgaan = get();
+               
+                  if (doorgaan)
+                  {
+                     if ((OSM_mode.equals(OSM_OFFLINE_MANUAL) || OSM_mode.equals(OSM_OFFLINE_AWS_VISUAL)))
+                     {
+                        // IMMT based
+                        osm_class.OSM_IMMT_on_leaflet_map();   
+                     }
+                     else if (OSM_mode.equals(OSM_OFFLINE_AWS_SENSOR))
+                     {
+                        // sensor data files based
+                        osm_class.OSM_AWS_Sensor_data_on_leaflet_map();
+                     }
+                  }
+                  else
+                  {
+                     String info = "Error when displaying Obs's offline map";
+                     main.log_turbowin_system_message("[OSM] " + info);
+                     JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+                  } // else
+               
+               } // try
+               catch (InterruptedException | ExecutionException ex) 
+               {   
+                  System.out.println("+++ Error in Function: Maps_Obs_Map_Offline_actionPerformed. " + ex); 
+               }
+            } // protected void done()
+         }.execute(); // new SwingWorker<Boolean, Void>()
+      } // if (OSM_mode.equals(OSM_OFFLINE)) etc.
+      
+      // OSM ONLINE
+      //
+      else if (OSM_mode.equals(OSM_ONLINE_MANUAL) || OSM_mode.equals(OSM_ONLINE_AWS_SENSOR) || OSM_mode.equals(OSM_ONLINE_AWS_VISUAL))
+      {
+         if ((OSM_mode.equals(OSM_ONLINE_MANUAL) || OSM_mode.equals(OSM_ONLINE_AWS_VISUAL)))
+         {
+            // IMMT based
+            osm_class.OSM_IMMT_on_leaflet_map();
+         }
+         else if (OSM_mode.equals(OSM_ONLINE_AWS_SENSOR))
+         {
+            // sensor data files based
+            osm_class.OSM_AWS_Sensor_data_on_leaflet_map();
+         }
+      }       
+      
+      // OSM_mode = unknown
+      //
+      else
+      {
+         String info = "Error when displaying Obs's map, unknown OSM display mode";
+         main.log_turbowin_system_message("[OSM] " + info);
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);      
+      } // else
+   }
 
    
       
@@ -12739,6 +13491,7 @@ private boolean checking_level_3()
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
+/*   
    private void display_IMMT_on_leaflet_map(List<String> immt_list)
    {
       // called from: main_IMMT_on_leaflet_map() [main.java]
@@ -12791,7 +13544,7 @@ private boolean checking_level_3()
       } // if ((Desktop.isDesktopSupported()) && etc.  
       
    }
-   
+*/   
    
 
    /***********************************************************************************************/
@@ -12799,6 +13552,7 @@ private boolean checking_level_3()
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
+/*
    private void Obsen_In_leaflet_Map(List<String> immt_list, String full_path_leaflet_maps_html_file)
    {
       // called from: display_IMMT_on_leaflet_map() [main.java]
@@ -13109,7 +13863,7 @@ private boolean checking_level_3()
       } // catch
       
    }
-  
+*/  
    
 
    /***********************************************************************************************/
@@ -13117,6 +13871,7 @@ private boolean checking_level_3()
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
+/*   
    private void main_IMMT_on_leaflet_map()
    {
       // called from: Info_Obs_Map_menu_actionPerformed() [main.java]
@@ -13315,7 +14070,7 @@ private boolean checking_level_3()
       } //  if (doorgaan)
       
    }
-    
+*/    
    
    
 /***********************************************************************************************/
@@ -14408,6 +15163,9 @@ private void initComponents2()
    jTextField4.setBackground(new java.awt.Color(204, 255, 255));   // Cyan 
    
    /* create pop-up menu (right mouse button) */
+   //create_popup_menu();
+   // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]
+/*   
    popup_input = new JPopupMenu();
       
    JMenuItem menuItem1 = new JMenuItem("Date & Time...");
@@ -14476,93 +15234,97 @@ private void initComponents2()
    });
    popup_input.add(menuItem6);    
    
-   JMenuItem menuItem7 = new JMenuItem("Waves...");
-   menuItem7.addActionListener(new java.awt.event.ActionListener() 
+   if (!main.GUI_mode.equals(main.GUI_LIGHT))
    {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem7 = new JMenuItem("Waves...");
+      menuItem7.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_waves_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem7);    
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_waves_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem7);    
    
-   JMenuItem menuItem8 = new JMenuItem("Visibility...");
-   menuItem8.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem8 = new JMenuItem("Visibility...");
+      menuItem8.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Visibility_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem8); 
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Visibility_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem8); 
 
-   JMenuItem menuItem9 = new JMenuItem("Present weather...");
-   menuItem9.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem9 = new JMenuItem("Present weather...");
+      menuItem9.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Presentweather_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem9);   
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Presentweather_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem9);   
    
-   JMenuItem menuItem10 = new JMenuItem("Past weather...");
-   menuItem10.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem10 = new JMenuItem("Past weather...");
+      menuItem10.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Pastweather_menu_actionperformed(null);
-      }
-   });
-   popup_input.add(menuItem10);    
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Pastweather_menu_actionperformed(null);
+         }
+      });
+      popup_input.add(menuItem10);    
    
-   JMenuItem menuItem11 = new JMenuItem("Clouds low...");
-   menuItem11.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem11 = new JMenuItem("Clouds low...");
+      menuItem11.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Cloudslow_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem11);    
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudslow_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem11);    
    
-   JMenuItem menuItem12 = new JMenuItem("Clouds middle...");
-   menuItem12.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem12 = new JMenuItem("Clouds middle...");
+      menuItem12.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Cloudsmiddle_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem12);    
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudsmiddle_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem12);    
    
-   JMenuItem menuItem13 = new JMenuItem("Clouds high...");
-   menuItem13.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem13 = new JMenuItem("Clouds high...");
+      menuItem13.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Cloudshigh_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem13);    
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudshigh_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem13);    
    
-   JMenuItem menuItem14 = new JMenuItem("Cloud cover & height...");
-   menuItem14.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
+      JMenuItem menuItem14 = new JMenuItem("Cloud cover & height...");
+      menuItem14.addActionListener(new java.awt.event.ActionListener() 
       {
-         Input_Cloudcover_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem14);    
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudcover_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem14);    
+   } // if (!main.GUI_mode.equals(main.GUI_LIGHT))
+   
    
    JMenuItem menuItem15 = new JMenuItem("Icing...");
    menuItem15.addActionListener(new java.awt.event.ActionListener() 
@@ -14646,7 +15408,7 @@ private void initComponents2()
    MouseListener popupListener_input = new PopupListener_input();
    addMouseListener(popupListener_input);                              // connect to jFrame otherwise eg: jTextField1.addMouseListener(popupListener);
    jToolBar1.addMouseListener(popupListener_input);                    // also connected to Toolbar now
-     
+*/     
    
    /* user directory */
    user_dir = System.getProperty("user.dir");
@@ -14878,6 +15640,267 @@ private void initComponents2()
    // NB not available in this stage so see: check_meta_data() [main.java]
    
 }  
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void create_popup_menu()
+{
+   /* create pop-up menu (right mouse button) */
+   popup_input = new JPopupMenu();
+      
+   JMenuItem menuItem1 = new JMenuItem("Date & Time...");
+   menuItem1.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_DateTime_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem1);    
+      
+   JMenuItem menuItem2 = new JMenuItem("Position, Course & Speed...");
+   menuItem2.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Position_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem2);    
+   
+   JMenuItem menuItem3 = new JMenuItem("Barometer reading...");
+   menuItem3.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Barometer_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem3);    
+   
+   JMenuItem menuItem4 = new JMenuItem("Barograph reading...");
+   menuItem4.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Barograph_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem4);    
+   
+   JMenuItem menuItem5 = new JMenuItem("Temperatures...");
+   menuItem5.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Temperatures_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem5);    
+   
+   JMenuItem menuItem6 = new JMenuItem("Wind...");
+   menuItem6.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Wind_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem6);    
+   
+   if (!main.GUI_mode.equals(main.GUI_LIGHT))
+   {
+      JMenuItem menuItem7 = new JMenuItem("Waves...");
+      menuItem7.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_waves_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem7);    
+   
+      JMenuItem menuItem8 = new JMenuItem("Visibility...");
+      menuItem8.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Visibility_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem8); 
+
+      JMenuItem menuItem9 = new JMenuItem("Present weather...");
+      menuItem9.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Presentweather_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem9);   
+   
+      JMenuItem menuItem10 = new JMenuItem("Past weather...");
+      menuItem10.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Pastweather_menu_actionperformed(null);
+         }
+      });
+      popup_input.add(menuItem10);    
+   
+      JMenuItem menuItem11 = new JMenuItem("Clouds low...");
+      menuItem11.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudslow_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem11);    
+   
+      JMenuItem menuItem12 = new JMenuItem("Clouds middle...");
+      menuItem12.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudsmiddle_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem12);    
+   
+      JMenuItem menuItem13 = new JMenuItem("Clouds high...");
+      menuItem13.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudshigh_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem13);    
+   
+      JMenuItem menuItem14 = new JMenuItem("Cloud cover & height...");
+      menuItem14.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            Input_Cloudcover_menu_actionPerformed(null);
+         }
+      });
+      popup_input.add(menuItem14);    
+   } // if (!main.GUI_mode.equals(main.GUI_LIGHT))
+   
+   
+   JMenuItem menuItem15 = new JMenuItem("Icing...");
+   menuItem15.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Icing_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem15);    
+   
+   JMenuItem menuItem16 = new JMenuItem("Ice...");
+   menuItem16.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Ice_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem16);    
+   
+   JMenuItem menuItem17 = new JMenuItem("Observer...");
+   menuItem17.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Input_Observer_menu_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem17);  
+   
+   popup_input.addSeparator();
+   
+   JMenuItem menuItem18 = new JMenuItem("Day colours");
+   menuItem18.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Themes_1_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem18);  
+   
+   JMenuItem menuItem19 = new JMenuItem("Night colours");
+   menuItem19.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Themes_2_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem19);  
+   
+   JMenuItem menuItem20 = new JMenuItem("Sunrise colours");
+   menuItem20.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Themes_3_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem20);  
+   
+   JMenuItem menuItem21 = new JMenuItem("Sunset colours");
+   menuItem21.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Themes_4_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem21);  
+   
+   MouseListener popupListener_input = new PopupListener_input();
+   addMouseListener(popupListener_input);                              // connect to jFrame otherwise eg: jTextField1.addMouseListener(popupListener);
+   jToolBar1.addMouseListener(popupListener_input);                    // also connected to Toolbar now
+   
+   // in 'gui light' mode, by default, the logo (Label13 reused) do not respond to right mouse click
+   if (GUI_mode.equals(GUI_LIGHT))
+   {
+      // in GUI LIGHT mode label13 (present weather in FULL mode) was altered to the chosen logo (eumetnet, noaa, sot)
+      jLabel13.addMouseListener(popupListener_input);
+   }
+}
 
 
 
@@ -18436,7 +19459,6 @@ public static void log_turbowin_system_message(final String message)
  
  
    // Variables declaration - do not modify//GEN-BEGIN:variables
-   private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton10;
    private javax.swing.JButton jButton11;
    private javax.swing.JButton jButton12;
@@ -18497,6 +19519,7 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JLabel jLabel8;
    private javax.swing.JLabel jLabel9;
    private javax.swing.JMenu jMenu1;
+   private javax.swing.JMenu jMenu10;
    private javax.swing.JMenu jMenu2;
    private javax.swing.JMenu jMenu3;
    private javax.swing.JMenu jMenu4;
@@ -18567,7 +19590,14 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem62;
    private javax.swing.JMenuItem jMenuItem63;
    private javax.swing.JMenuItem jMenuItem64;
+   private javax.swing.JMenuItem jMenuItem65;
+   private javax.swing.JMenuItem jMenuItem66;
+   private javax.swing.JMenuItem jMenuItem67;
+   private javax.swing.JMenuItem jMenuItem68;
+   private javax.swing.JMenuItem jMenuItem69;
    private javax.swing.JMenuItem jMenuItem7;
+   private javax.swing.JMenuItem jMenuItem70;
+   private javax.swing.JMenuItem jMenuItem71;
    private javax.swing.JMenuItem jMenuItem8;
    private javax.swing.JMenuItem jMenuItem9;
    private javax.swing.JPanel jPanel1;
@@ -18582,6 +19612,8 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JPopupMenu.Separator jSeparator5;
    private javax.swing.JPopupMenu.Separator jSeparator6;
    private javax.swing.JPopupMenu.Separator jSeparator7;
+   private javax.swing.JPopupMenu.Separator jSeparator8;
+   private javax.swing.JPopupMenu.Separator jSeparator9;
    private static javax.swing.JTextField jTextField1;
    private static javax.swing.JTextField jTextField10;
    private static javax.swing.JTextField jTextField11;
@@ -18650,7 +19682,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String LEAFLET_CSS_INTEGRITY         = "  integrity=\"sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==\"";
    public static final String LEAFLET_JS_INTEGRITY          = "  integrity=\"sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==\"";
    public static final String LEAFLET_ESRI_INTEGRITY        = "  integrity=\"sha512-m+BZ3OSlzGdYLqUBZt3u6eA0sH+Txdmq7cqA1u8/B2aTXviGMMLOfrKyiIW7181jbzZAY0u+3jWoiL61iLcTKQ==\"";
-   public static final String LEAFLET_MAPS_HTML_FILE        = "position_leaflet_maps.html";     // leaflet maps file
+   public static final String LEAFLET_MAPS_HTML_FILE        = "position_leaflet_maps.html";     // leaflet maps file for displaying just entered position 
    public static final double KNOT_M_S_CONVERSION           = 0.51444444444;
    public static final double M_S_KNOT_CONVERSION           = 1.94384449;
    public static final String OFFLINE_LOGS_DIR              = "logs";           // only used inoffline_mode
@@ -18658,7 +19690,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String TURBOWIN_SYSTEM_LOGS_DIR      = "turbowin_system";// online(web) and offline mode
    public static final int INVALID                          = 9999999;
    public static final int CONFIGURATION_FILE_POS_INHOUD    = 21;               // eg "van wind source        : estimated; true speed and true direction"de pos waar estimated begint
-   public static final int MAX_AANTAL_CONFIGURATIEREGELS    = 50;               // in configuratie file (for wind source e.d.)
+   public static final int MAX_AANTAL_CONFIGURATIEREGELS    = 100;               // in configuratie file (for wind source e.d.)
    public static final String ICONS_DIRECTORY               = "icons/";
    //public static final String ICONS_DIRECTORY_R             = "icons";        // _R van revised "icons" i.p.v. "icons/" WERKT HELAAS NIET BIJ TOOLBAR ICONS, REDEN ONBEKEND
    public static final String CONFIGURATION_FILE            = "configuration.txt";
@@ -18716,6 +19748,8 @@ public static void log_turbowin_system_message(final String message)
    public static final String WIND_UNITS_DASHBOARD_TXT      = "wind units dashbrd : ";   // t/m : is 20 characters
    public static final String SHIP_TYPE_DASHBOARD_TXT       = "ship type dashbrd  : ";   // t/m : is 20 characters
    public static final String HEIGHT_ANEMOMETER_TXT         = "anemometer-WL      : ";   // t/m : is 20 characters
+   public static final String GUI_MODE_TXT                  = "GUI mode           : ";   // t/m : is 20 characters
+   public static final String GUI_LOGO_TXT                  = "GUI logo           : ";   // t/m : is 20 characters
    
    public static final String CONTAINER_SHIP                = "container_ship";
    public static final String BULK_CARRIER                  = "bulk_carrier";
@@ -18724,7 +19758,9 @@ public static void log_turbowin_system_message(final String message)
    public static final String PASSENGER_SHIP                = "passenger_tanker";
    public static final String NEUTRAL_SHIP                  = "neutral_ship";
    public static final String GENERAL_CARGO_SHIP            = "general_cargo_ship";
-   
+   public static final String RESEARCH_VESSEL               = "research vessel";
+   public static final String RO_RO_SHIP                    = "Ro-Ro ship";
+   public static final String FERRY                         = "ferry";
    public static final String ESTIMATED_TRUE                = "estimated; true speed and true direction";
    public static final String MEASURED_OFF_BOW              = "measured; apparent speed and apparent direction (OFF THE BOW, clockwise)";
    public static final String MEASURED_TRUE                 = "measured; true speed and true direction";
@@ -18751,6 +19787,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String MAINTENANCE_SHOW_DATA         = "maintenance show  data";  // see 'mode' in password form
    public static final String MAINTENANCE_IMPORT_DATA       = "maintenance import data"; // see 'mode' in password form
    public static final String MAINTENANCE_EXPORT_DATA       = "maintenance export data"; // see 'mode' in password form
+   public static final String GUI_SETTINGS                  = "GUI settings";            // see 'mode' in password form
    public static final String SEA_AND_SWELL_ESTIMATED       = "wind sea and swell estimated";
    public static final String WAVES_MEASURED_SHIPBORNE      = "waves measured (shipborne wave recorder)";
    public static final String WAVES_MEASURED_BUOY           = "waves measured (buoy)";
@@ -18781,6 +19818,18 @@ public static void log_turbowin_system_message(final String message)
    public static final String THEME_NIMBUS_NIGHT            = "theme_nimbus_night";
    public static final String THEME_NIMBUS_SUNRISE          = "theme_nimbus_sunrise";
    public static final String THEME_NIMBUS_SUNSET           = "theme_nimbus_sunset";
+   public static final String OSM_OFFLINE_MANUAL            = "OSM_offline_manual";   // conventional VOS (APR included)
+   public static final String OSM_ONLINE_MANUAL             = "OSM_online_manual";    // conventional VOS (APR included)
+   public static final String OSM_ONLINE_AWS_SENSOR         = "OSM_online_AWS_sensor";
+   public static final String OSM_OFFLINE_AWS_SENSOR        = "OSM_offline_AWS_sensor";
+   public static final String OSM_ONLINE_AWS_VISUAL         = "OSM_online_AWS_visual";
+   public static final String OSM_OFFLINE_AWS_VISUAL        = "OSM_offline_AWS_visual";
+   public static final String GUI_LIGHT                     = "GUI light";
+   public static final String GUI_FULL                      = "GUI full";
+   public static final String LOGO_EUMETNET                 = "logo EUMETNET"; 
+   public static final String LOGO_NOAA                     = "logo NOAA"; 
+   public static final String LOGO_SOT                      = "logo SOT"; 
+   
    public enum OSType {WINDOWS, MACOS, LINUX, OTHER};
    //public static final String KNMI_UPLOAD_URL               = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?"; // "www.turbowin.knmi.nl/webstart101/index_webstart_101.php?";
    public static final Integer INVALID_RESPONSE_FORMAT_101  = 710;                    // self defined http response code
@@ -18791,8 +19840,8 @@ public static void log_turbowin_system_message(final String message)
    public static final Integer RESPONSE_UNSUPPORTED_ENCODING= 715;                    // self defined http response code 
    
    // public var's
-   public static final String APPLICATION_NAME              = "TurboWin+";                // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "3.2.0 JPMS (build 20-January-2019)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_NAME              = "TurboWin+";            // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_VERSION           = "3.3.0 [64-bit] (build 8-July-2019)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING
    public static final String DASHBOARD_LOGO                = "sot.png";              // analogue and digital dashboard 
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
@@ -18825,16 +19874,6 @@ public static void log_turbowin_system_message(final String message)
    public static String wind_units_dashboard                = "";                     // meta data (wind units graphs/dashboard)
    public static String ship_type_dashboard                 = "";                     // meta data (for dashboard)
    
-   //public static String OL_maps_obs_year                    = "";                     // for date time in infowindow on OL maps
-   //public static String OL_maps_obs_month                   = "";                     // for date time in infowindow on OL maps
-   //public static String OL_maps_obs_day                     = "";                     // for date time in infowindow on OL maps
-   //public static String OL_maps_obs_hour                    = "";                     // for date time in infowindow on OL maps
-   //public static String OL_maps_obs_wind_dir                = "";                     // for infowindow on OL maps
-   //public static String OL_maps_obs_wind_speed              = "";                     // for infowindow on OL maps
-   //public static String OL_maps_obs_air_temp                = "";                     // for infowindow on OL maps
-   //public static String OL_maps_obs_sst                     = "";                     // for infowindow on OL maps
-   //public static String OL_maps_obs_msl_pressure            = "";                     // for infowindow on OL maps
-   
    public static String leaflet_maps_obs_year                 = "";                     // for date time in infowindow on World map
    public static String leaflet_maps_obs_month                = "";                     // for date time in infowindow on World map
    public static String leaflet_maps_obs_day                  = "";                     // for date time in infowindow on World map
@@ -18844,6 +19883,9 @@ public static void log_turbowin_system_message(final String message)
    public static String leaflet_maps_obs_air_temp             = "";                     // for infowindow on World map
    public static String leaflet_maps_obs_sst                  = "";                     // for infowindow on World map
    public static String leaflet_maps_obs_msl_pressure         = "";                     // for infowindow on World map
+   public static String OSM_mode                              = "";
+   public static String GUI_mode                              = "";                     // light/full
+   public static String GUI_logo                              = "";                     // EUMETNET/NOAA/SOT logo
    
    public static String obs_format                          = "";                     // meta data for obs format settings (e.g. FORMAT_101 or FORMAT_FM13)
    public static String obs_101_encryption                  = "";                     // meta data for obs format settings 
@@ -18856,6 +19898,8 @@ public static void log_turbowin_system_message(final String message)
    public static int y_pos_frame;
    public static int x_pos_small_frame;
    public static int y_pos_small_frame;
+   public static int x_pos_about_frame;
+   public static int y_pos_about_frame;
    public static int x_pos_main_frame;
    public static int y_pos_main_frame;
    public static int x_pos_start_frame;
@@ -18864,6 +19908,8 @@ public static void log_turbowin_system_message(final String message)
    public static int y_pos_amver_frame;
    public static int x_pos_calculator_frame;
    public static int y_pos_calculator_frame;
+   //public static int x_pos_latestmeasurements_frame;
+   //public static int y_pos_latestmeasurements_frame;
    public static int screenWidth;
    public static int screenHeight;
    public static boolean in_next_sequence                   = false;
@@ -18902,8 +19948,6 @@ public static void log_turbowin_system_message(final String message)
    public static GregorianCalendar cal_systeem_datum_tijd;             
    public static GregorianCalendar cal_systeem_datum_tijd_UTC;
    public static GregorianCalendar cal_systeem_datum_tijd_LT;
-   public static FORMAT_101 format_101_class;
-   
    
    // RS232-RS422
    //
@@ -19069,10 +20113,11 @@ public static void log_turbowin_system_message(final String message)
    SystemTray tray = null;
    JPopupMenu popup_input;
    
-   public static ship myship;
-   
-   public static main mainClass;
-   
+   public static ship myship;                                        // class
+   public static main mainClass;                                     // class
+   public static FORMAT_101 format_101_class;                        // class
+   public static OSM osm_class;                                      // class
+
 }
 
 

@@ -848,10 +848,13 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel
       //reading_int_course = 33;
       //course_ok = true;
       //main.ship_type_dashboard = main.NEUTRAL_SHIP;
-      // main.ship_type_dashboard = main.PASSENGER_SHIP;
+      //main.ship_type_dashboard = main.PASSENGER_SHIP;
       //main.ship_type_dashboard = main.OIL_TANKER;
       //main.ship_type_dashboard = main.CONTAINER_SHIP;
       //main.ship_type_dashboard = main.LNG_TANKER;
+      //main.ship_type_dashboard = main.RESEARCH_VESSEL;
+      //main.ship_type_dashboard = main.RO_RO_SHIP;
+      //main.ship_type_dashboard = main.FERRY;
  ////////////////////////////////////////////////// END TESTING ////////////////////////////////////////
  
  
@@ -880,12 +883,15 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel
          {
             case main.GENERAL_CARGO_SHIP : main.myship.draw_general_cargo_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             case main.CONTAINER_SHIP     : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
-            case main.BULK_CARRIER       : main.myship.draw_bulk_carrier(g2d, wind_rose_diameter); break;
-            case main.OIL_TANKER         : main.myship.draw_oil_tanker(g2d, wind_rose_diameter); break;
-            case main.LNG_TANKER         : main.myship.draw_lng_tanker(g2d, wind_rose_diameter); break;
-            case main.PASSENGER_SHIP     : main.myship.draw_passenger_ship(g2d, wind_rose_diameter); break;
+            case main.BULK_CARRIER       : main.myship.draw_bulk_carrier(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.OIL_TANKER         : main.myship.draw_oil_tanker(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.LNG_TANKER         : main.myship.draw_lng_tanker(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.PASSENGER_SHIP     : main.myship.draw_passenger_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.RESEARCH_VESSEL    : main.myship.draw_research_vessel(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             case main.NEUTRAL_SHIP       : main.myship.draw_neutral_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
-            default                      : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_hybrid.night_vision); break;
+            case main.RO_RO_SHIP         : main.myship.draw_ro_ro_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.FERRY              : main.myship.draw_ferry(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            default                      : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
          } // switch (main.ship_type_dashboard)
       
          // reset drawing orientation
