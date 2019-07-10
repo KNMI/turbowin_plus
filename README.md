@@ -25,6 +25,8 @@ using extended threading the application is always responsive.
 
 • code certificate renewed
 
+• Latest AWS measurements in table with JSON export option
+
 
  
 ================================== VERSION 3.2.0 ================================
