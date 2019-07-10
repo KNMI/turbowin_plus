@@ -27,6 +27,8 @@ using extended threading the application is always responsive.
 
 • Latest AWS measurements in table with JSON export option
 
+• Logo options (EUMETNET, NOAA, SOT)
+
 
  
 ================================== VERSION 3.2.0 ================================
