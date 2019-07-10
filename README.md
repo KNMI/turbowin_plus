@@ -14,11 +14,16 @@ It can run for weeks in the background. The memory footprint is low and the cpu 
 using extended threading the application is always responsive. 
 
 
+
 ================================== VERSION 3.3.0 ================================
 • Dashboards: added three new ship types (Ro-Ro, research, ferry)
+
 • offline obs Map
+
 • Light mode (no references to Visibility, Weather, Waves and Clouds)
+
 • code certificate renewed
+
 
  
 ================================== VERSION 3.2.0 ================================
