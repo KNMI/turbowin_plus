@@ -17,6 +17,8 @@ using extended threading the application is always responsive.
 
 ================================== VERSION 3.3.0 ================================
 
+[Noticeable new items]
+
 • Dashboards: added three new ship types (Ro-Ro, research, ferry)
 
 • offline obs Map
