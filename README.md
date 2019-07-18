@@ -68,6 +68,7 @@ after sending obs
 after completing wind input form
 
 ================================== VERSION 3.1.0 ===============================
+
 [Version 3.1.0 compared to version 3.0.6]
 - many smaller changes and updates
 
@@ -82,6 +83,7 @@ noticeable new items in this version:
 
 
 ================================== VERSION 3.0.6 ==============================
+
 [Version 3.0.6 compared to version 3.0.5]
 
 This update contains a not visible new feature which  will not add any functionality but could be very useful: 
@@ -96,6 +98,7 @@ always reconnect automatically. For more info see: https://www.taskjunction.com/
 
 
 ================================== VERSION 3.0.5 =================================
+
 [Version 3.0.5 compared to version 3.0.0]
 - Better Dashboard scaling for low screen resolutions (and enlarged fonts accordingly)
 - Changed the Dashboard background from WMO picture to (tiled) SOT-JCOMM logo (after counting the votes)
