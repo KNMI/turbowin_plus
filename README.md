@@ -35,7 +35,7 @@ using extended threading the application is always responsive.
  
 ================================== VERSION 3.2.0 ================================
 
-New items in this version:
+[New items in this version]
 
 • ' hybrid' dashboard for visualising measured data (see Fig 13 in
 “TurboWin+_AWS_monitoring_displays.pdf”). Mix of digital and analog view, summary of
