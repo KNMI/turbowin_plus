@@ -25,6 +25,7 @@ using extended threading the application is always responsive.
 - Transparent Theme
 - Barometer comparison form (barometer self-check form)
 - Open source update
+- Java 13.0.2 for JPMS version
 
 
 ================================== VERSION 3.3.0 ================================
