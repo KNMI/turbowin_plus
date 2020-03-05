@@ -22,9 +22,9 @@ using extended threading the application is always responsive.
 - EMOS interface update
 - APR/APTR update
 - Station ID
-- Transparent Theme
+- Transparent theme
 - Barometer comparison form (barometer self-check form)
-- Open source update
+- Open source links update
 - Java 13.0.2 for JPMS version
 
 
