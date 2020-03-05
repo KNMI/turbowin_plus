@@ -13,6 +13,18 @@ TurboWin+ was especially designed for running in the background eg when collecti
 It can run for weeks in the background. The memory footprint is low and the cpu usage is minimal and by 
 using extended threading the application is always responsive. 
 
+================================== VERSION 4.0 ================================
+
+[Noticeable new items]
+
+1 Email options
+2 Vaisala HMP155 sensor interface
+3 EMOS interface update
+4 APR (or APTR) update
+5 Station ID
+6 Transparent Theme
+7 Barometer comparison form (barometer self-check form)
+8 Open source update
 
 
 ================================== VERSION 3.3.0 ================================
