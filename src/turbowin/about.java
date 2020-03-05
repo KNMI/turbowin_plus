@@ -51,13 +51,14 @@ final public class about extends javax.swing.JFrame {
       jLabel6 = new javax.swing.JLabel();
       jLabel3 = new javax.swing.JLabel();
       jLabel5 = new javax.swing.JLabel();
-      jLabel7 = new javax.swing.JLabel();
       jLabel8 = new javax.swing.JLabel();
       jLabel9 = new javax.swing.JLabel();
+      jLabel7 = new javax.swing.JLabel();
+      jLabel10 = new javax.swing.JLabel();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("About TurboWin+");
-      setMinimumSize(new java.awt.Dimension(500, 500));
+      setMinimumSize(new java.awt.Dimension(500, 600));
       setPreferredSize(new java.awt.Dimension(500, 500));
       setResizable(false);
 
@@ -93,7 +94,7 @@ final public class about extends javax.swing.JFrame {
 
       jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
       jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel6.setText("NOAA (National Oceanic and Atmospheric Administration)");
+      jLabel6.setText("NOAA (US National Oceanic and Atmospheric Administration)");
 
       jLabel3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
       jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -103,12 +104,9 @@ final public class about extends javax.swing.JFrame {
       jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel5.setText("onboard voluntary observing ships");
 
-      jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel7.setText("TurboWin+ is free software and open-source software (GPLv3)");
-
       jLabel8.setForeground(new java.awt.Color(51, 0, 255));
       jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel8.setText("<html><u>TurboWin+ was made possible by E-SURFMAR</u></html>");
+      jLabel8.setText("<html><u>TurboWin+ powered by E-SURFMAR</u></html>");
       jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
             Info_About_ESURFMAR_link_mouseClicked(evt);
@@ -132,8 +130,7 @@ final public class about extends javax.swing.JFrame {
                .addComponent(jLabel8)
                .addGroup(jPanel1Layout.createSequentialGroup()
                   .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                      .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                      .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                   .addContainerGap())))
@@ -143,7 +140,7 @@ final public class about extends javax.swing.JFrame {
          .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel6)
@@ -151,10 +148,25 @@ final public class about extends javax.swing.JFrame {
             .addComponent(jLabel3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel5)
-            .addGap(18, 18, 18)
-            .addComponent(jLabel7)
-            .addGap(24, 24, 24))
+            .addGap(5, 5, 5))
       );
+
+      jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+      jLabel7.setForeground(new java.awt.Color(51, 0, 255));
+      jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel7.setText("<html><u>TurboWin+ is free software and open-source software (GPLv3)</u></html>");
+      jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
+            Info_about_GPL_link_mouseClicked(evt);
+         }
+         public void mouseEntered(java.awt.event.MouseEvent evt) {
+            Info_about_GPL_link_mouseEntered(evt);
+         }
+         public void mouseExited(java.awt.event.MouseEvent evt) {
+            Info_about_GPL_link_mouseExited(evt);
+         }
+      });
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
@@ -162,22 +174,33 @@ final public class about extends javax.swing.JFrame {
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                  .addGap(0, 197, Short.MAX_VALUE)
+                  .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGap(0, 200, Short.MAX_VALUE))
                .addGroup(layout.createSequentialGroup()
                   .addContainerGap()
-                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(jSeparator1)
-                     .addComponent(jLabel4)
-                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                  .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
+                  .addGap(0, 0, Short.MAX_VALUE))
+               .addGroup(layout.createSequentialGroup()
+                  .addGap(27, 27, 27)
+                  .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGap(0, 0, Short.MAX_VALUE))
+               .addGroup(layout.createSequentialGroup()
+                  .addContainerGap()
+                  .addComponent(jLabel7))
+               .addGroup(layout.createSequentialGroup()
+                  .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                  .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGap(0, 0, Short.MAX_VALUE)))
             .addContainerGap())
-         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+         .addGroup(layout.createSequentialGroup()
+            .addGap(173, 173, 173)
+            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(178, 178, 178)
-            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(178, 178, 178))
       );
       layout.setVerticalGroup(
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,13 +208,17 @@ final public class about extends javax.swing.JFrame {
             .addGap(20, 20, 20)
             .addComponent(jLabel1)
             .addGap(18, 18, 18)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(18, 18, 18)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(15, 15, 15)
             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(15, 15, 15))
@@ -235,6 +262,9 @@ private void initComponents2()
       loadImage_about_logo(main.ICONS_DIRECTORY + "logo-eumetnet.png");
    }   
    
+   
+   // GPLv3 logo
+   loadImage_GPL_logo(main.ICONS_DIRECTORY + "gplv3-with-text-136x68.png");
 }
 
 
@@ -251,7 +281,7 @@ private void loadImage_about_logo(final String imagePath)
       @Override
       public ImageIcon doInBackground() 
       {
-         return createImageIcon_about(imagePath);
+         return createImageIcon(imagePath);
       }
 
       @Override
@@ -289,7 +319,52 @@ private void loadImage_about_logo(final String imagePath)
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-public ImageIcon createImageIcon_about(String path_and_file)
+private void loadImage_GPL_logo(final String imagePath) 
+{
+   new SwingWorker<ImageIcon, Object>() 
+   {
+      @Override
+      public ImageIcon doInBackground() 
+      {
+         return createImageIcon(imagePath);
+      }
+
+      @Override
+      public void done()
+      {
+         try
+         {        
+            ImageIcon logo_icon = get();
+            jLabel10.setIcon(logo_icon); 
+         } // try
+         catch (InterruptedException ignore) { }
+         catch (java.util.concurrent.ExecutionException e) 
+         {
+            String why;
+            Throwable cause = e.getCause();
+            if (cause != null) 
+            {
+               why = cause.getMessage();
+            } 
+            else 
+            {
+               why = e.getMessage();
+            }
+            //System.err.println("Error retrieving file: " + why);
+            JOptionPane.showMessageDialog(null, "Error retrieving file: " + why, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+         } // catch         
+      } //  public void done()
+   }.execute();
+} // private void loadImage(final String imagePath, final int index)
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public ImageIcon createImageIcon(String path_and_file)
 {
    URL url = null;
 
@@ -326,70 +401,8 @@ private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 /***********************************************************************************************/
 private void Info_about_web_start_link_mouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_web_start_link_mouseClicked
 // TODO add your handling code here:
-   new SwingWorker<Integer, Void>()
-   {
-      @Override
-      protected Integer doInBackground() throws Exception
-      {
-         Integer code = 0;                              // ok
-         Desktop desktop = null;
 
-         // Before more Desktop API is used, first check
-         // whether the API is supported by this particular
-         // virtual machine (VM) on this particular host.
-         if (Desktop.isDesktopSupported())
-         {
-            desktop = Desktop.getDesktop();
-            URI uri = null;
-            try
-            {
-               String http_adres = "https://projects.knmi.nl/turbowin/"; //"http://projects.knmi.nl/turbowin/";  //"www.knmi.nl/samenw/turbowin/"; 
-               uri = new URI(http_adres);
-               desktop.browse(uri);
-            }
-            catch (IOException | URISyntaxException ioe) 
-            { 
-               code = -2;
-            }
-         } // if (Desktop.isDesktopSupported())
-         else
-         {
-            //JOptionPane.showMessageDialog(null, "Error invoking default web browser (-Desktop-method not supported on this computer system)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            code = -1;
-         } // else
-
-         return code;
-
-      } // protected Integer doInBackground() throws Exception
-      
-      @Override
-      protected void done()
-      {
-         try
-         {
-            Integer response_code = get();
-
-            if (response_code == -1)
-            {
-               String message = "[GENERAL] Error invoking default web browser (-Desktop-method not supported on this computer system)";
-               JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-               main.log_turbowin_system_message(message);
-            }   
-            else if (response_code == -2)
-            {
-               String message = "[GENERAL] Error invoking TurboWin URL (Info -> About)";
-               JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-               main.log_turbowin_system_message(message);
-            }   
-         } // try
-         catch (InterruptedException | ExecutionException ex) 
-         {   
-            String message = "[GENERAL] Error invoking default web browser; " + ex.toString(); 
-            main.log_turbowin_system_message(message);
-            //main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
-         } // catch
-      } // protected void done()      
-   }.execute(); // new SwingWorker<Void, Void>()
+   link_mouse_clicked(LINK_TURBOWIN);
 }//GEN-LAST:event_Info_about_web_start_link_mouseClicked
 
 
@@ -402,7 +415,7 @@ private void Info_about_web_start_link_mouseClicked(java.awt.event.MouseEvent ev
 private void Info_about_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_mouseEntered
 // TODO add your handling code here:
 
-   setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+   link_mouse_entered();
 }//GEN-LAST:event_Info_about_mouseEntered
 
 
@@ -415,7 +428,7 @@ private void Info_about_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST
 private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_mouseExited
 // TODO add your handling code here:
 
-   setCursor(Cursor.getDefaultCursor());
+   link_mouse_exited();
 }//GEN-LAST:event_Info_about_mouseExited
 
 
@@ -427,12 +440,124 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
 /***********************************************************************************************/
    private void Info_About_ESURFMAR_link_mouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseClicked
       // TODO add your handling code here:
+      link_mouse_clicked(LINK_ESURFMAR);
+   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseClicked
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Info_About_ESURFMAR_link_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseEntered
+      // TODO add your handling code here:
+      
+      link_mouse_entered();
+   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseEntered
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   private void Info_About_ESURFMAR_link_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseExited
+      // TODO add your handling code here:
+      
+      link_mouse_exited();
+   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseExited
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void Info_about_GPL_link_mouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_GPL_link_mouseClicked
+      // TODO add your handling code here:
+      link_mouse_clicked(LINK_GITHUB);
+   }//GEN-LAST:event_Info_about_GPL_link_mouseClicked
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void Info_about_GPL_link_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_GPL_link_mouseEntered
+      // TODO add your handling code here:
+      link_mouse_entered();
+   }//GEN-LAST:event_Info_about_GPL_link_mouseEntered
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void Info_about_GPL_link_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_about_GPL_link_mouseExited
+      // TODO add your handling code here:
+      link_mouse_exited();
+   }//GEN-LAST:event_Info_about_GPL_link_mouseExited
+
+
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void link_mouse_entered()   
+   {
+      setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+   }
+   
+   
+/***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void link_mouse_exited()   
+   {
+      setCursor(Cursor.getDefaultCursor());
+   }   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/  
+   private void link_mouse_clicked(String link_subject)
+   {
       
       new SwingWorker<Integer, Void>()
       {
+         
          @Override
          protected Integer doInBackground() throws Exception
          {
+            String link_url = "";
+      
+            if (link_subject.equals(LINK_ESURFMAR))
+            {
+               link_url = "http://eumetnet.eu/activities/observations-programme/current-activities/e-surfmar/"; 
+            }
+            else if (link_subject.equals(LINK_GITHUB))
+            {
+               link_url = "https://github.com/KNMI/turbowin_plus/"; 
+            }
+            else if (link_subject.equals(LINK_TURBOWIN))
+            {
+               link_url = "https://projects.knmi.nl/turbowin/"; 
+            }
+            
             Integer code = 0;                              // ok
             Desktop desktop = null;
 
@@ -445,7 +570,7 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
                URI uri = null;
                try
                {
-                  String http_adres = "http://eumetnet.eu/activities/observations-programme/current-activities/e-surfmar/";  
+                  String http_adres = link_url;  
                   uri = new URI(http_adres);
                   desktop.browse(uri);
                }
@@ -479,7 +604,7 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
                }   
                else if (response_code == -2)
                {
-                  String message = "[GENERAL] Error invoking E_SURFMAR URL (Info -> About)";
+                  String message = "[GENERAL] Error invoking URL";
                   JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
                   main.log_turbowin_system_message(message);
                }   
@@ -492,36 +617,8 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
             } // catch
          } // protected void done()      
       }.execute(); // new SwingWorker<Void, Void>()
+   }
    
-   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseClicked
-
-   
-   
-/***********************************************************************************************/
-/*                                                                                             */
-/*                                                                                             */
-/*                                                                                             */
-/***********************************************************************************************/   
-   private void Info_About_ESURFMAR_link_mouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseEntered
-      // TODO add your handling code here:
-      
-      setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseEntered
-
-   
-   
-/***********************************************************************************************/
-/*                                                                                             */
-/*                                                                                             */
-/*                                                                                             */
-/***********************************************************************************************/   
-   private void Info_About_ESURFMAR_link_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Info_About_ESURFMAR_link_mouseExited
-      // TODO add your handling code here:
-      
-      setCursor(Cursor.getDefaultCursor());
-   }//GEN-LAST:event_Info_About_ESURFMAR_link_mouseExited
-
-
 
 
     /**
@@ -539,6 +636,7 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.JButton jButton1;
    private javax.swing.JLabel jLabel1;
+   private javax.swing.JLabel jLabel10;
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
    private javax.swing.JLabel jLabel4;
@@ -551,4 +649,8 @@ private void Info_about_mouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:
    private javax.swing.JSeparator jSeparator1;
    // End of variables declaration//GEN-END:variables
 
+   
+   private final String LINK_ESURFMAR  =    "link_esurfmar";
+   private final String LINK_GITHUB    =    "link_github";
+   private final String LINK_TURBOWIN  =    "link_turbowin";
 }
