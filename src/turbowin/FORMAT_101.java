@@ -89,8 +89,12 @@ public class FORMAT_101
       //
       if (doorgaan == true)
       {
-         // NB if masked call sign (VOS ID) iserted -> use this for obs else 'normal' call sign
-         if ((main.masked_call_sign != null) && (main.masked_call_sign.trim().length() > 0))
+         // NB if station ID or masked call sign (= masked station ID) iserted -> use this for obs else 'normal' call sign
+         if ((main.station_ID != null) && (main.station_ID.length() > 0))
+         {
+            compression_identifier = main.station_ID;
+         }
+         else if ((main.masked_call_sign != null) && (main.masked_call_sign.trim().length() > 0))
          {   
             compression_identifier = main.masked_call_sign;
          }
@@ -467,7 +471,7 @@ public class FORMAT_101
          out.write(main.imo_number);     // Christophe Billon [email 11-04-2014]: MEMBER is a number for the ship to identify it - you can define it the way you want (normally it corresponds to the Inmarsat fleet member or Iridium IMEI).
          out.write(";");
          //out.write(main.call_sign); // or MASKED call sign ??????
-         out.write(identifier);          // call sign or masked call sign
+         out.write(identifier);          // call sign or station ID or masked call sign (=masked station ID)
          out.write(";");
          out.write("1");
          out.write(";");
@@ -942,63 +946,71 @@ public class FORMAT_101
       //
       // unit = degrees true 
       schalings_factor = 1;                                        // scaling (scale factor)
-
-      if (myposition.Ds_code.equals("0") == true)
+      
+      if (myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0)
       {
-         compressed_ship_direction = (double)0 * schalings_factor;
+         // if in APR mode the high resolution COG_APR is available (eg Mintaka Star) use then this value
+         compressed_ship_direction = (double)myposition.COG_APR * schalings_factor;
          present[2] = 1;
       }
-      else if (myposition.Ds_code.equals("1") == true)
+      else // (COG_APR not available)
       {
-         compressed_ship_direction = (double)45 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("2") == true)   
-      {
-         compressed_ship_direction = (double)90 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("3") == true)
-      {
-         compressed_ship_direction = (double)135 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("4") == true)
-      {
-         compressed_ship_direction = (double)180 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("5") == true)   
-      {
-         compressed_ship_direction = (double)225 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("6") == true)
-      {
-         compressed_ship_direction = (double)270 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("7") == true)   
-      {
-         compressed_ship_direction = (double)315 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("8") == true)   
-      {
-         compressed_ship_direction = (double)360 * schalings_factor;
-         present[2] = 1;
-      }
-      else if (myposition.Ds_code.equals("9") == true)                  
-      {
-         compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
-         present[2] = 0;
-      }
-      else
-      {
-         compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
-         present[2] = 0;
-      }
-
+         if (myposition.Ds_code.equals("0") == true)
+         {
+            compressed_ship_direction = (double)0 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("1") == true)
+         {
+            compressed_ship_direction = (double)45 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("2") == true)   
+         {
+            compressed_ship_direction = (double)90 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("3") == true)
+         {
+            compressed_ship_direction = (double)135 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("4") == true)
+         {
+            compressed_ship_direction = (double)180 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("5") == true)   
+         {
+            compressed_ship_direction = (double)225 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("6") == true)
+         {
+            compressed_ship_direction = (double)270 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("7") == true)   
+         {
+            compressed_ship_direction = (double)315 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("8") == true)   
+         {
+            compressed_ship_direction = (double)360 * schalings_factor;
+            present[2] = 1;
+         }
+         else if (myposition.Ds_code.equals("9") == true)                  
+         {
+            compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
+            present[2] = 0;
+         }
+         else
+         {
+            compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
+            present[2] = 0;
+         }
+      } // else (COG_APR not available)
 
       
       /* [3]
@@ -1006,68 +1018,76 @@ public class FORMAT_101
       // NOTE in case format 101 past 10 minutes (BUFR: Descriptors 001012 and 001013 may relate to parameters of various meanings and the corresponding values may be integrated on different periods.)
       */
       /* unit = m/s */
-      
       schalings_factor = 1;
       int gem_Vs = Integer.MAX_VALUE;
       
-      if (myposition.vs_code.equals("0"))
+      if (myposition.SOG_APR >= 0.0 && myposition.SOG_APR <= 100.0) // NB SOG_APR in knots
       {
-         gem_Vs = 0;                // knots
-      }
-      else if (myposition.vs_code.equals("1"))
-      {
-         gem_Vs = 3;                // knots
-      }
-      else if (myposition.vs_code.equals("2"))
-      {
-         gem_Vs = 8;                // knots
-      }
-      else if (myposition.vs_code.equals("3"))
-      {
-         gem_Vs = 13;               // knots
-      }
-      else if (myposition.vs_code.equals("4"))
-      {
-         gem_Vs = 18;               // knots
-      }
-      else if (myposition.vs_code.equals("5"))
-      {
-         gem_Vs = 23;               // knots
-      }
-      else if (myposition.vs_code.equals("6"))
-      {
-         gem_Vs = 28;               // knots
-      }
-      else if (myposition.vs_code.equals("7"))
-      {   
-         gem_Vs = 33;               // knots
-      }
-      else if (myposition.vs_code.equals("8"))
-      {   
-         gem_Vs = 38;               // knots
-      }
-      else if (myposition.vs_code.equals("9"))    // tot versie 3.0.9: else if (myposition.vs_code.equals("2") == true) 
-      {
-         gem_Vs = 42;               // knots
-      }
-      else
-      {
-         gem_Vs = Integer.MAX_VALUE;
-      }   
-
-      if (gem_Vs != Integer.MAX_VALUE)
-      {
-         //compressed_ship_speed = (double)gem_Vs * omzet_kn_ms * schalings_factor;                // omzet_kn_ms = 0.5144444
-         BigDecimal bd_vs = new BigDecimal((double)gem_Vs * omzet_kn_ms * schalings_factor). setScale(3, RoundingMode.HALF_UP); // three decimals // omzet_kn_ms = 0.5144444
-         compressed_ship_speed = bd_vs.doubleValue();
+         // if in APR mode the high resolution SOG_APR is available (eg Mintaka Star) use then this value
+         BigDecimal bd_SOG_APR = new BigDecimal((double)myposition.SOG_APR * omzet_kn_ms * schalings_factor). setScale(3, RoundingMode.HALF_UP); // three decimals // omzet_kn_ms = 0.5144444
+         compressed_ship_speed = bd_SOG_APR.doubleValue();
          present[3] = 1;
       }
-      else
+      else // SOG_APR not available
       {
-         compressed_ship_speed = COMPRESSED_UNDEF_VALUE;
-         present[3] = 0;
-      }
-      
+         if (myposition.vs_code.equals("0"))
+         {
+            gem_Vs = 0;                // knots
+         }
+         else if (myposition.vs_code.equals("1"))
+         {
+            gem_Vs = 3;                // knots
+         }
+         else if (myposition.vs_code.equals("2"))
+         {
+            gem_Vs = 8;                // knots
+         }
+         else if (myposition.vs_code.equals("3"))
+         {
+            gem_Vs = 13;               // knots
+         }
+         else if (myposition.vs_code.equals("4"))
+         {
+            gem_Vs = 18;               // knots
+         }
+         else if (myposition.vs_code.equals("5"))
+         {
+            gem_Vs = 23;               // knots
+         }
+         else if (myposition.vs_code.equals("6"))
+         {
+            gem_Vs = 28;               // knots
+         }
+         else if (myposition.vs_code.equals("7"))
+         {   
+            gem_Vs = 33;               // knots
+         }
+         else if (myposition.vs_code.equals("8"))
+         {   
+            gem_Vs = 38;               // knots
+         }
+         else if (myposition.vs_code.equals("9"))    // tot versie 3.0.9: else if (myposition.vs_code.equals("2") == true) 
+         {
+            gem_Vs = 42;               // knots
+         }
+         else
+         {
+            gem_Vs = Integer.MAX_VALUE;
+         }   
+
+         if (gem_Vs != Integer.MAX_VALUE)
+         {
+            //compressed_ship_speed = (double)gem_Vs * omzet_kn_ms * schalings_factor;                // omzet_kn_ms = 0.5144444
+            BigDecimal bd_vs = new BigDecimal((double)gem_Vs * omzet_kn_ms * schalings_factor). setScale(3, RoundingMode.HALF_UP); // three decimals // omzet_kn_ms = 0.5144444
+            compressed_ship_speed = bd_vs.doubleValue();
+            present[3] = 1;
+         }
+         else
+         {
+            compressed_ship_speed = COMPRESSED_UNDEF_VALUE;
+            present[3] = 0;
+         }
+      } // else (SOG_APR not available)
       
       /* [4]
       ////////////////////////////////////////// 0 01 044 (true heading) /////////////////////////////////////

@@ -61,6 +61,8 @@ final public class mystationdata extends javax.swing.JFrame {
       jTextField3 = new javax.swing.JTextField();
       jLabel4 = new javax.swing.JLabel();
       jTextField4 = new javax.swing.JTextField();
+      jTextField10 = new javax.swing.JTextField();
+      jLabel24 = new javax.swing.JLabel();
       jLabel5 = new javax.swing.JLabel();
       jPanel2 = new javax.swing.JPanel();
       jScrollPane2 = new javax.swing.JScrollPane();
@@ -133,30 +135,39 @@ final public class mystationdata extends javax.swing.JFrame {
 
       jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-      jLabel1.setText("ship name:");
+      jLabel1.setText("ship name");
 
-      jLabel2.setText("IMO number:");
+      jLabel2.setText("IMO number");
 
-      jLabel3.setText("call sign:");
+      jLabel3.setText("call sign");
 
-      jLabel4.setText("masked call sign*:");
+      jLabel4.setText("masked station ID*");
+
+      jLabel24.setText("station ID*");
 
       javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
       jPanel1Layout.setHorizontalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel1Layout.createSequentialGroup()
-            .addContainerGap()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel1)
-               .addComponent(jLabel2)
-               .addComponent(jLabel3)
-               .addComponent(jLabel4))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-               .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jTextField3)
+               .addGroup(jPanel1Layout.createSequentialGroup()
+                  .addContainerGap()
+                  .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                     .addComponent(jLabel1)
+                     .addComponent(jLabel2)
+                     .addComponent(jLabel3)
+                     .addComponent(jLabel4))
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+               .addGroup(jPanel1Layout.createSequentialGroup()
+                  .addContainerGap()
+                  .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGap(18, 18, Short.MAX_VALUE)))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+               .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+               .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING)
+               .addComponent(jTextField10)
+               .addComponent(jTextField2)
                .addComponent(jTextField1))
             .addContainerGap())
       );
@@ -171,7 +182,7 @@ final public class mystationdata extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jLabel2)
                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(8, 8, 8)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jLabel3)
                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -179,6 +190,10 @@ final public class mystationdata extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                .addComponent(jLabel4)
                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
@@ -202,8 +217,8 @@ final public class mystationdata extends javax.swing.JFrame {
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel2Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+            .addContainerGap())
       );
 
       jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -218,11 +233,11 @@ final public class mystationdata extends javax.swing.JFrame {
       buttonGroup1.add(jRadioButton17);
       jRadioButton17.setText("measured; true speed and true direction");
 
-      jLabel11.setText("max. height deck cargo above SLL**  (metres, [0 - 100], rounded):");
+      jLabel11.setText("max. height deck cargo above SLL**  (metres, [0 - 100], rounded)");
 
-      jLabel19.setText("difference SLL and WL (water line) (metres, [-10 - 50]****, rounded):");
+      jLabel19.setText("difference SLL and WL (water line) (metres, [-10 - 50]****, rounded)");
 
-      jLabel6.setText("wind speed units source (estimated/measured):");
+      jLabel6.setText("wind speed units source (estimated/measured)");
 
       buttonGroup6.add(jRadioButton9);
       jRadioButton9.setText("knots");
@@ -230,7 +245,7 @@ final public class mystationdata extends javax.swing.JFrame {
       buttonGroup6.add(jRadioButton10);
       jRadioButton10.setText("m/s*");
 
-      jLabel23.setText("wind speed units display (graphs/dashboards):");
+      jLabel23.setText("wind speed units display (graphs/dashboards)");
 
       buttonGroup4.add(jRadioButton18);
       jRadioButton18.setText("knots");
@@ -318,11 +333,11 @@ final public class mystationdata extends javax.swing.JFrame {
       jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
       jPanel4.setPreferredSize(new java.awt.Dimension(387, 107));
 
-      jLabel12.setText("height of the barometer above SLL (metres, e.g. 20.8):");
+      jLabel12.setText("height of the barometer above SLL (metres, e.g. 20.8)");
 
-      jLabel13.setText("distance of bottom of the keel to SLL (metres, e.g. 9.1): ");
+      jLabel13.setText("distance of bottom of the keel to SLL (metres, e.g. 9.1)");
 
-      jLabel21.setText("does the reading indicate MSL pressure*:");
+      jLabel21.setText("does the reading indicate MSL pressure*");
 
       buttonGroup5.add(jRadioButton11);
       jRadioButton11.setText("yes");
@@ -379,9 +394,9 @@ final public class mystationdata extends javax.swing.JFrame {
       jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
       jPanel6.setPreferredSize(new java.awt.Dimension(387, 123));
 
-      jLabel15.setText("air temp exposure:");
+      jLabel15.setText("air temp exposure");
 
-      jLabel16.setText("sea water temp exposure:");
+      jLabel16.setText("sea water temp exposure");
 
       buttonGroup2.add(jRadioButton3);
       jRadioButton3.setText("intake");
@@ -423,7 +438,7 @@ final public class mystationdata extends javax.swing.JFrame {
                .addComponent(jLabel15)
                .addComponent(jRadioButton7)
                .addComponent(jRadioButton8))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addGroup(jPanel6Layout.createSequentialGroup()
                   .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,12 +523,12 @@ final public class mystationdata extends javax.swing.JFrame {
                   .addGap(42, 42, 42)
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                      .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
                      .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                      .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                      .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
@@ -521,40 +536,40 @@ final public class mystationdata extends javax.swing.JFrame {
                         .addComponent(jLabel8)
                         .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                     .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                     .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                   .addGap(42, 42, 42)))
             .addContainerGap())
-         .addGroup(layout.createSequentialGroup()
+         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addGap(42, 42, 42)
             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(367, 367, 367))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
       layout.setVerticalGroup(
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-               .addComponent(jLabel7)
-               .addComponent(jLabel5))
+               .addComponent(jLabel5)
+               .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                .addGroup(layout.createSequentialGroup()
                   .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                   .addComponent(jLabel20)
                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addComponent(jLabel9))
+                  .addComponent(jLabel9)
+                  .addGap(31, 31, 31))
                .addGroup(layout.createSequentialGroup()
                   .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                   .addComponent(jLabel17)
-                  .addGap(18, 18, 18)
+                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                   .addComponent(jLabel18)
                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGap(18, 18, 18)
+                  .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addGap(18, 18, 18)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addGroup(layout.createSequentialGroup()
                   .addComponent(jLabel8)
@@ -581,7 +596,11 @@ final public class mystationdata extends javax.swing.JFrame {
 
     
     
-
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
    private void lees_iso_landen_codes()
    {
       /* NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
@@ -972,7 +991,11 @@ final public class mystationdata extends javax.swing.JFrame {
 
     
     
-    
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/    
     private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK_button_actionPerformed
        // TODO add your handling code here:
 
@@ -988,6 +1011,7 @@ final public class mystationdata extends javax.swing.JFrame {
        main.keel_sll                 = jTextField6.getText().trim();
        main.max_height_deck_cargo    = jTextField7.getText().trim();
        main.diff_sll_wl              = jTextField8.getText().trim();
+       main.station_ID               = jTextField10.getText().trim();
            
        if (jRadioButton1.isSelected() == true)
           main.wind_source = main.ESTIMATED_TRUE; 
@@ -1209,10 +1233,59 @@ final public class mystationdata extends javax.swing.JFrame {
          {
              info = "Call sign: invalid character(s)";
              JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-             doorgaan = false;             
+             doorgaan = false; 
+             main.call_sign = "";
           }
        }
-
+       
+       
+       // station ID (SOT ID) extra check (all char in range a-z or A-Z or 0-9)
+       //
+       if (doorgaan == true)
+       {
+          if (main.station_ID.trim().equals("") == false)
+          {
+             badChar = Pattern.compile("[^A-Za-z0-9]");
+             if (badChar.matcher(main.station_ID.trim()).find())    
+             {
+                info = "station ID: invalid character(s)";
+                JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                doorgaan = false;     
+                main.station_ID = "";
+             }   
+          }
+       }
+      
+       // station ID (SOT ID) extra check (string length must be 7)
+       //
+       if (doorgaan == true)
+       {
+          if (main.station_ID.trim().equals("") == false)
+          {
+             if (main.station_ID.trim().length() != 7)
+             {
+                info = "station ID: invalid string length";
+                JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                doorgaan = false;   
+                main.station_ID = "";
+             }   
+          }
+       }
+       
+       // masked station ID (masked call sign) and station ID (SOT ID) can't be both present
+       //
+       if (doorgaan == true)
+       {
+          if ( (main.station_ID.trim().equals("") == false) && (main.masked_call_sign.trim().equals("") == false) )
+          {
+             info = "Only 'masked station ID' or 'station ID' can be inserted (not both)";
+             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+             doorgaan = false;   
+             main.station_ID = "";                  // station ID (SOT ID)
+             main.masked_call_sign = "";            // masked station ID
+          }
+       }       
+       
        
        if (doorgaan == true)
        {
@@ -1323,10 +1396,10 @@ final public class mystationdata extends javax.swing.JFrame {
              //    hier direct de obs_email_subject zetten en vastleggen in configuratie file voor UK recruited ships
              main.obs_email_subject = main.UK_OBS_EMAIL_SUBJECT;
           }
-          else // all other countries
-          {
-             main.obs_email_subject = main.GENERAL_OBS_EMAIL_SUBJECT;
-          }          
+          //else // all other countries
+          //{
+          //   main.obs_email_subject = main.GENERAL_OBS_EMAIL_SUBJECT;
+          //}          
           
           
        } // if (doorgaan == true)
@@ -1334,6 +1407,8 @@ final public class mystationdata extends javax.swing.JFrame {
 
        if (doorgaan == true)
        {
+          //System.out.println("++++ gepasseerd");
+          
           /* write to configuration file in logs dir (backup for muffin) and user dir */
           //main.schrijf_configuratie_regels();
           //
@@ -1366,6 +1441,12 @@ final public class mystationdata extends javax.swing.JFrame {
     }//GEN-LAST:event_OK_button_actionPerformed
 
     
+    
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/ 
     private void Cancel_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel_button_actionPerformed
         // TODO add your handling code here:
                
@@ -1375,6 +1456,12 @@ final public class mystationdata extends javax.swing.JFrame {
     }//GEN-LAST:event_Cancel_button_actionPerformed
 
     
+    
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/    
     private void import_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_import_button_actionPerformed
        // TODO add your handling code here:
        
@@ -1501,6 +1588,11 @@ final public class mystationdata extends javax.swing.JFrame {
     }//GEN-LAST:event_import_button_actionPerformed
 
     
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/    
    private void initStationComponents() 
    {
       // method determing waves
@@ -1557,6 +1649,10 @@ final public class mystationdata extends javax.swing.JFrame {
       // masked call sign
       //
       jTextField4.setText(main.masked_call_sign.trim());
+      
+      // station ID (SOT ID)
+      //
+      jTextField10.setText(main.station_ID.trim());
             
       // time zone computer
       //
@@ -1693,6 +1789,7 @@ final public class mystationdata extends javax.swing.JFrame {
    private javax.swing.JLabel jLabel21;
    private javax.swing.JLabel jLabel22;
    private javax.swing.JLabel jLabel23;
+   private javax.swing.JLabel jLabel24;
    private javax.swing.JLabel jLabel3;
    private javax.swing.JLabel jLabel4;
    private javax.swing.JLabel jLabel5;
@@ -1728,6 +1825,7 @@ final public class mystationdata extends javax.swing.JFrame {
    private javax.swing.JScrollPane jScrollPane2;
    private javax.swing.JSeparator jSeparator1;
    private javax.swing.JTextField jTextField1;
+   private javax.swing.JTextField jTextField10;
    private javax.swing.JTextField jTextField2;
    private javax.swing.JTextField jTextField3;
    private javax.swing.JTextField jTextField4;

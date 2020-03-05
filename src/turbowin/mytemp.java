@@ -240,12 +240,12 @@ final public class mytemp extends javax.swing.JFrame {
             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel2)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addComponent(jRadioButton2)
                .addComponent(jRadioButton1)
-               .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addContainerGap())
+               .addComponent(jLabel3))
+            .addGap(30, 30, 30))
       );
       jPanel4Layout.setVerticalGroup(
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,12 +292,12 @@ final public class mytemp extends javax.swing.JFrame {
             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel5)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                .addComponent(jRadioButton3)
                .addComponent(jRadioButton4))
-            .addGap(38, 38, 38))
+            .addGap(89, 89, 89))
       );
       jPanel2Layout.setVerticalGroup(
          jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,9 +310,9 @@ final public class mytemp extends javax.swing.JFrame {
                .addComponent(jLabel9))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jRadioButton3)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jRadioButton4)
-            .addContainerGap(21, Short.MAX_VALUE))
+            .addContainerGap(24, Short.MAX_VALUE))
       );
 
       jPanel5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -336,11 +336,11 @@ final public class mytemp extends javax.swing.JFrame {
             .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel11)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-               .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(19, 19, 19))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+               .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+            .addGap(57, 57, 57))
       );
       jPanel5Layout.setVerticalGroup(
          jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,15 +437,24 @@ private void initComponents2()
    //                               8 = barometer + temp/vocht Mintaka Star + StarX (WiFi; access point mode or station mode)
    //                               9 = OMC-140 AWS (Observator) serial
    //                               10= OMC-140 AWS (Observator) internet
+   //
+   // RS232_connection_mode_II:     1 = thermometer HMP155
+   //
+   
    
    // thermometer connected?
    if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)
    {
-      local_thermometer_connected = true;
+      local_thermometer_StarX_connected = true;
+   }
+   else if (main.RS232_connection_mode_II == 1)
+   {
+      local_thermometer_HMP155_connected = true;
    }
    else
    {
-      local_thermometer_connected = false;
+      local_thermometer_StarX_connected = false;
+      local_thermometer_HMP155_connected = false;
    }   
    
    
@@ -514,6 +523,24 @@ private void initComponents2()
       jTextField3.setForeground(main.input_color_from_observer);
       jTextField3.setEditable(true);
    }
+   
+   
+   // in APR mode temp fields not editable
+   if ((main.APR == true) && ((local_thermometer_StarX_connected == true) || (local_thermometer_HMP155_connected)))
+   {
+      // air temp field
+      jTextField1.setForeground(main.input_color_from_aws);    // NB input_color_from_aws same for APR
+      jTextField1.setEditable(false);
+      
+      // wet bulb temp
+      jTextField2.setForeground(main.input_color_from_aws);
+      jTextField2.setEditable(false);
+      
+      // RH field
+      jTextField4.setForeground(main.input_color_from_aws);
+      jTextField4.setEditable(false);
+
+   } //  if ((main.APR == true) etc.
    
 }
 
@@ -1188,9 +1215,13 @@ private void Bereken_Dauwpunt_en_RV()
    /***********************************************************************************************/
    private void initSynopparameters() 
    {
-      if (local_thermometer_connected)
+      if (local_thermometer_StarX_connected)
       {
          main_RS232_RS422.RS232_Mintaka_StarX_Read_Sensor_Data_Air_Temp_et_al_For_Obs();   // field values will be set in this function
+      }
+      else if (local_thermometer_HMP155_connected)
+      {
+         main_RS232_RS422.RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs();   // field values will be set in this function
       }
       else
       {   
@@ -1389,5 +1420,6 @@ private void Bereken_Dauwpunt_en_RV()
    private double double_wet_bulb_temp               = main.INVALID;
    private double double_sea_water_temp              = main.INVALID;
    private boolean checks_ok                         = false; 
-   private boolean local_thermometer_connected;
+   private boolean local_thermometer_StarX_connected;
+   private boolean local_thermometer_HMP155_connected;
 }

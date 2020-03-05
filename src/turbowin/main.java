@@ -69,6 +69,7 @@ import javax.jnlp.UnavailableServiceException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -220,17 +221,22 @@ import javax.swing.UnsupportedLookAndFeelException;
 * ----------------------------------------------------------------------------------------------------------------------
 *
 *
-* global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default) 
-*             (instrument type)      1 = barometer PTB220 serial
-*                                    2 = barometer PTB330 serial
-*                                    3 = EUCOS AWS (EUCAWS) serial
-*                                    4 = barometer Mintaka Duo USB
-*                                    5 = barometer Mintaka Star (USB)
-*                                    6 = barometer Mintaka Star [WiFi] LAN (access point mode or station mode)
-*                                    7 = barometer + temp/vocht Mintaka StarX (USBl)
-*                                    8 = barometer + temp/vocht Mintaka StarX [WiFi] LAN (access point mode or station mode)
-*                                    9 = OMC-140 AWS (Observator) serial
-*                                    10= OMC-140 AWS (Observator) [ethernet] LAN
+* global var: RS232_connection_mode:    0 = no instrument; serial connection or WiFi (default) 
+*             (instrument type)         1 = barometer Vaisala PTB220 serial
+*                                       2 = barometer Vaisala PTB330 serial
+*                                       3 = EUCOS AWS (EUCAWS) serial
+*                                       4 = barometer Mintaka Duo USB
+*                                       5 = barometer Mintaka Star (USB)
+*                                       6 = barometer Mintaka Star [WiFi] LAN (access point mode or station mode)
+*                                       7 = barometer Mintaka Star (USB) + Mintaka StarX (WiFi)
+*                                       8 = barometer Mintaka Star (WiFi] LAN (access point mode or station mode) + Mintaka StarX (WiFi)
+*                                       9 = OMC-140 AWS (Observator) serial
+*                                       10= OMC-140 AWS (Observator) [ethernet] LAN
+*
+*
+* global var: RS232_connection_mode_II: 0 = no 2nd meteo instrument; serial connection or WiFi (default) 
+*             (instrument type)         1 = Vaisala HMP 155 (with additional T probe) serial
+*
 *
 *
 * global var: RS232_GPS_connection_mode: 0 = no GPS serial connection (default) 
@@ -240,9 +246,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 *                                        4 = GPS in Mintaka StarX (USB, station mode, access point)
 *
 *
-* global var: RS232_GPS_sentence : 0 = no sentence
-*                                  1 = RMC
-*                                  2 = GGA
+* global var: RS232_GPS_sentence :       0 = no sentence
+*                                        1 = RMC
+*                                        2 = GGA
 * 
 *
 * global var obs_format:  - FORMAT_FM13
@@ -278,9 +284,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 *
 * 
 * main.configuratie_regels[0 - 14]                              -> station data 
-* main.configuratie_regels[15 - 16]                             -> email settings
+* main.configuratie_regels[15]                                  -> email settings (obs email recipient)
+* main.configuratie_regels[16]                                  -> email settings (obs email subject)
 * main.configuratie_regels[17]                                  -> logs_dir
-* main.configuratie_regels[18]                                  -> email settings
+* main.configuratie_regels[18]                                  -> email settings (logs email recipient)
 * main.configuratie_regels[19]                                  -> station data (wind units)
 * main.configuratie_regels[20]                                  -> INSTRUMENT instrument connection mode; serial communication settings
 * main.configuratie_regels[21]                                  -> INSTRUMENT bps; serial communication settings
@@ -314,10 +321,33 @@ import javax.swing.UnsupportedLookAndFeelException;
 * main.configuratie_regels[49]                                  -> height anemometer above WL
 * main.configuratie_regels[50]                                  -> GUI_mode (light, full)
 * main.configuratie_regels[51]                                  -> GUI_logo (Eumetnet, NOAA, SOT)
-*
-*
+* main.configuratie_regels[52]                                  -> obs email cc
+* main.configuratie_regels[53]                                  -> obs email SMTP HOST server name (eg smtp.xy.com)
+* main.configuratie_regels[54]                                  -> obs email your Gmail address
+* main.configuratie_regels[55]                                  -> obs email Gmail app password
+* main.configuratie_regels[56]                                  -> obs email Gmail security (TLS / SSL)
+* main.configuratie_regels[57]                                  -> obs email your Yahoo address
+* main.configuratie_regels[58]                                  -> obs email Yahoo app password
+* main.configuratie_regels[59]                                  -> obs email Yahoo security (TLS / SSL)
+* main.configuratie_regels[60]                                  -> obs email SMTP HOST ship email address
+* main.configuratie_regels[61]                                  -> obs email SMTP HOST password
+* main.configuratie_regels[62]                                  -> obs email SMTP HOST port
+* main.configuratie_regels[63]                                  -> RS232_connection_mode_II (2nd meteo instrument)      
+* main.configuratie_regels[64]                                  -> bits_per_second_II (2nd meteo instrument)                      
+* main.configuratie_regels[65]                                  -> data_bits_II (2nd meteo instrument)                               
+* main.configuratie_regels[66]                                  -> parity_II (2nd meteo instrument)                                    
+* main.configuratie_regels[67]                                  -> stop_bits_II (2nd meteo instrument)                               
+* main.configuratie_regels[68]                                  -> prefered_COM_port_number_II (2nd meteo instrument)   
+* main.configuratie_regels[69]                                  -> APTR/AWSR send method (server/SMTP host/Gmail/Yahoo Mail)
+* main.configuratie_regels[70]                                  => station ID (SOT ID)
 *
 * 
+*+++++++++++++++++++ NB IF NEW ENTRY, IT IS ONLY NECESSARY TO APPEND THESE TWO FUNCTIONS: ++++++++++++++++++++
+*                              - fill_configuratie_array() [main.java]
+*                              - meta_data_from_configuration_regels_into_global_vars()[main.java]
+*
+* 
+*
 * lezen via: - read_muffin()
 *            - lees_configuratie_regels()
 * 
@@ -335,11 +365,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 *          - OK_button_actionPerformed [WOW_settings.java]
 *
 *
-* ->->->->-> -- IF NEW ENTRY, IT IS ONLY NECESSARY TO APPEND THESE TWO FUNCTIONS:--- <-<-<-<-
-*                              - fill_configuratie_array()
-*                              - meta_data_from_configuration_regels_into_global_vars()
-*
-* 
 * ---------------------------------------------------------------------------------------------------------------------
 * 
 * NB input/output in een GUI altijd via een SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) 
@@ -369,7 +394,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 * logging/dispalying examples:
 *               - main.log_turbowin_system_message(message);  // NB inclusive System.out.printLn
 *               - JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);  
-*               - System.out.printLn("test");
+*               - System.out.println("test");
 * 
 **/
 
@@ -387,7 +412,6 @@ public class main extends javax.swing.JFrame {
       public void mousePressed(MouseEvent e) 
       {
          ShowPopup(e);
-         //System.out.println("Popup menu will be visible!");
       }
 
       @Override
@@ -407,42 +431,60 @@ public class main extends javax.swing.JFrame {
    
    
    /* Creates new form main */
-   public main() {
+   public main() 
+   {
 
-      try
+      if (!theme_mode.equals(THEME_TRANSPARENT))  
       {
-         for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+         // always at first start-up of this application
+         try
          {
-            if ("Nimbus".equals(info.getName()))
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
             {
-               UIManager.setLookAndFeel(info.getClassName());
-
-               // NB onderstaande hier nog niet nodig omdat de componenten nog niet aangemaakt zijn (initComponents();)
-               //SwingUtilities.updateComponentTreeUI(main.this);
+               if ("Nimbus".equals(info.getName()))
+               //if ("Metal".equals(info.getName()))   
+               {
+                  UIManager.setLookAndFeel(info.getClassName());
                
-               // NB onderstaande kan niet omdat jTextField4 nog niet gecreeerd
-               //jTextField4.setBackground(new java.awt.Color(204, 255, 255));
-               
-               theme_mode = THEME_NIMBUS_DAY;
+                  //UIManager.setLookAndFeel(new MetalLookAndFeel());
+                  //UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
-               break;
+                  // NB onderstaande hier nog niet nodig omdat de componenten nog niet aangemaakt zijn (initComponents();)
+                  //SwingUtilities.updateComponentTreeUI(main.this);
+               
+                  // NB onderstaande kan niet omdat jTextField4 nog niet gecreeerd
+                  //jTextField4.setBackground(new java.awt.Color(204, 255, 255));
+               
+                  //theme_mode = THEME_NIMBUS_DAY;
+
+                  break;
+               }
             }
          }
-      }
-      catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
-      {
-         // If Metal is not available, you can set the GUI to another look and feel.
-         //JOptionPane.showMessageDialog(null, "Metal color schemenot supported on this computer", main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-         try { UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); }  // java default look and feel (voor Java 1.6 het zelde als:  UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");)
-         catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) { }
-      }
-
+         catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+         {
+            // If Metal is not available, you can set the GUI to another look and feel.
+            //JOptionPane.showMessageDialog(null, "Metal color scheme not supported on this computer", main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
+            try { UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); }  // java default look and feel (voor Java 1.6 het zelde als:  UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");)
+            catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) { }
+         }
+      } //  if (!theme_mode.equals(THEME_TRANSPARENT))    
+      
       initComponents();
-      initComponents2();
       bepaal_frame_location();
       initImages();
-       //read_muffin();                             // read configuration(station) data (in read_muffin: ook check op grootte immt log); NB if muffin not available reads meta data from confuguration file */
-   }
+      initComponents2();
+      
+      
+      if (theme_mode.equals(THEME_TRANSPARENT))   
+      {
+         // NB before, by invoking initComponents2(),  most of the main start-up settings were already done
+         //    but the specific main screen (menu) items settings must be done again
+         
+         setOpacity(0.75f);
+       
+      } // else if (theme_mode.equals(THEME_TRANSPARENT))
+   } //  public main() 
     
    
     
@@ -459,7 +501,7 @@ public class main extends javax.swing.JFrame {
    }  // class SISListener implements SingleInstanceListener 
    
    
-   
+  
 
 
 
@@ -471,6 +513,8 @@ public class main extends javax.swing.JFrame {
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
    private void initComponents() {
 
+      jSeparator10 = new javax.swing.JSeparator();
+      jSeparator12 = new javax.swing.JSeparator();
       jPanel1 = new javax.swing.JPanel();
       jToolBar1 = new javax.swing.JToolBar();
       jButton2 = new javax.swing.JButton();
@@ -492,6 +536,10 @@ public class main extends javax.swing.JFrame {
       jButton18 = new javax.swing.JButton();
       jButton19 = new javax.swing.JButton();
       jButton20 = new javax.swing.JButton();
+      jSeparator11 = new javax.swing.JToolBar.Separator();
+      jCheckBox1 = new javax.swing.JCheckBox();
+      jSeparator13 = new javax.swing.JToolBar.Separator();
+      jCheckBox2 = new javax.swing.JCheckBox();
       jPanel2 = new javax.swing.JPanel();
       jLabel33 = new javax.swing.JLabel();
       jTextField33 = new javax.swing.JTextField();
@@ -571,9 +619,9 @@ public class main extends javax.swing.JFrame {
       jSeparator1 = new javax.swing.JSeparator();
       jTextField4 = new javax.swing.JTextField();
       jLabel4 = new javax.swing.JLabel();
-      jLabel8 = new javax.swing.JLabel();
       jLabel39 = new javax.swing.JLabel();
       jLabel6 = new javax.swing.JLabel();
+      jLabel41 = new javax.swing.JLabel();
       jMenuBar1 = new javax.swing.JMenuBar();
       jMenu1 = new javax.swing.JMenu();
       jMenuItem1 = new javax.swing.JMenuItem();
@@ -600,6 +648,9 @@ public class main extends javax.swing.JFrame {
       jMenu3 = new javax.swing.JMenu();
       jMenuItem20 = new javax.swing.JMenuItem();
       jMenuItem23 = new javax.swing.JMenuItem();
+      jMenuItem74 = new javax.swing.JMenuItem();
+      jMenuItem72 = new javax.swing.JMenuItem();
+      jMenuItem73 = new javax.swing.JMenuItem();
       jMenuItem24 = new javax.swing.JMenuItem();
       jMenuItem46 = new javax.swing.JMenuItem();
       jMenuItem48 = new javax.swing.JMenuItem();
@@ -627,6 +678,7 @@ public class main extends javax.swing.JFrame {
       jMenuItem32 = new javax.swing.JMenuItem();
       jMenuItem34 = new javax.swing.JMenuItem();
       jMenuItem22 = new javax.swing.JMenuItem();
+      jMenuItem76 = new javax.swing.JMenuItem();
       jMenu6 = new javax.swing.JMenu();
       jMenuItem33 = new javax.swing.JMenuItem();
       jMenuItem38 = new javax.swing.JMenuItem();
@@ -659,6 +711,7 @@ public class main extends javax.swing.JFrame {
       jMenu7 = new javax.swing.JMenu();
       jMenuItem36 = new javax.swing.JMenuItem();
       jMenuItem49 = new javax.swing.JMenuItem();
+      jMenuItem75 = new javax.swing.JMenuItem();
       jSeparator5 = new javax.swing.JPopupMenu.Separator();
       jMenuItem53 = new javax.swing.JMenuItem();
       jMenuItem35 = new javax.swing.JMenuItem();
@@ -911,6 +964,32 @@ public class main extends javax.swing.JFrame {
          }
       });
       jToolBar1.add(jButton20);
+      jToolBar1.add(jSeparator11);
+
+      jCheckBox1.setText("APR");
+      jCheckBox1.setToolTipText("Automated Pressure (&Temperature)  Reports");
+      jCheckBox1.setFocusable(false);
+      jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+      jCheckBox1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+      jCheckBox1.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            APR_toolbar_itemStateChanged(evt);
+         }
+      });
+      jToolBar1.add(jCheckBox1);
+      jToolBar1.add(jSeparator13);
+
+      jCheckBox2.setText("AWSR");
+      jCheckBox2.setToolTipText("Automatic Weather Station Reports");
+      jCheckBox2.setFocusable(false);
+      jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+      jCheckBox2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+      jCheckBox2.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            AWSR_toolbar_itemStateChanged(evt);
+         }
+      });
+      jToolBar1.add(jCheckBox2);
 
       javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
@@ -920,7 +999,7 @@ public class main extends javax.swing.JFrame {
       );
       jPanel1Layout.setVerticalGroup(
          jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+         .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
       );
 
       jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1510,7 +1589,7 @@ public class main extends javax.swing.JFrame {
          }
       });
 
-      jLabel2.setText("Masked call sign");
+      jLabel2.setText("Station ID");
       jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
          public void mouseClicked(java.awt.event.MouseEvent evt) {
             masked_call_sign_mainscreen_mouseClicked(evt);
@@ -1779,11 +1858,7 @@ public class main extends javax.swing.JFrame {
       jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel4.setText("Turbo+");
 
-      jLabel8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-      jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel8.setText("--- when minimised see system tray ---");
-
-      jLabel39.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+      jLabel39.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
       jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel39.setText("--- adding data: input menu, popup menu, toolbar icons or click on the text labels or fields ---");
 
@@ -1791,24 +1866,23 @@ public class main extends javax.swing.JFrame {
       jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
       jLabel6.setText("-");
 
+      jLabel41.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+      jLabel41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel41.setText("-");
+
       javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
       jPanel5.setLayout(jPanel5Layout);
       jPanel5Layout.setHorizontalGroup(
          jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel5Layout.createSequentialGroup()
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addGroup(jPanel5Layout.createSequentialGroup()
-                  .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
-                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
-                     .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
-                     .addComponent(jLabel39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                  .addGap(0, 10, Short.MAX_VALUE))
-               .addGroup(jPanel5Layout.createSequentialGroup()
-                  .addContainerGap()
-                  .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addContainerGap())
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+               .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
+               .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
+               .addComponent(jLabel39, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
+               .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap(20, Short.MAX_VALUE))
       );
 
       jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel4, jSeparator1, jTextField4});
@@ -1816,8 +1890,7 @@ public class main extends javax.swing.JFrame {
       jPanel5Layout.setVerticalGroup(
          jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel5Layout.createSequentialGroup()
-            .addComponent(jLabel8)
-            .addGap(6, 6, 6)
+            .addGap(7, 7, 7)
             .addComponent(jLabel39)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1827,7 +1900,8 @@ public class main extends javax.swing.JFrame {
             .addComponent(jLabel4)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel6)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jLabel41))
       );
 
       jMenuBar1.setMaximumSize(new java.awt.Dimension(200, 21));
@@ -1995,11 +2069,6 @@ public class main extends javax.swing.JFrame {
       jMenuBar1.add(jMenu2);
 
       jMenu3.setText("Output");
-      jMenu3.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Output_obs_by_email_actionPerformed(evt);
-         }
-      });
 
       jMenuItem20.setText("Obs to server (internet)");
       jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
@@ -2009,13 +2078,37 @@ public class main extends javax.swing.JFrame {
       });
       jMenu3.add(jMenuItem20);
 
-      jMenuItem23.setText("Obs by E-mail (internet)...");
+      jMenuItem23.setText("Obs by Email (default)...");
       jMenuItem23.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Output_obs_by_email_actionPerformed(evt);
+            Output_obs_by_email_default_actionPerformed(evt);
          }
       });
       jMenu3.add(jMenuItem23);
+
+      jMenuItem74.setText("Obs by Email (SMTP host)");
+      jMenuItem74.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Output_obs_by_email_local_host_actionPerformed(evt);
+         }
+      });
+      jMenu3.add(jMenuItem74);
+
+      jMenuItem72.setText("Obs by Email (Gmail)");
+      jMenuItem72.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Output_obs_by_email_Gmail_actionPerformed(evt);
+         }
+      });
+      jMenu3.add(jMenuItem72);
+
+      jMenuItem73.setText("Obs by Email (Yahoo)");
+      jMenuItem73.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Output_obs_by_email_yahoo_actionPerformed(evt);
+         }
+      });
+      jMenu3.add(jMenuItem73);
 
       jMenuItem24.setText("Obs to file...");
       jMenuItem24.addActionListener(new java.awt.event.ActionListener() {
@@ -2054,7 +2147,7 @@ public class main extends javax.swing.JFrame {
       });
       jMenu4.add(jMenuItem21);
 
-      jMenuItem25.setText("E-mail settings...");
+      jMenuItem25.setText("Email settings...");
       jMenuItem25.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
             Maintenance_Email_settings_actionPerformed(evt);
@@ -2078,7 +2171,7 @@ public class main extends javax.swing.JFrame {
       });
       jMenu4.add(jMenuItem50);
 
-      jMenuItem42.setText("Serial/USB/LAN connection settings...");
+      jMenuItem42.setText("Serial / USB / LAN device settings...");
       jMenuItem42.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
             Maintenance_Serial_actionPerformed(evt);
@@ -2086,7 +2179,8 @@ public class main extends javax.swing.JFrame {
       });
       jMenu4.add(jMenuItem42);
 
-      jMenuItem52.setText("WOW/APR/AWSR settings...");
+      jMenuItem52.setText("WOW / APR / APTR / AWSR settings...");
+      jMenuItem52.setActionCommand("WOW/AP[&T]R/AWSR settings...");
       jMenuItem52.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
             Maintenance_WOW_settings_actionPerformed(evt);
@@ -2136,7 +2230,7 @@ public class main extends javax.swing.JFrame {
       });
       jMenu4.add(jMenuItem2);
 
-      jMenuItem29.setText("Move log files by E-mail");
+      jMenuItem29.setText("Move log files by Email");
       jMenuItem29.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
             Maintenance_Move_log_files_by_email_actionPerformed(evt);
@@ -2172,6 +2266,11 @@ public class main extends javax.swing.JFrame {
       jMenuBar1.add(jMenu4);
 
       jMenu5.setText("Themes");
+      jMenu5.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Themes_5_actionPerformed(evt);
+         }
+      });
 
       jMenuItem31.setText("Day");
       jMenuItem31.addActionListener(new java.awt.event.ActionListener() {
@@ -2204,6 +2303,14 @@ public class main extends javax.swing.JFrame {
          }
       });
       jMenu5.add(jMenuItem22);
+
+      jMenuItem76.setText("Transparent");
+      jMenuItem76.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Themes_5_actionPerformed(evt);
+         }
+      });
+      jMenu5.add(jMenuItem76);
 
       jMenuBar1.add(jMenu5);
 
@@ -2427,6 +2534,14 @@ public class main extends javax.swing.JFrame {
          }
       });
       jMenu7.add(jMenuItem49);
+
+      jMenuItem75.setText("barometer comparison...");
+      jMenuItem75.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Info_barometer_comparison_menu_actionPerformed(evt);
+         }
+      });
+      jMenu7.add(jMenuItem75);
       jMenu7.add(jSeparator5);
 
       jMenuItem53.setText("System log");
@@ -3373,8 +3488,15 @@ private void read_muffin()
                //JOptionPane.showMessageDialog(null, "muffin gelezen gelukt", APPLICATION_NAME + " test", JOptionPane.INFORMATION_MESSAGE);
 
                // "TurboWIn+ started" message to log (logs dir must be known!)
-               log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
-   
+               if (!theme_changed)
+               {
+                  log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+               }
+               else
+               {
+                  log_turbowin_system_message("[GENERAL] restarted main module (Theme changed)" + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+               }
+
                // log Java version
                log_java_version();
                
@@ -3413,7 +3535,10 @@ private void read_muffin()
                // gray (disable) the not appropriate graph menu selection options 
                disable_graph_menu_items();
                disable_dashboard_and_maps_menu_items();
-               disable_output_menu_items();
+               disable_and_enable_output_menu_items();
+               set_APR_toolbar();
+               set_AWSR_toolbar();
+               
                
                // GPS connected ? 
                //if (RS232_GPS_connection_mode == 1)                        // 0 = no GPS; 1 = GPS (NMEA 1083)
@@ -3449,66 +3574,159 @@ private void read_muffin()
 /***********************************************************************************************/
 private void specific_connection_initComponents()
 {
+   
+   // called from: - read_muffin() [main.java]
+   //              - lees_configuratie_regels() [main.java]
+   
+   
    //
    //////// RS232/RS422/WiFi //////
    //
-   if (RS232_connection_mode == 1 || RS232_connection_mode == 2 || RS232_connection_mode == 4 || RS232_connection_mode == 5 || RS232_connection_mode == 7) // PTB220 or PTB330 or Mintaka Duo or Mintaka Star USB or Mintaka Star + StarX USB
-   {   
-      RS232_RS422.RS232_initComponents();                                 // for Vaisala/Mintaka barometers (not Mintaka Star Wifi)
-   }
-   else if (RS232_connection_mode == 3 || RS232_connection_mode == 9)     // EUCOS AWS serial or OMC AWS serial
+   if (theme_changed)   
    {
-      /* in AWS mode input items like call sign, position, date/time etc. are not asked */ 
-      //disable_aws_input_menu_items();
+      // NB if transparent scheme all the necessary start-up items were all ready done
+      //    so not necessary to invoke e.g. RS232_RS422.RS232_initComponents(); etc becuase they are still running
+        
+      // text field labels
+      if (RS232_connection_mode == 3 || RS232_connection_mode == 9)     // EUCOS AWS serial or OMC AWS serial
+      {
+         // in AWS mode no dew point but relative humidity 
+         jLabel40.setText("relative humidity");
                   
-      /* in AWS mode Output -> obs to file etc. disable */
-      //disable_aws_output_menu_items();
+         // in AWS mode update info 
+         jLabel41.setText("--- sensor data updated every minute ---");
+      }
+      else if (RS232_connection_mode == 10)                                 // OMC-140 ethernet LAN
+      {
+         // in AWS mode no dew point but relative humidity 
+         jLabel40.setText("relative humidity");
                   
-      /* in AWS mode no dew point but relative humidity */
-      jLabel40.setText("relative humidity");
-                  
-      /* in AWS mode update info */
-      jLabel8.setText("--- sensor data updated every minute ---");
-                  
-      RS232_RS422.RS422_initComponents(); 
-   }
-   else if (RS232_connection_mode == 6 || RS232_connection_mode == 8)    // Mintaka Star WiFi or Mintaka Star + StarX WiFi
-   {
-      RS232_RS422.WiFi_initComponents();
-   }
-   else if (RS232_connection_mode == 10)                                 // OMC-140 ethernet LAN
-   {
-       /* in AWS mode no dew point but relative humidity */
-      jLabel40.setText("relative humidity");
-                  
-      /* in AWS mode update info */
-      jLabel8.setText("--- sensor data updated every minute ---");
-     
+         // in AWS mode update info 
+         jLabel41.setText("--- sensor data updated every minute ---");
+      }       
+         
+      // in transparant theme mode no popup menu avaialable so over write the appropriate text on the main menu 
+      jLabel39.setText("--- adding data: input menu, toolbar icons or click on the text labels or fields ---");
       
-      RS232_RS422.Ethernet_initComponents();
-   }
+      // Text on label6 was set only once at start up in function RS232_GPS_NMEA_0183_initComponents() [main_RS232_RS422]
+      if (main_RS232_RS422.GPS_defaultPort != null)
+      {   
+         //System.out.println("+++ GPS_defaultPort = " + GPS_defaultPort);
+         // info text on (bottom) main screen 
+         main.jLabel6.setText(main.APPLICATION_NAME + " receiving GPS data via serial communication.....");
+      }
+         
+   } // if (theme_changed)    
+   else // no Theme change
+   {
+      // NB at first time start-up of this application it will never be the trnsparent scheme so all items below will be invoked/set the first time
+      if (RS232_connection_mode == 1 || RS232_connection_mode == 2 || RS232_connection_mode == 4 || RS232_connection_mode == 5 || RS232_connection_mode == 7) // PTB220 or PTB330 or Mintaka Duo or Mintaka Star USB or Mintaka Star + StarX USB
+      {   
+         RS232_RS422.RS232_initComponents();                                 // for Vaisala/Mintaka barometers (not Mintaka Star Wifi)
+      }
+      else if (RS232_connection_mode == 3 || RS232_connection_mode == 9)     // EUCOS AWS serial or OMC AWS serial
+      {
+         /* in AWS mode input items like call sign, position, date/time etc. are not asked */ 
+         //disable_aws_input_menu_items();
+                  
+         /* in AWS mode Output -> obs to file etc. disable */
+         //disable_aws_output_menu_items();
+                  
+         /* in AWS mode no dew point but relative humidity */
+         jLabel40.setText("relative humidity");
+                  
+         /* in AWS mode update info */
+         //jLabel8.setText("--- sensor data updated every minute ---");
+         jLabel41.setText("--- sensor data updated every minute ---");
+                  
+         RS232_RS422.RS422_initComponents(); 
+      }
+      else if (RS232_connection_mode == 6 || RS232_connection_mode == 8)    // Mintaka Star WiFi or Mintaka Star + StarX WiFi
+      {
+         RS232_RS422.WiFi_initComponents();
+      }
+      else if (RS232_connection_mode == 10)                                 // OMC-140 ethernet LAN
+      {
+          /* in AWS mode no dew point but relative humidity */
+         jLabel40.setText("relative humidity");
+                  
+         /* in AWS mode update info */
+         //jLabel8.setText("--- sensor data updated every minute ---");
+         jLabel41.setText("--- sensor data updated every minute ---");
+      
+         RS232_RS422.Ethernet_initComponents();
+      }
         
    
-   // GPS connected ? 
-   if (RS232_GPS_connection_mode == 1)                                     // 0 = no GPS; 1 = GPS (NMEA 1083)
-   {
-      RS232_RS422.RS232_GPS_NMEA_0183_initComponents();
-   }
+      //
+      //////// 2nd RS232 //////
+      //
+   
+      /////////////////////// TEST BEGIN /////////////////
+      //RS232_connection_mode_II = 1;
+      ////////////////////// TEST END ////////////////
+   
+      if (RS232_connection_mode_II == 1)
+      {
+         RS232_RS422.RS232_initComponents_II();        
+      }
    
    
-   /* check date and time (and ask observer for confirmation) */
-   if (RS232_connection_mode != 3 && RS232_connection_mode != 9 && RS232_connection_mode != 10) // not AWS connected mode 
-   {
-      check_and_set_datetime_v2();    // NB var use_system_date_time_for_updating = true can be set here, used in case of an connected barometer
-   }
-   else // AWS connected
-   {
-      // in AWS connected mode the date time is updated when reading the incoming AWS measured data
-      use_system_date_time_for_updating = false;   // in AWS connected mode the date time is always! updated when reading the incoming AWS measured data
+      //
+      ////////// GPS connected ? 
+      //
+      if (RS232_GPS_connection_mode == 1)                                     // 0 = no GPS; 1 = GPS (NMEA 1083)
+      {
+         RS232_RS422.RS232_GPS_NMEA_0183_initComponents();
+      }
+   
+   
+      //
+      ////////// check date and time (and ask observer for confirmation) 
+      //
+      if (RS232_connection_mode != 3 && RS232_connection_mode != 9 && RS232_connection_mode != 10) // not AWS connected mode 
+      {
+         check_and_set_datetime_v2();    // NB var use_system_date_time_for_updating = true can be set here, used in case of an connected barometer [static]
+      }
+      else // AWS connected
+      {
+         // in AWS connected mode the date time is updated when reading the incoming AWS measured data
+         use_system_date_time_for_updating = false;   // in AWS connected mode the date time is always! updated when reading the incoming AWS measured data [static]
       
-      // but if an instrument is connected but this is not an  AWS, so a barometer is connected then the date time will be automatically inserted on main screen
+         // but if an instrument is connected but this is not an  AWS, so a barometer is connected then the date time will be automatically inserted on main screen
+      }
+   } // else (no Theme change)
+   
+   
+   // APR and AWSR checkboxes on the toolbar
+   //
+   
+   // initialisation
+   jCheckBox1.setEnabled(true);                                           // APR checkbox   
+   jCheckBox2.setEnabled(true);                                           // AWSR checkbox
+   
+   if (RS232_connection_mode == 3)                                        // EUCAWS (has its own send method/device, so APR and AWSR not appropriate))
+   {
+      jCheckBox1.setEnabled(false);                                       // APR checkbox   
+      jCheckBox2.setEnabled(false);                                       // AWSR checkbox
    }
    
+   if ((RS232_connection_mode == 9) || (RS232_connection_mode == 10))     // OMC-140 serial and OMC-140 LAN
+   {
+      jCheckBox1.setEnabled(false);                                       // APR checkbox
+   }
+   
+   if ((RS232_connection_mode != 3) && (RS232_connection_mode != 9) && (RS232_connection_mode != 10))     // EUCAWS and OMC-140
+   {
+      jCheckBox2.setEnabled(false);                                       // AWSR checkbox
+   }
+   
+   if (RS232_connection_mode == 0)                                        // no devices connected
+   {
+      jCheckBox1.setEnabled(false);                                       // APR checkbox   
+      jCheckBox2.setEnabled(false);                                       // AWSR checkbox
+   
+   }
 }
 
 
@@ -3588,32 +3806,157 @@ private void disable_aws_input_menu_items()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-private void disable_output_menu_items()
+public static void disable_and_enable_output_menu_items()
 {
+   // initialisation (because some could be disabled before and must now enabled (see Function OK_button_actionPerformed() [main_RS232_RS422.java])
+   jMenuItem20.setEnabled(true);    // Obs to server
+   jMenuItem23.setEnabled(true);    // Email default
+   jMenuItem74.setEnabled(true);    // Email SMTP host
+   jMenuItem72.setEnabled(true);    // Email Gmail
+   jMenuItem73.setEnabled(true);    // Email Yahoo
+   jMenuItem24.setEnabled(true);    // Obs to file
+   jMenuItem46.setEnabled(true);    // Obs to AWS
+   jMenuItem48.setEnabled(true);    // Obs to clipbord
+   
+   
+   // AWS (EUCAWS or OMC-140 etc.) connection 
+   //       NB so OMC-140 can never send manually output observations! (only in AWSR mode)
    if (RS232_connection_mode == 3 || RS232_connection_mode == 9 || RS232_connection_mode == 10)  // AWS connected mode
    {
-      jMenuItem20.setEnabled(false);                          // Obs to server
-      jMenuItem23.setEnabled(false);                          // Obs by E-mail
-      jMenuItem24.setEnabled(false);                          // Obs to file
-      jMenuItem48.setEnabled(false);                          // Obs to clipboard
+      jMenuItem20.setEnabled(false);                                 // Obs to server
+      jMenuItem23.setEnabled(false);                                 // Obs by E-mail (default)
+      jMenuItem24.setEnabled(false);                                 // Obs to file
+      jMenuItem48.setEnabled(false);                                 // Obs to clipboard
+      
+      jMenuItem72.setEnabled(false);                                 // Obs by E-mail (Gmail)
+      jMenuItem73.setEnabled(false);                                 // Obs by E-mail (Yahoo)
+      jMenuItem74.setEnabled(false);                                 // Obs by E-mail (local host)
    }
    
+   
    // if not EUCAWS connected 
-   if (RS232_connection_mode != 3)                            // not EUCAWS connected mode 
+   if (RS232_connection_mode != 3)                                   // not EUCAWS connected mode 
    {
-      //JOptionPane.showMessageDialog(null, "disable_output_menu_items()", main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-      
       // disable the "Obs to AWS" menu item 
-      jMenuItem46.setEnabled(false);                          // Obs to AWS
-   }               
+      jMenuItem46.setEnabled(false);                                 // Obs to AWS (so also disabled for OMC-140!!)
+   } 
+   
+   
+   // if not EUCAWS and not OMC-140 connected 
+   // Email options
+   if ((RS232_connection_mode != 3) && (RS232_connection_mode != 9) && (RS232_connection_mode != 10)) // not EUCAWS and not OMC-140 connected mode 
+   {
+      // [ALL]           // NB the basics are these two items (recipient and subject) that must be present always 
+      if ( (obs_email_recipient.equals("")) || (obs_email_subject.equals("")) )
+      {
+         jMenuItem23.setEnabled(false);                              // Obs by E-mail (default)
+         jMenuItem72.setEnabled(false);                              // Obs by E-mail (Gmail)
+         jMenuItem73.setEnabled(false);                              // Obs by E-mail (Yahoo)
+         jMenuItem74.setEnabled(false);                              // Obs by E-mail (local host)
+      }
+      else // recipient and subject ok
+      {
+         // [DEFAULT]
+         if (obs_format.equals(main.FORMAT_101))
+         {
+            if (obs_101_email.equals(""))                               // obs_101_email: body or attachment
+            {
+               jMenuItem23.setEnabled(false);                           // Obs by E-mail (default)
+            }
+            else
+            {
+               jMenuItem23.setEnabled(true);                            // Obs by E-mail (default)
+            } // else
+         } // if (obs_format.equals(main.FORMAT_101))
+         else // FM13
+         {
+            jMenuItem23.setEnabled(true);                               // Obs by E-mail (default)
+         }
+         
+         // [SMTP HOST]
+         if ( (local_email_server.equals("")) || (your_ship_address.equals("")) )
+         {
+            jMenuItem74.setEnabled(false);                           // Obs by E-mail (local host)        
+         }
+         else
+         {
+            jMenuItem74.setEnabled(true);                            // Obs by E-mail (local host)
+         } // else
+         
+         // [GMAIl]
+         if ( (your_gmail_address.equals("")) || (gmail_app_password.equals("")) || (gmail_security.equals("")) )
+         {
+            jMenuItem72.setEnabled(false);                           // Obs by E-mail (Gmail)
+         }
+         else
+         {
+            jMenuItem72.setEnabled(true);                            // Obs by E-mail (Gmail)
+         } // else
+         
+         // [YAHOO]
+         if ( (your_yahoo_address.equals("")) || (yahoo_app_password.equals("")) || (yahoo_security.equals("")) )
+         {
+            jMenuItem73.setEnabled(false);                           // Obs by E-mail (Yahoo)
+         }
+         else
+         {
+            jMenuItem73.setEnabled(true);                            // Obs by E-mail (Yahoo)
+         } // else
+         
+      } // else (recipient and subject ok)
+      
+   } // if (RS232_connection_mode != 3)
+   
+/*
+   // Obs to server
+   //
+   // check if upload URL was entered 
+   if ( (upload_URL.equals("") || upload_URL == null) )
+   {
+      // no upload URL entered
+      jMenuItem20.setEnabled(false);             
+   }
+   else // upload URL ok
+   {
+      if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
+      {
+         // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
+         // gray (disable) the "output -> obs to server (internet)" menu selection option
+         jMenuItem20.setEnabled(false);
+      }
+   } // upload URL ok
+*/   
 
    // Obs to server
-   if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
+   //
+   if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == false))
    {
-      // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
-      // gray (disable) the "output -> obs to server (internet)" menu selection option
+      // FM13 + Java Web Start (TurboWeb): by default always a valid FM13 URL avaialble (the URL were TurboWeb it was downloaded from!!)
+      jMenuItem20.setEnabled(true);
+   }
+   else if ( (upload_URL.equals("") || upload_URL == null) )
+   {
+      // if not FM13 + Java Web Start (TurboWeb) then upload URL must be available
       jMenuItem20.setEnabled(false);
    }
+   
+   
+   // APR and AWSR 
+   //
+   if (APR || AWSR)                     // NB APR and APTR could never be checked together
+   {
+      // in APR and AWSR mode disable all output menu items (in APR and AWSR mode the output method is set in 'Maintenance -> WOW/APR/APTR/AWSR settings')
+      //    NB at the beginning of this function all output menu options were enabled(true)
+      //    NB in OMC-140 mode these menu items were already disabled (so is not strict necessary do do it here again)
+      jMenuItem20.setEnabled(false);    // Obs to server
+      jMenuItem23.setEnabled(false);    // Email default
+      jMenuItem74.setEnabled(false);    // Email SMTP host
+      jMenuItem72.setEnabled(false);    // Email Gmail
+      jMenuItem73.setEnabled(false);    // Email Yahoo
+      jMenuItem24.setEnabled(false);    // Obs to file
+      jMenuItem46.setEnabled(false);    // Obs to AWS
+      jMenuItem48.setEnabled(false);    // Obs to clipboard
+   } // if (APR || APTR)
 }
 
 
@@ -3897,7 +4240,8 @@ public static void set_muffin()
    /***********************************************************************************************/
    public static void coded_obs_update()
    {
-      if (!main.obs_format.equals(main.FORMAT_AWS))            // not AWS connected mode
+      //if (!main.obs_format.equals(main.FORMAT_AWS))            // not AWS connected mode
+      if ((RS232_connection_mode != 3) && (RS232_connection_mode != 9) && (RS232_connection_mode != 10)) // not EUCAWS and not OMC-140 connected mode    
       {
          //System.out.println("+++++++++++ coded_obs_update");
          
@@ -3949,7 +4293,7 @@ public static void set_muffin()
       
       // compute position of info-about screen
       x_pos_about_frame = screenWidth / 2 - (500 / 2);
-      y_pos_about_frame = screenHeight / 2 - (500 / 2);
+      y_pos_about_frame = screenHeight / 2 - (600 / 2);
       
      // compute position of calculator screen
       x_pos_calculator_frame = screenWidth / 2 - (350 / 2);
@@ -4016,14 +4360,24 @@ public static void set_muffin()
       String coded_obs_zi;
               
       
-      // if masked call sign (VOS ID) iserted -> use this for obs else 'normal' call sign
+      // if station ID or masked call sign (= masked sation ID) inserted -> use this for obs else 'normal' call sign
       //
-      if ((masked_call_sign != null) && (masked_call_sign.trim().length() > 0))
+      if ((station_ID != null) && (station_ID.trim().length() > 0))
+      {
+         coded_obs_call_sign = station_ID;       
+      }
+      else if ((masked_call_sign != null) && (masked_call_sign.trim().length() > 0))
+      {
          coded_obs_call_sign = masked_call_sign;
+      }
       else if ((call_sign != null) && (call_sign.trim().length() > 0))
+      {
          coded_obs_call_sign = call_sign;
+      }
       else
+      {
          coded_obs_call_sign = "unknown";
+      }
          
       //JOptionPane.showMessageDialog(null, obs_call_sign, "mycallsign.call_sign", JOptionPane.INFORMATION_MESSAGE);
 
@@ -4593,7 +4947,7 @@ public static void set_muffin()
       configuratie_regels[27] = main.OBS_FORMAT_TXT + main.obs_format.trim();                            
       configuratie_regels[28] = main.FORMAT_101_ENCRYPTION_TXT + main.obs_101_encryption.trim();        
       configuratie_regels[29] = main.FORMAT_101_EMAIL_TXT + main.obs_101_email.trim();                   
-      configuratie_regels[30] = main.RS232_PREF_COM_PORT_NAME_TXT + main.prefered_COM_port_name;   
+      configuratie_regels[30] = main.RS232_PREF_COM_PORT_NAME_TXT + main.prefered_COM_port_name;        // not in use from version 3.4 
       configuratie_regels[31] = main.WOW_PUBLISH_TXT + String.valueOf(main.WOW);                        // boolean
       configuratie_regels[32] = main.WOW_SITE_ID_TXT + main.WOW_site_id;
       configuratie_regels[33] = main.WOW_PIN_TXT + main.WOW_site_pin;
@@ -4614,10 +4968,30 @@ public static void set_muffin()
       configuratie_regels[48] = main.SHIP_TYPE_DASHBOARD_TXT + main.ship_type_dashboard;  
       configuratie_regels[49] = main.HEIGHT_ANEMOMETER_TXT + main.height_anemometer; 
       configuratie_regels[50] = main.GUI_MODE_TXT + main.GUI_mode;
-      configuratie_regels[51] = main.GUI_LOGO_TXT + main.GUI_logo;        
+      configuratie_regels[51] = main.GUI_LOGO_TXT + main.GUI_logo;     
+      configuratie_regels[52] = main.OBS_EMAIL_CC_TXT + main.obs_email_cc; 
+      configuratie_regels[53] = main.LOCAL_EMAIL_SERVER_TXT + main.local_email_server; 
+      configuratie_regels[54] = main.YOUR_GMAIL_ADDRESS_TXT + main.your_gmail_address;
+      configuratie_regels[55] = main.GMAIL_APP_PASSWORD_TXT + main.gmail_app_password;
+      configuratie_regels[56] = main.GMAIL_SECURITY_TXT + main.gmail_security;
+      configuratie_regels[57] = main.YOUR_YAHOO_ADDRESS_TXT + main.your_yahoo_address;
+      configuratie_regels[58] = main.YAHOO_APP_PASSWORD_TXT + main.yahoo_app_password;
+      configuratie_regels[59] = main.YAHOO_SECURITY_TXT + main.yahoo_security;
+      configuratie_regels[60] = main.YOUR_SHIP_ADDRESS_TXT + main.your_ship_address;
+      configuratie_regels[61] = main.SMTP_HOST_PASSWORD_TXT + main.smtp_host_password;
+      configuratie_regels[62] = main.SMTP_HOST_PORT_TXT + main.smtp_host_port;
+      configuratie_regels[63] = main.RS232_INSTRUMENT_TYPE_TXT_II + main.RS232_connection_mode_II;       
+      configuratie_regels[64] = main.RS232_BITS_PER_SEC_TXT_II + main.bits_per_second_II;                      
+      configuratie_regels[65] = main.RS232_DATA_BITS_TXT_II + main.data_bits_II;                               
+      configuratie_regels[66] = main.RS232_PARITY_TXT_II + main.parity_II;                                     
+      configuratie_regels[67] = main.RS232_STOP_BITS_TXT_II + main.stop_bits_II;                               
+      configuratie_regels[68] = main.RS232_PREFERED_COM_PORT_TXT_II + main.prefered_COM_port_number_II;        
+      configuratie_regels[69] = main.APTR_AWSR_SEND_METHOD_TXT + main.APTR_AWSR_send_method; 
+      configuratie_regels[70] = main.STATION_ID_TXT + main.station_ID;
    }
    
     
+   
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -4810,7 +5184,14 @@ public static void set_muffin()
             protected void done()
             {
                // "TurboWin+ started" message to log (logs dir must be known!)
-               log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+               if (!theme_changed)
+               {
+                  log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+               }
+               else
+               {
+                  log_turbowin_system_message("[GENERAL] restarted main module (Theme changed)" + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+               }
                
                // log Java version
                log_java_version();
@@ -4853,8 +5234,9 @@ public static void set_muffin()
                /* gray (disable) the not appropriate graph/dashboard/maps menu selection options */
                disable_graph_menu_items();
                disable_dashboard_and_maps_menu_items();
-               disable_output_menu_items();
-               
+               disable_and_enable_output_menu_items();
+               set_APR_toolbar();
+               set_AWSR_toolbar();
                
                /* GPS connected ? */
                //if (RS232_GPS_connection_mode == 1)   // 0 = no GPS; 1 = GPS (NMEA 1083)
@@ -5284,7 +5666,17 @@ private void disable_graph_menu_items()
       jMenuItem45.setEnabled(true);                // menu item graph wind speed (wind speed gust included as a second line)
       jMenuItem47.setEnabled(true);                // menu item graph wind dir
       jMenuItem51.setEnabled(true);                // menu item graph total (pressure, air temp, wind dir, wind speed)
-   }         
+   }     
+   
+   
+  /************* TEST BEGIN ******************/
+  //RS232_connection_mode_II = 1;
+  /************* TEST END *******************/
+   
+   if (RS232_connection_mode_II == 1) 
+   {
+      jMenuItem43.setEnabled(true);               // menu item graph air temp
+   }
             
 }
 
@@ -5587,7 +5979,7 @@ public static void meta_data_from_configuration_regels_into_global_vars()
             prefered_GPS_COM_port_number = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
          }          
          
-         // RS232 prefered GPS COM port (Windows and Linux)
+         // RS232 prefered GPS COM port (OS X)
          if (configuratie_regels[teller].indexOf(RS232_GPS_COM_PORT_NAME_TXT) != -1)
          {
             prefered_GPS_COM_port_name = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
@@ -5667,11 +6059,158 @@ public static void meta_data_from_configuration_regels_into_global_vars()
             GUI_logo = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
          }
          
+         // obs email cc 
+         if (configuratie_regels[teller].indexOf(OBS_EMAIL_CC_TXT) != -1)
+         {
+            obs_email_cc = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+
+         // obs email local host 
+         if (configuratie_regels[teller].indexOf(LOCAL_EMAIL_SERVER_TXT) != -1)
+         {
+            local_email_server = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);   // NB also called SMTP host
+         }
+
+         // your Gmail address 
+         if (configuratie_regels[teller].indexOf(YOUR_GMAIL_ADDRESS_TXT) != -1)
+         {
+            your_gmail_address = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // Gmail app password 
+         if (configuratie_regels[teller].indexOf(GMAIL_APP_PASSWORD_TXT) != -1)
+         {
+            gmail_app_password = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // Gmail security
+         if (configuratie_regels[teller].indexOf(GMAIL_SECURITY_TXT) != -1)
+         {
+            gmail_security = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // your Yahoo address 
+         if (configuratie_regels[teller].indexOf(YOUR_YAHOO_ADDRESS_TXT) != -1)
+         {
+            your_yahoo_address = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // Yahoo app password 
+         if (configuratie_regels[teller].indexOf(YAHOO_APP_PASSWORD_TXT) != -1)
+         {
+            yahoo_app_password = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // Yahoo security
+         if (configuratie_regels[teller].indexOf(YAHOO_SECURITY_TXT) != -1)
+         {
+            yahoo_security = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // your ship address
+         if (configuratie_regels[teller].indexOf(YOUR_SHIP_ADDRESS_TXT) != -1)
+         {
+            your_ship_address = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // SMTP host password
+         if (configuratie_regels[teller].indexOf(SMTP_HOST_PASSWORD_TXT) != -1) 
+         {
+            smtp_host_password = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }  
+                 
+         // SMTP host port
+         if (configuratie_regels[teller].indexOf(SMTP_HOST_PORT_TXT) != -1) 
+         {
+            smtp_host_port = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }  
+         
+         
+         // RS232 2nd meteo instrument connection mode (= RS232 connected instrument II type: none, StarX, HMP155)
+         if (configuratie_regels[teller].indexOf(RS232_INSTRUMENT_TYPE_TXT_II) != -1)
+         {
+            RS232_connection_mode_II = Integer.parseInt(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+         }        
+                 
+         // RS232 2nd meteo instrument bits per sec
+         if (configuratie_regels[teller].indexOf(RS232_BITS_PER_SEC_TXT_II) != -1)
+         {
+            bits_per_second_II = Integer.parseInt(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+         }        
+                 
+         // RS232 2nd meteo instrument data bits
+         if (configuratie_regels[teller].indexOf(RS232_DATA_BITS_TXT_II) != -1)
+         {
+            String hulp_data_bits = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+            
+            switch (hulp_data_bits)  
+            {
+               case "7"  : data_bits_II = 7;
+                           break;
+               case "8"  : data_bits_II = 8;
+                           break;
+               default   : data_bits_II = 0;                                // non existing (data bits) value
+                           break;
+            } // switch (hulp_data_bits)
+         }
+
+         // RS232 2nd meteo instrument parity
+         if (configuratie_regels[teller].indexOf(RS232_PARITY_TXT_II) != -1)
+         {
+            String hulp_parity = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+            
+            switch (hulp_parity)
+            {
+               case "0" : parity_II = SerialPort.NO_PARITY;
+                          break;
+               case "1" : parity_II = SerialPort.ODD_PARITY;
+                          break;
+               case "2" : parity_II = SerialPort.EVEN_PARITY;
+                          break;
+               default  : parity_II = 99;                                // non existing (parity) value
+                          break;
+            } // switch (hulp_parity)            
+         }
+         
+         // RS232 2nd imeteo instrument stop bits
+         if (configuratie_regels[teller].indexOf(RS232_STOP_BITS_TXT_II) != -1)
+         {
+            String hulp_stop_bits = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+            
+            switch (hulp_stop_bits)  
+            {
+               case "1"  : stop_bits_II = SerialPort.ONE_STOP_BIT;
+                           break;
+               case "2"  : stop_bits_II = SerialPort.TWO_STOP_BITS;
+                           break;
+               default   : stop_bits_II = 0;                       // non existing (stop bits) value
+                           break;
+            } // switch (hulp_stop_bits)            
+         }      
+         
+         // RS232 2nd meteo instrument prefered COM port (Windows and Linux)
+         if (configuratie_regels[teller].indexOf(RS232_PREFERED_COM_PORT_TXT_II) != -1)
+         {
+            prefered_COM_port_number_II = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
+         // AP[&T]R / AWSR send method
+         if (configuratie_regels[teller].indexOf(APTR_AWSR_SEND_METHOD_TXT) != -1)
+         {
+            APTR_AWSR_send_method = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }    
+         
+         // station ID
+         if (configuratie_regels[teller].indexOf(STATION_ID_TXT) != -1)
+         {
+            station_ID = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+         }
+         
       } // if ((configuratie_regels[teller] != null) etc.
    } // for (teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++)
 
    
-   // generic name "prefered_COM_port" will be used [main_RS232_RS422.java]
+   // 1st meteo instrument: generic name "prefered_COM_port" will be used [main_RS232_RS422.java]
    //
    if (prefered_COM_port_number.trim().equals(""))                    // So no Windows or Linux com port number selected
    {
@@ -5682,7 +6221,8 @@ public static void meta_data_from_configuration_regels_into_global_vars()
       prefered_COM_port = prefered_COM_port_number;                   // Windows and Linux
    }   
    
-   // generic name "prefered_GPS_COM_port" will be used [main_RS232_RS422.java]
+   
+   // GPS: generic name "prefered_GPS_COM_port" will be used [main_RS232_RS422.java]
    //
    if (prefered_GPS_COM_port_number.trim().equals(""))                // So no Windows or Linux GPS com port number selected
    {
@@ -5694,7 +6234,16 @@ public static void meta_data_from_configuration_regels_into_global_vars()
    }   
    
 
-
+   // 2nd meteo instrument: generic name "prefered_COM_port_II" will be used [main_RS232_RS422.java]
+   //
+   if (prefered_COM_port_number_II.trim().equals(""))                      // So no Windows or Linux com port number selected
+   {
+      //prefered_COM_port_II = prefered_COM_port_name_II;                     // OS X
+   }
+   else
+   {
+      prefered_COM_port_II = prefered_COM_port_number_II;                   // Windows and Linux
+   }   
 }
 
 
@@ -5909,13 +6458,20 @@ private static void check_meta_data()
                 boolean doorgaan = get();
                 //if (doorgaan == true)
                 //{
-                //   Output_Obs_to_server();                // in this fuction also IMMT_log() (immt log storage)
+                //   Output_Obs_to_server();                    // in this fuction also IMMT_log() (immt log storage)
                 //}
                 if (doorgaan == true)
                 {
                    if (obs_format.equals(FORMAT_FM13))
                    {
-                      Output_obs_to_server_FM13();
+                      if (offline_mode == false)                // TurboWeb
+                      {
+                         Output_obs_to_server_FM13_TurboWeb();
+                      }
+                      else
+                      {
+                         Output_obs_to_server_FM13_TurboWin_stand_alone();
+                      }
                    }
                    else if (obs_format.equals(FORMAT_101))
                    {
@@ -6078,8 +6634,23 @@ private static void check_meta_data()
       } // if (main.RS232_connection_mode == 3 || RS232_connection_mode == 9)
       else // not AWS connected
       {
-         jTextField36.setForeground(main.input_color_from_observer);
+         if (APR == true)
+         {
+            if ( (main.obsolate_data_flag_II == true) || ((main.obsolate_data_flag == true) && (RS232_connection_mode == 7 || RS232_connection_mode == 8)) ) // NB 7/8 : Mintaka StarX (temp) linked
+            {
+               jTextField36.setForeground(main.obsolete_input_color_from_apr);   
+            }
+            else
+            {
+               jTextField36.setForeground(main.input_color_from_apr);
+            }
+         } // if (APR == true)  
+         else // no APR
+         {
+            jTextField36.setForeground(main.input_color_from_observer);
+         } // else (no APR)         
       }
+      
       
       if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null))    
       {
@@ -6125,7 +6696,22 @@ private static void check_meta_data()
       }
       else // not AWS connected
       {
-         jTextField37.setForeground(main.input_color_from_observer);
+         if (APR == true)
+         {
+            //if (main.obsolate_data_flag_II == true)
+            if ( (main.obsolate_data_flag_II == true) || ((main.obsolate_data_flag == true) && (RS232_connection_mode == 7 || RS232_connection_mode == 8)) ) // NB 7/8 : Mintaka StarX (temp) linked
+            {
+               jTextField37.setForeground(main.obsolete_input_color_from_apr);   
+            }
+            else
+            {
+               jTextField37.setForeground(main.input_color_from_apr);
+            }
+         } // if (APR == true)  
+         else // no APR
+         {
+            jTextField37.setForeground(main.input_color_from_observer);
+         } // else (no APR)         
       }
       
       if (rh_from_AWS_present == true)     
@@ -6198,7 +6784,23 @@ private static void check_meta_data()
       {   
          // dewpoint (only if in not AWS connected mode!)
          //  
-         jTextField38.setForeground(main.input_color_from_observer);
+         if (APR == true)
+         {
+            //if (main.obsolate_data_flag_II == true)
+            if ( (main.obsolate_data_flag_II == true) || ((main.obsolate_data_flag == true) && (RS232_connection_mode == 7 || RS232_connection_mode == 8)) ) // NB 7/8 : Mintaka StarX (temp) linked
+            {
+               jTextField38.setForeground(main.obsolete_input_color_from_apr);   
+            }
+            else
+            {
+               jTextField38.setForeground(main.input_color_from_apr);
+            }
+         } // if (APR == true)  
+         else // no APR
+         {
+            jTextField38.setForeground(main.input_color_from_observer);
+         } // else (no APR)         
+
          
          if ((mytemp.double_dew_point != INVALID)) 
          {
@@ -6264,8 +6866,12 @@ private static void check_meta_data()
       }   
       
       
-      /* update of the coded obs representation (bottom line main screen) */
-      coded_obs_update();
+      // update of the coded obs representation (bottom line main screen) 
+      //
+      if (APR == false)  // otherwise, in APR mode, the "next automated meteo report upload..." on botton status line will be overwritten everytime
+      {
+         coded_obs_update();
+      }
    }
    
    
@@ -6659,15 +7265,27 @@ private static void check_meta_data()
    /***********************************************************************************************/
    public static void call_sign_fields_update()
    {
+      // call sign
+      //
+      jTextField1.setText("");
       if ((call_sign.compareTo("") != 0) && (call_sign != null))
+      {
          jTextField1.setText(call_sign);
-      else
-         jTextField1.setText("");
+      }
       
-      if ((masked_call_sign.compareTo("") != 0) && (masked_call_sign != null))
+      
+      // station ID (or masked station ID)
+      //
+      jTextField2.setText("");
+      if ((masked_call_sign.compareTo("") != 0) && (masked_call_sign != null))    // masked station ID
+      {
          jTextField2.setText(masked_call_sign);
-      else
-         jTextField2.setText("");
+      }
+      
+      if ((station_ID.compareTo("") != 0) && (station_ID != null))
+      {
+         jTextField2.setText(station_ID);
+      }
       
       /* update of the coded obs representation (bottom line main screen) */
       coded_obs_update();
@@ -6714,6 +7332,7 @@ private static void check_meta_data()
 
    }  
    
+   
 
    /***********************************************************************************************/
    /*                                                                                             */
@@ -6735,10 +7354,24 @@ private static void check_meta_data()
             jTextField5.setForeground(main.input_color_from_aws);
          }
       }
-      else
+      else // no AWS
       {
-         jTextField5.setForeground(main.input_color_from_observer);
-      }
+         if (APR == true)
+         {
+            if (main.obsolate_GPS_data_flag == true)
+            {
+               jTextField5.setForeground(main.obsolete_input_color_from_apr);     
+            }
+            else
+            {
+               jTextField5.setForeground(main.input_color_from_apr);
+            }
+         } // if (APR == true)  
+         else // no APR
+         {
+            jTextField5.setForeground(main.input_color_from_observer);
+         } // else (no APR)
+      } // else (no AWS)
       
       if ((myposition.latitude_degrees.compareTo("") != 0 && myposition.latitude_minutes.compareTo("") != 0 && myposition.latitude_hemisphere.compareTo("") != 0 &&
            myposition.longitude_degrees.compareTo("") != 0 && myposition.longitude_minutes.compareTo("") != 0 && myposition.longitude_hemisphere.compareTo("") != 0) &&
@@ -6767,19 +7400,41 @@ private static void check_meta_data()
             jTextField7.setForeground(main.input_color_from_aws);
          }
       }
-      else
+      else // no AWS
       {
-         jTextField7.setForeground(main.input_color_from_observer);
+         //jTextField7.setForeground(main.input_color_from_observer);
+         if (APR == true)
+         {
+            if (main.obsolate_GPS_data_flag == true)
+            {
+               jTextField7.setForeground(main.obsolete_input_color_from_apr);     
+            }
+            else
+            {
+               jTextField7.setForeground(main.input_color_from_apr);
+            }
+         } // if (APR == true)  
+         else // no APR
+         {
+            jTextField7.setForeground(main.input_color_from_observer);
+         } // else (no APR)         
       }
       
       if ((myposition.course.compareTo("") != 0 && myposition.speed.compareTo("") != 0) && (myposition.course != null && myposition.speed != null))
-         jTextField7.setText(myposition.course + " degr" + "  " + myposition.speed + " knots");
+      {
+         jTextField7.setText(myposition.course + "°" + "  " + myposition.speed + " kts");
+      }
       else
+      {
          jTextField7.setText("");  
+      }
       
       
       /* update of the coded obs representation (bottom line main screen) */
-      coded_obs_update();
+      if (APR == false)  // otherwise, in APR mode, the "next automated meteo report upload..." on botton status line will be overwritten everytime
+      {
+         coded_obs_update();
+      }
    }
    
    
@@ -6827,6 +7482,7 @@ private static void check_meta_data()
    }
                     
 
+   
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -6849,17 +7505,32 @@ private static void check_meta_data()
             jTextField10.setForeground(main.input_color_from_aws);
          }
       }
-      else
+      else // no AWS
       {
-         jTextField9.setForeground(main.input_color_from_observer);
-         jTextField10.setForeground(main.input_color_from_observer);
-      }
+         if (APR == true)
+         {
+            if (main.obsolate_data_flag == true)
+            {
+               jTextField9.setForeground(main.obsolete_input_color_from_apr);   
+               jTextField10.setForeground(main.obsolete_input_color_from_apr); 
+            }
+            else
+            {
+               jTextField9.setForeground(main.input_color_from_apr);
+               jTextField10.setForeground(main.input_color_from_apr);     
+            }
+         } // if (APR == true)  
+         else // no APR
+         {
+            jTextField9.setForeground(main.input_color_from_observer);
+            jTextField10.setForeground(main.input_color_from_observer);
+         } // else (no APR)
+      } // else (no AWS)
       
       
       // air pressure reading
       //
       if ( (mybarometer.pressure_reading_corrected.compareTo("") != 0) && (mybarometer.pressure_reading_corrected != null) )
-          
       {
          jTextField9.setText(mybarometer.pressure_reading_corrected + " hPa"); 
       }
@@ -6868,6 +7539,7 @@ private static void check_meta_data()
          jTextField9.setText("");   
       }
        
+      
       // air pressure MSL
       //
       if ( (mybarometer.pressure_msl_corrected.compareTo("") != 0) && (mybarometer.pressure_msl_corrected != null) )
@@ -6879,10 +7551,16 @@ private static void check_meta_data()
          jTextField10.setText("");   
       }
       
-      /* update of the coded obs representation (bottom line main screen) */
-      coded_obs_update();
+      
+      // update of the coded obs representation (bottom line main screen) 
+      //
+      if (APR == false)  // otherwise, in APR mode, the "next automated meteo report upload..." on botton status line will be overwritten everytime
+      {
+         coded_obs_update();
+      }
    }
         
+   
    
    /***********************************************************************************************/
    /*                                                                                             */
@@ -6906,11 +7584,30 @@ private static void check_meta_data()
             jTextField12.setForeground(main.input_color_from_aws);
          }
       }
-      else
+      else // no AWS
       {
-         jTextField11.setForeground(main.input_color_from_observer);
-         jTextField12.setForeground(main.input_color_from_observer);
-      }      
+         //jTextField11.setForeground(main.input_color_from_observer);
+         //jTextField12.setForeground(main.input_color_from_observer);
+         
+         if (APR == true)
+         {
+            if (main.obsolate_data_flag == true)
+            {
+               jTextField11.setForeground(main.obsolete_input_color_from_apr);   
+               jTextField12.setForeground(main.obsolete_input_color_from_apr); 
+            }
+            else
+            {
+               jTextField11.setForeground(main.input_color_from_apr);
+               jTextField12.setForeground(main.input_color_from_apr);     
+            }
+         } // if (APR == true)    
+         else // NO APR
+         {
+            jTextField11.setForeground(main.input_color_from_observer);
+            jTextField12.setForeground(main.input_color_from_observer);
+         } // else (no APR)
+      }  // else (no AWS) 
       
       
       // amount of pressure tendency
@@ -6937,8 +7634,12 @@ private static void check_meta_data()
       }
       
       
-      /* update of the coded obs representation (bottom line main screen) */
-      coded_obs_update();
+      // update of the coded obs representation (bottom line main screen) 
+      //
+      if (APR == false)  // otherwise, in APR mode, the "next automated meteo report upload..." on botton status line will be overwritten everytime
+      {
+         coded_obs_update();
+      }
    }
 
 
@@ -7356,21 +8057,27 @@ private static void check_meta_data()
 private void Info_About_menu_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Info_About_menu_actionPerformed
 // TODO add your handling code here:
    about form = new about();               
-   //form.setSize(400, 350);
-   form.setSize(500, 500);
+   form.setSize(500, 600);
    form.setVisible(true); 
    
 }//GEN-LAST:event_Info_About_menu_actionPerformed
 
 
-/***********************************************************************************************/
-/*                                                                                             */
-/*                                                                                             */
-/*                                                                                             */
-/***********************************************************************************************/
-private void Output_obs_by_email_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Output_obs_by_email_actionPerformed
-// TODO add your handling code here:
 
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void Output_obs_by_email_all_manual()
+{          
+  
+   // called from:
+   //    - Output_obs_by_email_default_actionPerformed()
+   //    - Output_obs_by_email_local_host_actionPerformed()
+   //    - Output_obs_by_email_Gmail_actionPerformed()
+   //    - Output_obs_by_email_Yahoo_actionPerformed()
+   //
    // NB !!!!! email attachements zijn standaard NIET mogelijk binnen java !!!!!
 
    new SwingWorker<Boolean, Void>()
@@ -7393,7 +8100,7 @@ private void Output_obs_by_email_actionPerformed(java.awt.event.ActionEvent evt)
          {
             doorgaan = false;
       
-            String info = "E-mail address recipient not inserted (Select: Maintenance -> E-mail settings)";
+            String info = "Email address recipient not inserted (Select: Maintenance -> Email settings)";
             JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
          } // else
 
@@ -7467,30 +8174,45 @@ private void Output_obs_by_email_actionPerformed(java.awt.event.ActionEvent evt)
             {
                if (obs_format.equals(FORMAT_FM13))
                {
-                  Output_obs_by_email_FM13();
+                  if (email_send_mode.equals(EMAIL_SEND_DEFAULT))
+                  {
+                     Output_obs_by_email_FM13();                                                      // default email app via desktop
+                  }
+                  else
+                  {
+                     boolean manual_send = true;
+                     Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(manual_send);           // via python email app 
+                  }
                }
                else if (obs_format.equals(FORMAT_101))
                {
-                  Output_obs_by_email_format_101();
+                  if (email_send_mode.equals(EMAIL_SEND_DEFAULT))
+                  {
+                     Output_obs_by_email_format_101();                                                 // default email app via desktop
+                  }
+                  else
+                  {
+                     boolean manual_send = true;
+                     Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(manual_send);           // via python email app
+                  }
                }
                else
                {
                   String info = "obs format unknown (select: Maintenance -> Obs format setting)";
                   JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " warning", JOptionPane.WARNING_MESSAGE);                  
-                  System.out.println("+++ Not supported obs format in Function: Output_obs_by_email_actionPerformed()");
+                  System.out.println("+++ Not supported obs format in Function: Output_obs_by_email_all_manual()");
                }  // else 
             } // if (doorgaan == true)
          } // try
          catch (InterruptedException | ExecutionException ex) 
          { 
-            System.out.println("+++ Error in Function: Output_obs_by_email_actionPerformed(). " + ex);
+            System.out.println("+++ Error in Function: Output_obs_by_email_all_manual() " + ex);
          }
 
       } // protected void done()
    }.execute(); // new SwingWorker<Void, Void>()
-        
+}
 
-}//GEN-LAST:event_Output_obs_by_email_actionPerformed
 
 
 /***********************************************************************************************/
@@ -7606,6 +8328,7 @@ private void Output_obs_to_file_actionPerformed(java.awt.event.ActionEvent evt) 
    }.execute(); // new SwingWorker<Void, Void>()
   
 }//GEN-LAST:event_Output_obs_to_file_actionPerformed
+
 
 
 /***********************************************************************************************/
@@ -9449,6 +10172,9 @@ private void observer_toolbar_mouseClicked(java.awt.event.MouseEvent evt) {//GEN
 }//GEN-LAST:event_observer_toolbar_mouseClicked
 
 
+
+
+
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -9456,14 +10182,74 @@ private void observer_toolbar_mouseClicked(java.awt.event.MouseEvent evt) {//GEN
 /***********************************************************************************************/
 private void Themes_1_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Themes_1_actionPerformed
    // TODO add your handling code here:
+   boolean reset_main_class = false;
    
    
    //
    //////// Day colors (Nimbus (vanaf Java 1.6.10) based)
    //
    
+   /*
+      mainClass.dispose();
+      theme_mode = THEME_TRANSPARENT;
+      
+      
+       try {
+         //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+      } catch (ClassNotFoundException ex) {
+         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (InstantiationException ex) {
+         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (IllegalAccessException ex) {
+         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (UnsupportedLookAndFeelException ex) {
+         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+      }      
+     
+      
+      JFrame.setDefaultLookAndFeelDecorated(true);
+      mainClass = new main();
+      mainClass.setVisible(true);
+      
+      
+//      try {
+//         UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//      } catch (ClassNotFoundException ex) {
+//      } catch (InstantiationException ex) {
+//         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+//      } catch (IllegalAccessException ex) {
+//         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+//      } catch (UnsupportedLookAndFeelException ex) {
+//         Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+//      }
+      //setOpacity(0.7f);
+   
+   //theme_mode = THEME_TRANSPARENT;
+   //theme_mode = THEME_NIMBUS_DAY;
+*/     
+      
+      
+   if (theme_mode.equals(THEME_TRANSPARENT))
+   {
+      reset_main_class = true;
+      theme_changed = true;                          // for checking more than one instance running
+   }
+   
+   if (reset_main_class)
+   {
+      mainClass.dispose();
+   }
+   
    try
    {
+      //mainClass.dispose();
+      //JFrame.setDefaultLookAndFeelDecorated(true);
+      
+      //mainClass.setVisible(true);
+      //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+      //setOpacity(0.7f);
+     
       for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
          if ("Nimbus".equals(info.getName()))
@@ -9487,6 +10273,7 @@ private void Themes_1_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             break;
          }
       }
+
       theme_mode = THEME_NIMBUS_DAY;
    }
    catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
@@ -9495,6 +10282,14 @@ private void Themes_1_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
       JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
       main.log_turbowin_system_message("[GENERAL] " + info);
    }   
+   
+   if (reset_main_class)
+   {
+      //JFrame.setDefaultLookAndFeelDecorated(true);
+      mainClass = new main();
+      mainClass.setVisible(true);
+   }
+   
 
 }//GEN-LAST:event_Themes_1_actionPerformed
 
@@ -9506,9 +10301,77 @@ private void Themes_1_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 /***********************************************************************************************/
 private void Themes_2_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Themes_2_actionPerformed
    // TODO add your handling code here:
+   boolean reset_main_class = false;
 
    // Night colors (Nimbus based)
    //
+   
+   // JFrame.setDefaultLookAndFeelDecorated(false);
+  
+  
+   if (theme_mode.equals(THEME_TRANSPARENT))
+   {
+      reset_main_class = true;
+      theme_changed = true;                          // for checking more than one instance running
+   }
+   
+   if (reset_main_class)
+   {
+      mainClass.dispose();
+   }
+  
+   try
+   {
+      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+      {
+         if ("Nimbus".equals(info.getName()))
+         {
+            UIManager.setLookAndFeel(info.getClassName());
+            
+            UIManager.put("control", new Color(114,114,114)); 
+            UIManager.put("nimbusBase", new Color(64,64,64)); 
+            UIManager.put("nimbusFocus", new Color(191,191,191)); 
+            UIManager.put("nimbusLightBackground", new Color(176,176,176)); 
+            //UIManager.put("nimbusSelectionBackground", new Color(90,130,195)); 
+            UIManager.put("text", new Color(0,0,0));   
+            UIManager.put("nimbusBlueGrey", new Color(169,176,190));
+
+            SwingUtilities.updateComponentTreeUI(main.this);                                   // moet komen na setLookAndFeel !!!
+            
+            jTextField4.setBackground(new java.awt.Color(192, 192, 192));                      // status bar (for system messages)
+            
+            break;
+         }
+      }
+      theme_mode = THEME_NIMBUS_NIGHT;
+   }
+   catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+   {
+      String info = "Nimbus related Themes not supported on this computer";
+      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
+      main.log_turbowin_system_message("[GENERAL] " + info);
+   }
+  
+   if (reset_main_class)
+   {
+      //JFrame.setDefaultLookAndFeelDecorated(true);
+      mainClass = new main();
+      mainClass.setVisible(true);
+   }
+  
+  
+  
+  
+  
+/*  
+  
+  
+  if (theme_mode.equals(THEME_TRANSPARENT))
+  {
+     
+      mainClass.dispose();
+      theme_mode = THEME_NIMBUS_NIGHT;
+  
    
    try
    {
@@ -9541,8 +10404,54 @@ private void Themes_2_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
       JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
       main.log_turbowin_system_message("[GENERAL] " + info);
    }
-   
-   
+
+      JFrame.setDefaultLookAndFeelDecorated(true);
+      mainClass = new main();
+      mainClass.setVisible(true);
+     
+  }
+  
+  else
+  {
+   try
+   {
+      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+      {
+         if ("Nimbus".equals(info.getName()))
+         {
+            UIManager.setLookAndFeel(info.getClassName());
+            
+            UIManager.put("control", new Color(114,114,114)); 
+            UIManager.put("nimbusBase", new Color(64,64,64)); 
+            UIManager.put("nimbusFocus", new Color(191,191,191)); 
+            UIManager.put("nimbusLightBackground", new Color(176,176,176)); 
+            //UIManager.put("nimbusSelectionBackground", new Color(90,130,195)); 
+            UIManager.put("text", new Color(0,0,0));   
+            UIManager.put("nimbusBlueGrey", new Color(169,176,190));
+
+            SwingUtilities.updateComponentTreeUI(main.this);                                   // moet komen na setLookAndFeel !!!
+            
+            jTextField4.setBackground(new java.awt.Color(192, 192, 192));                      // status bar (for system messages)
+            
+            break;
+         }
+      }
+      theme_mode = THEME_NIMBUS_NIGHT;
+   }
+   catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+   {
+      String info = "Nimbus related Themes not supported on this computer";
+      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
+      main.log_turbowin_system_message("[GENERAL] " + info);
+   }
+     
+     
+   //theme_mode = THEME_TRANSPARENT;
+      
+  }  
+  
+      //theme_mode = THEME_NIMBUS_NIGHT;
+*/   
 }//GEN-LAST:event_Themes_2_actionPerformed
 
 
@@ -9555,11 +10464,24 @@ private void Themes_2_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 /***********************************************************************************************/
 private void Themes_3_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Themes_3_actionPerformed
    // TODO add your handling code here:
+   boolean reset_main_class = false;
 
    //
    //////// Sunrise, Nimbus (vanaf Java 1.6.10) based
    //
    // NB dit is eigenlijk geen Theme maar compleet ander color scheme
+   
+   if (theme_mode.equals(THEME_TRANSPARENT))
+   {
+      reset_main_class = true;
+      theme_changed = true;                          // for checking more than one instance running
+   }
+   
+   if (reset_main_class)
+   {
+      mainClass.dispose();
+   }
+   
    try
    {
       for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
@@ -9601,7 +10523,13 @@ private void Themes_3_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
       main.log_turbowin_system_message("[GENERAL] " + info);
    }
 
-
+   if (reset_main_class)
+   {
+      //JFrame.setDefaultLookAndFeelDecorated(true);
+      mainClass = new main();
+      mainClass.setVisible(true);
+   }
+   
     
    /*
    // http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/nimbus.html
@@ -9888,8 +10816,19 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
              }
           }
           RS232_view.sensor_data_file_ophalen_timer = null;
-      
           sensor_data_file_ophalen_timer_is_gecreeerd = false;
+          
+          
+          if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true)  
+          {
+             if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning())
+             {
+                RS232_view.sensor_data_file_ophalen_timer_II.stop();
+             }
+          }
+          RS232_view.sensor_data_file_ophalen_timer_II = null;
+          sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
+          
           
           //graph_form.dispose();
           graph_form.setVisible(false);
@@ -9937,9 +10876,9 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
       
       String info = "Are you sure you want to exit this application?";
       //if ( ((RS232_connection_mode == 1) || (RS232_connection_mode == 2) || (RS232_connection_mode == 3) || (RS232_connection_mode == 4))  && (defaultPort != null) )
-      if ( ((RS232_connection_mode != 0) && (defaultPort != null)) || (RS232_connection_mode == 6) )   
+      if ( ((RS232_connection_mode != 0) && (defaultPort != null)) || (RS232_connection_mode == 6) || ((RS232_connection_mode_II != 0) && (defaultPort_II != null)) )   
       {
-         // PTB220, PTB330, EUCAWS, OMC-140, MintakaDuo, Mintaka Star USB (all via serial comm) or Mintaka Star WiFi connected
+         // PTB220, PTB330, EUCAWS, OMC-140, MintakaDuo, Mintaka Star USB, HMP155 (all via serial comm) or Mintaka Star WiFi connected
          info += "\n\n (" + APPLICATION_NAME + " will stop with monitoring and collecting of the sensor data)";
          if (main.APR == true || main.WOW == true)
          {
@@ -9987,8 +10926,21 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
                //   System.out.println(ex);
                //}
             } // if (main.serialPort != null)
-            
          } // if ((RS232_connection_mode != 0) && (defaultPort != null))
+         
+          // serial communication thermometer
+         if ((RS232_connection_mode_II != 0) && (defaultPort_II != null))  
+         {
+            //
+            // NB in case of WiFi: defaultport_II == null
+            //
+            if (main.serialPort_II != null)
+            {
+               main.serialPort_II.removeDataListener();
+               main.serialPort_II.closePort();
+               main.serialPort_II = null;
+            } // if (main.serialPort_II != null)
+         } // if ((RS232_connection_mode_II != 0) && (defaultPort_II != null))
          
          // serial communication GPS
          if ((RS232_GPS_connection_mode != 0) && (main_RS232_RS422.GPS_defaultPort != null))
@@ -10042,20 +10994,36 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
             }
          }
          RS232_view.sensor_data_file_ophalen_timer = null;
-      
          sensor_data_file_ophalen_timer_is_gecreeerd = false;
+         
+         
+         if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true)  
+         {
+            if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning())
+            {
+               RS232_view.sensor_data_file_ophalen_timer_II.stop();
+            }
+         }
+         RS232_view.sensor_data_file_ophalen_timer_II = null;
+         sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
           
          //graph_form.dispose();
          graph_form.setVisible(false);
       }  
       
-      mode_grafiek = MODE_AIRTEMP;
+      if (RS232_connection_mode_II == 1)
+      {
+         mode_grafiek = MODE_AIRTEMP_II;
+      }
+      else
+      {
+         mode_grafiek = MODE_AIRTEMP;
+      }
        
       graph_form = new RS232_view();
       //graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full screen
       graph_form.setExtendedState(MAXIMIZED_BOTH); 
       graph_form.setVisible(true);     
-     
       
    }//GEN-LAST:event_Graphs_Airtemp_Sensor_Data_actionPerformed
 
@@ -10078,9 +11046,20 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
             }
          }
          RS232_view.sensor_data_file_ophalen_timer = null;
-      
          sensor_data_file_ophalen_timer_is_gecreeerd = false;
-          
+         
+         
+         if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true)  
+         {
+            if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning())
+            {
+               RS232_view.sensor_data_file_ophalen_timer_II.stop();
+            }
+         }
+         RS232_view.sensor_data_file_ophalen_timer_II = null;
+         sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
+         
+         
          //graph_form.dispose();
          graph_form.setVisible(false);
       }        
@@ -10113,8 +11092,18 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
             }
          }
          RS232_view.sensor_data_file_ophalen_timer = null;
-      
          sensor_data_file_ophalen_timer_is_gecreeerd = false;
+         
+         
+         if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true)  
+         {
+            if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning())
+            {
+               RS232_view.sensor_data_file_ophalen_timer_II.stop();
+            }
+         }
+         RS232_view.sensor_data_file_ophalen_timer_II = null;
+         sensor_data_file_ophalen_timer_is_gecreeerd_II = false;        
           
          //graph_form.dispose();
          graph_form.setVisible(false);
@@ -10610,8 +11599,18 @@ private void IMMT_AWS_manual_input_preperations()
             }
          }
          RS232_view.sensor_data_file_ophalen_timer = null;
-      
          sensor_data_file_ophalen_timer_is_gecreeerd = false;
+         
+         
+         if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true)  
+         {
+            if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning())
+            {
+               RS232_view.sensor_data_file_ophalen_timer_II.stop();
+            }
+         }
+         RS232_view.sensor_data_file_ophalen_timer_II = null;
+         sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
           
          //graph_form.dispose();
          graph_form.setVisible(false);
@@ -12288,7 +13287,7 @@ private boolean checking_level_3()
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             popup.add(pressure_graph_Item);
             
-            popup.addSeparator();
+            //popup.addSeparator();
             
             pressure_graph_Item.addActionListener(new ActionListener() 
             {
@@ -12298,6 +13297,24 @@ private boolean checking_level_3()
                   Graphs_Pressure_Sensor_Data_actionPerformed(null);  
                } // public void actionPerformed(ActionEvent e)
             });
+            
+            if ((RS232_connection_mode_II == 1) && (defaultPort_II != null))                     // also a HMP155 connected
+            {
+               MenuItem air_temp_graph_Item = new MenuItem("air temp graph");
+               popup.add(air_temp_graph_Item);
+     
+               air_temp_graph_Item.addActionListener(new ActionListener() 
+               {
+                  @Override
+                  public void actionPerformed(ActionEvent e) 
+                  {
+                     Graphs_Airtemp_Sensor_Data_actionPerformed(null);  
+                  } // public void actionPerformed(ActionEvent e)
+               }); 
+            }
+            
+            popup.addSeparator();
+            
          } // if ( ((RS232_connection_mode == 1) || (RS232_connection_mode == 2) || (RS232_connection_mode == 4) || (RS232_connection_mode == 5)) && (defaultPort != null) ) // PTB220 or PTB330 or Mintaka Duo
 
 
@@ -12320,7 +13337,7 @@ private boolean checking_level_3()
             MenuItem pressure_graph_Item = new MenuItem("pressure graph");
             popup.add(pressure_graph_Item);
             
-            popup.addSeparator();
+            //popup.addSeparator();
             
             pressure_graph_Item.addActionListener(new ActionListener() 
             {
@@ -12330,6 +13347,24 @@ private boolean checking_level_3()
                   Graphs_Pressure_Sensor_Data_actionPerformed(null);  
                } // public void actionPerformed(ActionEvent e)
             });
+            
+            if ((RS232_connection_mode_II == 1) && (defaultPort_II != null))                     // also a HMP155 connected
+            {
+               MenuItem air_temp_graph_Item = new MenuItem("air temp graph");
+               popup.add(air_temp_graph_Item);
+     
+               air_temp_graph_Item.addActionListener(new ActionListener() 
+               {
+                  @Override
+                  public void actionPerformed(ActionEvent e) 
+                  {
+                     Graphs_Airtemp_Sensor_Data_actionPerformed(null);  
+                  } // public void actionPerformed(ActionEvent e)
+               }); 
+            }
+            
+            popup.addSeparator();
+            
          } // if (RS232_connection_mode == 6)
 
          
@@ -12377,7 +13412,26 @@ private boolean checking_level_3()
          } // if ( ((RS232_connection_mode == 7) && (defaultPort != null)) || (RS232_connection_mode == 8) )
          
          
-         // exit and restore (maximize) always present!
+         if ((RS232_connection_mode == 0) && (RS232_connection_mode_II == 1) && (defaultPort_II != null))    // no 1st instrument (barometer) but one 2nd instrument (temperature device)
+         {
+            MenuItem air_temp_graph_Item = new MenuItem("air temp graph");
+            popup.add(air_temp_graph_Item);
+     
+            air_temp_graph_Item.addActionListener(new ActionListener() 
+            {
+               @Override
+               public void actionPerformed(ActionEvent e) 
+               {
+                  Graphs_Airtemp_Sensor_Data_actionPerformed(null);  
+               } // public void actionPerformed(ActionEvent e)
+            });             
+            
+            popup.addSeparator();
+            
+         } // if ((RS232_connection_mode == 0) && (RS232_connection_mode_II == 1) && (defaultPort_II != null)) 
+         
+         
+         // menu items 'exit' and 'restore (maximize)' always present!
          //
          MenuItem restoreItem = new MenuItem("Maximize TurboWin+");
          popup.add(restoreItem);
@@ -12439,7 +13493,10 @@ private boolean checking_level_3()
        
          try 
          {
+            //if (tray != null && trayIcon != null)
+            //{
             tray.add(trayIcon);
+            //}
          } 
          catch (AWTException e) 
          {
@@ -12513,6 +13570,18 @@ private boolean checking_level_3()
          RS232_view.sensor_data_file_ophalen_timer = null;
       
          sensor_data_file_ophalen_timer_is_gecreeerd = false;
+         
+       
+         if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true)  // 15-05-2013
+         {
+            if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning())
+            {
+               RS232_view.sensor_data_file_ophalen_timer_II.stop();
+            }
+         }
+         RS232_view.sensor_data_file_ophalen_timer_II = null;
+      
+         sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
           
          //graph_form.dispose();
          graph_form.setVisible(false);
@@ -12587,11 +13656,25 @@ private boolean checking_level_3()
    private void Themes_4_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Themes_4_actionPerformed
       
       // TODO add your handling code here:
+      boolean reset_main_class = false;
       
       //
       //////// Sunset, Nimbus (vanaf Java 1.6.10) based
       //
       // NB dit is eigenlijk geen Theme maar compleet ander color scheme
+      
+         
+      if (theme_mode.equals(THEME_TRANSPARENT))
+      {
+         reset_main_class = true;
+         theme_changed = true;                          // for checking more than one instance running
+      }
+   
+      if (reset_main_class)
+      {
+         mainClass.dispose();
+      }
+      
       try
       {
          for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
@@ -12632,6 +13715,15 @@ private boolean checking_level_3()
          JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
          main.log_turbowin_system_message("[GENERAL] " + info);
       }
+      
+     if (reset_main_class)
+     {
+         //JFrame.setDefaultLookAndFeelDecorated(true);
+         mainClass = new main();
+         mainClass.setVisible(true);
+      }
+      
+      
    }//GEN-LAST:event_Themes_4_actionPerformed
 
    
@@ -13157,7 +14249,372 @@ private boolean checking_level_3()
       form.setSize(400, 300);
       form.setVisible(true);
    }//GEN-LAST:event_Maintenance_GUI_settings_actionPerformed
+
    
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/         
+   private void Output_obs_by_email_default_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Output_obs_by_email_default_actionPerformed
+      // TODO add your handling code here:
+      
+      email_send_mode = EMAIL_SEND_DEFAULT;
+      Output_obs_by_email_all_manual();
+   }//GEN-LAST:event_Output_obs_by_email_default_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/     
+   private void Output_obs_by_email_Gmail_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Output_obs_by_email_Gmail_actionPerformed
+      // TODO add your handling code here:
+      
+      email_send_mode = EMAIL_SEND_GMAIL;
+      Output_obs_by_email_all_manual();
+   }//GEN-LAST:event_Output_obs_by_email_Gmail_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/ 
+   private void Output_obs_by_email_local_host_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Output_obs_by_email_local_host_actionPerformed
+      // TODO add your handling code here:
+      
+      email_send_mode = EMAIL_SEND_LOCAL_HOST;
+      Output_obs_by_email_all_manual();
+   }//GEN-LAST:event_Output_obs_by_email_local_host_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/    
+   private void Output_obs_by_email_yahoo_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Output_obs_by_email_yahoo_actionPerformed
+      // TODO add your handling code here:
+      
+      email_send_mode = EMAIL_SEND_YAHOO;
+      Output_obs_by_email_all_manual();
+   }//GEN-LAST:event_Output_obs_by_email_yahoo_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/     
+   private void Info_barometer_comparison_menu_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Info_barometer_comparison_menu_actionPerformed
+      // TODO add your handling code here:
+      
+      barometer_comparison form = new barometer_comparison();               
+      form.setSize(1000, 700);
+      form.setVisible(true);       
+   }//GEN-LAST:event_Info_barometer_comparison_menu_actionPerformed
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/     
+   private void Themes_5_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Themes_5_actionPerformed
+      // TODO add your handling code here:
+      
+      if (!theme_mode.equals(THEME_TRANSPARENT))
+      {
+         mainClass.dispose();
+         theme_changed = true;                       // for checking more than one instance running
+      
+         try 
+         {
+            //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            theme_mode = THEME_TRANSPARENT;
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+         } 
+         catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) 
+         {
+            String info = "Error invoking Transparent Theme";
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
+         }      
+      
+         JFrame.setDefaultLookAndFeelDecorated(true);     // !!! This is essential set it to the defult metal java mode (= the only Java Look and Feel suitable for tranaparency)
+         mainClass = new main();
+         mainClass.setVisible(true);
+      }
+      
+   }//GEN-LAST:event_Themes_5_actionPerformed
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/    
+   private void APR_toolbar_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_APR_toolbar_itemStateChanged
+      // TODO add your handling code here:
+      boolean checks_ok = true;
+      boolean additional_checks_ok = true;
+      
+      
+      APR = jCheckBox1.isSelected() == true;               // now APR = true or false
+      
+      if (!APR)
+      {
+         // NB reset JLabel39 (e.g. in APR mode: "--- more than 30 minutes to go for next automated upload, please do not insert observation data --- "
+         //    must be reseted to original string
+         main.jLabel39.setForeground(Color.BLACK);
+         main.jLabel39.setText("--- adding data: input menu, popup menu, toolbar icons or click on the text labels or fields ---");
+         
+         String info = "automated reporting (AP[&T]R) is turned off";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);            
+      } // if (!APR)
+      
+      
+      if (APR)
+      {
+         // AP[&T]R reporting interval
+         if (checks_ok && main.APR_reporting_interval.equals(""))
+         {
+            JOptionPane.showMessageDialog(null, "AP[&T]R reporting interval not selected (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            checks_ok = false;
+            APR = false;
+            jCheckBox1.setSelected(false);
+         }
+         
+         // AP[&T]R send method
+         if ( checks_ok && (main.APTR_AWSR_send_method.equals("")))
+         {
+            JOptionPane.showMessageDialog(null, "AP[&T]R / AWSR send method unknown (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            checks_ok = false;
+            APR = false;
+            jCheckBox1.setSelected(false);
+         }
+         
+         // AP[&T]R draught
+         if (checks_ok)
+         {
+            try
+            {
+               double double_WOW_APR_average_draught = Double.parseDouble(main.WOW_APR_average_draught);
+               
+               if (main.WOW_APR_average_draught.equals("") || !(double_WOW_APR_average_draught >= 0 && double_WOW_APR_average_draught <= 50))
+               {
+                  JOptionPane.showMessageDialog(null, "normal steaming draft not in range 0.0 - 50.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  checks_ok = false;
+                  APR = false;
+                  jCheckBox1.setSelected(false);
+               }
+            }
+            catch (NumberFormatException e) 
+            {
+               JOptionPane.showMessageDialog(null, "normal steaming draft not in range 0.0 - 50.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               checks_ok = false;
+               APR = false;
+               jCheckBox1.setSelected(false);
+            }    
+         } // if (checks_ok)
+         
+         // AP[&T]R barometer ic 
+         if (checks_ok)
+         {
+            try
+            {
+               double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+             
+               if (main.barometer_instrument_correction.equals("") || !(double_barometer_instrument_correction >= -4.0 || double_barometer_instrument_correction <= 4.0))
+               {
+                  JOptionPane.showMessageDialog(null, "barometer instrument correction not in range -4.0 - 4.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  checks_ok = false;
+                  APR = false;
+                  jCheckBox1.setSelected(false);
+               }             
+            }
+            catch (NumberFormatException e) 
+            { 
+               JOptionPane.showMessageDialog(null, "barometer_instrument_correction not in range -4.0 - 4.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               checks_ok = false;
+               APR = false;
+               jCheckBox1.setSelected(false);
+            }  
+         } // if (checks_ok) 
+         
+         // warning checks
+         if (checks_ok)
+         {
+            additional_checks_ok = WOW_APR_settings.APR_additional_requirements_checks();
+         }
+         
+         // pop-up message APR was turned on
+         if (checks_ok && additional_checks_ok)
+         {
+            String info = "automated reporting (AP[&T]R) is turned on";
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);  
+         }
+         else
+         {
+            APR = false;
+            jCheckBox1.setSelected(false);
+         }
+      } // if (APR)
+      
+      // NB below for APR turned on AND APR turned off !!
+      // clear the text fields on the main screen (because maybe there are still values in the text fields from a previous setting eg APR = true) and enable the output menu items again
+      main.Reset_all_meteo_parameters(); 
+      main.disable_and_enable_output_menu_items();     // in fact also for ENABLING the output menu options if now set APR = false and before APR = true
+      
+      // save the change
+      if (main.offline_mode_via_cmd == true)     // after installation as standalone program this will always be the case
+      {
+         main.schrijf_configuratie_regels();          
+      }
+      else // so offline_via_jnlp mode or online (webstart) mode
+      {
+         main.set_muffin();
+         main.schrijf_configuratie_regels();
+      }         
+      
+   }//GEN-LAST:event_APR_toolbar_itemStateChanged
+
+   
+   
+   private void AWSR_toolbar_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_AWSR_toolbar_itemStateChanged
+      // TODO add your handling code here:
+      boolean checks_ok = true;
+      boolean additional_checks_ok = true;
+      
+      
+      AWSR = jCheckBox2.isSelected() == true;               // now APR = true or false
+      
+      if (!AWSR)
+      {
+         // NB reset JLabel39 (e.g. in APR mode: "--- more than 30 minutes to go for next automated upload, please do not insert observation data --- "
+         //    must be reseted to original string
+         main.jLabel39.setForeground(Color.BLACK);
+         main.jLabel39.setText("--- adding data: input menu, popup menu, toolbar icons or click on the text labels or fields ---");
+         
+         String info = "automated reporting (AWSR) is turned off";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);            
+      } // if (!AWSR)
+      
+      
+      if (AWSR)
+      {
+         // AWSR reporting interval
+         if (checks_ok && main.AWSR_reporting_interval.equals(""))
+         {
+            JOptionPane.showMessageDialog(null, "ASWR reporting interval not selected (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            checks_ok = false;
+            AWSR = false;
+            jCheckBox2.setSelected(false);
+         }
+         
+         // AWSR send method
+         if ( checks_ok && (main.APTR_AWSR_send_method.equals("")))
+         {
+            JOptionPane.showMessageDialog(null, "AWSR send method unknown (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            checks_ok = false;
+            AWSR = false;
+            jCheckBox2.setSelected(false);
+         }
+/*        
+         // AWSR draught
+         if (checks_ok)
+         {
+            try
+            {
+               double double_WOW_APR_average_draught = Double.parseDouble(main.WOW_APR_average_draught);
+               
+               if (main.WOW_APR_average_draught.equals("") || !(double_WOW_APR_average_draught >= 0 && double_WOW_APR_average_draught <= 50))
+               {
+                  JOptionPane.showMessageDialog(null, "normal steaming draft not in range 0.0 - 50.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  checks_ok = false;
+                  AWSR = false;
+                  jCheckBox2.setSelected(false);
+               }
+            }
+            catch (NumberFormatException e) 
+            {
+               JOptionPane.showMessageDialog(null, "normal steaming draft not in range 0.0 - 50.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               checks_ok = false;
+               AWSR = false;
+               jCheckBox2.setSelected(false);
+            }    
+         } // if (checks_ok)
+         
+         // AWSR barometer ic 
+         if (checks_ok)
+         {
+            try
+            {
+               double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+             
+               if (main.barometer_instrument_correction.equals("") || !(double_barometer_instrument_correction >= -4.0 || double_barometer_instrument_correction <= 4.0))
+               {
+                  JOptionPane.showMessageDialog(null, "barometer instrument correction not in range -4.0 - 4.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  checks_ok = false;
+                  AWSR = false;
+                  jCheckBox2.setSelected(false);
+               }             
+            }
+            catch (NumberFormatException e) 
+            { 
+               JOptionPane.showMessageDialog(null, "barometer_instrument_correction not in range -4.0 - 4.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               checks_ok = false;
+               AWSR = false;
+               jCheckBox2.setSelected(false);
+            }  
+         } // if (checks_ok) 
+*/         
+         // warning checks
+         if (checks_ok)
+         {
+            additional_checks_ok = WOW_APR_settings.AWSR_additional_requirements_checks();
+         }
+         
+         // pop-up message AWSR was turned on
+         if (checks_ok && additional_checks_ok)
+         {
+            String info = "automated reporting (AWSR) is turned on";
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);  
+         }
+         else
+         {
+            AWSR = false;
+            jCheckBox2.setSelected(false);
+         }
+      } // if (AWSR)
+      
+      // NB below for AWSR turned on AND AWSR turned off !!
+      // clear the text fields on the main screen (because maybe there are still values in the text fields from a previous setting eg AWSR = true) and enable the output menu items again
+      main.Reset_all_meteo_parameters(); 
+      main.disable_and_enable_output_menu_items();     // in fact also for ENABLING the output menu options if now set AWSR = false and before AWSR = true
+      
+      // save the change
+      if (main.offline_mode_via_cmd == true)     // after installation as standalone program this will always be the case
+      {
+         main.schrijf_configuratie_regels();          
+      }
+      else // so offline_via_jnlp mode or online (webstart) mode
+      {
+         main.set_muffin();
+         main.schrijf_configuratie_regels();
+      }         
+      
+      
+   }//GEN-LAST:event_AWSR_toolbar_itemStateChanged
+  
    
    
    /***********************************************************************************************/
@@ -13276,8 +14733,11 @@ private boolean checking_level_3()
       // called from: - main_windowDeiconified() [main.java]   // in case os = NOT WINDOWS
       //              - main_windowIconfied() [main.java]      // in case os = WINDOWS
       
+      // NB in case of a connected AWS or barometer a timer will already update the date time field on the main screen
       
-      if ((RS232_connection_mode == 3) || (RS232_connection_mode == 9) || (RS232_connection_mode == 10)) // AWS connected
+      
+      //if ((RS232_connection_mode == 3) || (RS232_connection_mode == 9) || (RS232_connection_mode == 10)) // AWS connected
+      if ((RS232_connection_mode == 3) || (RS232_connection_mode == 9) || (RS232_connection_mode == 10) || (APR == true)) // AWS connected   
       {
          //System.out.println("+++ " + evt);
       
@@ -13299,6 +14759,11 @@ private boolean checking_level_3()
          updating_dialog.setVisible(true); 
       
       }
+      
+      
+      
+      
+/*      
       // update the obs date and time on the main screen
       //if (RS232_connection_mode == 0)    // no instrument/AWS connection 
       else // no AWS connected (so nothing connected or a barometer connected)
@@ -13312,22 +14777,8 @@ private boolean checking_level_3()
             cal_systeem_datum_tijd_UTC = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // gives system date and time in UTC of this moment
             cal_systeem_datum_tijd_UTC.getTime();                                 // effectueren
 
-            //int system_year_UTC          = cal_systeem_datum_tijd_UTC.get(Calendar.YEAR);
-            //int system_month_UTC         = cal_systeem_datum_tijd_UTC.get(Calendar.MONTH);        // The first month of the year is JANUARY which is 0
-            //int system_day_of_month_UTC  = cal_systeem_datum_tijd_UTC.get(Calendar.DAY_OF_MONTH); // The first day of the month has value 1
-            //int system_hour_of_day_UTC   = cal_systeem_datum_tijd_UTC.get(Calendar.HOUR_OF_DAY);  // HOUR_OF_DAY: 24 hour clock; HOUR : 12 hour clock
             int system_minute_UTC        = cal_systeem_datum_tijd_UTC.get(Calendar.MINUTE);
 
-            //if (system_minute_UTC <= 9)
-            //{
-            //    hulp_system_minute_UTC = "0" + Integer.toString(system_minute_UTC);
-            //}
-            //else
-            //{
-            //   hulp_system_minute_UTC = Integer.toString(system_minute_UTC);
-            //
-            //String system_UTC_string = "system: " + convert_month(system_month_UTC) + " " + system_day_of_month_UTC + ", " + system_year_UTC + " " + system_hour_of_day_UTC + "." + hulp_system_minute_UTC + " UTC";
-      
    
             ///////// obs time
             //
@@ -13359,6 +14810,9 @@ private boolean checking_level_3()
          // NB in case of a connected AWS or barometer a timer will already update the date time field on the main screen
          //check_and_set_datetime_v2();    // NB var use_system_date_time_for_updating = true can be set here, used in case of an connected barometer
       }
+*/
+
+      // NB in case of a connected AWS or barometer a timer will already update the date time field on the main screen
       
    }       
    
@@ -15112,6 +16566,45 @@ public static OSType detect_OS()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+public static void set_APR_toolbar()
+{
+   // check APR
+   if (APR)
+   {
+      jCheckBox1.setSelected(true);
+   }
+   else 
+   {
+      jCheckBox1.setSelected(false);
+   }
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void set_AWSR_toolbar()
+{
+   // check AWSR
+   if (AWSR)
+   {
+      jCheckBox2.setSelected(true);
+   }
+   else 
+   {
+      jCheckBox2.setSelected(false);
+   }
+}
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
 private void initComponents2()
 {
    /* determine the OS this program is running on */
@@ -15132,6 +16625,7 @@ private void initComponents2()
    }
 */
    
+/*   
    boolean use_system_tray = false;
       
    OSType ostype = detect_OS();
@@ -15142,12 +16636,13 @@ private void initComponents2()
       default:      use_system_tray = false;    
                     break;
    }   
+*/   
+   //if (use_system_tray == false)
+   //{
+   //   // over write text: "--- when minimised see system tray ---")
+   //   jLabel8.setText("--- when minimised see launcher bar ---");
+   //}
    
-   if (use_system_tray == false)
-   {
-      // over write text: "--- when minimised see system tray ---")
-      jLabel8.setText("--- when minimised see launcher bar ---");
-   }
    
    
    /* title of main screen */
@@ -15165,250 +16660,6 @@ private void initComponents2()
    /* create pop-up menu (right mouse button) */
    //create_popup_menu();
    // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]
-/*   
-   popup_input = new JPopupMenu();
-      
-   JMenuItem menuItem1 = new JMenuItem("Date & Time...");
-   menuItem1.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_DateTime_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem1);    
-      
-   JMenuItem menuItem2 = new JMenuItem("Position, Course & Speed...");
-   menuItem2.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Position_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem2);    
-   
-   JMenuItem menuItem3 = new JMenuItem("Barometer reading...");
-   menuItem3.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Barometer_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem3);    
-   
-   JMenuItem menuItem4 = new JMenuItem("Barograph reading...");
-   menuItem4.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Barograph_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem4);    
-   
-   JMenuItem menuItem5 = new JMenuItem("Temperatures...");
-   menuItem5.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Temperatures_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem5);    
-   
-   JMenuItem menuItem6 = new JMenuItem("Wind...");
-   menuItem6.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Wind_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem6);    
-   
-   if (!main.GUI_mode.equals(main.GUI_LIGHT))
-   {
-      JMenuItem menuItem7 = new JMenuItem("Waves...");
-      menuItem7.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_waves_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem7);    
-   
-      JMenuItem menuItem8 = new JMenuItem("Visibility...");
-      menuItem8.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Visibility_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem8); 
-
-      JMenuItem menuItem9 = new JMenuItem("Present weather...");
-      menuItem9.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Presentweather_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem9);   
-   
-      JMenuItem menuItem10 = new JMenuItem("Past weather...");
-      menuItem10.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Pastweather_menu_actionperformed(null);
-         }
-      });
-      popup_input.add(menuItem10);    
-   
-      JMenuItem menuItem11 = new JMenuItem("Clouds low...");
-      menuItem11.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Cloudslow_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem11);    
-   
-      JMenuItem menuItem12 = new JMenuItem("Clouds middle...");
-      menuItem12.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Cloudsmiddle_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem12);    
-   
-      JMenuItem menuItem13 = new JMenuItem("Clouds high...");
-      menuItem13.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Cloudshigh_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem13);    
-   
-      JMenuItem menuItem14 = new JMenuItem("Cloud cover & height...");
-      menuItem14.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            Input_Cloudcover_menu_actionPerformed(null);
-         }
-      });
-      popup_input.add(menuItem14);    
-   } // if (!main.GUI_mode.equals(main.GUI_LIGHT))
-   
-   
-   JMenuItem menuItem15 = new JMenuItem("Icing...");
-   menuItem15.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Icing_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem15);    
-   
-   JMenuItem menuItem16 = new JMenuItem("Ice...");
-   menuItem16.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Ice_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem16);    
-   
-   JMenuItem menuItem17 = new JMenuItem("Observer...");
-   menuItem17.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Input_Observer_menu_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem17);  
-   
-   popup_input.addSeparator();
-   
-   JMenuItem menuItem18 = new JMenuItem("Day colours");
-   menuItem18.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Themes_1_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem18);  
-   
-   JMenuItem menuItem19 = new JMenuItem("Night colours");
-   menuItem19.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Themes_2_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem19);  
-   
-   JMenuItem menuItem20 = new JMenuItem("Sunrise colours");
-   menuItem20.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Themes_3_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem20);  
-   
-   JMenuItem menuItem21 = new JMenuItem("Sunset colours");
-   menuItem21.addActionListener(new java.awt.event.ActionListener() 
-   {
-      @Override
-      public void actionPerformed(ActionEvent e) 
-      {
-         Themes_4_actionPerformed(null);
-      }
-   });
-   popup_input.add(menuItem21);  
-   
-   MouseListener popupListener_input = new PopupListener_input();
-   addMouseListener(popupListener_input);                              // connect to jFrame otherwise eg: jTextField1.addMouseListener(popupListener);
-   jToolBar1.addMouseListener(popupListener_input);                    // also connected to Toolbar now
-*/     
    
    /* user directory */
    user_dir = System.getProperty("user.dir");
@@ -15427,7 +16678,7 @@ private void initComponents2()
    // initialisation
    Reset_all_meteo_parameters();
    
-   // NB in via Reset_all_meteo_parameters() the staus line (JTextField4) was set literally to "undefined") (because the selection criterium -AWS connected'is there still not determined0
+   // NB in via Reset_all_meteo_parameters() the status line (JTextField4) was set literally to "undefined") (because the selection criterium -AWS connected'is there still not determined0
    jTextField4.setText(""); 
    
    /* check if the application is online or offline (different help file handling)  */
@@ -15541,7 +16792,8 @@ private void initComponents2()
       //jMenuItem36.setEnabled(false);
       
       /* set label on bottom main screen */
-      application_mode =  "stand-alone mode";
+      //application_mode =  "stand-alone mode";
+      application_mode =  "";
       jLabel4.setText(APPLICATION_NAME + " " + application_mode); // NB can later in this start up process be overwritten if a barometer or AWS is coupled
 
       /* NB logs dir fixed for offline mode (sub dir of main dir -main dir is the dir where the jar file is located-) */
@@ -15577,21 +16829,44 @@ private void initComponents2()
    /* read stored meta (station) data from muffins or from configuration files */
    if (offline_mode_via_cmd == true) // offline mode
    {
-	   // check only one instance running 
-		try 
+	   // check only one instance running (but not if this main class was created again due to a Theme change)
+      if (!theme_changed)
       {
-			s = new ServerSocket(PORT, 10, InetAddress.getLocalHost());
-		} 
-      catch (UnknownHostException e) 
-      {
-			// shouldn't happen for localhost
-		} 
-      catch (IOException e)
-      {
-			// port taken, so app is already running
-         JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE); 
-			System.exit(0);
-		}
+         int port_for_checking_instances = PORT;  // pORT is the default (cconstant)
+                 
+	   	try 
+         {
+            // NB PORT = 12345 at start up (= randomly chosen big number)
+            //    can be over ruled by the first argument at command line at start up (see main)
+            if (PORT_command_line.equals("") == false)
+            {
+               try 
+               {
+                  port_for_checking_instances = Integer.parseInt(PORT_command_line);
+               } 
+               catch (NumberFormatException e) 
+               {
+                  JOptionPane.showMessageDialog(null, "command line argument PORT number not OK", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  port_for_checking_instances = PORT;
+               }              
+            } // if (PORT_command_line.equals(""))  
+               
+            System.out.println("--- server port for checking multiple instances running = " + port_for_checking_instances);
+            
+			   //s = new ServerSocket(PORT, 10, InetAddress.getLocalHost());
+            s = new ServerSocket(port_for_checking_instances, 10, InetAddress.getLocalHost());
+		   } 
+         catch (UnknownHostException e) 
+         {
+			  // shouldn't happen for localhost
+		   } 
+         catch (IOException e)
+         {
+			   // port taken, so app is already running
+            JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE); 
+			   System.exit(0);
+		   }
+      } // if (!theme_changed)
       
       // read stored meta data
       lees_configuratie_regels();          
@@ -15605,24 +16880,27 @@ private void initComponents2()
       //
       //
       
-      // check only one instance running 
-      try 
-      { 
-         sis = (SingleInstanceService)ServiceManager.lookup("javax.jnlp.SingleInstanceService");
-      } 
-      catch (UnavailableServiceException e) { sis = null; } 
-      
-      // Register the single instance listener at the start of the application
-      if (sis != null)
+      // check only one instance running  (but not if this main class was created again due to a Theme change)
+      if (!theme_changed)
       {
-         sisL = new SISListener();
-         sis.addSingleInstanceListener(sisL);       
-      }
-
+         try 
+         { 
+            sis = (SingleInstanceService)ServiceManager.lookup("javax.jnlp.SingleInstanceService");
+         } 
+         catch (UnavailableServiceException e) { sis = null; } 
+      
+         // Register the single instance listener at the start of the application
+         if (sis != null)
+         {
+            sisL = new SISListener();
+            sis.addSingleInstanceListener(sisL);       
+         }
+      } // if (!theme_changed)
+      
       // read stored station data
       //
       read_muffin();
-   }   
+   } // else  
    
    
    // get the systemTrays instance
@@ -15635,7 +16913,7 @@ private void initComponents2()
       tray = SystemTray.getSystemTray();
    }   
    
-   
+    
    // check wind speed units source in AWS mode
    // NB not available in this stage so see: check_meta_data() [main.java]
    
@@ -15653,8 +16931,8 @@ private void create_popup_menu()
    /* create pop-up menu (right mouse button) */
    popup_input = new JPopupMenu();
       
-   JMenuItem menuItem1 = new JMenuItem("Date & Time...");
-   menuItem1.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem301 = new JMenuItem("Date & Time...");
+   menuItem301.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15662,10 +16940,10 @@ private void create_popup_menu()
          Input_DateTime_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem1);    
+   popup_input.add(menuItem301);    
       
-   JMenuItem menuItem2 = new JMenuItem("Position, Course & Speed...");
-   menuItem2.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem302 = new JMenuItem("Position, Course & Speed...");
+   menuItem302.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15673,10 +16951,10 @@ private void create_popup_menu()
          Input_Position_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem2);    
+   popup_input.add(menuItem302);    
    
-   JMenuItem menuItem3 = new JMenuItem("Barometer reading...");
-   menuItem3.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem303 = new JMenuItem("Barometer reading...");
+   menuItem303.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15684,10 +16962,10 @@ private void create_popup_menu()
          Input_Barometer_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem3);    
+   popup_input.add(menuItem303);    
    
-   JMenuItem menuItem4 = new JMenuItem("Barograph reading...");
-   menuItem4.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem304 = new JMenuItem("Barograph reading...");
+   menuItem304.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15695,10 +16973,10 @@ private void create_popup_menu()
          Input_Barograph_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem4);    
+   popup_input.add(menuItem304);    
    
-   JMenuItem menuItem5 = new JMenuItem("Temperatures...");
-   menuItem5.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem305 = new JMenuItem("Temperatures...");
+   menuItem305.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15706,10 +16984,10 @@ private void create_popup_menu()
          Input_Temperatures_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem5);    
+   popup_input.add(menuItem305);    
    
-   JMenuItem menuItem6 = new JMenuItem("Wind...");
-   menuItem6.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem306 = new JMenuItem("Wind...");
+   menuItem306.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15717,12 +16995,12 @@ private void create_popup_menu()
          Input_Wind_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem6);    
+   popup_input.add(menuItem306);    
    
    if (!main.GUI_mode.equals(main.GUI_LIGHT))
    {
-      JMenuItem menuItem7 = new JMenuItem("Waves...");
-      menuItem7.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem307 = new JMenuItem("Waves...");
+      menuItem307.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15730,10 +17008,10 @@ private void create_popup_menu()
             Input_waves_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem7);    
+      popup_input.add(menuItem307);    
    
-      JMenuItem menuItem8 = new JMenuItem("Visibility...");
-      menuItem8.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem308 = new JMenuItem("Visibility...");
+      menuItem308.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15741,10 +17019,10 @@ private void create_popup_menu()
             Input_Visibility_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem8); 
+      popup_input.add(menuItem308); 
 
-      JMenuItem menuItem9 = new JMenuItem("Present weather...");
-      menuItem9.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem309 = new JMenuItem("Present weather...");
+      menuItem309.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15752,10 +17030,10 @@ private void create_popup_menu()
             Input_Presentweather_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem9);   
+      popup_input.add(menuItem309);   
    
-      JMenuItem menuItem10 = new JMenuItem("Past weather...");
-      menuItem10.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem310 = new JMenuItem("Past weather...");
+      menuItem310.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15763,10 +17041,10 @@ private void create_popup_menu()
             Input_Pastweather_menu_actionperformed(null);
          }
       });
-      popup_input.add(menuItem10);    
+      popup_input.add(menuItem310);    
    
-      JMenuItem menuItem11 = new JMenuItem("Clouds low...");
-      menuItem11.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem311 = new JMenuItem("Clouds low...");
+      menuItem311.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15774,10 +17052,10 @@ private void create_popup_menu()
             Input_Cloudslow_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem11);    
+      popup_input.add(menuItem311);    
    
-      JMenuItem menuItem12 = new JMenuItem("Clouds middle...");
-      menuItem12.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem312 = new JMenuItem("Clouds middle...");
+      menuItem312.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15785,10 +17063,10 @@ private void create_popup_menu()
             Input_Cloudsmiddle_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem12);    
+      popup_input.add(menuItem312);    
    
-      JMenuItem menuItem13 = new JMenuItem("Clouds high...");
-      menuItem13.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem313 = new JMenuItem("Clouds high...");
+      menuItem313.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15796,10 +17074,10 @@ private void create_popup_menu()
             Input_Cloudshigh_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem13);    
+      popup_input.add(menuItem313);    
    
-      JMenuItem menuItem14 = new JMenuItem("Cloud cover & height...");
-      menuItem14.addActionListener(new java.awt.event.ActionListener() 
+      JMenuItem menuItem314 = new JMenuItem("Cloud cover & height...");
+      menuItem314.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
@@ -15807,12 +17085,12 @@ private void create_popup_menu()
             Input_Cloudcover_menu_actionPerformed(null);
          }
       });
-      popup_input.add(menuItem14);    
+      popup_input.add(menuItem314);    
    } // if (!main.GUI_mode.equals(main.GUI_LIGHT))
    
    
-   JMenuItem menuItem15 = new JMenuItem("Icing...");
-   menuItem15.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem315 = new JMenuItem("Icing...");
+   menuItem315.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15820,10 +17098,10 @@ private void create_popup_menu()
          Input_Icing_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem15);    
+   popup_input.add(menuItem315);    
    
-   JMenuItem menuItem16 = new JMenuItem("Ice...");
-   menuItem16.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem316 = new JMenuItem("Ice...");
+   menuItem316.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15831,10 +17109,10 @@ private void create_popup_menu()
          Input_Ice_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem16);    
+   popup_input.add(menuItem316);    
    
-   JMenuItem menuItem17 = new JMenuItem("Observer...");
-   menuItem17.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem317 = new JMenuItem("Observer...");
+   menuItem317.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15842,12 +17120,12 @@ private void create_popup_menu()
          Input_Observer_menu_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem17);  
+   popup_input.add(menuItem317);  
    
    popup_input.addSeparator();
    
-   JMenuItem menuItem18 = new JMenuItem("Day colours");
-   menuItem18.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem318 = new JMenuItem("Day colours");
+   menuItem318.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15855,10 +17133,10 @@ private void create_popup_menu()
          Themes_1_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem18);  
+   popup_input.add(menuItem318);  
    
-   JMenuItem menuItem19 = new JMenuItem("Night colours");
-   menuItem19.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem319 = new JMenuItem("Night colours");
+   menuItem319.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15866,10 +17144,10 @@ private void create_popup_menu()
          Themes_2_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem19);  
+   popup_input.add(menuItem319);  
    
-   JMenuItem menuItem20 = new JMenuItem("Sunrise colours");
-   menuItem20.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem320 = new JMenuItem("Sunrise colours");
+   menuItem320.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15877,10 +17155,10 @@ private void create_popup_menu()
          Themes_3_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem20);  
+   popup_input.add(menuItem320);  
    
-   JMenuItem menuItem21 = new JMenuItem("Sunset colours");
-   menuItem21.addActionListener(new java.awt.event.ActionListener() 
+   JMenuItem menuItem321 = new JMenuItem("Sunset colours");
+   menuItem321.addActionListener(new java.awt.event.ActionListener() 
    {
       @Override
       public void actionPerformed(ActionEvent e) 
@@ -15888,7 +17166,19 @@ private void create_popup_menu()
          Themes_4_actionPerformed(null);
       }
    });
-   popup_input.add(menuItem21);  
+   popup_input.add(menuItem321);  
+   
+   JMenuItem menuItem322 = new JMenuItem("Transparent");
+   menuItem322.addActionListener(new java.awt.event.ActionListener() 
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         Themes_5_actionPerformed(null);
+      }
+   });
+   popup_input.add(menuItem322); 
+   
    
    MouseListener popupListener_input = new PopupListener_input();
    addMouseListener(popupListener_input);                              // connect to jFrame otherwise eg: jTextField1.addMouseListener(popupListener);
@@ -16695,38 +17985,44 @@ public static void IMMT_log()
 
    immt_rec += "4";                                     // char number 71      // obs platform [4=VOSClim]
 
+   if (station_ID.trim().length() == 7)   
+   {
+      immt_rec += station_ID;                           // char number 72-78
+   }
+   else // no station ID present)
+   {
+   	int lengte = call_sign.trim().toUpperCase().length();
 
-	int lengte = call_sign.trim().toUpperCase().length();
-
-   if (lengte == 7)
-   {
-      immt_rec += call_sign;                             // char number 72-78
-   }
-   else if (lengte == 6)
-   {
-      immt_rec += call_sign;                             // char number 72-77
-      immt_rec += SPATIE_1;                              // char number 78
-   }
-   else if (lengte == 5)
-   {
-      immt_rec += call_sign;                             // char number 72-76
-      immt_rec += SPATIE_2;                              // char number 77-78
-   }
-   else if (lengte == 4)
-   {
-      immt_rec += call_sign;                             // char number 72-75
-      immt_rec += SPATIE_3;                              // char number 76-78
-   }
-   else if (lengte == 3)
-   {
-      immt_rec += call_sign;                             // char number 72-74
-      immt_rec += SPATIE_4;                              // char number 75-78
-   }
-   else // only call sign length of 3,4,5,6,7 char allowed (see IMMT description)
-   {
-     // note: in TurboWin "unknown"
-     immt_rec += SPATIE_7;                               // char number 72-78
-   }
+      if (lengte == 7)
+      {
+         immt_rec += call_sign;                          // char number 72-78
+      }
+      else if (lengte == 6)
+      {
+         immt_rec += call_sign;                          // char number 72-77
+         immt_rec += SPATIE_1;                           // char number 78
+      }
+      else if (lengte == 5)
+      {
+         immt_rec += call_sign;                          // char number 72-76
+         immt_rec += SPATIE_2;                           // char number 77-78
+      }
+      else if (lengte == 4)
+      {
+         immt_rec += call_sign;                          // char number 72-75
+         immt_rec += SPATIE_3;                           // char number 76-78
+      }
+      else if (lengte == 3)
+      {
+        immt_rec += call_sign;                           // char number 72-74
+         immt_rec += SPATIE_4;                           // char number 75-78
+      }
+      else // only call sign length of 3,4,5,6,7 char allowed (see IMMT description)
+      {
+        // note: in TurboWin "unknown"
+        immt_rec += SPATIE_7;                             // char number 72-78
+      }
+   } // else (no station ID present)
 
    if (recruiting_country.length() > 2)
    {
@@ -16815,52 +18111,69 @@ public static void IMMT_log()
       }
       else
       {
-         immt_rec += SPATIE_3;                           // char number 94-96
+         immt_rec += SPATIE_3;                          // char number 94-96
       }
    } // try
    catch (NumberFormatException e)
    {
-      immt_rec += SPATIE_3;                              // char number 94-96
+      immt_rec += SPATIE_3;                             // char number 94-96
    } // catch
 
-
-   try
+   
+   if (main.obs_format.equals(main.FORMAT_101))
    {
-      int num_Ds_code = Integer.valueOf(myposition.Ds_code);
-      if (num_Ds_code >= 0 && num_Ds_code <= 9)
-      {
-		   immt_rec += myposition.Ds_code;                // char number 97
-         Qc_17 = "1";
-      }
-      else
-      {
-         immt_rec += SPATIE_1;                           // char number 97
-      }
-   } // try
-   catch (NumberFormatException e)
+      // Ds in IMMT defined as 3 hours period; in format101 it is defined as 10 minutes period so Ds cannot be put in IMMT
+      immt_rec += SPATIE_1;                             // char number 97
+   }
+   else
    {
-      immt_rec += SPATIE_1;                              // char number 97
-   } // catch
-
-
-   try
-   {
-      int num_vs_code = Integer.valueOf(myposition.vs_code);
-      if (num_vs_code >= 0 && num_vs_code <= 9)
+      try
       {
-		   immt_rec += myposition.vs_code;                // char number 98
-         Qc_18 = "1";
-      }
-      else
+         int num_Ds_code = Integer.valueOf(myposition.Ds_code);
+         if (num_Ds_code >= 0 && num_Ds_code <= 9)
+         {
+		      immt_rec += myposition.Ds_code;             // char number 97
+            Qc_17 = "1";
+         }
+         else
+         {
+            immt_rec += SPATIE_1;                       // char number 97
+         }
+      } // try
+      catch (NumberFormatException e)
       {
-         immt_rec += SPATIE_1;                           // char number 98
-      }
-   } // try
-   catch (NumberFormatException e)
-   {
-      immt_rec += SPATIE_1;                              // char number 98
-   } // catch
+         immt_rec += SPATIE_1;                          // char number 97
+      } // catch
+   } // else
 
+   
+   if (main.obs_format.equals(main.FORMAT_101))
+   {
+      // vs in IMMT defined as 3 hours period; in format101 it is defined as 10 minutes period so vs cannot be put in IMMT
+      immt_rec += SPATIE_1;                             // char number 97
+   }
+   else
+   {
+      try
+      {
+         int num_vs_code = Integer.valueOf(myposition.vs_code);
+         if (num_vs_code >= 0 && num_vs_code <= 9)
+         {
+	   	   immt_rec += myposition.vs_code;             // char number 98
+            Qc_18 = "1";
+         }
+         else
+         {
+            immt_rec += SPATIE_1;                       // char number 98
+         }
+      } // try
+      catch (NumberFormatException e)
+      {
+         immt_rec += SPATIE_1;                          // char number 98
+      } // catch
+   } // else
+
+   
    try
    {
       int num_Dw2 = Integer.valueOf(mywaves.Dw2_code);
@@ -17373,9 +18686,11 @@ public static void IMMT_log()
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/
-   //private void schrijven_IMMT_log(final String immt_rec)
    private static void schrijven_IMMT_log(final String immt_rec)        
    {
+      // called from: IMMT_log() [main.java]
+      
+      
       /* NB input/output in a GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
       boolean doorgaan = true;
@@ -17391,15 +18706,19 @@ public static void IMMT_log()
 
       if (doorgaan == true)
       {
-         new SwingWorker<Void, Void>()
+         new SwingWorker<Integer, Void>()        
          {
             @Override
-            protected Void doInBackground() throws Exception
+            protected Integer doInBackground() throws Exception        
             {
+               Integer return_code          = -1;   // initialisation
+               
+               boolean huidige_rec_ok = true;
                String datum_tijd_positie_last_record = "";
                String datum_tijd_positie_huidige_record = "";
 
-               /* preventing observation will be stored twice or more times */
+               // preventing observation will be stored twice or more times and present record is ok
+               //
                if (last_record.length() >= 19)
                {
                   datum_tijd_positie_last_record = last_record.substring(1, 19);
@@ -17408,9 +18727,29 @@ public static void IMMT_log()
                if (immt_rec.length() >= 19)
                {
                   datum_tijd_positie_huidige_record = immt_rec.substring(1, 19);
+                  
+                  // basic test on year in present IMMT record
+                  String str_year = datum_tijd_positie_huidige_record.substring(1,5);   // eg 32019101002745900210    351040200    0000        009310  etc. 
+                  try
+                  {   
+                     int int_year = Integer.parseInt(str_year);
+                     if (int_year >= 2000 && int_year <= 2099)
+                     {
+                        huidige_rec_ok = true;
+                     }
+                  }
+                  catch (NumberFormatException e)
+                  {
+                     huidige_rec_ok = false;
+                  }
+               }
+               else
+               {
+                  // To prevent records without date time and position will be stored
+                  huidige_rec_ok = false;
                }
 
-               if (datum_tijd_positie_last_record.compareTo(datum_tijd_positie_huidige_record) != 0)
+               if ((datum_tijd_positie_last_record.compareTo(datum_tijd_positie_huidige_record) != 0) && (huidige_rec_ok == true))
                {
                   String volledig_path = main.logs_dir + java.io.File.separator + IMMT_LOG;
 
@@ -17421,19 +18760,80 @@ public static void IMMT_log()
                      out.write(immt_rec);
                      out.newLine();   // newLine(): write a line separator. The line separator string is defined by the system property line.separator, and is not necessarily a single newline ('\n') character.
            
+                     return_code = 0;               // OK
+                     
                      out.close();
 
                   } // try
                   catch (Exception e)
                   {
-                     JOptionPane.showMessageDialog(null, "unable to write to: " + volledig_path, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                     //JOptionPane.showMessageDialog(null, "unable to write to: " + volledig_path, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                     return_code = 1;          // writing error
                   } // catch
                }
+               else
+               {
+                  return_code = 2;              // double record
+               }
 
-
-               return null;
+               return return_code;
 
             } // protected Void doInBackground() throws Exception
+            
+            @Override
+            protected void done()
+            {
+               String message = "";
+               try 
+               {
+                  Integer return_code = get();
+                  
+                  // NB so the message of return_code -1 (nothing was done) is not logged / popped-up !!
+                  
+                  if (return_code == 0)
+                  {
+                     message = "appended immt.log successfully";
+                  }
+                  else if (return_code == 1)
+                  {
+                     String volledig_path_immt = main.logs_dir + java.io.File.separator + IMMT_LOG;
+                     message = "unable to write to: " + volledig_path_immt;
+                  } // if (return_code == 1)
+                  
+                  // NB so the message of return_code 2 (double immt record) is not logged / popped-up !!
+               } 
+               catch (InterruptedException | ExecutionException ex) 
+               {
+                  message = "exception when writing immt.log (" + ex + ")";
+               }
+               
+               // log or pop-up the message
+               if (message.equals("") == false)
+               {
+                  if (APR == true)
+                  {   
+                     main.log_turbowin_system_message("[IMMT] " + message);
+                  }
+                  else if (AWSR == true)
+                  {   
+                     main.log_turbowin_system_message("[IMMT] " + message);
+                  }
+                  else // manual (no APR and no AWSR)
+                  {
+                     if (message.contains ("successfully"))
+                     {
+                        // NB successfully written immt records only to log and not in pop-up message even in manual mode
+                        main.log_turbowin_system_message("[IMMT] " + message);
+                     }
+                     else
+                     {
+                        JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                     }
+                  }                  
+                  
+               } // if (message.equals("") == false)
+            } // protected void done()    
+            
          }.execute(); // new SwingWorker<Void, Void>()
       } // if (doorgaan == true)
    }
@@ -18095,9 +19495,401 @@ private void Output_obs_to_file_format_101()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+public static void Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(boolean manual_send)
+{
+   // NB manual_send = true/false   (called by a manual email send [Output Obs by Email) or part of AP[&T]R / AWSR)
+   //
+   // NB This function called by: - Output_obs_by_email_all() [main.java]                       // note: in this function format101 obs and FM13 obs were already made!
+   //                             - RS232_Output_obs_by_email_all_APR() [main_RS232_RS422.java] // note: in this function format101 obs and FM13 obs were already made!
+   
+   
+   new SwingWorker<Integer, Void>()
+   {
+      
+      // /***************** TEST BEGIN *********/
+            
+      //:: GMAIL_TLS (with app password)
+      //::.\dist\email_tbw.exe "GMAIL_TLS" "smtp.gmail.com" "xxxineinjletryoohdq" "martin.stam@home.nl" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with app password" "This is an obs test body line"  
+      //      String smtp_mode = "GMAIL_TLS";
+      //      String smtp_host_local = "smtp.gmail.com";
+      //      String smtp_password_local = "xxxineinjletryoohdq";
+      //      String send_to = obs_email_recipient;                    //"martin.stam@home.nl,martin.stam@knmi.nl";
+      //      String send_from = "turbowin.observations@gmail.com";
+      //      String email_subject = obs_email_subject;                //"dit is een test2 via GMAIL_TLS with app password";
+      //      String email_body = "This is an obs test body line";
+      
+      // /***************** TEST END **********/
+      
+      
+      @Override
+      protected Integer doInBackground() throws Exception        
+      {
+         //
+         ///////////////////////// PREPARE EMAIL PARAMETERS //////////////////////
+         //
+         
+         // initialisation
+         String smtp_mode           = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script
+         String smtp_host_local     = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script
+         String smtp_password_local = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script
+         String send_to             = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script
+         String send_from           = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script                                 
+         String email_subject       = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script
+         String email_body          = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script   
+         String send_cc             = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script 
+         String smtp_port_local     = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script 
+         String attachment          = "null";   // NB do not insert "" here because this will be considerd as a 'none' argument for the python script 
+         
+         ///////////////////////// EMAIL VIA SMTP HOST //////////////////////
+         if ( (manual_send == true && email_send_mode.equals(EMAIL_SEND_LOCAL_HOST)) || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_SMTP_HOST)) )
+         {
+            smtp_mode           = SMTP_HOST_SHIP;                         // 
+            smtp_host_local     = local_email_server;                     // eg "smtp.ziggo.nl";
+            //smtp_password_local = "null";
+            send_to             = obs_email_recipient;                    // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+            send_from           = your_ship_address;
+            email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"                       
+            email_body          = "null";                                 // see below
+            attachment          = "null";                                 // FM13 never in body; format101 only if indicated by the user
+            
+            if (obs_email_cc.length() > 3)                                // now we are sure it is a valid email address
+            {
+               send_cc = obs_email_cc;
+            }
+            else
+            {
+               send_cc = "null";
+            }
+            
+            if (smtp_host_password.length() > 3)
+            {
+               smtp_password_local = smtp_host_password;
+               smtp_port_local     = smtp_host_port;                      // port only used if password was also available/inserted
+            }
+            else
+            {
+               smtp_password_local = "null";
+               smtp_port_local     = "null";
+            }  
+            
+            if (obs_format.equals(FORMAT_101))
+            {
+               if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
+               {
+                  attachment = "yes";
+               }
+            }
+         } // if (email_send_mode.equals(EMAIL_SEND_LOCAL_HOST))
+         
+         
+         ///////////////////////// EMAIL VIA GMAIL //////////////////////
+         else if ( (manual_send == true && email_send_mode.equals(EMAIL_SEND_GMAIL)) || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_GMAIL)) )
+         {
+            smtp_mode           = gmail_security;                         // eg GMAIL_TLS";
+            smtp_host_local     = "smtp.gmail.com";                       
+            smtp_password_local = gmail_app_password;
+            send_to             = obs_email_recipient;                    // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+            send_from           = your_gmail_address;
+            email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"                     
+            email_body          = "null";                                 // see below
+            smtp_port_local     = "null";                                 // port not used
+            attachment          = "null";                                 // FM13 never in body; format101 only if indicated by the user
+            
+            if (obs_email_cc.length() > 3)
+            {
+               send_cc = obs_email_cc;
+            }
+            else
+            {
+               send_cc = "null";
+            }
+            
+            if (obs_format.equals(FORMAT_101))
+            {
+               if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
+               {
+                  attachment = "yes";
+               }
+            }
+         } // if (email_send_mode.equals(EMAIL_SEND_GMAIL))
+         
+         
+         ///////////////////////// EMAIL VIA YAHOO //////////////////////
+         else if ( (manual_send == true && email_send_mode.equals(EMAIL_SEND_YAHOO)) || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL)) )
+         {
+            smtp_mode           = yahoo_security;                         // eg YAHOO_TLS";
+            smtp_host_local     = "smtp.mail.yahoo.com";                       
+            smtp_password_local = yahoo_app_password;
+            send_to             = obs_email_recipient;                    // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+            send_from           = your_yahoo_address;
+            email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"                     
+            email_body          = "null";                                 // see below
+            smtp_port_local     = "null";                                 // port not used
+            attachment          = "null";                                 // FM13 never in body; format101 only if indicated by the user
+            
+            if (obs_email_cc.length() > 3)
+            {
+               send_cc = obs_email_cc;
+            }
+            else
+            {
+               send_cc = "null";
+            }
+            
+            if (obs_format.equals(FORMAT_101))
+            {
+               if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
+               {
+                  attachment = "yes";
+               }
+            }
+         } // if (email_send_mode.equals(EMAIL_SEND_YAHOO)) 
+         
+         
+         //
+         ///////////////////////// PREPARE OBS (format101 or FM13) //////////////////////
+         //
+         int python_email_status = 0;
+         boolean doorgaan = true;
+         
+         if ( (manual_send == true && (email_send_mode.equals(EMAIL_SEND_LOCAL_HOST) || email_send_mode.equals(EMAIL_SEND_GMAIL) || email_send_mode.equals(EMAIL_SEND_YAHOO))) ||
+              (manual_send == false && (APTR_AWSR_send_method.equals(APTR_AWSR_SMTP_HOST) || APTR_AWSR_send_method.equals(APTR_AWSR_GMAIL) || APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL))) )  
+         {
+            if (obs_format.equals(FORMAT_101))
+            {
+               // NB format 101 message was already prepared in function: Output_obs_by_email_all() [main.java]
+               //
+               if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
+               {
+                  email_body = "see attachment";
+               }
+               else
+               {   
+                  // read the compressed obs (format 101) which is the only line in file HPK_format_101.txt
+                  email_body = get_format_101_obs_from_file();
+                  if (email_body.equals("") == true)                // no format101 message found
+                  {
+                     doorgaan = false;
+                  }
+               } // else
+            } // if (obs_format.equals(FORMAT_101))
+      
+            if (obs_format.equals(FORMAT_FM13))
+            {
+               // if ddmmyyyy in subject field -> replace by actual utc date of observation 
+               //String obs_email_subject_new = obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
+               //obs_email_subject = obs_email_subject_new;
+               
+               if (obs_email_subject.contains("ddhhmm"))
+               {
+                  email_subject = obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
+               }
+               
+               
+               email_body = obs_write;
+               if (email_body.equals("") == true)
+               {
+                  doorgaan = false;
+               }
+            } // if (obs_format.equals(FORMAT_FM13))
+      
+            if (!doorgaan)
+            {
+               python_email_status = 1001;        // empty obs
+            }
+         } // if (email_send_mode.equals(EMAIL_SEND_LOCAL_HOST) || email_send_mode.equals(EMAIL_SEND_GMAIL) || email_send_mode.equals(EMAIL_SEND_YAHOO) etc.
+         else
+         {
+            python_email_status = 1002;          // invalid email_send_mode
+            doorgaan = false;
+         }
+          
+         
+         //
+         ///////////////////////// INVOKE PYTHON EMAIL MODULE //////////////////////
+         //
+         if (doorgaan) // so no empty obs and send mode = ok
+         {
+            String info_cc         = "";                  // only for logging       
+            String info_port       = "";                  // only for logging      
+            String info_attachment = "";                  // only for logging    
+            
+            if (send_cc.equals("null"))    // no cc
+            {
+               //main.log_turbowin_system_message("[EMAIL] trying to send obs (" + email_body + ") to " + send_to + " from " + send_from + " via " + smtp_mode);
+               info_cc = "none";
+            }
+            else // send also to the cc
+            {
+               //main.log_turbowin_system_message("[EMAIL] trying to send obs (" + email_body + ") to " + send_to + " cc " + send_cc + " from " + send_from + " via " + smtp_mode);
+               info_cc = send_cc;
+            }
+            
+            if (smtp_port_local.equals("null"))
+            {
+               info_port = "system defined";
+            }
+            else
+            {
+               info_port = smtp_port_local;
+            }
+            
+            if (attachment.equals("null"))
+            {
+               info_attachment = "none";
+            }
+            else
+            {
+               info_attachment = "yes";
+            }
+            
+            //main.log_turbowin_system_message(info);
+            main.log_turbowin_system_message("[EMAIL] trying to send obs (body= " + "\"" + email_body + "\"" + ") to " + send_to + " cc " + info_cc + " from " + send_from + " via " + smtp_mode + " port " + info_port + " attachment " + info_attachment);
+            
+            
+            if (python_email_class == null)
+            {                                
+               python_email_class = new Python_Email();
+            }
+
+            boolean python_email_found_ok = false;
+            python_email_found_ok = python_email_class.python_email_control_center();         
+         
+            if (python_email_found_ok) // 'python email exe' copied sucessfully (this time or already in the past) from jar to destination or was already present
+            {  
+               String smtp_password_local_plain = "";
+               if (smtp_password_local.equals("null") == false)
+               {
+                  // NB smtp_password_local = encrypted -> decrypt it before passing it to the python email module
+                  smtp_password_local_plain = myemailsettings.decrypt(smtp_password_local);   
+               }
+               else
+               {
+                  // NB so a null value was not encrypted so do also not decrypt (mode: EMAIL_SEND_LOCAL_HOST)
+                  smtp_password_local_plain = "null";
+               }
+               
+               // invoke the (python)email exe
+               int exit_status = python_email_class.send_python_email(smtp_mode, smtp_host_local, smtp_password_local_plain, send_to, send_from, email_subject, email_body, send_cc, smtp_port_local, attachment);
+               
+               // convert the numerical return status to text line return status + write to system log
+               String exit_status_text = python_email_class.python_email_exe_return_status_to_text(exit_status);
+               main.log_turbowin_system_message("[EMAIL] " + exit_status_text);
+            
+               python_email_status = exit_status;
+            }
+            else // python module not found / copy-error
+            {
+               python_email_status = 1000;  // python module not found / copy-error
+            }
+         } //  if (doorgaan)
+         
+         
+         return python_email_status;
+
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try 
+         {
+            int python_email_status = get();
+            
+            if (python_email_status == 0)            // OK
+            {  
+               IMMT_log();
+               Reset_all_meteo_parameters();
+               
+               // NB also already written 'success' to system log
+               
+               if (manual_send == true)
+               {
+                  String info = "sent obs successfully";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+               }
+            } 
+            else if (python_email_status == 1000) // copy failure or python email exe not find
+            {
+               IMMT_log();
+               Reset_all_meteo_parameters();
+               
+               // NB already written the cause of the failure to the system log (and ../logs/python/log_python_email.txt) (see copy_python_email_module() [Python_Email.java])
+               
+               if (manual_send == true)
+               {
+                  String info = "error invoking email module (copy-error from jar to destination) (check Info -> System log)";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               }
+            }
+            else if (python_email_status == 1001)        // empty obs
+            {
+               Reset_all_meteo_parameters();
+               // NB because empty obs, do not write to IMMT log
+               
+               String info = "send obs failed (observation contains no data due to an internal error)";
+               main.log_turbowin_system_message("[EMAIL] " + info);
+               
+               if (manual_send == true)
+               {   
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE); 
+               }
+            }
+            else if (python_email_status == 1002)        // invalid send mode
+            {
+               IMMT_log();
+               Reset_all_meteo_parameters();
+               
+               String info = "send obs failed (invalid manual or AP[T]R/AWSR email send mode)";
+               main.log_turbowin_system_message("[EMAIL] " + info);
+               
+               if (manual_send == true)
+               {   
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE); 
+               }
+            }
+            else // failed to send
+            {
+               IMMT_log();
+               Reset_all_meteo_parameters();
+               
+               // NB already written the cause of the failure to the system log (see doInBackground())
+               
+               if (manual_send == true)
+               {   
+                  String info = "send obs failed (see Info -> System log)";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               }
+            }
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         {
+            main.log_turbowin_system_message("[EMAIL] error invoking email module (" + ex + ")");
+            
+            if (manual_send == true)
+            {
+               String info = "send obs failed (check Info -> System log)";
+               System.out.println(info);
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            }
+         } // catch
+         
+      } // protected void done()
+
+   }.execute(); // new SwingWorker<Void, Void>()
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
 private void Output_obs_by_email_FM13()
 {
-   // This function called by: Output_obs_by_email_actionPerformed()
+   // This function called by: Output_obs_by_email_all()
 
    new SwingWorker<Void, Void>()
    {
@@ -18130,7 +19922,19 @@ private void Output_obs_by_email_FM13()
          
                String obs_email_subject_new = obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
 
-               String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + obs_write;
+               //String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + obs_write;
+               String mail_txt = "";
+               if (obs_email_cc.length() > 3)
+               {
+                  // NB after the email address you'll use a question mark to prefix the first variable, and ampersands ( & ) for each consecutive variable. (https://developer.yoast.com/guide-mailto-links/)
+                  mail_txt = obs_email_recipient + "?cc=" + obs_email_cc + "&subject=" + obs_email_subject_new  + "&body=" + obs_write;
+               }   
+               else
+               {
+                  mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + obs_write;
+               }
+               
+               
                URI uriMailTo = null;
                try
                {
@@ -18184,8 +19988,19 @@ private void Output_obs_by_email_FM13()
             // NB Use %0A for carriage returns, %20 for spaces [see "urlEncode(obs_write)"]
             // if ddmmyyyy in subject field -> replace by actual utc date of observation 
             String obs_email_subject_new = urlEncode(obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00"));
-            String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + urlEncode(obs_write);
-            
+        
+            //String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + urlEncode(obs_write);
+            String mail_txt = "";
+            if (obs_email_cc.length() > 3)
+            {
+               // NB after the email address you'll use a question mark to prefix the first variable, and ampersands ( & ) for each consecutive variable. (https://developer.yoast.com/guide-mailto-links/)
+               mail_txt = obs_email_recipient + "?cc" + obs_email_cc + "&subject=" + obs_email_subject_new  + "&body=" + urlEncode(obs_write);
+            }   
+            else
+            {
+               mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + urlEncode(obs_write);
+            }
+               
             //if (amos_mail) // DO NOT USE %0A for carriage returns and %20 for spaces [so NOT "urlEncode(obs_write)"] NB DIDN'T WORK EITHER SO FROM THIS VERSION NO PARTICULAR CODE FOR AMOS MAIL
             if (os.equals("WINDOWS"))   
             {
@@ -18277,7 +20092,6 @@ private static String urlEncode(String s)
 
 
 
-
 /***********************************************************************************************/
 /*                                                                                             */
 /*                                                                                             */
@@ -18285,7 +20099,7 @@ private static String urlEncode(String s)
 /***********************************************************************************************/
 private void Output_obs_by_email_format_101()
 {
-   // This function called by: Output_obs_by_email_actionPerformed()
+   // This function called by: Output_obs_by_email_all()
    
 
    new SwingWorker<Void, Void>()
@@ -18358,7 +20172,19 @@ private void Output_obs_by_email_format_101()
                   /* if ddmmyyyy in subject field -> replace by actual utc date of observation */
                   String obs_email_subject_new = obs_email_subject.replaceAll("ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
                   
-                  String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + email_body_line;
+                  //String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + email_body_line;
+                  String mail_txt = "";
+                  if (obs_email_cc.length() > 3)
+                  {
+                     // NB after the email address you'll use a question mark to prefix the first variable, and ampersands ( & ) for each consecutive variable. (https://developer.yoast.com/guide-mailto-links/)
+                     mail_txt = obs_email_recipient + "?cc=" + obs_email_cc + "&subject=" + obs_email_subject_new  + "&body=" + email_body_line;        
+                  }
+                  else
+                  {
+                     mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body=" + email_body_line;
+                  }
+                  
+                  
                   URI uriMailTo = null;
                   try
                   {
@@ -18403,7 +20229,7 @@ private void Output_obs_by_email_format_101()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-private String get_format_101_obs_from_file()
+private static String get_format_101_obs_from_file()
 {
    String format_101_obs = "";
    
@@ -18440,8 +20266,10 @@ private String get_format_101_obs_from_file()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-private void Output_obs_to_server_FM13()
+private void Output_obs_to_server_FM13_TurboWeb()
 {
+   // NB only for TurboWeb because then the upload URL (url_basis) is known by default
+   
    new SwingWorker<Void, Void>()
    {
       @Override
@@ -18496,11 +20324,211 @@ private void Output_obs_to_server_FM13()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
+private void Output_obs_to_server_FM13_TurboWin_stand_alone()
+{
+   // NB there is also a TurboWeb version [Output_obs_to_server_FM13_TurboWeb()]
+   
+   // http://stackoverflow.com/questions/2793150/using-java-net-urlconnection-to-fire-and-handle-http-requests
+   //
+   // NB see also: RS232_Send_Sensor_Data_to_APR_format101_Server() [main_RS232_RS422.java]
+   
+   // called from: Output_Obs_to_server_menu_actionPerformed() [main.java]
+   
+   
+   new SwingWorker<Integer, Void>()
+   {
+      @Override
+      protected Integer doInBackground() throws Exception
+      {
+         Integer responseCode = main.OK_RESPONSE_FORMAT_FM13;            // OK 
+         
+         // compose coded obs [obs_write = FM13 obs !!!]
+         // NB already done in Output_Obs_to_server_menu_actionPerformed()
+         // String SPATIE = main.SPATIE_OBS_SERVER;                                   // use "_" as marker between obs groeps
+         // main.obs_write = main.compose_coded_obs(SPATIE);                          // returns UNDEFINED if call sign, position or date/time not inserted
+
+         if ( (main.obs_write.equals("") == true) || (main.obs_write.equals(main.UNDEFINED) == true) )
+         {
+            responseCode = main.INVALID_RESPONSE_FORMAT_FM13;        
+         }
+         
+         
+         if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_FM13))   
+         {   
+            // NB encoding not necessary for FM13, but if necessary in the future see the comments below
+            
+            // NB encoding:
+            // Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. This method uses the supplied encoding scheme to obtain 
+            // the bytes for unsafe characters.
+            // Note: The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may introduce incompatibilites.
+            // 
+            // http://stackoverflow.com/questions/10786042/java-url-encoding-of-query-string-parameters:
+            // You only need to keep in mind to encode only the individual query string parameter name and/or value, not the entire URL, 
+            // for sure not the query string parameter separator character & nor the parameter name-value separator character =.
+            // String q = "random word £500 bank $";
+            // String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+            //
+            // Encode all 'not alloud' ASCII chars if not java.net.URISyntaxException (with index number in the URL string)
+            //String encoded_server_format_101_obs = URLEncoder.encode(server_format_101_line, "UTF-8");               
+               
+            ////String url = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" + encoded_server_format_101_obs; 
+            //String url = upload_URL + "obs=" + encoded_server_format_101_obs;       // eg upload U?rL = http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?
+            String url = upload_URL + "obs=" + main.obs_write;   
+            
+            URL obj = null;
+            try 
+            {
+               obj = new URL(url);
+               HttpURLConnection con = (HttpURLConnection)obj.openConnection();
+            
+               // optional (default is GET)
+	            con.setRequestMethod("GET");  
+               //con.setDoOutput(true);        //  To be clear: setting URLConnection#setDoOutput(true) to true implicitly sets the request method to POST
+                  
+               String message = "[MANUAL] sending 'GET' request to URL: " + url;
+               main.log_turbowin_system_message(message);
+     
+               responseCode = con.getResponseCode();
+      
+               // NB besides the response code there is also a corresponding response text, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned?. Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               //
+                     
+                     
+            } // try
+            catch (MalformedURLException ex)
+            {
+               //String message = "[MANUAL] send obs failed; MalformedURLException (function: Output_obs_to_server_format_101())"; 
+               //main.log_turbowin_system_message(message);
+               //main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+               
+               responseCode = RESPONSE_MALFORMED_URL;
+            }
+            catch (IOException ex) 
+            {
+               //String message = "[MANUAL] send obs failed; IOException; most probably no internet connection available; (function: Output_obs_to_server_format_101())"; 
+               //main.log_turbowin_system_message(message);
+               //main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+               
+               responseCode = RESPONSE_NO_INTERNET;
+            } // catch            
+            
+         } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_101))
+         
+         
+         return responseCode;
+
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try 
+         {
+            Integer response_code = get();
+            
+            if (response_code == 200)          // OK
+            {
+               String message_a = "[MANUAL] send obs success"; 
+                  
+               // file logging
+               main.log_turbowin_system_message(message_a);
+                  
+               // bottom line main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+               
+               // pop-up message in manual mode
+               String info = "<html>" + 
+                             main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs success" + "<br>" +
+                             "Many thanks for your cooperation" + 
+                             "</html>";
+               JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+               
+               IMMT_log();
+               Reset_all_meteo_parameters();
+            }
+            else // send obs NOT ok
+            {
+               // NB besides the response code there is also a corresponding response text (from the apache server, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned (from the apache server)?. 
+               //    Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               //
+               String message_b = "[MANUAL] send obs failed; " + http_respons_code_to_text(response_code).replace("<br>", " ");
+                  
+               // file logging
+               main.log_turbowin_system_message(message_b);
+                  
+               // bottom main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+               
+               // pop-up message in manual mode
+               String info = "<html>" + 
+                             main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
+                             http_respons_code_to_text(response_code) + 
+                             "</html>";
+               JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            
+               // "try again?" pop-up message
+               if (JOptionPane.showConfirmDialog(null, "try again (Obs to server)", APPLICATION_NAME + " ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+               {
+                  // YES button pressed (= try again)
+                  Output_obs_to_server_FM13_TurboWin_stand_alone();
+               }
+               else // NO or CANCEL clicked by the user
+               {
+                  IMMT_log();
+                  Reset_all_meteo_parameters();
+               }   
+            } // else (send obs NOT ok)
+         } // protected void done()
+         catch (InterruptedException | ExecutionException ex) 
+         {
+            String message = "[MANUAL] error in Function: Output_obs_to_server_FM13_TurboWin_stand_alone();" + ex.toString(); 
+            
+            // fille logging 
+            main.log_turbowin_system_message(message);
+            
+            // bottom main screen
+            main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+            
+            // pop-up message in manual mode
+            String info = "<html>" + 
+                          main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
+                          http_respons_code_to_text(RESPONSE_INTERRUPTION) + 
+                          "</html>";
+            JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+            
+            // "try again?" pop-up message
+            if (JOptionPane.showConfirmDialog(null, "try again (Obs to server)", APPLICATION_NAME + " ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+            {
+               // YES button pressed (= try again)
+               Output_obs_to_server_FM13_TurboWin_stand_alone();
+            }
+            else // NO or CANCEL clicked by the user
+            {
+               IMMT_log();
+               Reset_all_meteo_parameters();
+            }   
+         } // catch (InterruptedException | ExecutionException ex) 
+      } // protected void done()
+   }.execute(); // new SwingWorker<Void, Void>()
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
 private void Output_obs_to_server_format_101()
 {
    // http://stackoverflow.com/questions/2793150/using-java-net-urlconnection-to-fire-and-handle-http-requests
    //
-   // NB see also: RS232_Send_Sensor_Data_to_APR() [main_RS232_RS422.java]
+   // NB see also: RS232_Send_Sensor_Data_to_APR_format101_Server() [main_RS232_RS422.java]
    
    // called from: Output_Obs_to_server_menu_actionPerformed() [main.java]
    
@@ -18790,8 +20818,8 @@ private void Output_obs_to_server_format_101()
 public static String http_respons_code_to_text(int responseCode)
 {
    // called from:
-   //  - RS232_Send_Sensor_Data_to_APR() [main_RS232_RS422.java]
-   // 
+   //     - RS232_Send_Sensor_Data_to_APR_format101_Server() [main_RS232_RS422.java]
+   //     - RS232_Send_Sensor_Data_to_APR_FM13_Server [main_RS232_RS422.java]
    
    
    String text = "Unknown error";          
@@ -18854,18 +20882,20 @@ public static String http_respons_code_to_text(int responseCode)
       // 7xx: TurboWin+/server Error (custom/sef defined errors) [2 sections] 
       //// start first self defined section (must be coordinated with server [index_webstart_101.php]) //////   
       case 700: text = "obs invalid format"; break;                                                                       // self defined
-      case 701: text = "(masked)call sign in the obs not on the email whitelist of this server." + "<br>" +               // self defined
-                       "Please send an email with your (masked)call sign to your PMO or National Meteorological Service"; break;
+      case 701: text = "station ID or call sign in the obs not on the email whitelist of this server." + "<br>" +         // self defined
+                       "Please send an email with your station ID and call sign to the addressee National Meteorological Service"; break;
       case 702: text = "obs routing from server to Meteorological Centre failed"; break;                                  // self defined
        //// end first self defined section ////// 
          
-      //// start second self defined section (no coordination with server [index_webstart_101.php]) //////      
+      //// start second self defined section (no coordination with server [index_webstart_101.php or index_webstart_fm13.php]) //////      
       case 710: text = "internal error when generating format 101 obs"; break;                                            // self defined 
-      case 711: text = "most probably no internet connection available or firewall/scanner is blocking"; break;                                           // self defined (actually IOexception)
+      case 711: text = "most probably no internet connection available or firewall/scanner is blocking"; break;           // self defined (actually IOexception)
       case 712: text = "internal error, malformed URL"; break;                                                            // self defined
       case 713: text = "most probably no internet connection available (format 101 obs ok)"; break;                       // self defined
       case 714: text = "InterruptedException or ExecutionException"; break;                                               // self defined
       case 715: text = "Unsupported UTF-8 encoding"; break;                                                               // self defined 
+      case 716: text = "most probably no internet connection available (FM13 obs ok)"; break;                             // self defined
+      case 717: text = "internal error when generating FM13 obs"; break;                                                  // self defined 
       //// end second self defined section //////         
          
       // default   
@@ -19120,6 +21150,9 @@ private boolean Check_Land_Sea_Mask()
 /***********************************************************************************************/
 public static void Reset_all_meteo_parameters()        
 {
+   System.out.println("--- " + "Resetting all meteo parameters and clearing all fields main screen");
+   
+   
    // global var's
    //
    
@@ -19281,10 +21314,12 @@ public static void Reset_all_meteo_parameters()
    myposition.Qc_code                            = "";         
    myposition.Ds_code                            = "";
    myposition.vs_code                            = "";
-   myposition.int_latitude_degrees               = INVALID;    // also used for position sequence check and cloud height advice computation
-   myposition.int_latitude_minutes               = INVALID;    // also used for position sequence check
-   myposition.int_longitude_degrees              = INVALID;    // also used for position sequence check and cloud height advice computation
-   myposition.int_longitude_minutes              = INVALID;    // also used for position sequence check
+   myposition.int_latitude_degrees               = INVALID;          // also used for position sequence check and cloud height advice computation
+   myposition.int_latitude_minutes               = INVALID;          // also used for position sequence check
+   myposition.int_longitude_degrees              = INVALID;          // also used for position sequence check and cloud height advice computation
+   myposition.int_longitude_minutes              = INVALID;          // also used for position sequence check
+   myposition.SOG_APR                            = Double.MAX_VALUE; // exclusively used for APR + format101
+   myposition.COG_APR                            = Double.MAX_VALUE; // exclusively used for APR + format101
    
    // date time
    mydatetime.year                               = "";                           
@@ -19442,13 +21477,26 @@ public static void log_turbowin_system_message(final String message)
    */
    public static void main(String args[])        
    {
+      // displays each of its command-line arguments on a line by itself:
+      for (int i = 0; i < args.length; i++) 
+      {
+        System.out.println("--- Argument " + i + ": " + args[i]);
+        if (i == 0)
+        {
+           PORT_command_line = args[0];
+        }
+      } // for (int i = 0; i < args.length; i++) 
+      
+      
       java.awt.EventQueue.invokeLater(new Runnable() 
       {
          @Override
          public void run() 
          {
-            //new main().setVisible(true);
+            // Set opacity of a decorated JFrame in Java >= 8
+            // see: https://stackoverflow.com/questions/39538731/set-opacity-of-a-decorated-jframe-in-java-8/45740640
             
+            //new main().setVisible(true);
             // nb below insteadof new main().setVisible(true); because now there is a reference to the main class (which is used in hybrid and wind radar dashboards)
             mainClass = new main(); 
             mainClass.setVisible(true);
@@ -19478,6 +21526,8 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JButton jButton7;
    private javax.swing.JButton jButton8;
    private javax.swing.JButton jButton9;
+   public static javax.swing.JCheckBox jCheckBox1;
+   public static javax.swing.JCheckBox jCheckBox2;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel10;
    private javax.swing.JLabel jLabel11;
@@ -19510,13 +21560,13 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JLabel jLabel36;
    private javax.swing.JLabel jLabel37;
    private javax.swing.JLabel jLabel38;
-   private javax.swing.JLabel jLabel39;
+   public static javax.swing.JLabel jLabel39;
    public static javax.swing.JLabel jLabel4;
    private javax.swing.JLabel jLabel40;
+   public static javax.swing.JLabel jLabel41;
    private javax.swing.JLabel jLabel5;
    public static javax.swing.JLabel jLabel6;
    private javax.swing.JLabel jLabel7;
-   private javax.swing.JLabel jLabel8;
    private javax.swing.JLabel jLabel9;
    private javax.swing.JMenu jMenu1;
    private javax.swing.JMenu jMenu10;
@@ -19541,11 +21591,11 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem18;
    private javax.swing.JMenuItem jMenuItem19;
    private javax.swing.JMenuItem jMenuItem2;
-   private javax.swing.JMenuItem jMenuItem20;
+   public static javax.swing.JMenuItem jMenuItem20;
    private javax.swing.JMenuItem jMenuItem21;
    private javax.swing.JMenuItem jMenuItem22;
-   private javax.swing.JMenuItem jMenuItem23;
-   private javax.swing.JMenuItem jMenuItem24;
+   public static javax.swing.JMenuItem jMenuItem23;
+   public static javax.swing.JMenuItem jMenuItem24;
    private javax.swing.JMenuItem jMenuItem25;
    private javax.swing.JMenuItem jMenuItem26;
    private javax.swing.JMenuItem jMenuItem27;
@@ -19571,7 +21621,7 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem45;
    public static javax.swing.JMenuItem jMenuItem46;
    private javax.swing.JMenuItem jMenuItem47;
-   private javax.swing.JMenuItem jMenuItem48;
+   public static javax.swing.JMenuItem jMenuItem48;
    private javax.swing.JMenuItem jMenuItem49;
    private javax.swing.JMenuItem jMenuItem5;
    private javax.swing.JMenuItem jMenuItem50;
@@ -19598,6 +21648,11 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JMenuItem jMenuItem7;
    private javax.swing.JMenuItem jMenuItem70;
    private javax.swing.JMenuItem jMenuItem71;
+   public static javax.swing.JMenuItem jMenuItem72;
+   public static javax.swing.JMenuItem jMenuItem73;
+   public static javax.swing.JMenuItem jMenuItem74;
+   private javax.swing.JMenuItem jMenuItem75;
+   private javax.swing.JMenuItem jMenuItem76;
    private javax.swing.JMenuItem jMenuItem8;
    private javax.swing.JMenuItem jMenuItem9;
    private javax.swing.JPanel jPanel1;
@@ -19606,6 +21661,10 @@ public static void log_turbowin_system_message(final String message)
    private javax.swing.JPanel jPanel4;
    private javax.swing.JPanel jPanel5;
    private javax.swing.JSeparator jSeparator1;
+   private javax.swing.JSeparator jSeparator10;
+   private javax.swing.JToolBar.Separator jSeparator11;
+   private javax.swing.JSeparator jSeparator12;
+   private javax.swing.JToolBar.Separator jSeparator13;
    private javax.swing.JSeparator jSeparator2;
    private javax.swing.JSeparator jSeparator3;
    private javax.swing.JSeparator jSeparator4;
@@ -19648,7 +21707,7 @@ public static void log_turbowin_system_message(final String message)
    public static javax.swing.JTextField jTextField38;
    public static javax.swing.JTextField jTextField4;
    public static javax.swing.JTextField jTextField40;
-   private static javax.swing.JTextField jTextField5;
+   public static javax.swing.JTextField jTextField5;
    private static javax.swing.JTextField jTextField7;
    private static javax.swing.JTextField jTextField9;
    private javax.swing.JToolBar jToolBar1;
@@ -19657,9 +21716,7 @@ public static void log_turbowin_system_message(final String message)
    
    
    // private constants
-   private static final String SPATIE_OBS_SERVER            = "_";//"%20";// must be replaced by receiving php program with " "this is to avoid problems by browsers handling spaces
-   private static final String SPATIE_OBS_VIEW              = " ";
-   private static final String UNDEFINED                    = "undefined";
+   public static final String SPATIE_OBS_SERVER             = "_";//"%20";// must be replaced by receiving php program with " "this is to avoid problems by browsers handling spaces
    private static final int MAX_AANTAL_JAREN_IN_IMMT        = 5;
    private static final int MAX_AANTAL_WAARNEMERS           = 20;          // zie ook OBSERVER_ROWS in myobserver.java
    private static final int IMMT_3_POSITION_OBSERVER        = 160;         // in IMMT-3 records begin position observer name
@@ -19674,8 +21731,23 @@ public static void log_turbowin_system_message(final String message)
    private final String CMD_OFFLINE_FILE                    = "turbowin_plus_offline.cmd"; // deze file zal aanwezig zijn als alleen in offline mode gewerkt wordt (wordt dan door KNMI er bij geleverd)
    private final String TURBOWIN_LAUNCHER_FILE              = "turbowin_launcher.bat";
    private final String TURBOWIN_LAUNCHER_FILE_LINUX        = "turbowin_launcher";
+   private final String EMAIL_SEND_DEFAULT                  = "email_send_default";
+   private static final String EMAIL_SEND_LOCAL_HOST        = "email_send_local_host";
+   private static final String EMAIL_SEND_GMAIL             = "email_send_gmail";
+   private static final String EMAIL_SEND_YAHOO             = "email_send_yahoo";
    
    // public constants
+   public static final String SPATIE_OBS_VIEW               = " ";
+   public static final String UNDEFINED                     = "undefined";
+   public static final String APTR_AWSR_SERVER              = "APTR_AWSR_server";          // WOW_APR_settings.java
+   public static final String APTR_AWSR_SMTP_HOST           = "APTR_AWSR_SMTP_host";       // WOW_APR_settings.java
+   public static final String APTR_AWSR_GMAIL               = "APTR_AWSR_Gmail";           // WOW_APR_settings.java
+   public static final String APTR_AWSR_YAHOO_MAIL          = "APTR_AWSR_Yahoo_Mail";      // WOW_APR_settings.java
+   public static final String SMTP_HOST_SHIP                = "SMTP_HOST_SHIP";
+   public static final String GMAIL_TLS                     = "GMAIL_TLS";
+   public static final String GMAIL_SSL                     = "GMAIL_SSL";
+   public static final String YAHOO_TLS                     = "YAHOO_TLS";
+   public static final String YAHOO_SSL                     = "YAHOO_SSL";
    public static final String LEAFLET_CSS_URL               = "  <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.3.1/dist/leaflet.css\"";
    public static final String LEAFLET_JS_URL                = "  <script src=\"https://unpkg.com/leaflet@1.3.1/dist/leaflet.js\"";
    public static final String LEAFLET_ESRI_URL              = "  <script src=\"https://unpkg.com/esri-leaflet@2.1.4/dist/esri-leaflet.js\"";
@@ -19697,6 +21769,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String OBSERVER_LOG                  = "observer.log";
    public static final String CAPTAIN_LOG                   = "captain.log";
    public static final String IMMT_LOG                      = "immt.log";
+   
    public static final String SHIP_NAME_TXT                 = "ship name          : ";   // t/m : is 20 characters
    public static final String IMO_NUMBER_TXT                = "imo number         : ";   // t/m : is 20 characters
    public static final String CALL_SIGN_TXT                 = "call sign          : ";   // t/m : is 20 characters
@@ -19723,6 +21796,12 @@ public static void log_turbowin_system_message(final String message)
    public static final String RS232_PARITY_TXT              = "RS232 parity       : ";   // t/m : is 20 characters
    public static final String RS232_STOP_BITS_TXT           = "RS232 stop bits    : ";   // t/m : is 20 characters
    public static final String RS232_PREFERED_COM_PORT_TXT   = "RS232 prefered COM : ";   // t/m : is 20 characters (Windows and Linux)
+   public static final String RS232_INSTRUMENT_TYPE_TXT_II  = "RS232 instrument_II: ";   // t/m : is 20 characters
+   public static final String RS232_BITS_PER_SEC_TXT_II     = "RS232 bps_II       : ";   // t/m : is 20 characters
+   public static final String RS232_DATA_BITS_TXT_II        = "RS232 data bits_II : ";   // t/m : is 20 characters
+   public static final String RS232_PARITY_TXT_II           = "RS232 parity_II    : ";   // t/m : is 20 characters
+   public static final String RS232_STOP_BITS_TXT_II        = "RS232 stop bits_II : ";   // t/m : is 20 characters
+   public static final String RS232_PREFERED_COM_PORT_TXT_II= "RS232 pref COM_II  : ";   // t/m : is 20 characters (Windows and Linux)
    public static final String IC_BAROMETER_TXT              = "ic barometer       : ";   // t/m : is 20 characters
    public static final String OBS_FORMAT_TXT                = "obs format         : ";   // t/m : is 20 characters
    public static final String FORMAT_101_ENCRYPTION_TXT     = "format 101 encrypt : ";   // t/m : is 20 characters
@@ -19750,12 +21829,25 @@ public static void log_turbowin_system_message(final String message)
    public static final String HEIGHT_ANEMOMETER_TXT         = "anemometer-WL      : ";   // t/m : is 20 characters
    public static final String GUI_MODE_TXT                  = "GUI mode           : ";   // t/m : is 20 characters
    public static final String GUI_LOGO_TXT                  = "GUI logo           : ";   // t/m : is 20 characters
+   public static final String OBS_EMAIL_CC_TXT              = "obs email cc       : ";   // t/m : is 20 characters
+   public static final String LOCAL_EMAIL_SERVER_TXT        = "email local host   : ";   // t/m : is 20 characters
+   public static final String YOUR_GMAIL_ADDRESS_TXT        = "your Gmail address : ";   // t/m : is 20 characters
+   public static final String GMAIL_APP_PASSWORD_TXT        = "Gmail app password : ";   // t/m : is 20 characters
+   public static final String GMAIL_SECURITY_TXT            = "Gmail security     : ";   // t/m : is 20 characters
+   public static final String YOUR_YAHOO_ADDRESS_TXT        = "your Yahoo address : ";   // t/m : is 20 characters
+   public static final String YAHOO_APP_PASSWORD_TXT        = "Yahoo app password : ";   // t/m : is 20 characters
+   public static final String YAHOO_SECURITY_TXT            = "Yahoo security     : ";   // t/m : is 20 characters
+   public static final String YOUR_SHIP_ADDRESS_TXT         = "your ship address  : ";   // t/m : is 20 characters  
+   public static final String SMTP_HOST_PASSWORD_TXT        = "smtp host password : ";   // t/m : is 20 characters
+   public static final String SMTP_HOST_PORT_TXT            = "smtp host port     : ";   // t/m : is 20 characters 
+   public static final String APTR_AWSR_SEND_METHOD_TXT     = "APTR send method   : ";   // t/m : is 20 characters    // also for AWSR
+   public static final String STATION_ID_TXT                = "station ID         : ";   // t/m : is 20 characters
    
    public static final String CONTAINER_SHIP                = "container_ship";
    public static final String BULK_CARRIER                  = "bulk_carrier";
    public static final String OIL_TANKER                    = "oil_tanker";
    public static final String LNG_TANKER                    = "LNG_tanker";
-   public static final String PASSENGER_SHIP                = "passenger_tanker";
+   public static final String PASSENGER_SHIP                = "passenger_ship";
    public static final String NEUTRAL_SHIP                  = "neutral_ship";
    public static final String GENERAL_CARGO_SHIP            = "general_cargo_ship";
    public static final String RESEARCH_VESSEL               = "research vessel";
@@ -19794,7 +21886,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String WAVES_MEASURED_OTHER          = "waves measured (other measurement system)";
    public static final String MUFFIN_LINE_SEPARATOR         = "%";                    // i.p.v. eol deze geeft problemen bij bytes -> String
    public static final String UK_OBS_EMAIL_SUBJECT          = "SXVX88 EGRR ddhhmm";
-   public static final String GENERAL_OBS_EMAIL_SUBJECT     = "weather observation";
+   //public static final String GENERAL_OBS_EMAIL_SUBJECT     = "weather observation";
    public static final String URL_TURBOWIN                  = "https://projects.knmi.nl/turbowin/";
    public static final String URL_INTERNET_HELP             = "https://projects.knmi.nl/turbowin/webstart101/help/"; // "http://projects.knmi.nl/turbowin/webstart/help/";      //"www.turbowin.knmi.nl/webstart101/help/";
    public static final String OFFLINE_HELP_DIR              = "help";                 // wordt alleeen gebruikt indien in offline_mode
@@ -19818,6 +21910,7 @@ public static void log_turbowin_system_message(final String message)
    public static final String THEME_NIMBUS_NIGHT            = "theme_nimbus_night";
    public static final String THEME_NIMBUS_SUNRISE          = "theme_nimbus_sunrise";
    public static final String THEME_NIMBUS_SUNSET           = "theme_nimbus_sunset";
+   public static final String THEME_TRANSPARENT             = "theme_transparent";
    public static final String OSM_OFFLINE_MANUAL            = "OSM_offline_manual";   // conventional VOS (APR included)
    public static final String OSM_ONLINE_MANUAL             = "OSM_online_manual";    // conventional VOS (APR included)
    public static final String OSM_ONLINE_AWS_SENSOR         = "OSM_online_AWS_sensor";
@@ -19838,10 +21931,12 @@ public static void log_turbowin_system_message(final String message)
    public static final Integer OK_RESPONSE_FORMAT_101       = 713;                    // self defined http response code 
    public static final Integer RESPONSE_INTERRUPTION        = 714;                    // self defined http response code (InterruptedException | ExecutionException)
    public static final Integer RESPONSE_UNSUPPORTED_ENCODING= 715;                    // self defined http response code 
+   public static final Integer OK_RESPONSE_FORMAT_FM13      = 716;                    // self defined http response code
+   public static final Integer INVALID_RESPONSE_FORMAT_FM13 = 717;                    // self defined http response code
    
    // public var's
    public static final String APPLICATION_NAME              = "TurboWin+";            // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION           = "3.3.0 [64-bit] (build 8-July-2019)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING
+   public static final String APPLICATION_VERSION           = "4.0.2 [64-bit] (build 1-March-2020)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING // NB wordt getest op substring "[64-bit]"
    public static final String DASHBOARD_LOGO                = "sot.png";              // analogue and digital dashboard 
    public static String application_mode                    = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                        = "";                     // AMVER
@@ -19851,6 +21946,7 @@ public static void log_turbowin_system_message(final String message)
    public static String imo_number                          = "";                     // meta data
    public static String call_sign                           = "";                     // meta data
    public static String masked_call_sign                    = "";                     // meta data
+   public static String station_ID                          = "";                     // meta data
    public static String time_zone_computer                  = "";                     // meta data
    public static String recruiting_country                  = "";                     // meta data
    public static String method_waves                        = "";                     // meta data
@@ -19868,6 +21964,18 @@ public static void log_turbowin_system_message(final String message)
    public static String obs_email_recipient                 = "";                     // meta data (myemailsettings.java)
    public static String obs_email_subject                   = "";                     // meta data (myemailsettings.java)
    public static String logs_email_recipient                = "";                     // meta data (myemailsettings.java)
+   public static String obs_email_cc                        = "";                     // meta data (myemailsettings.java)
+   public static String local_email_server                  = "";                     // meta data (myemailsettings.java)
+   public static String your_gmail_address                  = "";                     // meta data (myemailsettings.java)
+   public static String gmail_app_password                  = "";                     // meta data (myemailsettings.java) // NB = encrypted!!
+   public static String gmail_security                      = "";                     // meta data (myemailsettings.java)
+   public static String your_yahoo_address                  = "";                     // meta data (myemailsettings.java) 
+   public static String yahoo_app_password                  = "";                     // meta data (myemailsettings.java) // NB = encrypted!!
+   public static String yahoo_security                      = "";                     // meta data (myemailsettings.java)
+   public static String your_ship_address                   = "";                     // meta data (myemailsettings.java)
+   public static String smtp_host_password                  = "";                     // meta data (myemailsettings.java) // NB = encrypted!!
+   public static String smtp_host_port                      = "";                     // meta data (myemailsettings.java)
+   
    public static String barometer_instrument_correction     = "";                     // meta data (mybarometer.java)
    public static String mode                                = "";
    public static String wind_units                          = "";                     // meta data (wind units observed/measured)
@@ -19887,13 +21995,13 @@ public static void log_turbowin_system_message(final String message)
    public static String GUI_mode                              = "";                     // light/full
    public static String GUI_logo                              = "";                     // EUMETNET/NOAA/SOT logo
    
-   public static String obs_format                          = "";                     // meta data for obs format settings (e.g. FORMAT_101 or FORMAT_FM13)
-   public static String obs_101_encryption                  = "";                     // meta data for obs format settings 
-   public static String obs_101_email                       = "";                     // meta data for obs format settings 
-   public static String upload_URL                          = "";                     // meta data for server settings (used by Output -> Obs to server)
-   public static boolean amos_mail                          = false;                  // meta data (myemailsettings.java)
-   public static String newline                             = System.getProperty("line.separator");
-   public static String theme_mode                          = "";
+   public static String obs_format                            = "";                     // meta data for obs format settings (e.g. FORMAT_101 or FORMAT_FM13)
+   public static String obs_101_encryption                    = "";                     // meta data for obs format settings 
+   public static String obs_101_email                         = "";                     // meta data for obs format settings 
+   public static String upload_URL                            = "";                     // meta data for server settings (used by Output -> Obs to server)
+   public static boolean amos_mail                            = false;                  // meta data (myemailsettings.java)
+   public static String newline                               = System.getProperty("line.separator");
+   public static String theme_mode                            = "";
    public static int x_pos_frame;
    public static int y_pos_frame;
    public static int x_pos_small_frame;
@@ -19908,29 +22016,28 @@ public static void log_turbowin_system_message(final String message)
    public static int y_pos_amver_frame;
    public static int x_pos_calculator_frame;
    public static int y_pos_calculator_frame;
-   //public static int x_pos_latestmeasurements_frame;
-   //public static int y_pos_latestmeasurements_frame;
    public static int screenWidth;
    public static int screenHeight;
-   public static boolean in_next_sequence                   = false;
+   public static boolean in_next_sequence                          = false;
    public static boolean offline_mode;
    public static boolean offline_mode_via_jnlp;
    public static boolean offline_mode_via_cmd;
    public static boolean tray_icon_clicked;
-   public static boolean use_system_date_time_for_updating  = false;      // NB if you start with true then if the data/comfirmation box pop-ups and the user disagree the time is still inserted by the timer loop
+   public static boolean use_system_date_time_for_updating         = false;         // NB if you start with true then if the data/comfirmation box pop-ups and the user disagree the time is still inserted by the timer loop
+   public static boolean theme_changed                             = false;         // used by checking more than one instance running
    public static TrayIcon trayIcon;
-   //public static boolean maintenance_import_data_password_ok       = false;
+   public static String obs_write                                  = "";
+   public static String PORT_command_line                          = "";            // alternative for PORT (via command line) for checking running second instance
    
    // private var's
    private static final int PORT                                   = 12345;		   // for checking only one instance is running  // random large port number
 	private static ServerSocket s;                                                   // for checking only one instance is running
- 
    private SingleInstanceService sis                               = null;          // for checking only one instance is running
    private SISListener sisL                                        = null;          // for checking only one instance is running
    private static String output_dir                                = null;
    private static String hulp_dir                                  = "";            // for writing configuration.txt file in user_dir (system defined) AND logs_dir (user defined) (backup for muffin)
    private URL url_php;
-   private String obs_write                                        = "";
+   
    private String output_file                                      = "";
    private String volledig_path_dstFilename_immt                   = "";
    private String volledig_path_srcFilename_immt                   = "";
@@ -19939,24 +22046,24 @@ public static void log_turbowin_system_message(final String message)
    private String volledig_path_srcFilename_captain                = "";
    private String volledig_path_backup_srcFilename_captain         = "";
    private String temp_logs_dir                                    = "";
+   private static String email_send_mode                           = "";             // SMTP_LOCAL_HOST / GMAIL_TLS / GMAIL_SSL / YAHOO_TLS / YAHOO_SSL
    //private String last_record                                    = "";
    private static String last_record                               = "";
    private String[] jaar_substring_array                           = new String [MAX_AANTAL_JAREN_IN_IMMT];
    private String[] observername_array                             = new String [MAX_AANTAL_WAARNEMERS];
-   //private String maintenance_data_import_file                     = "";            // for importing maintenance data (configuration data) from import file
-   //private String maintenance_data_export_file                     = "";            // for exporting maintenance data (configuration data) to exportt file
    public static GregorianCalendar cal_systeem_datum_tijd;             
    public static GregorianCalendar cal_systeem_datum_tijd_UTC;
    public static GregorianCalendar cal_systeem_datum_tijd_LT;
    
    // RS232-RS422
    //
-   private main_RS232_RS422 RS232_RS422;
+   private main_RS232_RS422 RS232_RS422                           = null;
    
    public static final String SERIAL_CONNECTION                    = "serial connection";  // see mode in password form
    //public static final String WIFI_CONNECTION                      = "WiFi connection";  // see mode in password form
    public static final String MODE_PRESSURE                        = "mode_pressure";
    public static final String MODE_AIRTEMP                         = "mode_airtemp";
+   public static final String MODE_AIRTEMP_II                      = "mode_airtemp II";
    public static final String MODE_SST                             = "mode_sst";
    public static final String MODE_WIND_SPEED                      = "mode_windspeed";
    public static final String MODE_WIND_DIR                        = "mode_winddir";
@@ -19976,24 +22083,34 @@ public static void log_turbowin_system_message(final String message)
    public static final int RECORD_a_BEGIN_POS_PTB220               = 22;
    public static final int RECORD_ppp_BEGIN_POS_PTB220             = 16;
    
+   public static final int RECORD_LENGTE_HMP155                    = 48;
+   
    public static int RS232_GPS_sentence                            = 0;   //  0 = no existing value; 1 = RMC ; 2 = GGA
    public static int RS232_GPS_connection_mode                     = 0;   //  0 = default = no GPS connected via RS232
    public static int RS232_connection_mode                         = 0;   //  0 = default = no meteorological instrument connected via RS232
+   public static int RS232_connection_mode_II                      = 0;   //  0 = default = no 2nd meteorological instrument connected via RS232
    public static int bits_per_second                               = 0;   //  0 = meteorological instrument no existing value
+   public static int bits_per_second_II                            = 0;   //  0 = meteorological instrument no existing value; 2nd meteo instrument
    public static int GPS_bits_per_second                           = 0;   //  0 = GPS no existing value
    public static int data_bits                                     = 0;   //  0 = meteorological instrument no existing value
+   public static int data_bits_II                                  = 0;   //  0 = meteorological instrument no existing value; 2nd meteo instrument
    public static int parity                                        = 99;  // 99 = meteorological instrument no existing value
+   public static int parity_II                                     = 99;  // 99 = meteorological instrument no existing value; 2nd meteo instrument
    public static int stop_bits                                     = 0;   //  0 = meteorological instrument no existing value 
+   public static int stop_bits_II                                  = 0;   //  0 = meteorological instrument no existing value; 2nd meteo instrument 
    //public static int flow_control                                  = SerialPort.FLOWCONTROL_NONE;
    public static String prefered_COM_port_number                   = "";  // meteorological instrument Windows and Linux
+   public static String prefered_COM_port_number_II                = "";  // meteorological instrument Windows and Linux
    public static String prefered_GPS_COM_port_number               = "";  // GPS Windows and Linux
    public static String prefered_COM_port_name                     = "";  // meteorological instrument OS X
    public static String prefered_GPS_COM_port_name                 = "";  // GPS OS X
-   public static String prefered_COM_port                          = "";  // meteorological instrument generic (Windows/Linux/OS X)
+   public static String prefered_COM_port                          = "";  // meteorological instrument generic (Windows/Linux)
+   public static String prefered_COM_port_II                       = "";  // 2nd meteorological instrument generic (Windows/Linux)
    public static String prefered_GPS_COM_port                      = "";  // GPS generic (Windows/Linux/OS X)
    public static String defaultPort                                = null;// system port name for opening/closing etc
+   public static String defaultPort_II                             = null;// system port name for opening/closing etc (2nd meteo instrument)
    public static String defaultPort_descriptive                    = null;// descripte port name for info messages and logging
-   //public static SerialPort defaultPort                            = null;
+   public static String defaultPort_descriptive_II                 = null;// descripte port name for info messages and logging
    public static String sensor_data_record_obs_pressure            = "";
    public static String sensor_data_record_obs_ppp                 = "";
    public static String sensor_data_record_obs_a                   = "";
@@ -20002,7 +22119,8 @@ public static void log_turbowin_system_message(final String message)
    public static SimpleDateFormat sdf4;
    public static SimpleDateFormat sdf_tsl_1;                              // TurboWin system logs
    public static SimpleDateFormat sdf_tsl_2;                              // TurboWin system logs
-   public static boolean sensor_data_file_ophalen_timer_is_gecreeerd = false;              // static!
+   public static boolean sensor_data_file_ophalen_timer_is_gecreeerd    = false;    // static!
+   public static boolean sensor_data_file_ophalen_timer_is_gecreeerd_II = false;    // static!
    
    public static int VOT                                           = Integer.MAX_VALUE; // for dashboard Meteo France
    
@@ -20029,6 +22147,7 @@ public static void log_turbowin_system_message(final String message)
    public static boolean true_wind_gust_dir_from_AWS_present       = false;
    public static boolean displayed_aws_data_obsolate               = false;   // for DASHBOARD; set in Function: RS422_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
    public static boolean displayed_barometer_data_obsolate         = false;   // for DASHBOARD; set in Function: RS232_WiFi_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
+   public static boolean displayed_thermometer_data_obsolete       = false;   // for DASHBOARD; set in Function: RS232_WiFi_init_new_aws_data_received_check_timer_II()[main_RS232_RS422.java]
    public static boolean VOT_from_AWS_present                      = false;   // for DASHBOARD
    
    public static final int NUMBER_COM_PORTS                        = 20;     // used by checking COM ports meteorological instrument (barometer, EUCAWS) and also for GPS
@@ -20074,12 +22193,16 @@ public static void log_turbowin_system_message(final String message)
    //public static SerialPort[] portList;//public static String[] portList;
    public static GregorianCalendar obs_file_datum_tijd;
    public static SerialPort serialPort                              = null;
+   public static SerialPort serialPort_II                           = null;
    public static SerialPort GPS_serialPort                          = null;
    public static String total_string;     
-   public static boolean obsolate_data_flag                         = false;   // obsolate meteo data (barometer, gPS)
-   public static boolean obsolate_GPS_data_flag                     = false;   // obsolate GPS data     
+   public static String total_string_II;  
+   public static boolean obsolate_data_flag                         = false;   // obsolete meteo data (barometer)
+   public static boolean obsolate_data_flag_II                      = false;   // obsolete meteo data 2nd instrument (thermometer)
+   public static boolean obsolate_GPS_data_flag                     = false;   // obsolete GPS data     
    
    private RS232_view graph_form;
+   //public static RS232_view graph_form;
    private DASHBOARD_view dashboard_form;
    private DASHBOARD_view_AWS dashboard_form_AWS;                   // analogue
    private DASHBOARD_view_AWS_digital dashboard_form_AWS_digital;   // digital
@@ -20089,6 +22212,8 @@ public static void log_turbowin_system_message(final String message)
    public static final Color input_color_from_aws                   = Color.RED;  // color for text fields if input was measured by AWS (manually input of that text field disabled)
    public static final Color input_color_from_observer              = Color.BLACK;
    public static final Color obsolate_color_data_from_aws           = Color.GRAY;
+   public static final Color input_color_from_apr                   = Color.RED;  
+   public static final Color obsolete_input_color_from_apr          = Color.GRAY;
    
    // WOW
    public static boolean WOW                                        = false;       // meta data  yes or no publish on WOW (WeatherObservationsWebsite)
@@ -20096,27 +22221,31 @@ public static void log_turbowin_system_message(final String message)
    public static String WOW_site_pin                                = "";          // meya data
    public static String WOW_reporting_interval                      = "";          // meta data
    //public static String WOW_average_height_barometer                = "";        // meta data
-   public final static String WOW_REPORTING_INTERVAL_MANUAL         = "44444";     // meta data (44444 is just a number)
+   //public final static String WOW_REPORTING_INTERVAL_MANUAL         = "44444";     // meta data (44444 is just a number)
    
-   // APR (Automated Pressure Reports)
-   public static boolean APR                                        = false;       // meta data
-   public static String APR_reporting_interval                      = "";          // meta data
+   // AP[&T]R (Automated Pressure [&Temperature] Reports)
+   public static boolean APR                                        = false;       // meta data   (WOW_APR_ettings.java)
+   public static String APR_reporting_interval                      = "";          // meta data   (WOW_APR_ettings.java)
    
    // AWSR (Automatic Weather Station Reports)
-   public static boolean AWSR                                        = false;      // meta data
-   public static String AWSR_reporting_interval                      = "";         // meta data
+   public static boolean AWSR                                        = false;      // meta data   (WOW_APR_ettings.java)
+   public static String AWSR_reporting_interval                      = "";         // meta data   (WOW_APR_ettings.java)
    
-   // WOW and APR and AWSR
-   public static String WOW_APR_average_draught                      = "";         // meta data
+   // AP[&T]R and AWSR
+   public static String APTR_AWSR_send_method                        = "";         // meta data   (WOW_APR_ettings.java)
+   
+   // WOW and AP[&T]R and AWSR
+   public static String WOW_APR_average_draught                      = "";         // meta data   (WOW_APR_ettings.java)
  
    
-   SystemTray tray = null;
-   JPopupMenu popup_input;
+   public static SystemTray tray = null;
+   private JPopupMenu popup_input;
    
    public static ship myship;                                        // class
    public static main mainClass;                                     // class
    public static FORMAT_101 format_101_class;                        // class
    public static OSM osm_class;                                      // class
+   public static Python_Email python_email_class;                    // class
 
 }
 

@@ -57,17 +57,17 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jPanel2" alignment="0" max="32767" attributes="1"/>
-                          <Component id="jPanel6" alignment="0" pref="370" max="32767" attributes="1"/>
+                          <Component id="jPanel6" alignment="0" pref="374" max="32767" attributes="1"/>
                           <Component id="jLabel10" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
                           <Component id="jLabel18" alignment="0" min="-2" pref="199" max="-2" attributes="0"/>
-                          <Component id="jLabel17" alignment="0" min="-2" pref="366" max="-2" attributes="0"/>
                           <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
+                          <Component id="jLabel17" alignment="1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="53" max="32767" attributes="0"/>
+                      <EmptySpace pref="49" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jPanel3" alignment="0" pref="434" max="32767" attributes="1"/>
@@ -77,18 +77,17 @@
                               <Component id="jLabel22" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jLabel20" min="-2" pref="434" max="-2" attributes="0"/>
+                          <Component id="jLabel7" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="42" pref="42" max="42" attributes="0"/>
               <Component id="jLabel5" min="-2" pref="68" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="jLabel7" min="-2" pref="119" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="367" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -97,29 +96,30 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel7" alignment="3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jPanel3" min="-2" pref="281" max="-2" attributes="1"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jPanel1" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel2" min="-2" pref="155" max="-2" attributes="0"/>
+                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -178,19 +178,21 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel24" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jTextField2" alignment="0" max="32767" attributes="1"/>
-                      <Component id="jTextField4" alignment="0" max="32767" attributes="1"/>
-                      <Component id="jTextField3" max="32767" attributes="1"/>
+                  <EmptySpace type="separate" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jTextField3" alignment="1" pref="240" max="32767" attributes="1"/>
+                      <Component id="jTextField4" alignment="1" max="32767" attributes="1"/>
+                      <Component id="jTextField10" max="32767" attributes="0"/>
+                      <Component id="jTextField2" max="32767" attributes="1"/>
                       <Component id="jTextField1" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -210,7 +212,7 @@
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -219,6 +221,11 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTextField4" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTextField10" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel24" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -230,29 +237,36 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="ship name:"/>
+            <Property name="text" type="java.lang.String" value="ship name"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="IMO number:"/>
+            <Property name="text" type="java.lang.String" value="IMO number"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField2">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="call sign:"/>
+            <Property name="text" type="java.lang.String" value="call sign"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField3">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="masked call sign*:"/>
+            <Property name="text" type="java.lang.String" value="masked station ID*"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField4">
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextField10">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel24">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="station ID*"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -284,8 +298,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="90" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -446,12 +460,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
-            <Property name="text" type="java.lang.String" value="max. height deck cargo above SLL**  (metres, [0 - 100], rounded):"/>
+            <Property name="text" type="java.lang.String" value="max. height deck cargo above SLL**  (metres, [0 - 100], rounded)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel19">
           <Properties>
-            <Property name="text" type="java.lang.String" value="difference SLL and WL (water line) (metres, [-10 - 50]****, rounded):"/>
+            <Property name="text" type="java.lang.String" value="difference SLL and WL (water line) (metres, [-10 - 50]****, rounded)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField7">
@@ -460,7 +474,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="wind speed units source (estimated/measured):"/>
+            <Property name="text" type="java.lang.String" value="wind speed units source (estimated/measured)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton9">
@@ -481,7 +495,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel23">
           <Properties>
-            <Property name="text" type="java.lang.String" value="wind speed units display (graphs/dashboards):"/>
+            <Property name="text" type="java.lang.String" value="wind speed units display (graphs/dashboards)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton18">
@@ -577,21 +591,21 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>
-            <Property name="text" type="java.lang.String" value="height of the barometer above SLL (metres, e.g. 20.8):"/>
+            <Property name="text" type="java.lang.String" value="height of the barometer above SLL (metres, e.g. 20.8)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField5">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel13">
           <Properties>
-            <Property name="text" type="java.lang.String" value="distance of bottom of the keel to SLL (metres, e.g. 9.1): "/>
+            <Property name="text" type="java.lang.String" value="distance of bottom of the keel to SLL (metres, e.g. 9.1)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField6">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
-            <Property name="text" type="java.lang.String" value="does the reading indicate MSL pressure*:"/>
+            <Property name="text" type="java.lang.String" value="does the reading indicate MSL pressure*"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton11">
@@ -644,7 +658,7 @@
                       <Component id="jRadioButton7" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jRadioButton8" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="6" max="32767" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -705,12 +719,12 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel15">
           <Properties>
-            <Property name="text" type="java.lang.String" value="air temp exposure:"/>
+            <Property name="text" type="java.lang.String" value="air temp exposure"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel16">
           <Properties>
-            <Property name="text" type="java.lang.String" value="sea water temp exposure:"/>
+            <Property name="text" type="java.lang.String" value="sea water temp exposure"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton3">

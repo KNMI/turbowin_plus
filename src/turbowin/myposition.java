@@ -578,8 +578,20 @@ final public class myposition extends javax.swing.JFrame {
       //                                    8 = barometer + temp/vocht Mintaka Star + StarX (WiFi LAN; access point mode or station mode)
       //                                    9 = OMC-140 AWS (Observator) serial
       //                                    10= OMC-140 AWS (Observator) ethernet LAN
-   
+      //
+      //      RS232_connection_mode_II:     1 = thermometer HMP155
+      //
       
+      
+      // AWS connected?
+      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
+      {
+         local_AWS_connected = true;
+      }
+      else
+      {
+         local_AWS_connected = false; 
+      }
       
       
       // hide Back/Stop buttons if not in next_screen_mode
@@ -608,8 +620,11 @@ final public class myposition extends javax.swing.JFrame {
       
       
       // if in AWS collecting data mode the parameter was measured by AWS then disable the option to insert the parameter manually
+      //
+      
       // latitude
-      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)   // AWS connected mode
+      //if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)   // AWS connected mode
+      if (local_AWS_connected || (main.APR == true))   
       {
          jTextField1.setForeground(main.input_color_from_aws);        // Latitude degr
          jTextField1.setEditable(false);
@@ -623,7 +638,8 @@ final public class myposition extends javax.swing.JFrame {
          
          
       // longitude
-      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
+      //if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)  // AWS connected mode
+      if (local_AWS_connected || (main.APR == true)) 
       {   
          jTextField3.setForeground(main.input_color_from_aws);        // Longitude degr
          jTextField3.setEditable(false);
@@ -637,11 +653,18 @@ final public class myposition extends javax.swing.JFrame {
       
       
       // course
-      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
+      //if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)   // AWS connected mode
+      if (local_AWS_connected || (main.APR == true)) 
       {
          jLabel6.setForeground(main.input_color_from_aws); 
-         jLabel6.setText("course made good during last 10 minutes (degr)");
-
+         if (local_AWS_connected || (main.APR && main.obs_format.equals(main.FORMAT_101)))
+         {
+            jLabel6.setText("course made good during last 10 minutes (degr)");
+         }
+         else
+         {
+            jLabel6.setText("course made good during last 3 hours (degr)");
+         }
          
          jRadioButton5.setEnabled(false); 
          jRadioButton6.setEnabled(false);
@@ -656,10 +679,18 @@ final public class myposition extends javax.swing.JFrame {
       
       
       // speed
-      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
+      //if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) // AWS connected mode
+      if (local_AWS_connected || (main.APR == true)) 
       {
          jLabel5.setForeground(main.input_color_from_aws); 
-         jLabel5.setText("speed made good during last 10 minutes (knots)");
+         if (local_AWS_connected || (main.APR && main.obs_format.equals(main.FORMAT_101)))
+         {   
+            jLabel5.setText("speed made good during last 10 minutes (knots)");
+         }
+         else
+         {
+            jLabel5.setText("speed made good during last 3 hours (knots)");
+         }
          
          jRadioButton14.setEnabled(false); 
          jRadioButton15.setEnabled(false);
@@ -674,9 +705,11 @@ final public class myposition extends javax.swing.JFrame {
       }
      
       
-      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
+      // show position on Open Street Map
+      //if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) // AWS connected mode
+      if (local_AWS_connected || (main.APR == true))    
       {
-         jCheckBox1.setSelected(false);                 // display obs position on Google maps
+         jCheckBox1.setSelected(false);                 // display obs position on Open Street Map
          jCheckBox1.setEnabled(false);
          
          //jCheckBox2.setSelected(false);                 // display obs position on Google maps + AIS map
@@ -711,6 +744,7 @@ final public class myposition extends javax.swing.JFrame {
       int_latitude_minutes  = main.INVALID;
       int_longitude_degrees = main.INVALID;
       int_longitude_minutes = main.INVALID;
+      // NB do not reset SOG_APR and COG_APR here
 
       // local var's with initialisation
       checks_ok             = false;
@@ -748,8 +782,13 @@ final public class myposition extends javax.swing.JFrame {
          next_screen();
       }
       
-      // if myposition vars were set (in initsynopparameters if ?GPS connected) before clear them
-      myposition_windowClosing(null);
+      if (main.APR == false)
+      {
+         // NB in APR mode we do not want the cleaaring of the main screen which is ipdatated every minute
+         
+         // if myposition vars were set (in initsynopparameters if ?GPS connected) before clear them
+         myposition_windowClosing(null);
+      }
    }//GEN-LAST:event_Cancel_button_actionPerformed
 
 
@@ -762,7 +801,7 @@ final public class myposition extends javax.swing.JFrame {
    private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK_button_actionPerformed
       // TODO add your handling code here:
       
-      if (main.RS232_connection_mode != 3)                       // not AWS connected
+      if ( (main.RS232_connection_mode != 3) && (main.RS232_connection_mode != 9) && (main.RS232_connection_mode != 10) )  // not AWS connected
       { 
       
       // initialisation
@@ -1274,12 +1313,24 @@ final public class myposition extends javax.swing.JFrame {
 
       } // if ( (checks_ok == true) && (jCheckBox1.isSelected() == true) )
 
-      } // if (main.RS232_connection_mode != 3)
+      } // if (main.RS232_connection_mode != 3) etc.
       else                                          // AWS connected mode
       {
          checks_ok = true;
       }
 
+      
+      // BELOW MAYBE IN NEXT STAGE
+      //if (checks_ok && (main.APR == true))
+      //{
+      //   // so the manual position will most probably be entered by the observer if in APR mode and if the position from the GPS is not ok or if obsolete
+      //   main.obsolate_GPS_data_flag = false;
+      //   
+      //   // for timer checking the GPS data is not obsolete (see Function: RS232_GPS_NMEA_0183_init_new_data_received_check_timer)
+      //   main_RS232_RS422.last_new_GPS_data_received_TimeMillis = System.currentTimeMillis(); 
+      //   
+      //} // if (checks_ok && (main.APR == true))
+      
       
       if (checks_ok == true)
       {
@@ -2070,7 +2121,7 @@ else
       {
          if (main.obs_format.equals(main.FORMAT_101) || main.obs_format.equals(main.FORMAT_FM13) ) 
          {
-            // for correct compting obs format must beset before to format101 or FM13
+            // for correct compting obs format must be set before to format101 or FM13
             boolean StarX = false;
             main_RS232_RS422.RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_GPS_For_Obs("MANUAL", StarX); 
          }
@@ -2132,6 +2183,150 @@ else
                   jRadioButton4.setSelected(true);
                }
             } // if (latitude_hemisphere != "")  
+            
+            // course
+             // 
+            // COG
+            //
+            //
+            // NB WMO_NO_306.pdf
+            //
+            //Ds True direction of resultant displacement of the ship during the three hours preceding
+            //the time of observation
+            //D1 True direction of the point position from the station
+            //Code
+            //figure
+            //0 Calm (in D, DK), or stationary (in Ds), or at the station (in Da, D1), or stationary or no clouds (in DH,
+            //DL, DM)
+            //1 NE
+            //2 E
+            //3 SE
+            //4 S
+            //5 SW
+            //6 W
+            //7 NW
+            //8 N
+            //9 All directions (in Da, D1), or confused (in DK), or variable (in D(wind)), or unknown (in Ds), or unknown
+            //or clouds invisible (in DH, DL, DM)
+            // / Report from a coastal land station or displacement of ship not reported (in Ds only — see
+            // Regulation 12.3.1.2 (b))               
+               
+            // NB see myposition.java  
+            //
+            //public static final String COURSE_STATIONARY = "stationary";
+            //public static final String COURSE_023_067    = "023 - 067";
+            //public static final String COURSE_068_112    = "068 - 112";
+            //public static final String COURSE_113_157    = "113 - 157";
+            //public static final String COURSE_158_202    = "158 - 202";
+            //public static final String COURSE_203_247    = "203 - 247";
+            //public static final String COURSE_248_292    = "248 - 292";
+            //public static final String COURSE_293_337    = "293 - 337";
+            //public static final String COURSE_338_022    = "338 - 022";
+               
+            if (SOG_APR < 1.0) // stopped
+            {
+               // by default: in case SOG is indicating stopped then SOG always stopped also!
+               myposition.jRadioButton5.setSelected(true);           // COG = stopped
+            }
+            //else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar veranderd om toch een richting tijdens laatste testjes te krijgen)
+            else if (SOG_APR >= 1.0 && SOG_APR <= 999999.9) // not stopped   
+            {
+               if (COG_APR > 23.0 && COG_APR <= 67.0)
+               {
+                  myposition.jRadioButton6.setSelected(true);
+               }
+               else if (COG_APR > 67.0 && COG_APR <= 112.0)
+               {
+                  myposition.jRadioButton7.setSelected(true);
+               }
+               else if (COG_APR > 112.0 && COG_APR <= 157.0)
+               {
+                  myposition.jRadioButton8.setSelected(true);
+               }
+               else if (COG_APR > 157.0 && COG_APR <= 202.0)
+               {
+                  myposition.jRadioButton9.setSelected(true);
+               }
+               else if (COG_APR > 202.0 && COG_APR <= 247.0)
+               {
+                  myposition.jRadioButton10.setSelected(true);
+               }
+               else if (COG_APR > 247.0 && COG_APR <= 292.0)
+               {
+                  myposition.jRadioButton11.setSelected(true);
+               }
+               else if (COG_APR > 292.0 && COG_APR <= 337.0)
+               {
+                  myposition.jRadioButton12.setSelected(true);
+               }
+               else if (COG_APR > 337.0 && COG_APR <= 360.0 || COG_APR > 0.0 && COG_APR <= 23.0)
+               {
+                  myposition.jRadioButton13.setSelected(true);
+               }
+            } // else if (SOG >= 1.0 && SOG <= 99.9)
+            
+            
+            // speed
+            // SOG
+            //
+            //   
+            // NB WMO_NO_306.pdf
+            // 
+            // WMO table  4451
+            //vs Ship’s average speed made good during the three hours preceding the time of observation
+            //Code
+            //figure
+            //0 0 knot 0 km h–1
+            //1 1– 5 knots 1–10 km h–1
+            //2 6–10 knots 11–19 km h–1
+            //3 11–15 knots 20–28 km h–1
+            //4 16–20 knots 29–37 km h–1
+            //5 21–25 knots 38–47 km h–1
+            //6 26–30 knots 48–56 km h–1
+            //7 31–35 knots 57–65 km h–1
+            //8 36–40 knots 66–75 km h–1
+            //9 Over 40 knots Over 75 km h–1
+            /// Not applicable (report from a coastal land station) or not reported (see Regulation 12.3.1.2 (b))
+            if (SOG_APR < 1.0)
+            {
+               myposition.jRadioButton14.setSelected(true);
+            }
+            else if (SOG_APR >= 1.0 && SOG_APR <= 5.0)
+            {
+               myposition.jRadioButton15.setSelected(true);
+            }           
+            else if (SOG_APR > 5.0 && SOG_APR <= 10.0)
+            {
+               myposition.jRadioButton16.setSelected(true);
+            } 
+            else if (SOG_APR > 10.0 && SOG_APR <= 15.0)
+            {
+               myposition.jRadioButton17.setSelected(true);
+            } 
+            else if (SOG_APR > 15.0 && SOG_APR <= 20.0)
+            {
+               myposition.jRadioButton18.setSelected(true);
+            } 
+            else if (SOG_APR > 20.0 && SOG_APR <= 25.0)
+            {
+               myposition.jRadioButton19.setSelected(true);
+            } 
+            else if (SOG_APR > 25.0 && SOG_APR <= 30.0)
+            {
+               myposition.jRadioButton20.setSelected(true);
+            } 
+            else if (SOG_APR > 30.0 && SOG_APR <= 35.0)
+            {
+               myposition.jRadioButton21.setSelected(true);
+            } 
+            else if (SOG_APR > 35.0 && SOG_APR <= 40.0)
+            {
+               myposition.jRadioButton22.setSelected(true);
+            } 
+            else if (SOG_APR > 40 && SOG_APR <= 99)
+            {
+               myposition.jRadioButton23.setSelected(true);
+            } 
             
          } // if (GPS_date_time_ok )
          
@@ -2331,17 +2526,21 @@ else
    public static String longitude_hemisphere    = "";
    public static String course                  = "";
    public static String speed                   = "";
-   public static String lalala_code             = "";         // always 3 chars
-   public static String lolololo_code           = "";         // always 4 chars
-   public static String Qc_code                 = "";         // always 1 chars
+   public static String lalala_code             = "";              // always 3 chars
+   public static String lolololo_code           = "";              // always 4 chars
+   public static String Qc_code                 = "";              // always 1 chars
    public static String Ds_code                 = "";
    public static String vs_code                 = "";
-   public static int int_latitude_degrees       = main.INVALID;    // also used for position sequence check and cloud height advice computation
-   public static int int_latitude_minutes       = main.INVALID;    // also used for position sequence check
-   public static int int_longitude_degrees      = main.INVALID;    // also used for position sequence check and cloud height advice computation
-   public static int int_longitude_minutes      = main.INVALID;    // also used for position sequence check
+   public static int int_latitude_degrees       = main.INVALID;     // also used for position sequence check and cloud height advice computation
+   public static int int_latitude_minutes       = main.INVALID;     // also used for position sequence check
+   public static int int_longitude_degrees      = main.INVALID;     // also used for position sequence check and cloud height advice computation
+   public static int int_longitude_minutes      = main.INVALID;     // also used for position sequence check
+   public static double SOG_APR                 = Double.MAX_VALUE; // used for "APR + format101"
+   public static double COG_APR                 = Double.MAX_VALUE; // used for "APR + format101"
+
 
    // locale var's with initialisation
    boolean checks_ok                            = false;
    private boolean GPS_ok                       = true;
+   private boolean local_AWS_connected;
 }

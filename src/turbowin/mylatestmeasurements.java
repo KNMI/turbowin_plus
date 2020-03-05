@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -197,6 +196,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
       // NB AWS_array[i][c]: rows i -> highest i-index numbers = most recent in time; i = 0 -> record of 6 hours ago
       String table_insert = "";
       int row = -1;
+      
       for (int i = AANTAL_AWS_MEASUREMENTS -1; i >= 0; i--)       // rows, newest/latest records on top in the table
       {
          if ( (!AWS_array[i][date_index].equals("")) && (!AWS_array[i][time_index].equals("")) )
@@ -232,7 +232,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                      table_insert = "";
                   }
                }
-               else if (/*c == sog_index ||*/ c == true_wind_speed_index || c == true_wind_gust_index)
+               else if ((c == true_wind_speed_index) || (c == true_wind_gust_index))
                {
                   // convert m/s to knots if required
                   if (AWS_array[i][c].length() >= 1 && (!AWS_array[i][c].equals("")))
@@ -251,6 +251,10 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                      table_insert = String.format("%.2f", table_insert_double);
                      
                   } // if (AWS_array[i][c].length() >= 1 && (!AWS_array[i][c].equals("")))
+                  else
+                  {
+                     table_insert = "";
+                  }   
                }
                else
                {
@@ -258,6 +262,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                }
                
                jTable1.setValueAt(table_insert, row, c);
+               
             } // for (int c = 0; c < AANTAL_AWS_PARAMETERS; c++) 
          } // if ( (!AWS_array[i][date_index].equals("")) && (!AWS_array[i][time_index].equals("")) )
       } // for (int i = AANTAL_AWS_MEASUREMENTS -1; i >= 0; i--)  
@@ -313,7 +318,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
    
       // initialisation
       //aantal_intelezen_files = 6;                            // max 6 hours back (= max duty watch on bridge
-      aantal_intelezen_files = AANTAL_AWS_MEASUREMENTS -1;     // -1 !! otherwise autside array boundary)
+      aantal_intelezen_files = AANTAL_AWS_MEASUREMENTS -1;     // -1 !! otherwise outside array boundary)
 
       // message to console
       //SimpleDateFormat sdf2_local;
@@ -726,8 +731,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
          sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
          
          //System.out.println("+++ " + "sensor_data_file_name = " +  sensor_data_file_name);
-         
-         
    
          // first check if there is a sensor data file present (and not empty)
          volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
@@ -846,6 +849,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                         do
                         {
                            pos = record.indexOf(",", pos + 1);    // searching "," from position "pos + 1"
+                       
                            if (pos > 0)     // "," found
                            {
                               number_read_commas++;
@@ -1025,6 +1029,8 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                               {
                                  if (record.length() > pos + 1 + 12)    // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
                                  {
+                                    //System.out.println("+++ ingelezen record bij number_read_commas == main.TRUE_WIND_SPEED_COMMA_NUMBER: " + record);
+                                    
                                     int pos2 = record.indexOf(",", pos + 1);
                                     if (pos2 - pos >= 2)            // between conmmas at least 1 char
                                     {
@@ -1033,6 +1039,8 @@ public class mylatestmeasurements extends javax.swing.JFrame {
 
                                        //AWS_array[(aantal_intelezen_files - i) * 12 + int_minuten_5][true_wind_speed_index] = record_parameter; 
                                        AWS_array[(aantal_intelezen_files - i)][true_wind_speed_index] = record_parameter;          // so every 1 hour
+                                       
+                                       //System.out.println("+++ record_parameter (wind speed): " + record_parameter);
                                        
                                     } // if (pos2 - pos >= 2)
                                  } // if (record.length() > number_read_commas + 12)
