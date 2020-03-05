@@ -17,14 +17,14 @@ using extended threading the application is always responsive.
 
 [Noticeable new items]
 
-1 Email options
-2 Vaisala HMP155 sensor interface
-3 EMOS interface update
-4 APR (or APTR) update
-5 Station ID
-6 Transparent Theme
-7 Barometer comparison form (barometer self-check form)
-8 Open source update
+- Email options
+- Vaisala HMP155 sensor interface
+- EMOS interface update
+- APR (or APTR) update
+- Station ID
+- Transparent Theme
+- Barometer comparison form (barometer self-check form)
+- Open source update
 
 
 ================================== VERSION 3.3.0 ================================
