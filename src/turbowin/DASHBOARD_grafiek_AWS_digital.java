@@ -156,9 +156,10 @@ public void paintComponent(Graphics g)
    final Graphics2D g2d = (Graphics2D) g;
    
   
-   // background image(not in night vision mode)
+   // background image(not in night vision mode and not if transparent)
    //
-   if (DASHBOARD_view_AWS_digital.night_vision == false)
+   //if (DASHBOARD_view_AWS_digital.night_vision == false)
+   if ( (main.GUI_logo.equals(main.LOGO_SOT)) && (DASHBOARD_view.night_vision == false) && (!main.theme_mode.equals(main.THEME_TRANSPARENT)) )
    {
       Image img1 = new ImageIcon(this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO)).getImage();
       //scale the image to cover a the complete area of the drawing surface

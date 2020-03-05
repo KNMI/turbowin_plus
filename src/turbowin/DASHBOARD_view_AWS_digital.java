@@ -77,7 +77,10 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       {
          night_vision = false;
          
-         background_color_panel1 = jPanel1.getBackground();
+         //background_color_panel1 = jPanel1.getBackground();
+         background_color_panel1 = jPanel4.getBackground();    // jPanel4 = left panel (but could also be another (site)panel)
+         jPanel1.setBackground(background_color_panel1); 
+         
          background_color_panel2 = jPanel2.getBackground();
          background_color_panel3 = jPanel3.getBackground();
          background_color_panel4 = jPanel4.getBackground();
@@ -243,10 +246,16 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
    /**
     * Creates new form DASHBOARD_view_AWS_digital
     */
-   public DASHBOARD_view_AWS_digital() {
+   public DASHBOARD_view_AWS_digital() 
+   {
       initComponents();
       initComponents1();
       init_dasboard_AWS_digital_timer();
+      
+      if (main.theme_mode.equals(main.THEME_TRANSPARENT))   
+      {
+         setOpacity(0.75f);
+      } // else if (theme_mode.equals(THEME_TRANSPARENT))  
    }
 
    

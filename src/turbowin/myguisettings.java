@@ -47,6 +47,7 @@ public class myguisettings extends javax.swing.JFrame {
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("GUI settings");
+      setResizable(false);
 
       jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 

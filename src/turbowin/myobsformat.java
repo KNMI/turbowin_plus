@@ -33,9 +33,6 @@ final public class myobsformat extends javax.swing.JFrame {
 
       buttonGroup1 = new javax.swing.ButtonGroup();
       buttonGroup2 = new javax.swing.ButtonGroup();
-      buttonGroup3 = new javax.swing.ButtonGroup();
-      jScrollPane1 = new javax.swing.JScrollPane();
-      jList1 = new javax.swing.JList();
       jSeparator1 = new javax.swing.JSeparator();
       jButton1 = new javax.swing.JButton();
       jButton2 = new javax.swing.JButton();
@@ -44,22 +41,11 @@ final public class myobsformat extends javax.swing.JFrame {
       jPanel2 = new javax.swing.JPanel();
       jRadioButton3 = new javax.swing.JRadioButton();
       jRadioButton4 = new javax.swing.JRadioButton();
-      jPanel3 = new javax.swing.JPanel();
-      jRadioButton5 = new javax.swing.JRadioButton();
-      jRadioButton6 = new javax.swing.JRadioButton();
       jLabel3 = new javax.swing.JLabel();
-      jLabel4 = new javax.swing.JLabel();
       jPanel4 = new javax.swing.JPanel();
       jRadioButton1 = new javax.swing.JRadioButton();
       jRadioButton2 = new javax.swing.JRadioButton();
       jRadioButton7 = new javax.swing.JRadioButton();
-
-      jList1.setModel(new javax.swing.AbstractListModel() {
-         String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-         public int getSize() { return strings.length; }
-         public Object getElementAt(int i) { return strings[i]; }
-      });
-      jScrollPane1.setViewportView(jList1);
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("Obs Format");
@@ -114,38 +100,7 @@ final public class myobsformat extends javax.swing.JFrame {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
-      jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-      buttonGroup3.add(jRadioButton5);
-      jRadioButton5.setText("in E-mail body, not possible with a web-based email client (email via web browser)");
-
-      buttonGroup3.add(jRadioButton6);
-      jRadioButton6.setText("as E-mail attachment");
-
-      javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-      jPanel3.setLayout(jPanel3Layout);
-      jPanel3Layout.setHorizontalGroup(
-         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(jPanel3Layout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jRadioButton5)
-               .addComponent(jRadioButton6))
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-      );
-      jPanel3Layout.setVerticalGroup(
-         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(jPanel3Layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jRadioButton5)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-            .addComponent(jRadioButton6)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-      );
-
       jLabel3.setText("format 101 call sign encryption");
-
-      jLabel4.setText("format 101 in E-mail");
 
       jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -166,7 +121,8 @@ final public class myobsformat extends javax.swing.JFrame {
       });
 
       buttonGroup1.add(jRadioButton7);
-      jRadioButton7.setText("AWS connected");
+      jRadioButton7.setText("EUCAWS connected");
+      jRadioButton7.setActionCommand("EUCAWS connected");
       jRadioButton7.addItemListener(new java.awt.event.ItemListener() {
          public void itemStateChanged(java.awt.event.ItemEvent evt) {
             AWS_itemStateChanged(evt);
@@ -179,11 +135,11 @@ final public class myobsformat extends javax.swing.JFrame {
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(jPanel4Layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jRadioButton1)
-               .addComponent(jRadioButton2)
-               .addComponent(jRadioButton7))
-            .addContainerGap())
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+               .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+               .addComponent(jRadioButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(426, Short.MAX_VALUE))
       );
       jPanel4Layout.setVerticalGroup(
          jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,11 +161,9 @@ final public class myobsformat extends javax.swing.JFrame {
             .addContainerGap(120, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-               .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-               .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addContainerGap(121, Short.MAX_VALUE))
          .addGroup(layout.createSequentialGroup()
@@ -229,21 +183,17 @@ final public class myobsformat extends javax.swing.JFrame {
       layout.setVerticalGroup(
          layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
          .addGroup(layout.createSequentialGroup()
-            .addGap(45, 45, 45)
+            .addGap(65, 65, 65)
             .addComponent(jLabel1)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel2)
-            .addGap(69, 69, 69)
+            .addGap(89, 89, 89)
             .addComponent(jLabel3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, 18)
-            .addComponent(jLabel4)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(15, 15, 15)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -272,10 +222,8 @@ final public class myobsformat extends javax.swing.JFrame {
       //
       if (jRadioButton1.isSelected() == true)         // FM13
       {
-         main.obs_format = main.FORMAT_FM13; 
+         main.obs_format         = main.FORMAT_FM13; 
          main.obs_101_encryption = "";
-         main.obs_101_email      = "";
-
          doorgaan = true;
       }
       else if (jRadioButton2.isSelected() == true)    // 101 format
@@ -285,10 +233,8 @@ final public class myobsformat extends javax.swing.JFrame {
       }  
       else if (jRadioButton7.isSelected() == true)    // AWS format
       {
-         main.obs_format = main.FORMAT_AWS;
+         main.obs_format         = main.FORMAT_AWS;   // NB only for EUCAWS (OMC-140 must be 101 or FM13)
          main.obs_101_encryption = "";
-         main.obs_101_email      = "";
-
          doorgaan = true;
       }        
       else // obs format unknown
@@ -323,35 +269,14 @@ final public class myobsformat extends javax.swing.JFrame {
             main.obs_101_encryption = "";    
             doorgaan = false;
          } // else
-      
          
-         if (doorgaan == true)
-         {
-            /////// format 101 in email (attachement or body)
-            //
-            if (jRadioButton5.isSelected() == true)                      // email 101 format in body
-            {
-               main.obs_101_email =  main.FORMAT_101_BODY;
-               doorgaan = true;
-            }
-            else if (jRadioButton6.isSelected() == true)                 // email 101 format in attachement
-            {
-               main.obs_101_email =  main.FORMAT_101_ATTACHEMENT;
-               doorgaan = true;
-            }
-            else
-            {
-               main.obs_101_email = "";
-               doorgaan = false;
-            }
-         } // if (doorgaan == true)
-         
-         
-         // obs format = format 101 AND call sign encryption not ok AND/OR email body/attachment not ok
+
+         // obs format = format 101 AND call sign encryption not ok
          //
          if (!(doorgaan == true))
          {
-            String info = "\"format 101 call sign encryption\" and/or \"format 101 in E-mail\" unknown";
+            /* //String info = "\"format 101 call sign encryption\" and/or \"format 101 in E-mail\" unknown"; */
+            String info = "\"format 101 call sign encryption in E-mail\" unknown";
             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
          }
          else // obs format = format 101 AND call sign encryption ok AND email body/attachment ok
@@ -428,29 +353,24 @@ final public class myobsformat extends javax.swing.JFrame {
       {
          jRadioButton3.setSelected(false);                    // call sign encryption yes
          jRadioButton4.setSelected(false);                    // call sign encryption no
-         jRadioButton5.setSelected(false);                    // email 101 in body
-         jRadioButton6.setSelected(false);                    // email 101 as attachement
          
          jRadioButton3.setEnabled(false);                     // call sign encryption yes
          jRadioButton4.setEnabled(false);                     // call sign encryption no
-         jRadioButton5.setEnabled(false);                     // email 101 in body
-         jRadioButton6.setEnabled(false);                     // email 101 as attachement
          
       } // if (jRadioButton1.isSelected() == true)
-      else if (jRadioButton1.isSelected() == false)           // 101 format
+/*      
+      else if (jRadioButton1.isSelected() == false)           // FM13
       {
+         JOptionPane.showMessageDialog(null, "FM13 unchecked", main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+         
          jRadioButton3.setSelected(false);                    // call sign encryption yes
          jRadioButton4.setSelected(false);                    // call sign encryption no
-         jRadioButton5.setSelected(false);                    // email 101 in body
-         jRadioButton6.setSelected(false);                    // email 101 as attachement
          
          jRadioButton3.setEnabled(true);                      // call sign encryption yes
          jRadioButton4.setEnabled(true);                      // call sign encryption no
-         jRadioButton5.setEnabled(true);                      // email 101 in body
-         jRadioButton6.setEnabled(true);                      // email 101 as attachement
          
       } // else if (jRadioButton3.isSelected() == false)      
-      
+*/      
    }//GEN-LAST:event_FM13_itemStateChanged
 
    
@@ -467,29 +387,28 @@ final public class myobsformat extends javax.swing.JFrame {
       {
          jRadioButton3.setSelected(false);                    // call sign encryption yes
          jRadioButton4.setSelected(false);                    // call sign encryption no
-         jRadioButton5.setSelected(false);                    // email 101 in body
-         jRadioButton6.setSelected(false);                    // email 101 as attachement
          
          jRadioButton3.setEnabled(true);                      // call sign encryption yes
          jRadioButton4.setEnabled(true);                      // call sign encryption no
-         jRadioButton5.setEnabled(true);                      // email 101 in body
-         jRadioButton6.setEnabled(true);                      // email 101 as attachement
          
       } // if (jRadioButton2.isSelected() == true)
+      
+/*      
       else if (jRadioButton2.isSelected() == false)           // 101 format
       {
          jRadioButton3.setSelected(false);                    // call sign encryption yes
          jRadioButton4.setSelected(false);                    // call sign encryption no
-         jRadioButton5.setSelected(false);                    // email 101 in body
-         jRadioButton6.setSelected(false);                    // email 101 as attachement
          
          jRadioButton3.setEnabled(false);                     // call sign encryption yes
          jRadioButton4.setEnabled(false);                     // call sign encryption no
-         jRadioButton5.setEnabled(false);                     // email 101 in body
-         jRadioButton6.setEnabled(false);                     // email 101 as attachement
          
       } // else if (jRadioButton2.isSelected() == false)         
-      
+*/     
+
+
+
+
+
    }//GEN-LAST:event_format_101_itemStateChanged
 
    
@@ -506,28 +425,22 @@ final public class myobsformat extends javax.swing.JFrame {
       {
          jRadioButton3.setSelected(false);                    // call sign encryption yes
          jRadioButton4.setSelected(false);                    // call sign encryption no
-         jRadioButton5.setSelected(false);                    // email 101 in body
-         jRadioButton6.setSelected(false);                    // email 101 as attachement
          
          jRadioButton3.setEnabled(false);                     // call sign encryption yes
          jRadioButton4.setEnabled(false);                     // call sign encryption no
-         jRadioButton5.setEnabled(false);                     // email 101 in body
-         jRadioButton6.setEnabled(false);                     // email 101 as attachement
 
       } // if (jRadioButton7.isSelected() == true)
+      /*
       else if (jRadioButton7.isSelected() == false)           // AWS format
       {
          jRadioButton3.setSelected(false);                    // call sign encryption yes
          jRadioButton4.setSelected(false);                    // call sign encryption no
-         jRadioButton5.setSelected(false);                    // email 101 in body
-         jRadioButton6.setSelected(false);                    // email 101 as attachement
          
          jRadioButton3.setEnabled(true);                      // call sign encryption yes
          jRadioButton4.setEnabled(true);                      // call sign encryption no
-         jRadioButton5.setEnabled(true);                      // email 101 in body
-         jRadioButton6.setEnabled(true);                      // email 101 as attachement
          
-      } // else if (jRadioButton7.isSelected() == false)       
+      } // else if (jRadioButton7.isSelected() == false)     
+      */
    }//GEN-LAST:event_AWS_itemStateChanged
 
    
@@ -540,13 +453,11 @@ final public class myobsformat extends javax.swing.JFrame {
    private void initComponents2() 
    {
       // initialisation
-      jRadioButton1.setSelected(false);
-      jRadioButton2.setSelected(false);
+      jRadioButton1.setSelected(false);                   // FM13
+      jRadioButton2.setSelected(false);                   // format 101
       jRadioButton3.setSelected(false);
       jRadioButton4.setSelected(false);
-      jRadioButton5.setSelected(false);
-      jRadioButton6.setSelected(false);
-      jRadioButton7.setSelected(false);
+      jRadioButton7.setSelected(false);                   // AWS
         
       
       //
@@ -575,16 +486,6 @@ final public class myobsformat extends javax.swing.JFrame {
       else if (main.obs_101_encryption.equals(main.FORMAT_101_ENCRYPTION_NO)) 
       {   
          jRadioButton4.setSelected(true);
-      }   
-       
-      // e-mail body or attachment if format 101
-      if (main.obs_101_email.equals(main.FORMAT_101_BODY))        
-      {   
-         jRadioButton5.setSelected(true);
-      }   
-      else if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT)) 
-      {   
-         jRadioButton6.setSelected(true);
       }   
       
    }
@@ -626,25 +527,18 @@ final public class myobsformat extends javax.swing.JFrame {
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.ButtonGroup buttonGroup1;
    private javax.swing.ButtonGroup buttonGroup2;
-   private javax.swing.ButtonGroup buttonGroup3;
    private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton2;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
-   private javax.swing.JLabel jLabel4;
-   private javax.swing.JList jList1;
    private javax.swing.JPanel jPanel2;
-   private javax.swing.JPanel jPanel3;
    private javax.swing.JPanel jPanel4;
    private javax.swing.JRadioButton jRadioButton1;
    private javax.swing.JRadioButton jRadioButton2;
    private javax.swing.JRadioButton jRadioButton3;
    private javax.swing.JRadioButton jRadioButton4;
-   private javax.swing.JRadioButton jRadioButton5;
-   private javax.swing.JRadioButton jRadioButton6;
    private javax.swing.JRadioButton jRadioButton7;
-   private javax.swing.JScrollPane jScrollPane1;
    private javax.swing.JSeparator jSeparator1;
    // End of variables declaration//GEN-END:variables
 }

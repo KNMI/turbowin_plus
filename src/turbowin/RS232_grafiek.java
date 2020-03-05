@@ -40,10 +40,11 @@ public RS232_grafiek()
    for (int i = 0; i < RS232_view.AANTAL_PLOT_POINTS; i++)
    {
       RS232_view.points[i] = new Point2D.Double(0, 0);
-      RS232_view.sensor_waarde_array[i]   = "";
-      RS232_view.sensor_waarde_array_2[i] = "";
-		RS232_view.sensor_waarde_array_c[i] = "";
-		RS232_view.sensor_waarde_array_d[i] = "";
+      RS232_view.sensor_waarde_array[i]    = "";             // 1st meteo instrument
+      RS232_view.sensor_waarde_array_2[i]  = "";             // 1st meteo instrument
+		RS232_view.sensor_waarde_array_c[i]  = "";             // 1st meteo instrument
+		RS232_view.sensor_waarde_array_d[i]  = "";             // 1st meteo instrument
+      RS232_view.sensor_waarde_array_II[i] = "";             // 2nd meteo instrument
    }
 
    //JOptionPane.showMessageDialog(null, "in RS232_AWS_grafiek", "test", JOptionPane.WARNING_MESSAGE);
@@ -1105,7 +1106,7 @@ public void paintComponent(Graphics g)
          //color_raster = color_raster_orange;
          //color_pen    = color_pen_black;
       }
-      else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))
+      else if (main.mode_grafiek.equals(main.MODE_AIRTEMP) || main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
       {
          //Color color_raster_blue_air = new Color(114, 160, 193);          //  Air Superiority Blue
          //Color color_pen_red         = Color.RED;
@@ -1173,7 +1174,7 @@ public void paintComponent(Graphics g)
          aantal_parameter_markers_y_as                = 10;  // actually 11 markers (if source included)
          aantal_units_tussen_2_markers                = 10;  // nb units = hPa or degrees or wind speed
       }
-      else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))
+      else if (main.mode_grafiek.equals(main.MODE_AIRTEMP) || main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
       {
          parameter_start_waarde                       = -50; // lowest parameter value in graph
          aantal_parameter_markers_y_as                = 10;  // actually 11 markers (if source included)
@@ -1345,7 +1346,7 @@ public void paintComponent(Graphics g)
       {
          test_aanduiding_y = "1000 hPa";
       }
-      else if ((main.mode_grafiek.equals(main.MODE_AIRTEMP)) || (main.mode_grafiek.equals(main.MODE_SST)))
+      else if ( (main.mode_grafiek.equals(main.MODE_AIRTEMP)) || (main.mode_grafiek.equals(main.MODE_SST)) || (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)) )
       {
          test_aanduiding_y = "-10 °C";
       }
@@ -1386,7 +1387,7 @@ public void paintComponent(Graphics g)
          {
             aanduiding = Integer.toString(int_aanduiding) + " hPa";
          }
-         else if ((main.mode_grafiek.equals(main.MODE_AIRTEMP)) || (main.mode_grafiek.equals(main.MODE_SST)))
+         else if ((main.mode_grafiek.equals(main.MODE_AIRTEMP)) || (main.mode_grafiek.equals(main.MODE_SST)) || (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)))
          {
             aanduiding = Integer.toString(int_aanduiding) + " °C";   
          }
@@ -1478,8 +1479,10 @@ public void paintComponent(Graphics g)
       
       if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)   // PTB220 or PTB330 or MintakaDuo or Mintaka Star (USB) Mintaka Star WiFi 
       {
-         
-         string_aanduiding = "All values at barometer height and no ic applied";
+         if (main.mode_grafiek.equals(main.MODE_PRESSURE))
+         {
+            string_aanduiding = "All values at barometer height and no ic applied";
+         }
          // NB color is the color of the raster 
          //Font font_sensor_level_text = new Font("Serif", Font.BOLD, 14);
          //g2.setFont(font_sensor_level_text);
@@ -1526,6 +1529,16 @@ public void paintComponent(Graphics g)
          }  
       } // else if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10)
       
+      
+      if (main.RS232_connection_mode_II == 1)
+      {
+         if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))   
+         {
+            string_aanduiding = "All air temperature values at sensor height";
+         }     
+      }
+      
+      
       if (string_aanduiding.equals("") == false)
       {
          // NB color is the color of the raster 
@@ -1547,6 +1560,22 @@ public void paintComponent(Graphics g)
 
       double x_waarde = 0;
       double y_waarde = 0;
+      
+      // initialisation
+      for (int k = 0; k <  RS232_view.AANTAL_PLOT_POINTS; k++)
+      {
+         // 2nd meteo instrument
+         if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)) 
+         {
+            hulp_sensor_waarde_array[k] =  RS232_view.sensor_waarde_array_II[k];
+            hulp_datum_tijd_array[k]    =  RS232_view.datum_tijd_array_II[k];
+         }
+         else // 1st meteo instrument
+         {
+            hulp_sensor_waarde_array[k] =  RS232_view.sensor_waarde_array[k];
+            hulp_datum_tijd_array[k]    =  RS232_view.datum_tijd_array[k];
+         }
+      } // for (int k = 0; k <  RS232_view.AANTAL_PLOT_POINTS; k++)
 
       // initialisation
       for (int i = 0; i < RS232_view.AANTAL_PLOT_POINTS; i++)
@@ -1558,7 +1587,7 @@ public void paintComponent(Graphics g)
       {
          //System.out.println("--- " + "sensor_waarde_array[" + i + "] = " + sensor_waarde_array[i]);
 
-         if (!RS232_view.sensor_waarde_array[i].equals(""))
+         if (!hulp_sensor_waarde_array[i].equals(""))
          {
             try
             {
@@ -1578,28 +1607,28 @@ public void paintComponent(Graphics g)
                   {
                      if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in m/s and dashboard in knots
                      {
-                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) * main.M_S_KNOT_CONVERSION;
+                        sensor_waarde = Double.parseDouble(hulp_sensor_waarde_array[i].trim()) * main.M_S_KNOT_CONVERSION;
                      }
                      else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in m/s and dashboard in m/s
                      {
-                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()); 
+                        sensor_waarde = Double.parseDouble(hulp_sensor_waarde_array[i].trim()); 
                      }
                   }
                   else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
                   {
                      if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // measured in knots and dashboard in knots
                      {
-                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()); 
+                        sensor_waarde = Double.parseDouble(hulp_sensor_waarde_array[i].trim()); 
                      }
                      else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // measured in knots and dashboard in m/s
                      {
-                        sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) * main.KNOT_M_S_CONVERSION; 
+                        sensor_waarde = Double.parseDouble(hulp_sensor_waarde_array[i].trim()) * main.KNOT_M_S_CONVERSION; 
                      }   
                   }          
                } // if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                else
                {
-                  sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim());
+                  sensor_waarde = Double.parseDouble(hulp_sensor_waarde_array[i].trim());
                }
                
                if (main.mode_grafiek.equals(main.MODE_WIND_DIR))
@@ -1661,11 +1690,11 @@ public void paintComponent(Graphics g)
       //
       for (int i = RS232_view.AANTAL_PLOT_POINTS -1; i >= 0; i--)   
       {
-         if (!RS232_view.sensor_waarde_array[i].equals(""))
+         if (!hulp_sensor_waarde_array[i].equals(""))
          {
             try        
             {
-               double digitale_sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array[i].trim());
+               double digitale_sensor_waarde = Double.parseDouble(hulp_sensor_waarde_array[i].trim());
                
                if (main.mode_grafiek.equals(main.MODE_WIND_SPEED))
                {
@@ -1703,11 +1732,11 @@ public void paintComponent(Graphics g)
                
                if ((digitale_sensor_waarde > -50) && (digitale_sensor_waarde < 1100))   // max/min of max limits of the parameters pressure, air temp, sst and wind speed
                {
-                  String jaar   = RS232_view.datum_tijd_array[i].substring(0, 4);
-                  String maand  = RS232_view.datum_tijd_array[i].substring(4, 4 + 2);
-                  String dag    = RS232_view.datum_tijd_array[i].substring(6, 6 + 2);
-                  String uur    = RS232_view.datum_tijd_array[i].substring(8, 8 + 2);
-                  String minuut = RS232_view.datum_tijd_array[i].substring(10, 10 + 2);
+                  String jaar   = hulp_datum_tijd_array[i].substring(0, 4);
+                  String maand  = hulp_datum_tijd_array[i].substring(4, 4 + 2);
+                  String dag    = hulp_datum_tijd_array[i].substring(6, 6 + 2);
+                  String uur    = hulp_datum_tijd_array[i].substring(8, 8 + 2);
+                  String minuut = hulp_datum_tijd_array[i].substring(10, 10 + 2);
 
                   String datum_tijd_parameter_string = "";
 						String test_aanduiding_datum_tijd_parameter = "";
@@ -1716,7 +1745,7 @@ public void paintComponent(Graphics g)
                      datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " hPa";
 							test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 1020.7 hPa";
                   }
-                  else if ((main.mode_grafiek.equals(main.MODE_AIRTEMP)) || (main.mode_grafiek.equals(main.MODE_SST)))
+                  else if ((main.mode_grafiek.equals(main.MODE_AIRTEMP)) || (main.mode_grafiek.equals(main.MODE_SST)) || (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)))
                   {
                      datum_tijd_parameter_string = dag + "-" + maand + "-" + jaar + " " + uur + ":" + minuut + " UTC  " + digitale_sensor_waarde + " °C";
 							test_aanduiding_datum_tijd_parameter = "17-04-2016 09:35 UTC 14.8 °C";
@@ -1902,7 +1931,8 @@ public void paintComponent(Graphics g)
 }
 
 
-
+   public String[] hulp_sensor_waarde_array                = new String[RS232_view.AANTAL_PLOT_POINTS];  
+   public String[] hulp_datum_tijd_array                   = new String[RS232_view.AANTAL_PLOT_POINTS];
 
    //private final double M_S_KNOT_CONVERSION              = 1.94384449;
    //private final double HOOGTE_CORRECTIE = 0.0;

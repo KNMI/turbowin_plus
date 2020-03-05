@@ -334,7 +334,8 @@ final public class mybarometer extends javax.swing.JFrame {
          jTextField2.setEnabled(false);
       }
       
-      if (local_AWS_connected)                                    // AWS connected mode
+      //if (local_AWS_connected)                                    // AWS connected mode
+      if (local_AWS_connected || (main.APR == true))              // AWS connected mode or APR mode   
       {
          jTextField1.setForeground(main.input_color_from_aws);    // pressure reading field 
          jTextField1.setEditable(false);
@@ -405,12 +406,12 @@ final public class mybarometer extends javax.swing.JFrame {
           */
           if ( (main.barometer_above_sll.equals("")) || (main.barometer_above_sll.trim().length() == 0) )
           {
-             JOptionPane.showMessageDialog(null, "barometer height above MSL not available (Maintenance -> Station data)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+             JOptionPane.showMessageDialog(null, "barometer height above SLL not available (Maintenance -> Station data)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
              Reset_All_Barometer_Vars();                   // hier wordt ook "checks_ok" op false gezet
           }
           else if ( (main.keel_sll.equals("")) || (main.keel_sll.trim().length() == 0) )
           {
-             JOptionPane.showMessageDialog(null, "distance keel - MSL not available (Maintenance -> Station data)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+             JOptionPane.showMessageDialog(null, "distance keel - SLL not available (Maintenance -> Station data)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
              Reset_All_Barometer_Vars();                   // hier wordt ook "checks_ok" op false gezet
           }
            
@@ -885,6 +886,18 @@ final public class mybarometer extends javax.swing.JFrame {
          checks_ok = true;
       }
        
+      
+      // BELOW MAYBE IN A NEXT STAGE
+      //if (checks_ok && (main.APR == true))
+      //{
+      //   // so the barometer data will most probably be manually entered by the observer if APR automated barometer data is not available
+      //   main.obsolate_data_flag = false;
+      //   
+      //   // for timer checking the barometer data is not obsolete (see Function: RS232_And_WiFi_init_new_data_received_check_timer)
+      //   main_RS232_RS422.last_new_data_received_TimeMillis = System.currentTimeMillis(); 
+      //  
+      //} // if (checks_ok && (main.APR == true))
+
        
        /*
        ////// finish

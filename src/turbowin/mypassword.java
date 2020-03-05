@@ -148,7 +148,7 @@ final public class mypassword extends javax.swing.JFrame {
           {
              /* open email settings input page */
              myemailsettings form = new myemailsettings();
-             form.setSize(800, 600);
+             form.setSize(1000, 700);//form.setSize(800, 600);
              form.setVisible(true);
           }
           else if (main.mode.equals(main.LOG_FILES))

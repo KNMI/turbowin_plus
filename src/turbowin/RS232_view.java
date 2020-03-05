@@ -253,36 +253,80 @@ public class RS232_view extends javax.swing.JFrame {
       
       mode_tijd_periode = MODE_DAY;
 
-      // if necessary first stop the timer
-      if (main.sensor_data_file_ophalen_timer_is_gecreeerd == true)
+      
+      // if necessary first stop the timers
+      //
+      if (main.sensor_data_file_ophalen_timer_is_gecreeerd == true)             // 1st meteo instrument
       {
          if (sensor_data_file_ophalen_timer.isRunning())
          {
              sensor_data_file_ophalen_timer.stop();
          }
       }
-
-      if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8|| main.RS232_connection_mode == 10)         // Mintaka Star or StarX LAN or OMC-140 LAN
+      if (main.sensor_data_file_ophalen_timer_is_gecreeerd_II == true)          // 2nd meteo instrument
       {
-         // NB In case of WiFi connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
-         //
-         //
-         // retrieving sensor data from file, timer scheduled
-         init_sensor_data_uit_file_ophalen_timer();         
-      } 
-      else // no Wifi connection (so serial connection or no connection at all)
-      {
-         if (main.defaultPort != null)
+         if (sensor_data_file_ophalen_timer_II.isRunning())
          {
-            // retrieving sensor data from file, timer scheduled
-            init_sensor_data_uit_file_ophalen_timer();
-         }    
-         else
-         {
-            // retrieving sensor data from file, only once (no timer because there is no active serial connection)
-            sensor_data_uit_file_ophalen();
+             sensor_data_file_ophalen_timer_II.stop();
          }
-      } // else 
+      }
+      
+      
+      // first meteo instrument
+      //
+      if ( (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS)) || 
+           (main.mode_grafiek.equals(main.MODE_PRESSURE)) ||
+           (main.mode_grafiek.equals(main.MODE_AIRTEMP)) ||   
+           (main.mode_grafiek.equals(main.MODE_SST)) ||
+           (main.mode_grafiek.equals(main.MODE_WIND_SPEED)) ||    
+           (main.mode_grafiek.equals(main.MODE_WIND_DIR)) )
+      {
+          if (main.RS232_connection_mode != 0)
+         {
+            if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8|| main.RS232_connection_mode == 10)         // Mintaka Star LAN or StarX LAN or OMC-140 LAN
+            {
+               // NB In case of WiFi connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort != null)
+               //
+               //
+               // retrieving sensor data from file, timer scheduled
+               init_sensor_data_uit_file_ophalen_timer();         
+            } 
+            else // no Wifi connection (so serial connection or no connection at all)
+            {
+               if (main.defaultPort != null)
+               {
+                  // retrieving sensor data from file, timer scheduled
+                  init_sensor_data_uit_file_ophalen_timer();
+               }    
+               else
+               {
+                  // retrieving sensor data from file, only once (no timer because there is no active serial connection)
+                  sensor_data_uit_file_ophalen();
+               }
+            } // else 
+         } // if (main.RS232_connection_mode != 0)
+      }
+      
+      
+      // 2nd meteo instrument
+      //
+      if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
+      {
+         if (main.RS232_connection_mode_II != 0)
+         {
+            if (main.defaultPort_II != null)
+            {
+               // retrieving sensor data from file, timer scheduled
+               init_sensor_data_uit_file_ophalen_timer_II();
+            }    
+            else
+            {
+               // retrieving sensor data from file, only once (no timer because there is no active serial connection)
+               sensor_data_uit_file_ophalen();
+            }
+         
+         } // if (main.RS232_connection_mode_II != 0)
+      }
    }//GEN-LAST:event_day_button_actionPerformed
 
    
@@ -297,40 +341,83 @@ public class RS232_view extends javax.swing.JFrame {
       
       // called from: initComponents1() [RS232_view.java]
       //
-      // NB timer will be stopped/checked in RS232_graph_windowClosed() [RS232_view.java]
+      // NB timers will be stopped/checked in RS232_graph_windowClosed() [RS232_view.java]
       
       mode_tijd_periode = MODE_WEEK;
 
-      // if necessary first stop the timer
-      if (main.sensor_data_file_ophalen_timer_is_gecreeerd == true)
+      
+      // if necessary first stop the timers
+      //
+      if (main.sensor_data_file_ophalen_timer_is_gecreeerd == true)              // 1st meteo instrument
       {
          if (sensor_data_file_ophalen_timer.isRunning())
          {
             sensor_data_file_ophalen_timer.stop();
          }
       }
-
-      if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8 || main.RS232_connection_mode == 10)
+      if (main.sensor_data_file_ophalen_timer_is_gecreeerd_II == true)           // 2nd meteo nstrument
       {
-         // NB In case of LAN connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
-         //
-         //
-         // retrieving sensor data from file, timer scheduled
-         init_sensor_data_uit_file_ophalen_timer();         
-      } 
-      else // no Wifi connection (so serial connection or no connection at all)
-      {   
-         if (main.defaultPort != null)
+         if (sensor_data_file_ophalen_timer_II.isRunning())
          {
-            // retrieving sensor data from file, timer scheduled
-            init_sensor_data_uit_file_ophalen_timer();
-         }     
-         else
-         {
-            // retrieving sensor data from file, only once (no timer because there is no active serial connection)
-            sensor_data_uit_file_ophalen();
+            sensor_data_file_ophalen_timer_II.stop();
          }
-      } // else
+      }
+      
+      
+      // 1st meteo instrument
+      //
+      if ( (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS)) || 
+           (main.mode_grafiek.equals(main.MODE_PRESSURE)) ||
+           (main.mode_grafiek.equals(main.MODE_AIRTEMP)) ||   
+           (main.mode_grafiek.equals(main.MODE_SST)) ||
+           (main.mode_grafiek.equals(main.MODE_WIND_SPEED)) ||    
+           (main.mode_grafiek.equals(main.MODE_WIND_DIR)) )
+      {
+         if (main.RS232_connection_mode != 0)
+         {
+            if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8 || main.RS232_connection_mode == 10)          // // Mintaka Star LAN or StarX LAN or OMC-140 LAN
+            {
+               // NB In case of LAN connection no possibility to check the connection is still live (in case of serial connection that will be the case if defaultPort ! null)
+               //
+               //
+               // retrieving sensor data from file, timer scheduled
+               init_sensor_data_uit_file_ophalen_timer();         
+            } 
+            else // no Wifi connection (so serial connection or no connection at all)
+            {   
+               if (main.defaultPort != null)
+               {
+                  // retrieving sensor data from file, timer scheduled
+                  init_sensor_data_uit_file_ophalen_timer();
+               }     
+               else
+               {
+                  // retrieving sensor data from file, only once (no timer because there is no active serial connection)
+                  sensor_data_uit_file_ophalen();
+               }
+            } // else
+         } // if (main.RS232_connection_mode != 0)
+      }
+      
+      
+      // 2nd meteo instrument
+      //
+      if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
+      {
+         if (main.RS232_connection_mode_II != 0)
+         {
+            if (main.defaultPort_II != null)
+            {
+               // retrieving sensor data from file, timer scheduled
+               init_sensor_data_uit_file_ophalen_timer_II();
+            }     
+            else
+            {
+               // retrieving sensor data from file, only once (no timer because there is no active serial connection)
+               sensor_data_uit_file_ophalen();
+            }      
+         } // if (main.RS232_connection_mode_II != 0)
+      }
    }//GEN-LAST:event_week_button_actionPerformed
 
    
@@ -343,6 +430,11 @@ public class RS232_view extends javax.swing.JFrame {
    private void RS232_graph_windowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_RS232_graph_windowClosed
       // TODO add your handling code here:
       
+      // NB there is always max 1 graph window open! so if closed then all timers can be stopped!
+      
+      
+      // 1st meteo instrument
+      //
       if (main.sensor_data_file_ophalen_timer_is_gecreeerd == true)  // 15-05-2013
       {
          if (sensor_data_file_ophalen_timer.isRunning())
@@ -352,8 +444,22 @@ public class RS232_view extends javax.swing.JFrame {
       }
       
       sensor_data_file_ophalen_timer = null;
-      
       main.sensor_data_file_ophalen_timer_is_gecreeerd = false;
+      
+      
+      // 2nd meteo instrument
+      //
+      if (main.sensor_data_file_ophalen_timer_is_gecreeerd_II == true)
+      {
+         if (sensor_data_file_ophalen_timer_II.isRunning())
+         {
+            sensor_data_file_ophalen_timer_II.stop();
+         }
+      }
+      
+      sensor_data_file_ophalen_timer_II = null;
+      main.sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
+      
    }//GEN-LAST:event_RS232_graph_windowClosed
 
     
@@ -375,6 +481,8 @@ private void sensor_data_uit_file_ophalen()
       @Override
       protected Void doInBackground() throws Exception
       {
+         // 1st meteo instrument
+         //
          if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)        // PTB220 or PTB330 connected
          {
             Read_Sensor_Data_Files_For_Barograph();
@@ -406,6 +514,18 @@ private void sensor_data_uit_file_ophalen()
             }
          }
          
+         
+         // 2nd meteo instrument
+         //
+         if (main.RS232_connection_mode_II == 1)
+         {
+            if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
+            {
+               Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
+            }
+         }
+         
+         
          return null;
       } // protected Void doInBackground() throws Exception
 
@@ -427,7 +547,7 @@ private void sensor_data_uit_file_ophalen()
 /***********************************************************************************************/
 private void init_sensor_data_uit_file_ophalen_timer()
 {
-   // retrieving sensor data from file, timer scheduled
+   // retrieving sensor data from file, timer scheduled [1st meteo instrument]
    //
    // called from: day_button_actionPerformed() [RS232_view.java]
    //              week_button_actionPerformed() [RS232_view.java]
@@ -462,6 +582,8 @@ private void init_sensor_data_uit_file_ophalen_timer()
             @Override
             protected Void doInBackground() throws Exception
             {
+               // 1st meteo instrument
+               //
                if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PTB330 connected
                {
                   Read_Sensor_Data_Files_For_Barograph();
@@ -492,7 +614,18 @@ private void init_sensor_data_uit_file_ophalen_timer()
                      Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
                   }
                }
+               
+               
+               // 2nd instrument
+               //
+               //if (main.RS232_connection_mode_II == 1)
+               //{
+               //   if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
+               //      Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
+               //   }
+               //}
 
+               
                return null;
             } // protected Void doInBackground() throws Exception
 
@@ -511,16 +644,362 @@ private void init_sensor_data_uit_file_ophalen_timer()
 
    // main loop for retrieving sensor data from file (file was and is filled by TurboWin+)
    sensor_data_file_ophalen_timer = new Timer(DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP, sensor_data_file_ophalen_action);
-   sensor_data_file_ophalen_timer.setRepeats(true);                             // false = only one action
+   sensor_data_file_ophalen_timer.setRepeats(true);                                             // false = only one action
    sensor_data_file_ophalen_timer.setInitialDelay(INITIAL_DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP); // time in millisec to wait after timer is started to fire first event
-   sensor_data_file_ophalen_timer.setCoalesce(true);                            // in principe was dit al de default, maar voor de zekerheid hier neergezet
-   //sensor_data_file_ophalen_timer.start();
+   sensor_data_file_ophalen_timer.setCoalesce(true);                                            // in principe was dit al de default, maar voor de zekerheid hier neergezet
    sensor_data_file_ophalen_timer.restart();
    main.sensor_data_file_ophalen_timer_is_gecreeerd = true;
 }
 
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                           init_sensor_data_uit_file_ophalen_timer_II                        */
+/*                                                                                             */
+/***********************************************************************************************/
+private void init_sensor_data_uit_file_ophalen_timer_II()
+{
+   // retrieving sensor data from file (2nd instrument), timer scheduled [2nd meteo instrument]
+   //
+   // called from: day_button_actionPerformed() [RS232_view.java]
+   //              week_button_actionPerformed() [RS232_view.java]
+   //
+   
+   ActionListener sensor_data_file_ophalen_action = new ActionListener()
+   {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+
+         new SwingWorker<Void, Void>()
+         {
+            @Override
+            protected Void doInBackground() throws Exception
+            {
+               
+               // 2nd instrument
+               //
+               if (main.RS232_connection_mode_II == 1)
+               {
+                  if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
+                  {
+                     Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
+                  }
+               }
+
+               
+               return null;
+            } // protected Void doInBackground() throws Exception
+
+            @Override
+            protected void done()
+            {
+               jPanel1.repaint();                                                        // main panel
+            }
+         }.execute(); // new SwingWorker<Void, Void>()
+
+      } // public void actionPerformed(ActionEvent e)
+   }; // ActionListener sensor_data_file_ophalen_action = new ActionListener()
+
+   // zo snel mogelijk geheugen weer vrijmaken
+   //cal_systeem_datum_tijd = null;
+
+   // main loop for retrieving sensor data from file 2nd meteo instrument (file was and is filled by TurboWin+)
+   sensor_data_file_ophalen_timer_II = new Timer(DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP, sensor_data_file_ophalen_action);
+   sensor_data_file_ophalen_timer_II.setRepeats(true);                                             // false = only one action
+   sensor_data_file_ophalen_timer_II.setInitialDelay(INITIAL_DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP); // time in millisec to wait after timer is started to fire first event
+   sensor_data_file_ophalen_timer_II.setCoalesce(true);                                            // in principe was dit al de default, maar voor de zekerheid hier neergezet
+   sensor_data_file_ophalen_timer_II.restart();
+   main.sensor_data_file_ophalen_timer_is_gecreeerd_II = true;
+}
+
+   
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155()
+{  
+   // called from: init_sensor_data_uit_file_ophalen_timer() [RS232_view.java]
+   //
+   //
+   
+   // NB this function reads sensor data from an Vaisala HMP155 thermometer stored in files
+   //
+   // NB This function will be called from within a swingworker, see: init_sensor_data_uit_file_ophalen_timer() and sensor_data_uit_file_ophalen()
+   //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file reading/writing)
+   //
+   // NB plot every 5 minutes -> 12 points per hour -> 288 points per 24 hours (12 * 24) + 12 (extra hour)
+   //
+   // example saved record:
+   //
+   // ___22.98____17.77____14.77____60.09_201909041422
+   // 3x      4x       4x       4x       1x spaces
+   //
    
    
+   
+   // declaration + initialisation
+   int type_record_lengte                                 = main.RECORD_LENGTE_HMP155;     // 48
+   int type_record_datum_tijd_begin_pos                   = type_record_lengte - 12;       // 36
+   int type_record_minuten_begin_pos                      = type_record_lengte - 2;        // 46
+   int type_record_air_temp_begin_pos                     = 0;
+   
+   String sensor_data_file_name                           = "";
+   String volledig_path_sensor_data                       = "";
+   String record_datum_tijd                               = "";
+   String record_minuten                                  = "";
+   String record_air_temp                                 = "";
+   String record_datum_tijd_met_minuten                   = "";      // voor tijdsweergave van de laatste air emp waarde apart op thermogram
+   
+   int int_record_minuten;
+   int aantal_intelezen_files                             = 0;
+   int wrong_record_length_counter;
+   int wrong_record_air_temp_counter;
+
+   
+   // initialisation
+   for (int k = 0; k < AANTAL_PLOT_POINTS; k++)
+   {
+      sensor_waarde_array_II[k] = "";
+      datum_tijd_array_II[k]    = "";
+   }
+
+   // intialisation
+   wrong_record_length_counter                            = 0;   // keep track of the number of records with wrong record length (every 1 minute) in the file (note: only in the file of present hour)
+   wrong_record_air_temp_counter                          = 0;   // keep track of the number of records with wrong air temp format (every 5 minutes) in the file
+  
+   
+   if ((mode_tijd_periode).equals(MODE_DAY))
+   {
+      aantal_intelezen_files = 24;          // 24 * 1 = 24
+   }
+   else if ((mode_tijd_periode).equals(MODE_WEEK))
+   {
+      aantal_intelezen_files = 168;         // 24 * 7 = 168
+   }
+
+   // message to console
+   System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "reading thermometer sensor data from file for graph");
+   
+   
+   // 24 files at day mode and 168 at week mode must be read (eg sensor_data_II_2013020115.txt, sensor_data_II_2013020116.txt etc.)
+   for (int i = aantal_intelezen_files; i >= 0; i--)
+   {
+      cal_file_datum_tijd_II = new GregorianCalendar();
+      cal_file_datum_tijd_II.add(Calendar.HOUR_OF_DAY, -i);
+
+      String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(cal_file_datum_tijd_II.getTime()); // eg 2013020308
+      sensor_data_file_name = "sensor_data_II_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
+
+      // first check if there is a sensor data file present (and not empty)
+      volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
+      // bv volledig_path_sensor_data = C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+
+      //System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "proberen te openen file: " + volledig_path_sensor_data);
+
+      // keep track of the file name of the last (present hour) sensor data file
+      if (i == 0)
+      {
+         // NB for later use if there are more than 20 wrong records in the file ( or > 3 invalid temperature formats) , so we can delete this file, otherwise after a restart the program complains again (see next lines)
+         last_sensor_data_file_II = volledig_path_sensor_data;
+      }
+
+
+      File sensor_data_file = new File(volledig_path_sensor_data);
+      if (sensor_data_file.exists() && sensor_data_file.length() > 0)     // length() in bytes
+      {
+         try
+         {
+            BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data));
+
+            try
+            {
+               String record                    = null;
+
+               //System.out.println("--- " + sdf2.format(new Date()) + " UTC " + "geopende file: " + volledig_path_sensor_data);
+
+               while ((record = in.readLine()) != null)
+               {
+                  if (record.length() == type_record_lengte)
+                  {
+                     record_datum_tijd = record.substring(type_record_datum_tijd_begin_pos, type_record_datum_tijd_begin_pos + 10);       // substring van begin-index t/m eind-index-1
+
+                     //System.out.println("--- " + "record met lengte 48 = " + record);
+
+                     if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel)) // NB record_datum_tijd dus ook zonder minuten (YYYYMMDDUU)
+                     {
+                        record_minuten = record.substring(type_record_minuten_begin_pos, type_record_minuten_begin_pos + 2);
+
+                        // initialisation
+                        int_record_minuten = 9999;
+
+                        try
+                        {
+                           int_record_minuten = Integer.parseInt(record_minuten.trim());
+                        }
+                        //catch (NumberFormatException e) {System.out.println("--- " + "NumberFormatException:" + e); }
+                        catch (NumberFormatException e) { }
+
+                        // only temp. every 5 minutes (00, 05, 10, 15 etc minutes) !
+                        if (int_record_minuten >= 0 && int_record_minuten <= 59 && (int_record_minuten % 5 == 0))
+                        {
+                           record_air_temp = record.substring(type_record_air_temp_begin_pos, type_record_air_temp_begin_pos + 8);
+                           int int_minuten_5 = int_record_minuten / 5;
+                           sensor_waarde_array_II[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_air_temp.trim(); // dus om de 5 miuten opslag (=array plaats)
+
+                           record_datum_tijd_met_minuten = record.substring(type_record_datum_tijd_begin_pos, type_record_datum_tijd_begin_pos + 12);       // YYYYMMDDUUmm
+                           datum_tijd_array_II[(aantal_intelezen_files - i) * 12 + int_minuten_5] = record_datum_tijd_met_minuten; // dus om de 5 miuten opslag (=array plaats)
+
+                           //System.out.println("--- " + "record_air_temp = " + record_air_temp);
+                           
+                           // check/testing on valid pressure value
+                           if (i == 0)           // so file of present hour
+                           {
+                              try
+                              {   
+                                 double test_waarde = Double.parseDouble(record_air_temp);
+                                 if (test_waarde < -99.9 || test_waarde > 99.9)
+                                 {
+                                    wrong_record_air_temp_counter++;
+                                 }   
+                              } // try  
+                              catch (NumberFormatException e) 
+                              {
+                                 wrong_record_air_temp_counter++;
+                              } // catch
+                           } //  if (i == 0)
+                           
+                        } // if (int_record_minuten >= 0 && int_record_minuten <= 59 etc.
+                     } // if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
+
+                  } // if (record.length() == type_record_lengte)
+                  else // record length not OK
+                  {
+                     if (i == 0)                  // so file of present hour
+                     {
+                        wrong_record_length_counter++;
+
+                        // NB when no <cr> then all records will be written as one long string 
+                        if (record.length() > (MAX_WRONG_RECORDS * type_record_lengte))
+                        {
+                           wrong_record_length_counter += MAX_WRONG_RECORDS;
+                        }
+
+                        //System.out.println("--- wrong_record_length_counter = " + wrong_record_length_counter);
+
+                     } // if (i == 0)
+                  } // else (record length not OK)
+
+
+                  //}
+                  //catch (NumberFormatException e) {System.out.println("--- " + "NumberFormatException:" + e); }
+
+                  //// clear memory
+                  //cal_file_datum_tijd = null;
+
+               } // while ((record = in.readLine()) != null)
+               //in.close();
+
+            } // try
+            finally
+            {
+               in.close();
+            }
+
+         } // try
+         //catch (IOException ex) {System.out.println("--- " + "IOException:" + ex); }
+         catch (IOException ex) {  }
+
+      } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
+      
+      // clear memory
+      cal_file_datum_tijd = null;
+      
+   } // for (int i = aantal_intelezen_files; i >= 0; i--)
+
+   
+   // 
+   // check
+   //
+   if ( (wrong_record_length_counter > MAX_WRONG_RECORDS) || (wrong_record_air_temp_counter > MAX_WRONG_AIR_TEMP_IN_RECORDS) )
+   {
+      if (wrong_record_length_counter > MAX_WRONG_RECORDS)
+      {
+         System.out.println("--- more than " + MAX_WRONG_RECORDS + " records with wrong length (or 1 record with length > " + MAX_WRONG_RECORDS + " x default record length)" + " Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155()");
+      }
+      else if (wrong_record_air_temp_counter > MAX_WRONG_PRESSURE_IN_RECORDS)
+      {
+         System.out.println("--- more than " + MAX_WRONG_PRESSURE_IN_RECORDS + " Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155()");
+      }   
+
+      
+      if (dialog_sensor_data_error_present == false)
+      {
+         //private JDialog optionPaneDialog;
+         //JFrame mainFrame = RS232_AWS_1App.getApplication().getMainFrame();
+         //JFrame mainFrame = main.getApplication().getMainFrame();
+         
+         //optionPaneDialog = new JDialog(mainFrame, main.APPLICATION_NAME);   // A dialog can be either modeless (the default) or modal (A modal dialog is one which blocks input to some other top-level windows in the application)
+         optionPaneDialog = new JDialog(this, main.APPLICATION_NAME);
+         
+         // NB Note we are creating an instance of a JOptionPane
+         //    Normally it's just a call to a static method.
+         JOptionPane optPane = new JOptionPane("sensor data format errors, close " + main.APPLICATION_NAME + "; unplug/plug the thermometer (USB)serial communication cable, wait a few seconds; start " + main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION);
+
+         // NB Listen for the JOptionPane button click. It comes through as property change
+         //    event with the property called "value".
+         optPane.addPropertyChangeListener(new PropertyChangeListener()
+         {
+            @Override
+            public void propertyChange(PropertyChangeEvent e)
+            {
+               if (e.getPropertyName().equals("value"))
+               {
+                  switch ((Integer)e.getNewValue())
+                  {
+                     //case JOptionPane.OK_OPTION: break;
+                     case JOptionPane.OK_OPTION:                        
+                     new SwingWorker<Void, Void>()
+                     {
+                        @Override
+                        protected Void doInBackground() throws Exception
+                        {
+                           File file_sensor_data = new File(last_sensor_data_file_II);
+                           if (file_sensor_data.exists())
+                           {
+                              file_sensor_data.delete();
+                           }
+                           return null;
+                        } // protected Void doInBackground() throws Exception
+                     }.execute(); // new SwingWorker<Void, Void>()                       
+                     
+                     break;         
+                  }
+                  optionPaneDialog.dispose();
+                  dialog_sensor_data_error_present = false;
+               }
+            }
+         });
+         optionPaneDialog.setContentPane(optPane);
+
+         // NB Let the JDialog figure out how big it needs to be
+         //    based on the size of JOptionPane by calling the pack() method
+         optionPaneDialog.pack();
+         //optionPaneDialog.setLocationRelativeTo(mainFrame);
+         optionPaneDialog.setLocationRelativeTo(this);
+         optionPaneDialog.setVisible(true);
+         dialog_sensor_data_error_present = true;
+
+      } // if (dialog_sensor_data_error_present == false)
+   } // if (wrong_record_length_counter > 10)
+      
+}
+
+
 
 /***********************************************************************************************/
 /*                                                                                             */
@@ -2339,7 +2818,7 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
             jLabel3.setText("");
          }
       }
-      else if (main.mode_grafiek.equals(main.MODE_AIRTEMP))
+      else if (main.mode_grafiek.equals(main.MODE_AIRTEMP) || main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
       {
          //setTitle(main.APPLICATION_NAME + " sensor data graph air temp (1 minute average)");
          setTitle(main.APPLICATION_NAME + " sensor data graph air temp");
@@ -2407,17 +2886,28 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
 
       // start (week notation + also set the appropriate radiobutton)
       main.sensor_data_file_ophalen_timer_is_gecreeerd = false;
+      main.sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
       
 		if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS))  //  4 graphs view
 		{
-	      day_button_actionPerformed(null);                  // hier gaat de sensor data ophalen timer ook lopen
+         // NB 4 graph view only as 1st meteo instrument
+         day_button_actionPerformed(null);                         // hier gaat de sensor data ophalen timer ook lopen
+         
          jRadioButton1.setSelected(true);
 			jRadioButton2.setSelected(false);
 		}
-		else
+      else // 1st or 2nd meteo instrument
 		{	
-		   week_button_actionPerformed(null);                  // hier gaat de sensor data ophalen timer ook lopen
-			jRadioButton1.setSelected(false);
+         //if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
+         //{
+		   //   week_button_actionPerformed_II(null);                  // hier gaat de sensor data ophalen timer II ook lopen
+        // }
+         //else
+         //{
+            week_button_actionPerformed(null);                      // hier gaat de sensor data ophalen timer ook lopen
+         //}
+         
+         jRadioButton1.setSelected(false);
          jRadioButton2.setSelected(true);
 		}
 		
@@ -2496,7 +2986,8 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
    private final int DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP             = 300000; // 5 min                          // time in millisec to wait after timer is started to fire first event (10 min = 10 * 1000 * 60 * 10 = 600000)
    private final int INITIAL_DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP     = 500;//1000; // 1000 = 1 sec                // time in millisec to wait after timer is started to fire first event
    private final int MAX_WRONG_RECORDS                               = 20;        // 60 records in a file sampling every 1 minute sampling
-   private final int MAX_WRONG_PRESSURE_IN_RECORDS                   = 4;         // 60 records in a file but only every 5 minutes sampling
+   private final int MAX_WRONG_PRESSURE_IN_RECORDS                   = 4;         // 60 records in a file but only every 5 minutes sampling 
+   private final int MAX_WRONG_AIR_TEMP_IN_RECORDS                   = 4;         // 60 records in a file but only every 5 minutes sampling
    
    public static final String MODE_DAY                               = "mode_day";
    public static final String MODE_WEEK                              = "mode_week";
@@ -2508,7 +2999,9 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
    JPopupMenu popup;
    private String saved_trace_image;
    private String last_sensor_data_file                              = "";
-   public static /*private*/ Timer sensor_data_file_ophalen_timer;
+   private String last_sensor_data_file_II                           = "";
+   public static Timer sensor_data_file_ophalen_timer;
+   public static Timer sensor_data_file_ophalen_timer_II;
    private JDialog optionPaneDialog;
    private boolean dialog_sensor_data_error_present                  = false;
    private boolean doorgaan_trace_save                               = true;
@@ -2520,9 +3013,11 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
    public static SimpleDateFormat sdf6;
    public static SimpleDateFormat sdf7;
    public static Point2D[] points                                    = new Point2D[AANTAL_PLOT_POINTS];
-   public static String[] sensor_waarde_array                        = new String[AANTAL_PLOT_POINTS];
-   public static String[] sensor_waarde_array_2                      = new String[AANTAL_PLOT_POINTS];
-   public static String[] datum_tijd_array                           = new String[AANTAL_PLOT_POINTS]; 
+   public static String[] sensor_waarde_array                        = new String[AANTAL_PLOT_POINTS];      // 1st meteo instrument
+   public static String[] sensor_waarde_array_II                     = new String[AANTAL_PLOT_POINTS];      // 2nd meteo instrument 
+   public static String[] sensor_waarde_array_2                      = new String[AANTAL_PLOT_POINTS];      // 1st meteo instrument; 2nd (gust) line in wind graph 1st meteo instrument
+   public static String[] datum_tijd_array                           = new String[AANTAL_PLOT_POINTS];      // 1st meteo instrument
+   public static String[] datum_tijd_array_II                        = new String[AANTAL_PLOT_POINTS];      // 2nd meteo instrument
    public static String[] datum_tijd_array_b	                        = new String[AANTAL_PLOT_POINTS];
    public static String[] datum_tijd_array_c	                        = new String[AANTAL_PLOT_POINTS];
    public static String[] datum_tijd_array_d	                        = new String[AANTAL_PLOT_POINTS];
@@ -2530,7 +3025,8 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
 	//public static String[] sensor_waarde_array_b                      = new String[AANTAL_PLOT_POINTS];
 	public static String[] sensor_waarde_array_c                      = new String[AANTAL_PLOT_POINTS];
 	public static String[] sensor_waarde_array_d                      = new String[AANTAL_PLOT_POINTS];
-   public GregorianCalendar cal_file_datum_tijd;
+   public GregorianCalendar cal_file_datum_tijd;                                                            // 1st meteo instrument
+   public GregorianCalendar cal_file_datum_tijd_II;                                                         // 2nd meteo instrument
    public static boolean night_vision;
    static Color background_color_panel1;
    static Color background_color_panel2;
