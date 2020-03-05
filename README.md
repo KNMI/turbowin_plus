@@ -10,7 +10,7 @@ assists the observer with many menus, pictures, photos, forms, help pages, outpu
 calculations in reporting marine observations. It also provides for the automated compilation, archiving of observations, 
 and ease of transmission ashore to Meteorological Centers. TurboWin+ can also display measured data of Automatic Weather Stations. 
 TurboWin+ was especially designed for running in the background eg when collecting sensor data. 
-It can run for weeks in the background. The memory footprint is low and the cpu usage is minimal and by 
+The memory footprint is low and the cpu usage is minimal and by 
 using extended threading the application is always responsive. 
 
 ================================== VERSION 4.0 ================================
