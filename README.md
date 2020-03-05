@@ -20,7 +20,7 @@ using extended threading the application is always responsive.
 - Email options
 - Vaisala HMP155 sensor interface
 - EMOS interface update
-- APR (or APTR) update
+- APR/APTR update
 - Station ID
 - Transparent Theme
 - Barometer comparison form (barometer self-check form)
