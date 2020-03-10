@@ -26,6 +26,7 @@ using extended threading the application is always responsive.
 - Barometer comparison form (barometer self-check form)
 - Open source links update
 - Java 13.0.2 for JPMS version
+- jSerialComm 2.5.2
 
 
 ================================== VERSION 3.3.0 ================================
