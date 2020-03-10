@@ -25,8 +25,8 @@ using extended threading the application is always responsive.
 - Transparent theme
 - Barometer comparison form (barometer self-check form)
 - Open source links update
-- Java 13.0.2 for JPMS version
-- jSerialComm 2.5.2
+- Java 13.0.2 for JPMS version (https://jdk.java.net/)
+- jSerialComm 2.5.2 (https://fazecast.github.io/jSerialComm/)
 
 
 ================================== VERSION 3.3.0 ================================
