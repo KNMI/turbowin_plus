@@ -182,7 +182,7 @@ try:
         
         smtp_host      = smtp_host_local               # 'smtp.gmail.com'
         smtp_port      = 587                           # moet komen na msg = EmailMessage() !!!!!!!!!????????
-        smtp_password  = smtp_password_local           #"zaipzrwzxfjhrcls" # "3730AE!!!"
+        smtp_password  = smtp_password_local           #
          
         smtp_server = smtplib.SMTP(smtp_host, smtp_port)
         smtp_server.starttls(context=context)          # Secure the connection
@@ -205,7 +205,7 @@ try:
         
         smtp_host      = smtp_host_local                 # 'smtp.gmail.com'
         smtp_port      = 465                             # moet komen na msg = EmailMessage() !!!!!!!!!????????
-        smtp_password  = smtp_password_local             #"zaipzrwzxfjhrcls" #"3730AE!!!"
+        smtp_password  = smtp_password_local             #
 
         smtp_server = smtplib.SMTP_SSL(smtp_host, smtp_port)
         smtp_server.login(send_from, smtp_password)
@@ -226,7 +226,7 @@ try:
         
         smtp_host      = smtp_host_local               #'smtp.mail.yahoo.com'
         smtp_port      = 587                           # moet komen na msg = EmailMessage() !!!!!!!!!????????
-        smtp_password  = smtp_password_local           #"nfthpddamdhqucxz"
+        smtp_password  = smtp_password_local           #
 
         smtp_server = smtplib.SMTP(smtp_host, smtp_port)
         smtp_server.starttls(context=context) # Secure the connection
@@ -250,7 +250,7 @@ try:
         
         smtp_host      = smtp_host_local                    # 'smtp.mail.yahoo.com'
         smtp_port      = 465                                # moet komen na msg = EmailMessage() !!!!!!!!!????????
-        smtp_password  = smtp_password_local                #"nfthpddamdhqucxz"
+        smtp_password  = smtp_password_local                #
         
         smtp_server   = smtplib.SMTP_SSL(smtp_host, smtp_port)
         smtp_server.login(send_from, smtp_password)
@@ -302,7 +302,7 @@ try:
             smtp_host      = smtp_host_local                  # 'smtp.ziggo.nl'
             smtp_port      = int(smtp_port_local)             # moet komen na msg = EmailMessage() !!!!!!!!!????????
             #smtp_port      = 587
-            smtp_password  = smtp_password_local              #"zaipzrwzxfjhrcls"  
+            smtp_password  = smtp_password_local              # 
          
             smtp_server = smtplib.SMTP(smtp_host, smtp_port)
             smtp_server.starttls(context=context) # Secure the connection
