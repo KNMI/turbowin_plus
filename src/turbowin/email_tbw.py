@@ -260,7 +260,7 @@ try:
     elif (smtp_mode == "SMTP_HOST_SHIP"):
 # -------- TESTING BEGIN -------
 #        smtp_host_local       = "smtp.ziggo.nl"
-#        smtp_password_local   = "210959" 
+#        smtp_password_local   = "xxxxxx" 
 #        smtp_port_local       = 587
 #
 #        send_to        = 'martin.stam@home.nl'
